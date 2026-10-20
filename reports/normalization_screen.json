@@ -1,0 +1,2939 @@
+{
+  "stage": "normalization_controlled_screen",
+  "selection_split": "val",
+  "test_used": false,
+  "selection_caveat": "Fixed pooled marginal W1 selects checkpoints; macro and temporal metrics are independent diagnostics. Exploratory tuning, not confirmatory inference.",
+  "runs": [
+    {
+      "name": "screen_minmax",
+      "config": {
+        "batch_size": 512,
+        "device": "cpu",
+        "epochs": 120,
+        "hidden_dim": 64,
+        "latent_dim": 24,
+        "lr_d": 0.0002,
+        "lr_g": 0.0001,
+        "max_train_samples": 65536,
+        "normalization": "minmax",
+        "num_threads": 1,
+        "patience": null,
+        "seed": 42,
+        "unconditional": false,
+        "validation_samples": 2048
+      },
+      "best_epoch": 116,
+      "epochs_completed": 120,
+      "generator_updates": 15360,
+      "discriminator_updates": 15360,
+      "elapsed_seconds": 271.7494720550021,
+      "provenance": {
+        "git_commit": "0955c218377f3213bafc849d0c1be75a4f3ed20b",
+        "git_commit_tree": "9adda02f57e800394ebf572176d5395423f81a14",
+        "git_dirty": false,
+        "hardware": {
+          "cpu_count": 9,
+          "cuda_device": null,
+          "device": "cpu",
+          "machine": "x86_64",
+          "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+          "processor": "x86_64"
+        },
+        "numpy": "2.3.5",
+        "python": "3.12.14",
+        "torch": "2.14.1+cu130"
+      },
+      "checkpoint_sha256": "1c32a0f34b412dd7618a28cdf91c321b21cc30921740c64f11c154d88931ccc5",
+      "data_hashes": {
+        "metadata.json": "36b40313730d206ba3195c228807e184044aa98f35c21a05a4b4fa144539fc63",
+        "scaler.json": "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb",
+        "train.npz": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+        "val.npz": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d"
+      },
+      "scaler": {
+        "constant_range": false,
+        "fitted_on": "train",
+        "maximum": 7.09499979019165,
+        "minimum": -2.9560000896453857,
+        "range": [
+          0,
+          1
+        ],
+        "transform": "(x - minimum) / (maximum - minimum); use denominator 1 if constant"
+      },
+      "training_profiles": {
+        "prepared": 611520,
+        "model": 65536,
+        "baselines": 65536
+      },
+      "evaluation": {
+        "split": "val",
+        "seed": 2026,
+        "samples_per_condition_cap": 100,
+        "units": "kWh/interval",
+        "target": "net",
+        "checkpoint_sha256": "1c32a0f34b412dd7618a28cdf91c321b21cc30921740c64f11c154d88931ccc5",
+        "train_sha256": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+        "evaluation_sha256": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d",
+        "profile_count": 6400,
+        "meter_count": 360,
+        "training_profiles": {
+          "prepared": 611520,
+          "model": 65536,
+          "baselines": 65536
+        },
+        "sampling": "Uniform without replacement within each observed condition; macro averages weight conditions equally.",
+        "nearest_neighbors": {
+          "reference_scope": "sampled_training_profiles",
+          "total_counts": {
+            "train": 65536,
+            "generated": 6400,
+            "heldout": 6400
+          },
+          "sample_counts": {
+            "train": 1000,
+            "generated": 1000,
+            "heldout": 1000
+          },
+          "seed": 2026,
+          "distance_units": "kWh/interval (Euclidean RMS across slots)",
+          "generated_to_train_mean_rms_kwh": 0.4065881768640645,
+          "generated_to_train_median_rms_kwh": 0.4034343009200855,
+          "generated_to_train_p05_rms_kwh": 0.37775845828737703,
+          "generated_to_train_p95_rms_kwh": 0.4454051991145831,
+          "generated_exact_copy_fraction": 0.0,
+          "heldout_to_train_mean_rms_kwh": 0.16376267829465524,
+          "heldout_to_train_median_rms_kwh": 0.1304866822999073,
+          "heldout_to_train_p05_rms_kwh": 0.02102804117472389,
+          "heldout_to_train_p95_rms_kwh": 0.4361292503765998,
+          "heldout_exact_copy_fraction": 0.004
+        },
+        "raw_output": {
+          "minimum_kwh": -1.1484410762786865,
+          "maximum_kwh": 2.238926887512207,
+          "negative_fraction": 0.5007633463541666,
+          "negative_values_valid_for_target": true,
+          "clipping_applied": false
+        },
+        "interpretation": "Descriptive held-out diagnostics; no privacy guarantee or significance claim. Repeated test use invalidates a final untouched-test claim."
+      },
+      "macro": {
+        "cgan": {
+          "daily_energy_wasserstein_kwh": 9.92579409198204,
+          "diversity_ratio": 0.3005969744035692,
+          "generated_mean_daily_energy_kwh": 3.4080073369630703,
+          "generated_mean_peak_power_kw": 4.989619128257036,
+          "generated_mean_pointwise_variance_kwh2": 0.014605442120981945,
+          "generated_mean_ramp_kw": 0.0035335908759298036,
+          "mean_profile_rmse_kwh": 0.4273748641818078,
+          "peak_power_wasserstein_kw": 2.531934118677018,
+          "pointwise_variance_rmse_kwh2": 0.1140805121930034,
+          "pointwise_wasserstein_kwh": 0.37744973005083493,
+          "ramp_wasserstein_kw": 1.5437549586553239,
+          "real_mean_daily_energy_kwh": 11.639102508503893,
+          "real_mean_peak_power_kw": 3.0686786213926096,
+          "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+          "real_mean_ramp_kw": 7.936128632526989e-05,
+          "autocorrelation": {
+            "1": {
+              "lag_hours": 0.25,
+              "real_mean": 0.6727450496266503,
+              "generated_mean": 0.017641464613254606,
+              "mean_difference_abs": 0.6551035850133958,
+              "wasserstein": 0.662915812769076
+            },
+            "4": {
+              "lag_hours": 1.0,
+              "real_mean": 0.3506312945526328,
+              "generated_mean": -0.12569696480020714,
+              "mean_difference_abs": 0.47632825935283996,
+              "wasserstein": 0.47955097778152245
+            },
+            "24": {
+              "lag_hours": 6.0,
+              "real_mean": -0.09445569126878453,
+              "generated_mean": -0.0455482425823113,
+              "mean_difference_abs": 0.05543584554845563,
+              "wasserstein": 0.09731447116402112
+            }
+          }
+        },
+        "conditional_resampling": {
+          "daily_energy_wasserstein_kwh": 2.8830527758525206,
+          "diversity_ratio": 1.121634517391652,
+          "generated_mean_daily_energy_kwh": 11.481074849798205,
+          "generated_mean_peak_power_kw": 3.1824456246400956,
+          "generated_mean_pointwise_variance_kwh2": 0.1027134017687587,
+          "generated_mean_ramp_kw": 4.679605530538152e-05,
+          "mean_profile_rmse_kwh": 0.04965895915094653,
+          "peak_power_wasserstein_kw": 0.5003467479971004,
+          "pointwise_variance_rmse_kwh2": 0.08153648891794743,
+          "pointwise_wasserstein_kwh": 0.05569842207662457,
+          "ramp_wasserstein_kw": 0.03363244945240989,
+          "real_mean_daily_energy_kwh": 11.639102508503893,
+          "real_mean_peak_power_kw": 3.0686786213926096,
+          "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+          "real_mean_ramp_kw": 7.936128632526989e-05,
+          "autocorrelation": {
+            "1": {
+              "lag_hours": 0.25,
+              "real_mean": 0.6727450496266503,
+              "generated_mean": 0.6884247860739665,
+              "mean_difference_abs": 0.037013110915542956,
+              "wasserstein": 0.04820116120799234
+            },
+            "4": {
+              "lag_hours": 1.0,
+              "real_mean": 0.3506312945526328,
+              "generated_mean": 0.35185817663818075,
+              "mean_difference_abs": 0.032132397965273146,
+              "wasserstein": 0.0448208833089057
+            },
+            "24": {
+              "lag_hours": 6.0,
+              "real_mean": -0.09445569126878453,
+              "generated_mean": -0.09716131053803098,
+              "mean_difference_abs": 0.015268555621223492,
+              "wasserstein": 0.02407074250791654
+            }
+          }
+        },
+        "conditional_mean": {
+          "daily_energy_wasserstein_kwh": 10.18354593744003,
+          "diversity_ratio": 8.16749709002317e-31,
+          "generated_mean_daily_energy_kwh": 11.55076318725581,
+          "generated_mean_peak_power_kw": 0.9890898677710929,
+          "generated_mean_pointwise_variance_kwh2": 7.535692447056231e-32,
+          "generated_mean_ramp_kw": 0.00023156988419342994,
+          "mean_profile_rmse_kwh": 0.03991371506541414,
+          "peak_power_wasserstein_kw": 2.2155377201868283,
+          "pointwise_variance_rmse_kwh2": 0.12413530699861512,
+          "pointwise_wasserstein_kwh": 0.17683333286520986,
+          "ramp_wasserstein_kw": 0.23484048251338252,
+          "real_mean_daily_energy_kwh": 11.639102508503893,
+          "real_mean_peak_power_kw": 3.0686786213926096,
+          "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+          "real_mean_ramp_kw": 7.936128632526989e-05,
+          "autocorrelation": {
+            "1": {
+              "lag_hours": 0.25,
+              "real_mean": 0.6727450496266503,
+              "generated_mean": 0.9580953634712387,
+              "mean_difference_abs": 0.2853503138445884,
+              "wasserstein": 0.28656516287857225
+            },
+            "4": {
+              "lag_hours": 1.0,
+              "real_mean": 0.3506312945526328,
+              "generated_mean": 0.7790205829039067,
+              "mean_difference_abs": 0.428389288351274,
+              "wasserstein": 0.4385840715661916
+            },
+            "24": {
+              "lag_hours": 6.0,
+              "real_mean": -0.09445569126878453,
+              "generated_mean": -0.18574729775962695,
+              "mean_difference_abs": 0.14816478729920507,
+              "wasserstein": 0.17551832869045791
+            }
+          }
+        }
+      },
+      "condition_primary": {
+        "0": {
+          "pointwise_wasserstein_kwh": 0.3542301420224825,
+          "daily_energy_wasserstein_kwh": 7.822391420834174,
+          "ramp_wasserstein_kw": 1.6774396321113636,
+          "diversity_ratio": 0.48505119197414104
+        },
+        "1": {
+          "pointwise_wasserstein_kwh": 0.3579581742163835,
+          "daily_energy_wasserstein_kwh": 12.574234248037172,
+          "ramp_wasserstein_kw": 1.6377206120063046,
+          "diversity_ratio": 0.49449926446694403
+        },
+        "2": {
+          "pointwise_wasserstein_kwh": 0.3387485809154282,
+          "daily_energy_wasserstein_kwh": 2.696564766713346,
+          "ramp_wasserstein_kw": 1.6706808804969586,
+          "diversity_ratio": 1.3809250758987726
+        },
+        "3": {
+          "pointwise_wasserstein_kwh": 0.35378296047684327,
+          "daily_energy_wasserstein_kwh": 5.055827131998411,
+          "ramp_wasserstein_kw": 1.8349991698994723,
+          "diversity_ratio": 1.1860223870423907
+        },
+        "4": {
+          "pointwise_wasserstein_kwh": 0.35681554991651715,
+          "daily_energy_wasserstein_kwh": 10.395876613889559,
+          "ramp_wasserstein_kw": 1.6274273974733477,
+          "diversity_ratio": 0.41287865612709274
+        },
+        "5": {
+          "pointwise_wasserstein_kwh": 0.35874307912864917,
+          "daily_energy_wasserstein_kwh": 12.352267186991702,
+          "ramp_wasserstein_kw": 1.5840729207191586,
+          "diversity_ratio": 0.33885226942349944
+        },
+        "6": {
+          "pointwise_wasserstein_kwh": 0.3448065846197809,
+          "daily_energy_wasserstein_kwh": 9.438633935489197,
+          "ramp_wasserstein_kw": 1.6069850356577662,
+          "diversity_ratio": 1.2716952825812682
+        },
+        "7": {
+          "pointwise_wasserstein_kwh": 0.36673885378017385,
+          "daily_energy_wasserstein_kwh": 12.54684672743635,
+          "ramp_wasserstein_kw": 1.6377316443800045,
+          "diversity_ratio": 0.8322248868377528
+        },
+        "8": {
+          "pointwise_wasserstein_kwh": 0.3636405198163819,
+          "daily_energy_wasserstein_kwh": 10.586435866230824,
+          "ramp_wasserstein_kw": 1.6501648432671483,
+          "diversity_ratio": 0.19200592764054655
+        },
+        "9": {
+          "pointwise_wasserstein_kwh": 0.34456788576513825,
+          "daily_energy_wasserstein_kwh": 4.163947737957175,
+          "ramp_wasserstein_kw": 1.6414042512910036,
+          "diversity_ratio": 0.5234010146146212
+        },
+        "10": {
+          "pointwise_wasserstein_kwh": 0.344544480417043,
+          "daily_energy_wasserstein_kwh": 1.9951834967519246,
+          "ramp_wasserstein_kw": 1.5941900419092088,
+          "diversity_ratio": 0.38143789121285343
+        },
+        "11": {
+          "pointwise_wasserstein_kwh": 0.32759747675829926,
+          "daily_energy_wasserstein_kwh": 3.421306742681009,
+          "ramp_wasserstein_kw": 1.595047020975975,
+          "diversity_ratio": 0.8404604456583202
+        },
+        "12": {
+          "pointwise_wasserstein_kwh": 0.35635816869915593,
+          "daily_energy_wasserstein_kwh": 13.29017501399416,
+          "ramp_wasserstein_kw": 1.5978096814128373,
+          "diversity_ratio": 0.21996788269859768
+        },
+        "13": {
+          "pointwise_wasserstein_kwh": 0.34637726666905566,
+          "daily_energy_wasserstein_kwh": 1.2285154681374846,
+          "ramp_wasserstein_kw": 1.632761701271808,
+          "diversity_ratio": 0.3642002116173457
+        },
+        "14": {
+          "pointwise_wasserstein_kwh": 0.34116504882296944,
+          "daily_energy_wasserstein_kwh": 1.7854499350731203,
+          "ramp_wasserstein_kw": 1.5346461851133315,
+          "diversity_ratio": 0.3355547169967815
+        },
+        "15": {
+          "pointwise_wasserstein_kwh": 0.3469961087259604,
+          "daily_energy_wasserstein_kwh": 9.65583962799037,
+          "ramp_wasserstein_kw": 1.583566278673612,
+          "diversity_ratio": 0.5818221561258848
+        },
+        "16": {
+          "pointwise_wasserstein_kwh": 0.3968075336219287,
+          "daily_energy_wasserstein_kwh": 12.470721223428846,
+          "ramp_wasserstein_kw": 1.5708533361284371,
+          "diversity_ratio": 0.08529904434281443
+        },
+        "17": {
+          "pointwise_wasserstein_kwh": 0.39067589542355124,
+          "daily_energy_wasserstein_kwh": 4.791769158115333,
+          "ramp_wasserstein_kw": 1.7068283441229755,
+          "diversity_ratio": 0.15329870365986242
+        },
+        "18": {
+          "pointwise_wasserstein_kwh": 0.3666377216230461,
+          "daily_energy_wasserstein_kwh": 13.390262142266096,
+          "ramp_wasserstein_kw": 1.627408073032549,
+          "diversity_ratio": 0.37654373938780744
+        },
+        "19": {
+          "pointwise_wasserstein_kwh": 0.3889248311257871,
+          "daily_energy_wasserstein_kwh": 4.543886427148537,
+          "ramp_wasserstein_kw": 1.7129784501896022,
+          "diversity_ratio": 0.10665937514578917
+        },
+        "20": {
+          "pointwise_wasserstein_kwh": 0.4350866173047159,
+          "daily_energy_wasserstein_kwh": 21.800929840358002,
+          "ramp_wasserstein_kw": 1.4868330491944708,
+          "diversity_ratio": 0.04319358417381457
+        },
+        "21": {
+          "pointwise_wasserstein_kwh": 0.3764493637831303,
+          "daily_energy_wasserstein_kwh": 3.2368803386801304,
+          "ramp_wasserstein_kw": 1.6020092595991078,
+          "diversity_ratio": 0.10419103398650864
+        },
+        "22": {
+          "pointwise_wasserstein_kwh": 0.3588694481452482,
+          "daily_energy_wasserstein_kwh": 10.091344411035822,
+          "ramp_wasserstein_kw": 1.5810511638530482,
+          "diversity_ratio": 0.5556889104829438
+        },
+        "23": {
+          "pointwise_wasserstein_kwh": 0.3795810330102416,
+          "daily_energy_wasserstein_kwh": 15.573724002746127,
+          "ramp_wasserstein_kw": 1.455487938400906,
+          "diversity_ratio": 0.13610354070959924
+        },
+        "24": {
+          "pointwise_wasserstein_kwh": 0.3466811659111304,
+          "daily_energy_wasserstein_kwh": 1.9459976568679986,
+          "ramp_wasserstein_kw": 1.6507319639354945,
+          "diversity_ratio": 0.3387430701744628
+        },
+        "25": {
+          "pointwise_wasserstein_kwh": 0.35329492378860117,
+          "daily_energy_wasserstein_kwh": 2.618460860955161,
+          "ramp_wasserstein_kw": 1.5860196447017487,
+          "diversity_ratio": 0.22232640694261005
+        },
+        "26": {
+          "pointwise_wasserstein_kwh": 0.36963656311239296,
+          "daily_energy_wasserstein_kwh": 5.969068857209642,
+          "ramp_wasserstein_kw": 1.5628509680825091,
+          "diversity_ratio": 0.1533582101641821
+        },
+        "27": {
+          "pointwise_wasserstein_kwh": 0.34625555324933854,
+          "daily_energy_wasserstein_kwh": 5.3064075030535145,
+          "ramp_wasserstein_kw": 1.5995780018160684,
+          "diversity_ratio": 0.3128895029081922
+        },
+        "28": {
+          "pointwise_wasserstein_kwh": 0.3493138470421154,
+          "daily_energy_wasserstein_kwh": 4.28089804036772,
+          "ramp_wasserstein_kw": 1.6302618684567034,
+          "diversity_ratio": 0.19347695619807154
+        },
+        "29": {
+          "pointwise_wasserstein_kwh": 0.3605173024971668,
+          "daily_energy_wasserstein_kwh": 5.183255694977779,
+          "ramp_wasserstein_kw": 1.4849724016711605,
+          "diversity_ratio": 0.13060547054628782
+        },
+        "30": {
+          "pointwise_wasserstein_kwh": 0.36120536194747127,
+          "daily_energy_wasserstein_kwh": 6.674376193236968,
+          "ramp_wasserstein_kw": 1.5507128674437929,
+          "diversity_ratio": 0.17866770638547955
+        },
+        "31": {
+          "pointwise_wasserstein_kwh": 0.3615294780121747,
+          "daily_energy_wasserstein_kwh": 5.159664088265598,
+          "ramp_wasserstein_kw": 1.5919103619004233,
+          "diversity_ratio": 0.2048872812328192
+        },
+        "32": {
+          "pointwise_wasserstein_kwh": 0.425238833185044,
+          "daily_energy_wasserstein_kwh": 15.07182506830908,
+          "ramp_wasserstein_kw": 1.5183552523756547,
+          "diversity_ratio": 0.11019808274768558
+        },
+        "33": {
+          "pointwise_wasserstein_kwh": 0.36552861364588657,
+          "daily_energy_wasserstein_kwh": 8.416194830957101,
+          "ramp_wasserstein_kw": 1.4809725676458205,
+          "diversity_ratio": 0.1128788623565051
+        },
+        "34": {
+          "pointwise_wasserstein_kwh": 0.3475738705678068,
+          "daily_energy_wasserstein_kwh": 5.292276693081603,
+          "ramp_wasserstein_kw": 1.6958574747776087,
+          "diversity_ratio": 1.0851628120526031
+        },
+        "35": {
+          "pointwise_wasserstein_kwh": 0.3653757860188807,
+          "daily_energy_wasserstein_kwh": 9.45054994168764,
+          "ramp_wasserstein_kw": 1.5010030608943319,
+          "diversity_ratio": 0.16899793013069786
+        },
+        "36": {
+          "pointwise_wasserstein_kwh": 0.44764269489308095,
+          "daily_energy_wasserstein_kwh": 20.212427194259945,
+          "ramp_wasserstein_kw": 1.414278424799712,
+          "diversity_ratio": 0.055508959353771266
+        },
+        "37": {
+          "pointwise_wasserstein_kwh": 0.4059777440259718,
+          "daily_energy_wasserstein_kwh": 18.45640600931347,
+          "ramp_wasserstein_kw": 1.4841932561134819,
+          "diversity_ratio": 0.13411373175970287
+        },
+        "38": {
+          "pointwise_wasserstein_kwh": 0.3405919906163712,
+          "daily_energy_wasserstein_kwh": 8.495124979520421,
+          "ramp_wasserstein_kw": 1.5138640983689644,
+          "diversity_ratio": 0.7807953731183331
+        },
+        "39": {
+          "pointwise_wasserstein_kwh": 0.3814500614853689,
+          "daily_energy_wasserstein_kwh": 11.058660191483211,
+          "ramp_wasserstein_kw": 1.477612493659982,
+          "diversity_ratio": 0.07802793328861146
+        },
+        "40": {
+          "pointwise_wasserstein_kwh": 0.3622734577450304,
+          "daily_energy_wasserstein_kwh": 9.525624958881162,
+          "ramp_wasserstein_kw": 1.5103756928124568,
+          "diversity_ratio": 0.2507841517720223
+        },
+        "41": {
+          "pointwise_wasserstein_kwh": 0.36725953615693996,
+          "daily_energy_wasserstein_kwh": 6.86165606489485,
+          "ramp_wasserstein_kw": 1.5140160502992805,
+          "diversity_ratio": 0.17493717607300027
+        },
+        "42": {
+          "pointwise_wasserstein_kwh": 0.3746311492382241,
+          "daily_energy_wasserstein_kwh": 8.286900265319419,
+          "ramp_wasserstein_kw": 1.4757528391508448,
+          "diversity_ratio": 0.13037844727909237
+        },
+        "43": {
+          "pointwise_wasserstein_kwh": 0.34602512409009173,
+          "daily_energy_wasserstein_kwh": 5.111923841708995,
+          "ramp_wasserstein_kw": 1.5360031013321989,
+          "diversity_ratio": 0.22312197949982637
+        },
+        "44": {
+          "pointwise_wasserstein_kwh": 0.38334680533914184,
+          "daily_energy_wasserstein_kwh": 16.388971565754265,
+          "ramp_wasserstein_kw": 1.4635030860969802,
+          "diversity_ratio": 0.20546070211399223
+        },
+        "45": {
+          "pointwise_wasserstein_kwh": 0.37306298027877877,
+          "daily_energy_wasserstein_kwh": 7.2295246038981,
+          "ramp_wasserstein_kw": 1.495505043742835,
+          "diversity_ratio": 0.15446775156749956
+        },
+        "46": {
+          "pointwise_wasserstein_kwh": 0.3662267707664993,
+          "daily_energy_wasserstein_kwh": 4.397217687499505,
+          "ramp_wasserstein_kw": 1.4889250723172567,
+          "diversity_ratio": 0.1542291601300374
+        },
+        "47": {
+          "pointwise_wasserstein_kwh": 0.3946515869464507,
+          "daily_energy_wasserstein_kwh": 20.37822529048254,
+          "ramp_wasserstein_kw": 1.4329966749286405,
+          "diversity_ratio": 0.13289481981366372
+        },
+        "48": {
+          "pointwise_wasserstein_kwh": 0.4226136567308307,
+          "daily_energy_wasserstein_kwh": 19.98387120364729,
+          "ramp_wasserstein_kw": 1.3842515257792056,
+          "diversity_ratio": 0.10164495654255759
+        },
+        "49": {
+          "pointwise_wasserstein_kwh": 0.3872779800677802,
+          "daily_energy_wasserstein_kwh": 7.970413153190711,
+          "ramp_wasserstein_kw": 1.4618338864047666,
+          "diversity_ratio": 0.12319313083544009
+        },
+        "50": {
+          "pointwise_wasserstein_kwh": 0.34308484008489354,
+          "daily_energy_wasserstein_kwh": 4.527973554009515,
+          "ramp_wasserstein_kw": 1.6312234507212968,
+          "diversity_ratio": 0.49257692271089454
+        },
+        "51": {
+          "pointwise_wasserstein_kwh": 0.38972804568768643,
+          "daily_energy_wasserstein_kwh": 11.21071221184691,
+          "ramp_wasserstein_kw": 1.5366574655829095,
+          "diversity_ratio": 0.10374902179055084
+        },
+        "52": {
+          "pointwise_wasserstein_kwh": 0.44041603379157185,
+          "daily_energy_wasserstein_kwh": 16.880086174605605,
+          "ramp_wasserstein_kw": 1.3787727222353232,
+          "diversity_ratio": 0.09423287716222986
+        },
+        "53": {
+          "pointwise_wasserstein_kwh": 0.37980132035187264,
+          "daily_energy_wasserstein_kwh": 11.603160389034437,
+          "ramp_wasserstein_kw": 1.5429203520819317,
+          "diversity_ratio": 0.16018454592780215
+        },
+        "54": {
+          "pointwise_wasserstein_kwh": 0.3704078413520248,
+          "daily_energy_wasserstein_kwh": 9.155408812365422,
+          "ramp_wasserstein_kw": 1.6140793236711022,
+          "diversity_ratio": 0.3944690551600543
+        },
+        "55": {
+          "pointwise_wasserstein_kwh": 0.4157391665088994,
+          "daily_energy_wasserstein_kwh": 20.568473555532766,
+          "ramp_wasserstein_kw": 1.422200952373837,
+          "diversity_ratio": 0.10263605819168735
+        },
+        "56": {
+          "pointwise_wasserstein_kwh": 0.45370512435105903,
+          "daily_energy_wasserstein_kwh": 20.153455395484233,
+          "ramp_wasserstein_kw": 1.4541772592210238,
+          "diversity_ratio": 0.08219511649946203
+        },
+        "57": {
+          "pointwise_wasserstein_kwh": 0.41476556064912345,
+          "daily_energy_wasserstein_kwh": 10.475736818121195,
+          "ramp_wasserstein_kw": 1.3757708001110187,
+          "diversity_ratio": 0.08626203625190777
+        },
+        "58": {
+          "pointwise_wasserstein_kwh": 0.40450370589584966,
+          "daily_energy_wasserstein_kwh": 9.892553793062685,
+          "ramp_wasserstein_kw": 1.3864020101806809,
+          "diversity_ratio": 0.08255658893104727
+        },
+        "59": {
+          "pointwise_wasserstein_kwh": 0.41004672627379407,
+          "daily_energy_wasserstein_kwh": 14.979010888346494,
+          "ramp_wasserstein_kw": 1.4866498954398248,
+          "diversity_ratio": 0.08055726551885083
+        },
+        "60": {
+          "pointwise_wasserstein_kwh": 0.46186368999502253,
+          "daily_energy_wasserstein_kwh": 22.527237367353116,
+          "ramp_wasserstein_kw": 1.3811298350277263,
+          "diversity_ratio": 0.06585212002798016
+        },
+        "61": {
+          "pointwise_wasserstein_kwh": 0.42761194064119384,
+          "daily_energy_wasserstein_kwh": 11.936493414372087,
+          "ramp_wasserstein_kw": 1.4209062618504058,
+          "diversity_ratio": 0.06255764326321131
+        },
+        "62": {
+          "pointwise_wasserstein_kwh": 0.4334155941667132,
+          "daily_energy_wasserstein_kwh": 13.157228615121133,
+          "ramp_wasserstein_kw": 1.3570640444764501,
+          "diversity_ratio": 0.05209044010514782
+        },
+        "63": {
+          "pointwise_wasserstein_kwh": 0.4104069713572505,
+          "daily_energy_wasserstein_kwh": 13.548354994786314,
+          "ramp_wasserstein_kw": 1.455928390278867,
+          "diversity_ratio": 0.06455891249450363
+        }
+      },
+      "history": [
+        {
+          "elapsed_seconds": 2.171987634996185,
+          "epoch": 1,
+          "loss_d": 0.3715847530402243,
+          "loss_g": 1.1770600625313818,
+          "validation_score": 0.13758094854807248
+        },
+        {
+          "elapsed_seconds": 2.2060047059931094,
+          "epoch": 2,
+          "loss_d": 0.33928957721218467,
+          "loss_g": 2.1785548143088818,
+          "validation_score": 0.22247006311936465
+        },
+        {
+          "elapsed_seconds": 2.163352308998583,
+          "epoch": 3,
+          "loss_d": 0.156842467316892,
+          "loss_g": 3.332478802651167,
+          "validation_score": 0.21647334450979194
+        },
+        {
+          "elapsed_seconds": 1.9233610030059936,
+          "epoch": 4,
+          "loss_d": 0.12091785095981322,
+          "loss_g": 3.238437822088599,
+          "validation_score": 0.18694645358255238
+        },
+        {
+          "elapsed_seconds": 2.371059690005495,
+          "epoch": 5,
+          "loss_d": 0.10719692648854107,
+          "loss_g": 3.891392635181546,
+          "validation_score": 0.16396531751425533
+        },
+        {
+          "elapsed_seconds": 2.094752367993351,
+          "epoch": 6,
+          "loss_d": 0.08986385450407397,
+          "loss_g": 3.852159218862653,
+          "validation_score": 0.11133048668616159
+        },
+        {
+          "elapsed_seconds": 2.2082443019899074,
+          "epoch": 7,
+          "loss_d": 0.21640377916628495,
+          "loss_g": 2.811787623912096,
+          "validation_score": 0.09833755182201287
+        },
+        {
+          "elapsed_seconds": 2.224689604001469,
+          "epoch": 8,
+          "loss_d": 0.11992350514628924,
+          "loss_g": 3.144310887902975,
+          "validation_score": 0.07970997175553407
+        },
+        {
+          "elapsed_seconds": 2.5736524609965272,
+          "epoch": 9,
+          "loss_d": 0.2290870422439184,
+          "loss_g": 3.2058652583509684,
+          "validation_score": 0.08487561571817064
+        },
+        {
+          "elapsed_seconds": 2.3722902089939453,
+          "epoch": 10,
+          "loss_d": 0.16904856346081942,
+          "loss_g": 3.366743039339781,
+          "validation_score": 0.0875931192021729
+        },
+        {
+          "elapsed_seconds": 2.625830760996905,
+          "epoch": 11,
+          "loss_d": 0.16600912660942413,
+          "loss_g": 3.6551701426506042,
+          "validation_score": 0.09911785209499158
+        },
+        {
+          "elapsed_seconds": 2.4631405499967514,
+          "epoch": 12,
+          "loss_d": 0.13914965683943592,
+          "loss_g": 3.350685400888324,
+          "validation_score": 0.09084223089327755
+        },
+        {
+          "elapsed_seconds": 2.3190277539979434,
+          "epoch": 13,
+          "loss_d": 0.13571475207572803,
+          "loss_g": 3.996254688128829,
+          "validation_score": 0.11246689437278216
+        },
+        {
+          "elapsed_seconds": 2.073756551006227,
+          "epoch": 14,
+          "loss_d": 0.16560520199709572,
+          "loss_g": 4.195316977798939,
+          "validation_score": 0.08031705777436098
+        },
+        {
+          "elapsed_seconds": 2.08945766800025,
+          "epoch": 15,
+          "loss_d": 0.1371701881289482,
+          "loss_g": 3.847131859511137,
+          "validation_score": 0.07923718697367121
+        },
+        {
+          "elapsed_seconds": 1.9911317760124803,
+          "epoch": 16,
+          "loss_d": 0.13084498143871315,
+          "loss_g": 4.085543414577842,
+          "validation_score": 0.0767771784445775
+        },
+        {
+          "elapsed_seconds": 2.475416759989457,
+          "epoch": 17,
+          "loss_d": 0.1764542429591529,
+          "loss_g": 3.387190841138363,
+          "validation_score": 0.07191214515506772
+        },
+        {
+          "elapsed_seconds": 2.698996389997774,
+          "epoch": 18,
+          "loss_d": 0.15299545344896615,
+          "loss_g": 3.7403857838362455,
+          "validation_score": 0.07333910816485438
+        },
+        {
+          "elapsed_seconds": 2.318561888008844,
+          "epoch": 19,
+          "loss_d": 0.22046174402930774,
+          "loss_g": 3.720638372004032,
+          "validation_score": 0.06953994408140336
+        },
+        {
+          "elapsed_seconds": 2.282756380009232,
+          "epoch": 20,
+          "loss_d": 0.19023898302111775,
+          "loss_g": 3.458726916462183,
+          "validation_score": 0.07238467027519846
+        },
+        {
+          "elapsed_seconds": 2.337289624992991,
+          "epoch": 21,
+          "loss_d": 0.198429748066701,
+          "loss_g": 3.565812274813652,
+          "validation_score": 0.06513258075519464
+        },
+        {
+          "elapsed_seconds": 2.161522996990243,
+          "epoch": 22,
+          "loss_d": 0.18988421431276947,
+          "loss_g": 3.6903688199818134,
+          "validation_score": 0.05999756194468849
+        },
+        {
+          "elapsed_seconds": 2.0457292559876805,
+          "epoch": 23,
+          "loss_d": 0.24584214889910072,
+          "loss_g": 3.058785567060113,
+          "validation_score": 0.05815350075259099
+        },
+        {
+          "elapsed_seconds": 2.191376275004586,
+          "epoch": 24,
+          "loss_d": 0.27171044930582866,
+          "loss_g": 2.9687582291662693,
+          "validation_score": 0.06777005020253075
+        },
+        {
+          "elapsed_seconds": 2.142106901999796,
+          "epoch": 25,
+          "loss_d": 0.22413795528700575,
+          "loss_g": 3.1138086644932628,
+          "validation_score": 0.06246106511421582
+        },
+        {
+          "elapsed_seconds": 2.5880860820034286,
+          "epoch": 26,
+          "loss_d": 0.27178987563820556,
+          "loss_g": 2.8388025015592575,
+          "validation_score": 0.06128355703435773
+        },
+        {
+          "elapsed_seconds": 2.2081343489990104,
+          "epoch": 27,
+          "loss_d": 0.23923304409254342,
+          "loss_g": 3.0608795918524265,
+          "validation_score": 0.05393869974487112
+        },
+        {
+          "elapsed_seconds": 2.1733827580028446,
+          "epoch": 28,
+          "loss_d": 0.26135576522210613,
+          "loss_g": 3.330142080783844,
+          "validation_score": 0.07223784526049333
+        },
+        {
+          "elapsed_seconds": 2.731677111994941,
+          "epoch": 29,
+          "loss_d": 0.4874378852546215,
+          "loss_g": 2.1845012810081244,
+          "validation_score": 0.060157970521326355
+        },
+        {
+          "elapsed_seconds": 2.4969053659879137,
+          "epoch": 30,
+          "loss_d": 0.19734985486138612,
+          "loss_g": 2.573747475631535,
+          "validation_score": 0.05944905268277504
+        },
+        {
+          "elapsed_seconds": 2.5199861519940896,
+          "epoch": 31,
+          "loss_d": 0.2751177791506052,
+          "loss_g": 2.4279389437288046,
+          "validation_score": 0.06006110523558542
+        },
+        {
+          "elapsed_seconds": 2.4857056150067365,
+          "epoch": 32,
+          "loss_d": 0.23960465367417783,
+          "loss_g": 2.758163490332663,
+          "validation_score": 0.054503767764477594
+        },
+        {
+          "elapsed_seconds": 2.1965498520003166,
+          "epoch": 33,
+          "loss_d": 0.3186997132143006,
+          "loss_g": 2.5466714715585113,
+          "validation_score": 0.06319647754827429
+        },
+        {
+          "elapsed_seconds": 2.230556541006081,
+          "epoch": 34,
+          "loss_d": 0.2607490656664595,
+          "loss_g": 2.9009061008691788,
+          "validation_score": 0.055728446019334875
+        },
+        {
+          "elapsed_seconds": 2.6298283969954355,
+          "epoch": 35,
+          "loss_d": 0.3848618743941188,
+          "loss_g": 2.287419862113893,
+          "validation_score": 0.0574760494089522
+        },
+        {
+          "elapsed_seconds": 2.6349321479938226,
+          "epoch": 36,
+          "loss_d": 0.29556438885629177,
+          "loss_g": 2.745488326996565,
+          "validation_score": 0.05885462685127626
+        },
+        {
+          "elapsed_seconds": 2.8789924529992277,
+          "epoch": 37,
+          "loss_d": 0.3510660699685104,
+          "loss_g": 2.2851579692214727,
+          "validation_score": 0.0650355689719883
+        },
+        {
+          "elapsed_seconds": 2.6603187089931453,
+          "epoch": 38,
+          "loss_d": 0.3820574679411948,
+          "loss_g": 2.2960874745622277,
+          "validation_score": 0.06435622650491268
+        },
+        {
+          "elapsed_seconds": 2.44121289299801,
+          "epoch": 39,
+          "loss_d": 0.16774602321675047,
+          "loss_g": 3.2243720069527626,
+          "validation_score": 0.06454862376303556
+        },
+        {
+          "elapsed_seconds": 2.1242512890021317,
+          "epoch": 40,
+          "loss_d": 0.30461516871582717,
+          "loss_g": 2.73846841044724,
+          "validation_score": 0.05905073235588058
+        },
+        {
+          "elapsed_seconds": 2.0938809380022576,
+          "epoch": 41,
+          "loss_d": 0.28804160276195034,
+          "loss_g": 3.0555093875154853,
+          "validation_score": 0.05890369231942335
+        },
+        {
+          "elapsed_seconds": 2.0843418180011213,
+          "epoch": 42,
+          "loss_d": 0.24595305242110044,
+          "loss_g": 3.406256750226021,
+          "validation_score": 0.06050219858015756
+        },
+        {
+          "elapsed_seconds": 2.2770381070004078,
+          "epoch": 43,
+          "loss_d": 0.4333632081397809,
+          "loss_g": 2.431736626662314,
+          "validation_score": 0.05498292444157945
+        },
+        {
+          "elapsed_seconds": 2.1927815489907516,
+          "epoch": 44,
+          "loss_d": 0.34993201203178614,
+          "loss_g": 2.54425844270736,
+          "validation_score": 0.059865277500440094
+        },
+        {
+          "elapsed_seconds": 2.1738622230041074,
+          "epoch": 45,
+          "loss_d": 0.30698601121548563,
+          "loss_g": 2.672692196443677,
+          "validation_score": 0.060100736203802775
+        },
+        {
+          "elapsed_seconds": 2.5075760449981317,
+          "epoch": 46,
+          "loss_d": 0.3076669304864481,
+          "loss_g": 2.7043794095516205,
+          "validation_score": 0.0633125983332737
+        },
+        {
+          "elapsed_seconds": 2.105733834003331,
+          "epoch": 47,
+          "loss_d": 0.3650394987780601,
+          "loss_g": 2.5709024500101805,
+          "validation_score": 0.053842985207533424
+        },
+        {
+          "elapsed_seconds": 1.938904573005857,
+          "epoch": 48,
+          "loss_d": 0.3612216440960765,
+          "loss_g": 2.5558065362274647,
+          "validation_score": 0.05069450044483877
+        },
+        {
+          "elapsed_seconds": 1.9204814010008704,
+          "epoch": 49,
+          "loss_d": 0.25430620973929763,
+          "loss_g": 2.6847795359790325,
+          "validation_score": 0.04996527308592628
+        },
+        {
+          "elapsed_seconds": 2.058151764998911,
+          "epoch": 50,
+          "loss_d": 0.38106051983777434,
+          "loss_g": 2.385974266566336,
+          "validation_score": 0.04955509320558349
+        },
+        {
+          "elapsed_seconds": 2.014082930996665,
+          "epoch": 51,
+          "loss_d": 0.40538152889348567,
+          "loss_g": 2.3923907382413745,
+          "validation_score": 0.04788151483548594
+        },
+        {
+          "elapsed_seconds": 2.1853741490049288,
+          "epoch": 52,
+          "loss_d": 0.3675558870891109,
+          "loss_g": 2.5175605546683073,
+          "validation_score": 0.05318450297058538
+        },
+        {
+          "elapsed_seconds": 2.131769080006052,
+          "epoch": 53,
+          "loss_d": 0.3739484552061185,
+          "loss_g": 2.0341073479503393,
+          "validation_score": 0.05840154445830118
+        },
+        {
+          "elapsed_seconds": 1.9771836360014277,
+          "epoch": 54,
+          "loss_d": 0.32674047793261707,
+          "loss_g": 2.580222082324326,
+          "validation_score": 0.06696854966255235
+        },
+        {
+          "elapsed_seconds": 2.3170708069956163,
+          "epoch": 55,
+          "loss_d": 0.3968703793361783,
+          "loss_g": 3.0066992230713367,
+          "validation_score": 0.05881238390166269
+        },
+        {
+          "elapsed_seconds": 2.1458116970025003,
+          "epoch": 56,
+          "loss_d": 0.3791692565428093,
+          "loss_g": 2.063803697936237,
+          "validation_score": 0.05211624539581786
+        },
+        {
+          "elapsed_seconds": 2.1607080260000657,
+          "epoch": 57,
+          "loss_d": 0.3569947498617694,
+          "loss_g": 2.1981593891978264,
+          "validation_score": 0.060442978796667525
+        },
+        {
+          "elapsed_seconds": 1.828400963000604,
+          "epoch": 58,
+          "loss_d": 0.3727760093752295,
+          "loss_g": 2.4288293486461043,
+          "validation_score": 0.05109663904782261
+        },
+        {
+          "elapsed_seconds": 2.1908291040017502,
+          "epoch": 59,
+          "loss_d": 0.3901844220235944,
+          "loss_g": 2.04988837428391,
+          "validation_score": 0.04072260345467763
+        },
+        {
+          "elapsed_seconds": 2.1288385090010706,
+          "epoch": 60,
+          "loss_d": 0.47523899213410914,
+          "loss_g": 1.6524189924821258,
+          "validation_score": 0.03941170710692177
+        },
+        {
+          "elapsed_seconds": 2.0939683640026487,
+          "epoch": 61,
+          "loss_d": 0.5457944949157536,
+          "loss_g": 1.6541653047315776,
+          "validation_score": 0.04250329379001035
+        },
+        {
+          "elapsed_seconds": 1.9962717820017133,
+          "epoch": 62,
+          "loss_d": 0.5079339201329276,
+          "loss_g": 1.8439100999385118,
+          "validation_score": 0.04158777944475863
+        },
+        {
+          "elapsed_seconds": 1.9104746490047546,
+          "epoch": 63,
+          "loss_d": 0.46462020417675376,
+          "loss_g": 1.6462778747081757,
+          "validation_score": 0.05465655109960229
+        },
+        {
+          "elapsed_seconds": 2.032166090008104,
+          "epoch": 64,
+          "loss_d": 0.5256013858597726,
+          "loss_g": 2.054249311797321,
+          "validation_score": 0.06964310884289186
+        },
+        {
+          "elapsed_seconds": 2.072575999001856,
+          "epoch": 65,
+          "loss_d": 0.3596732869045809,
+          "loss_g": 2.282584188506007,
+          "validation_score": 0.06150158503299963
+        },
+        {
+          "elapsed_seconds": 2.2738887589948718,
+          "epoch": 66,
+          "loss_d": 0.3351695645833388,
+          "loss_g": 2.6637896010652184,
+          "validation_score": 0.04895286974857527
+        },
+        {
+          "elapsed_seconds": 2.197280924010556,
+          "epoch": 67,
+          "loss_d": 0.404183549573645,
+          "loss_g": 2.2556942040100694,
+          "validation_score": 0.05494762060393062
+        },
+        {
+          "elapsed_seconds": 2.0187436759879347,
+          "epoch": 68,
+          "loss_d": 0.4235919317579828,
+          "loss_g": 2.398125813342631,
+          "validation_score": 0.04670031629960173
+        },
+        {
+          "elapsed_seconds": 2.0666745779890334,
+          "epoch": 69,
+          "loss_d": 0.5971415928797796,
+          "loss_g": 1.674853665754199,
+          "validation_score": 0.049403476634230024
+        },
+        {
+          "elapsed_seconds": 2.116119204001734,
+          "epoch": 70,
+          "loss_d": 0.40024592832196504,
+          "loss_g": 2.2459919964894652,
+          "validation_score": 0.05300342410947678
+        },
+        {
+          "elapsed_seconds": 2.2190467990003526,
+          "epoch": 71,
+          "loss_d": 0.35009923088364303,
+          "loss_g": 2.1181260012090206,
+          "validation_score": 0.05503467277827667
+        },
+        {
+          "elapsed_seconds": 2.006608228010009,
+          "epoch": 72,
+          "loss_d": 0.3984508463181555,
+          "loss_g": 2.619520265609026,
+          "validation_score": 0.05555781547462857
+        },
+        {
+          "elapsed_seconds": 1.979620680998778,
+          "epoch": 73,
+          "loss_d": 0.4606848858529702,
+          "loss_g": 2.394631976261735,
+          "validation_score": 0.0503328424507572
+        },
+        {
+          "elapsed_seconds": 2.288077296994743,
+          "epoch": 74,
+          "loss_d": 0.4329546734225005,
+          "loss_g": 2.5257723508402705,
+          "validation_score": 0.055329928131698125
+        },
+        {
+          "elapsed_seconds": 2.049530129006598,
+          "epoch": 75,
+          "loss_d": 0.42284932418260723,
+          "loss_g": 2.390965299680829,
+          "validation_score": 0.04742502058174599
+        },
+        {
+          "elapsed_seconds": 2.197287638002308,
+          "epoch": 76,
+          "loss_d": 0.5686863171868026,
+          "loss_g": 2.5356254521757364,
+          "validation_score": 0.04476331761821939
+        },
+        {
+          "elapsed_seconds": 1.9755956669978332,
+          "epoch": 77,
+          "loss_d": 0.3726608104771003,
+          "loss_g": 1.8593553211539984,
+          "validation_score": 0.042102734031137366
+        },
+        {
+          "elapsed_seconds": 1.95201501599513,
+          "epoch": 78,
+          "loss_d": 0.5086956156883389,
+          "loss_g": 2.119998149573803,
+          "validation_score": 0.04878882141169546
+        },
+        {
+          "elapsed_seconds": 2.1162506039981963,
+          "epoch": 79,
+          "loss_d": 0.48371058760676533,
+          "loss_g": 2.6760372323915362,
+          "validation_score": 0.04347350858519879
+        },
+        {
+          "elapsed_seconds": 2.1090809349989286,
+          "epoch": 80,
+          "loss_d": 0.44896522839553654,
+          "loss_g": 1.9267004616558552,
+          "validation_score": 0.04027224878099863
+        },
+        {
+          "elapsed_seconds": 2.0139228830084903,
+          "epoch": 81,
+          "loss_d": 0.4216302066342905,
+          "loss_g": 2.0518504790961742,
+          "validation_score": 0.046576110856278774
+        },
+        {
+          "elapsed_seconds": 2.250184296994121,
+          "epoch": 82,
+          "loss_d": 0.5389354389626533,
+          "loss_g": 1.745924098417163,
+          "validation_score": 0.05461127531701019
+        },
+        {
+          "elapsed_seconds": 2.371881618993939,
+          "epoch": 83,
+          "loss_d": 0.5396761131705716,
+          "loss_g": 1.7809548769146204,
+          "validation_score": 0.052051459925545863
+        },
+        {
+          "elapsed_seconds": 2.0865962780080736,
+          "epoch": 84,
+          "loss_d": 0.3884780574589968,
+          "loss_g": 2.316843818873167,
+          "validation_score": 0.04623234779014259
+        },
+        {
+          "elapsed_seconds": 2.2235325840010773,
+          "epoch": 85,
+          "loss_d": 0.48073451197706163,
+          "loss_g": 1.778610854409635,
+          "validation_score": 0.04566728940617774
+        },
+        {
+          "elapsed_seconds": 2.044126572989626,
+          "epoch": 86,
+          "loss_d": 0.4439518640283495,
+          "loss_g": 1.8358508693054318,
+          "validation_score": 0.03955462186261608
+        },
+        {
+          "elapsed_seconds": 1.923308226003428,
+          "epoch": 87,
+          "loss_d": 0.39393181807827204,
+          "loss_g": 2.136542241089046,
+          "validation_score": 0.04596299019194324
+        },
+        {
+          "elapsed_seconds": 1.988706125994213,
+          "epoch": 88,
+          "loss_d": 0.461881440714933,
+          "loss_g": 2.275718712247908,
+          "validation_score": 0.03633358092813902
+        },
+        {
+          "elapsed_seconds": 1.9683609200001229,
+          "epoch": 89,
+          "loss_d": 0.5903170718811452,
+          "loss_g": 2.0743148010224104,
+          "validation_score": 0.04451038483159664
+        },
+        {
+          "elapsed_seconds": 2.0328513139975257,
+          "epoch": 90,
+          "loss_d": 0.44246097654104233,
+          "loss_g": 2.259287097491324,
+          "validation_score": 0.043525544589916386
+        },
+        {
+          "elapsed_seconds": 1.9982804210012546,
+          "epoch": 91,
+          "loss_d": 0.5315971422242001,
+          "loss_g": 2.143598809838295,
+          "validation_score": 0.04314218272647471
+        },
+        {
+          "elapsed_seconds": 2.4277882640017197,
+          "epoch": 92,
+          "loss_d": 0.49628073477651924,
+          "loss_g": 2.025279671885073,
+          "validation_score": 0.0714869809169727
+        },
+        {
+          "elapsed_seconds": 2.4634086550067877,
+          "epoch": 93,
+          "loss_d": 0.4082330715027638,
+          "loss_g": 2.3620030470192432,
+          "validation_score": 0.05268170347958782
+        },
+        {
+          "elapsed_seconds": 2.0674939659947995,
+          "epoch": 94,
+          "loss_d": 0.5110533282859251,
+          "loss_g": 1.9371263035573065,
+          "validation_score": 0.05351728675045327
+        },
+        {
+          "elapsed_seconds": 2.159675581002375,
+          "epoch": 95,
+          "loss_d": 0.3174589379923418,
+          "loss_g": 1.9678771579638124,
+          "validation_score": 0.05235801146471886
+        },
+        {
+          "elapsed_seconds": 1.9977049459994305,
+          "epoch": 96,
+          "loss_d": 0.4635361840482801,
+          "loss_g": 2.113391171209514,
+          "validation_score": 0.058795007366200025
+        },
+        {
+          "elapsed_seconds": 1.9132978550042026,
+          "epoch": 97,
+          "loss_d": 0.5722703004721552,
+          "loss_g": 2.371360097080469,
+          "validation_score": 0.05105210072461356
+        },
+        {
+          "elapsed_seconds": 1.9651609470020048,
+          "epoch": 98,
+          "loss_d": 0.4939068798557855,
+          "loss_g": 2.4755297154188156,
+          "validation_score": 0.04523129505345954
+        },
+        {
+          "elapsed_seconds": 2.2043743069953052,
+          "epoch": 99,
+          "loss_d": 0.41438313794787973,
+          "loss_g": 2.310232885181904,
+          "validation_score": 0.06538082049165439
+        },
+        {
+          "elapsed_seconds": 2.6466676499985624,
+          "epoch": 100,
+          "loss_d": 0.5516590203624219,
+          "loss_g": 2.694441723637283,
+          "validation_score": 0.04441186835596985
+        },
+        {
+          "elapsed_seconds": 2.551292057003593,
+          "epoch": 101,
+          "loss_d": 0.4507883950136602,
+          "loss_g": 1.9136679051443934,
+          "validation_score": 0.05415553695091072
+        },
+        {
+          "elapsed_seconds": 2.566431465995265,
+          "epoch": 102,
+          "loss_d": 0.3802111496916041,
+          "loss_g": 2.1787823541089892,
+          "validation_score": 0.041191597134059066
+        },
+        {
+          "elapsed_seconds": 2.1541256780037656,
+          "epoch": 103,
+          "loss_d": 0.4595776228234172,
+          "loss_g": 2.058100000023842,
+          "validation_score": 0.04233111946039495
+        },
+        {
+          "elapsed_seconds": 2.1082225930003915,
+          "epoch": 104,
+          "loss_d": 0.44090582244098186,
+          "loss_g": 1.891718172468245,
+          "validation_score": 0.05020196670570461
+        },
+        {
+          "elapsed_seconds": 2.395753878998221,
+          "epoch": 105,
+          "loss_d": 0.525713418261148,
+          "loss_g": 2.159815277904272,
+          "validation_score": 0.052448251206953955
+        },
+        {
+          "elapsed_seconds": 2.578992623995873,
+          "epoch": 106,
+          "loss_d": 0.3223771306220442,
+          "loss_g": 2.444979310967028,
+          "validation_score": 0.06158075039250358
+        },
+        {
+          "elapsed_seconds": 2.4460702700016554,
+          "epoch": 107,
+          "loss_d": 0.45717648928985,
+          "loss_g": 1.9171211617067456,
+          "validation_score": 0.0460321439484801
+        },
+        {
+          "elapsed_seconds": 2.53941803300404,
+          "epoch": 108,
+          "loss_d": 0.6812595289666206,
+          "loss_g": 2.7465396532788873,
+          "validation_score": 0.1106601598220512
+        },
+        {
+          "elapsed_seconds": 2.5829709849931533,
+          "epoch": 109,
+          "loss_d": 0.43425189203117043,
+          "loss_g": 2.462997319176793,
+          "validation_score": 0.06619088181603654
+        },
+        {
+          "elapsed_seconds": 2.739328337003826,
+          "epoch": 110,
+          "loss_d": 0.44910266576334834,
+          "loss_g": 3.2411653930321336,
+          "validation_score": 0.06439888734463277
+        },
+        {
+          "elapsed_seconds": 2.535415842998191,
+          "epoch": 111,
+          "loss_d": 0.3271099237026647,
+          "loss_g": 3.5666523249819875,
+          "validation_score": 0.06399076740621013
+        },
+        {
+          "elapsed_seconds": 2.4829133519961033,
+          "epoch": 112,
+          "loss_d": 0.3145390454446897,
+          "loss_g": 2.4990804633125663,
+          "validation_score": 0.04696070044309408
+        },
+        {
+          "elapsed_seconds": 2.1717506970016984,
+          "epoch": 113,
+          "loss_d": 0.4532940819626674,
+          "loss_g": 2.6159895537421107,
+          "validation_score": 0.045705712049520265
+        },
+        {
+          "elapsed_seconds": 2.480358240994974,
+          "epoch": 114,
+          "loss_d": 0.4846368122380227,
+          "loss_g": 1.5631462847813964,
+          "validation_score": 0.043240861907236194
+        },
+        {
+          "elapsed_seconds": 2.312314023001818,
+          "epoch": 115,
+          "loss_d": 0.48930516256950796,
+          "loss_g": 1.6738632805645466,
+          "validation_score": 0.04075433773965642
+        },
+        {
+          "elapsed_seconds": 2.2578109610039974,
+          "epoch": 116,
+          "loss_d": 0.4716692784568295,
+          "loss_g": 1.5608094269409776,
+          "validation_score": 0.03617155169375034
+        },
+        {
+          "elapsed_seconds": 2.179125294991536,
+          "epoch": 117,
+          "loss_d": 0.5750292751472443,
+          "loss_g": 1.3734714081510901,
+          "validation_score": 0.04340426724106313
+        },
+        {
+          "elapsed_seconds": 1.9753176660015015,
+          "epoch": 118,
+          "loss_d": 0.4683431410230696,
+          "loss_g": 1.8774326154962182,
+          "validation_score": 0.052491418958860926
+        },
+        {
+          "elapsed_seconds": 2.1564487389987335,
+          "epoch": 119,
+          "loss_d": 0.49742389924358577,
+          "loss_g": 1.6830231719650328,
+          "validation_score": 0.05400561045327853
+        },
+        {
+          "elapsed_seconds": 2.2110077499964973,
+          "epoch": 120,
+          "loss_d": 0.5402569803409278,
+          "loss_g": 2.234269636683166,
+          "validation_score": 0.04804373911684934
+        }
+      ]
+    },
+    {
+      "name": "screen_standard",
+      "config": {
+        "batch_size": 512,
+        "device": "cpu",
+        "epochs": 120,
+        "hidden_dim": 64,
+        "latent_dim": 24,
+        "lr_d": 0.0002,
+        "lr_g": 0.0001,
+        "max_train_samples": 65536,
+        "normalization": "standard",
+        "num_threads": 1,
+        "patience": null,
+        "seed": 42,
+        "unconditional": false,
+        "validation_samples": 2048
+      },
+      "best_epoch": 118,
+      "epochs_completed": 120,
+      "generator_updates": 15360,
+      "discriminator_updates": 15360,
+      "elapsed_seconds": 271.5439850600087,
+      "provenance": {
+        "git_commit": "0955c218377f3213bafc849d0c1be75a4f3ed20b",
+        "git_commit_tree": "9adda02f57e800394ebf572176d5395423f81a14",
+        "git_dirty": false,
+        "hardware": {
+          "cpu_count": 9,
+          "cuda_device": null,
+          "device": "cpu",
+          "machine": "x86_64",
+          "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+          "processor": "x86_64"
+        },
+        "numpy": "2.3.5",
+        "python": "3.12.14",
+        "torch": "2.14.1+cu130"
+      },
+      "checkpoint_sha256": "3e5efd38b94bd5326c31fa9c97a0357815229983ac85d38e5118b8c8648aa8fc",
+      "data_hashes": {
+        "metadata.json": "36b40313730d206ba3195c228807e184044aa98f35c21a05a4b4fa144539fc63",
+        "scaler.json": "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb",
+        "train.npz": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+        "val.npz": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d"
+      },
+      "scaler": {
+        "constant_range": false,
+        "fitted_on": "train",
+        "kind": "standard",
+        "maximum": 7.09499979019165,
+        "mean": 0.11793679966132381,
+        "minimum": -2.9560000896453857,
+        "range": [
+          0,
+          1
+        ],
+        "std": 0.35429410208763035,
+        "transform": "(x - minimum) / (maximum - minimum); use denominator 1 if constant"
+      },
+      "training_profiles": {
+        "prepared": 611520,
+        "model": 65536,
+        "baselines": 65536
+      },
+      "evaluation": {
+        "split": "val",
+        "seed": 2026,
+        "samples_per_condition_cap": 100,
+        "units": "kWh/interval",
+        "target": "net",
+        "checkpoint_sha256": "3e5efd38b94bd5326c31fa9c97a0357815229983ac85d38e5118b8c8648aa8fc",
+        "train_sha256": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+        "evaluation_sha256": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d",
+        "profile_count": 6400,
+        "meter_count": 360,
+        "training_profiles": {
+          "prepared": 611520,
+          "model": 65536,
+          "baselines": 65536
+        },
+        "sampling": "Uniform without replacement within each observed condition; macro averages weight conditions equally.",
+        "nearest_neighbors": {
+          "reference_scope": "sampled_training_profiles",
+          "total_counts": {
+            "train": 65536,
+            "generated": 6400,
+            "heldout": 6400
+          },
+          "sample_counts": {
+            "train": 1000,
+            "generated": 1000,
+            "heldout": 1000
+          },
+          "seed": 2026,
+          "distance_units": "kWh/interval (Euclidean RMS across slots)",
+          "generated_to_train_mean_rms_kwh": 0.10044877601751506,
+          "generated_to_train_median_rms_kwh": 0.085834358950746,
+          "generated_to_train_p05_rms_kwh": 0.02865953792567894,
+          "generated_to_train_p95_rms_kwh": 0.22249414725437852,
+          "generated_exact_copy_fraction": 0.0,
+          "heldout_to_train_mean_rms_kwh": 0.16376267829465524,
+          "heldout_to_train_median_rms_kwh": 0.1304866822999073,
+          "heldout_to_train_p05_rms_kwh": 0.02102804117472389,
+          "heldout_to_train_p95_rms_kwh": 0.4361292503765998,
+          "heldout_exact_copy_fraction": 0.004
+        },
+        "raw_output": {
+          "minimum_kwh": -2.0661823749542236,
+          "maximum_kwh": 1.716264009475708,
+          "negative_fraction": 0.24176432291666666,
+          "negative_values_valid_for_target": true,
+          "clipping_applied": false
+        },
+        "interpretation": "Descriptive held-out diagnostics; no privacy guarantee or significance claim. Repeated test use invalidates a final untouched-test claim."
+      },
+      "macro": {
+        "cgan": {
+          "daily_energy_wasserstein_kwh": 7.927150899715435,
+          "diversity_ratio": 0.3760651830298237,
+          "generated_mean_daily_energy_kwh": 6.951067149679751,
+          "generated_mean_peak_power_kw": 1.3145683714002372,
+          "generated_mean_pointwise_variance_kwh2": 0.021218726694437473,
+          "generated_mean_ramp_kw": -0.0003318579982281838,
+          "mean_profile_rmse_kwh": 0.09962581205987286,
+          "peak_power_wasserstein_kw": 1.798764458788646,
+          "pointwise_variance_rmse_kwh2": 0.10701989136770902,
+          "pointwise_wasserstein_kwh": 0.1094045713258247,
+          "ramp_wasserstein_kw": 0.15496329410095155,
+          "real_mean_daily_energy_kwh": 11.639102508503893,
+          "real_mean_peak_power_kw": 3.0686786213926096,
+          "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+          "real_mean_ramp_kw": 7.936128632526989e-05,
+          "autocorrelation": {
+            "1": {
+              "lag_hours": 0.25,
+              "real_mean": 0.6727450496266503,
+              "generated_mean": 0.5272590372272262,
+              "mean_difference_abs": 0.1468970060260735,
+              "wasserstein": 0.18011086640168367
+            },
+            "4": {
+              "lag_hours": 1.0,
+              "real_mean": 0.3506312945526328,
+              "generated_mean": 0.3031244648739934,
+              "mean_difference_abs": 0.08085874266133386,
+              "wasserstein": 0.10313862335477791
+            },
+            "24": {
+              "lag_hours": 6.0,
+              "real_mean": -0.09445569126878453,
+              "generated_mean": -0.06192390543223421,
+              "mean_difference_abs": 0.040846060653493624,
+              "wasserstein": 0.04919446294378302
+            }
+          }
+        },
+        "conditional_resampling": {
+          "daily_energy_wasserstein_kwh": 2.8830527758525206,
+          "diversity_ratio": 1.121634517391652,
+          "generated_mean_daily_energy_kwh": 11.481074849798205,
+          "generated_mean_peak_power_kw": 3.1824456246400956,
+          "generated_mean_pointwise_variance_kwh2": 0.1027134017687587,
+          "generated_mean_ramp_kw": 4.679605530538152e-05,
+          "mean_profile_rmse_kwh": 0.04965895915094653,
+          "peak_power_wasserstein_kw": 0.5003467479971004,
+          "pointwise_variance_rmse_kwh2": 0.08153648891794743,
+          "pointwise_wasserstein_kwh": 0.05569842207662457,
+          "ramp_wasserstein_kw": 0.03363244945240989,
+          "real_mean_daily_energy_kwh": 11.639102508503893,
+          "real_mean_peak_power_kw": 3.0686786213926096,
+          "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+          "real_mean_ramp_kw": 7.936128632526989e-05,
+          "autocorrelation": {
+            "1": {
+              "lag_hours": 0.25,
+              "real_mean": 0.6727450496266503,
+              "generated_mean": 0.6884247860739665,
+              "mean_difference_abs": 0.037013110915542956,
+              "wasserstein": 0.04820116120799234
+            },
+            "4": {
+              "lag_hours": 1.0,
+              "real_mean": 0.3506312945526328,
+              "generated_mean": 0.35185817663818075,
+              "mean_difference_abs": 0.032132397965273146,
+              "wasserstein": 0.0448208833089057
+            },
+            "24": {
+              "lag_hours": 6.0,
+              "real_mean": -0.09445569126878453,
+              "generated_mean": -0.09716131053803098,
+              "mean_difference_abs": 0.015268555621223492,
+              "wasserstein": 0.02407074250791654
+            }
+          }
+        },
+        "conditional_mean": {
+          "daily_energy_wasserstein_kwh": 10.18354593744003,
+          "diversity_ratio": 8.16749709002317e-31,
+          "generated_mean_daily_energy_kwh": 11.55076318725581,
+          "generated_mean_peak_power_kw": 0.9890898677710929,
+          "generated_mean_pointwise_variance_kwh2": 7.535692447056231e-32,
+          "generated_mean_ramp_kw": 0.00023156988419342994,
+          "mean_profile_rmse_kwh": 0.03991371506541414,
+          "peak_power_wasserstein_kw": 2.2155377201868283,
+          "pointwise_variance_rmse_kwh2": 0.12413530699861512,
+          "pointwise_wasserstein_kwh": 0.17683333286520986,
+          "ramp_wasserstein_kw": 0.23484048251338252,
+          "real_mean_daily_energy_kwh": 11.639102508503893,
+          "real_mean_peak_power_kw": 3.0686786213926096,
+          "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+          "real_mean_ramp_kw": 7.936128632526989e-05,
+          "autocorrelation": {
+            "1": {
+              "lag_hours": 0.25,
+              "real_mean": 0.6727450496266503,
+              "generated_mean": 0.9580953634712387,
+              "mean_difference_abs": 0.2853503138445884,
+              "wasserstein": 0.28656516287857225
+            },
+            "4": {
+              "lag_hours": 1.0,
+              "real_mean": 0.3506312945526328,
+              "generated_mean": 0.7790205829039067,
+              "mean_difference_abs": 0.428389288351274,
+              "wasserstein": 0.4385840715661916
+            },
+            "24": {
+              "lag_hours": 6.0,
+              "real_mean": -0.09445569126878453,
+              "generated_mean": -0.18574729775962695,
+              "mean_difference_abs": 0.14816478729920507,
+              "wasserstein": 0.17551832869045791
+            }
+          }
+        }
+      },
+      "condition_primary": {
+        "0": {
+          "pointwise_wasserstein_kwh": 0.055527131538678616,
+          "daily_energy_wasserstein_kwh": 1.0934334396124543,
+          "ramp_wasserstein_kw": 0.14800732477961143,
+          "diversity_ratio": 0.4544404513747672
+        },
+        "1": {
+          "pointwise_wasserstein_kwh": 0.049467883505190956,
+          "daily_energy_wasserstein_kwh": 0.9334611522500379,
+          "ramp_wasserstein_kw": 0.1357342708830316,
+          "diversity_ratio": 0.60625996588579
+        },
+        "2": {
+          "pointwise_wasserstein_kwh": 0.037274565306877894,
+          "daily_energy_wasserstein_kwh": 0.5976253339484722,
+          "ramp_wasserstein_kw": 0.11661247173711,
+          "diversity_ratio": 1.1728128914976437
+        },
+        "3": {
+          "pointwise_wasserstein_kwh": 0.04437305432027198,
+          "daily_energy_wasserstein_kwh": 1.0922534308712146,
+          "ramp_wasserstein_kw": 0.12944645500977958,
+          "diversity_ratio": 0.7256956757678316
+        },
+        "4": {
+          "pointwise_wasserstein_kwh": 0.05337574024785199,
+          "daily_energy_wasserstein_kwh": 1.071759888849165,
+          "ramp_wasserstein_kw": 0.1373165978604727,
+          "diversity_ratio": 0.6572028942369114
+        },
+        "5": {
+          "pointwise_wasserstein_kwh": 0.053844073492244515,
+          "daily_energy_wasserstein_kwh": 1.7273471004913155,
+          "ramp_wasserstein_kw": 0.13062577009022744,
+          "diversity_ratio": 0.4638784455840012
+        },
+        "6": {
+          "pointwise_wasserstein_kwh": 0.04466198926191315,
+          "daily_energy_wasserstein_kwh": 0.7112188877860673,
+          "ramp_wasserstein_kw": 0.14401910804415208,
+          "diversity_ratio": 0.9358417857026937
+        },
+        "7": {
+          "pointwise_wasserstein_kwh": 0.04758086706823739,
+          "daily_energy_wasserstein_kwh": 0.8666370623106465,
+          "ramp_wasserstein_kw": 0.14256069877815408,
+          "diversity_ratio": 0.6819053916773584
+        },
+        "8": {
+          "pointwise_wasserstein_kwh": 0.06820193586937262,
+          "daily_energy_wasserstein_kwh": 3.436434534865303,
+          "ramp_wasserstein_kw": 0.12626833602413987,
+          "diversity_ratio": 0.22922105402815382
+        },
+        "9": {
+          "pointwise_wasserstein_kwh": 0.0643939215452117,
+          "daily_energy_wasserstein_kwh": 2.7367482067598687,
+          "ramp_wasserstein_kw": 0.15252460703409376,
+          "diversity_ratio": 0.9010604905729703
+        },
+        "10": {
+          "pointwise_wasserstein_kwh": 0.09109435599289277,
+          "daily_energy_wasserstein_kwh": 4.743230738380857,
+          "ramp_wasserstein_kw": 0.11402488414368699,
+          "diversity_ratio": 0.6139689175005965
+        },
+        "11": {
+          "pointwise_wasserstein_kwh": 0.04717812563546412,
+          "daily_energy_wasserstein_kwh": 1.9200737519540236,
+          "ramp_wasserstein_kw": 0.12028862481914598,
+          "diversity_ratio": 0.6280673625273268
+        },
+        "12": {
+          "pointwise_wasserstein_kwh": 0.06294333688104455,
+          "daily_energy_wasserstein_kwh": 3.347962683033003,
+          "ramp_wasserstein_kw": 0.13289315357958692,
+          "diversity_ratio": 0.31695698454235305
+        },
+        "13": {
+          "pointwise_wasserstein_kwh": 0.07220711843229735,
+          "daily_energy_wasserstein_kwh": 4.096038805277813,
+          "ramp_wasserstein_kw": 0.11718604338291491,
+          "diversity_ratio": 0.6159187203346077
+        },
+        "14": {
+          "pointwise_wasserstein_kwh": 0.09881994845490179,
+          "daily_energy_wasserstein_kwh": 7.083346556632069,
+          "ramp_wasserstein_kw": 0.1203196425729678,
+          "diversity_ratio": 0.5227805182203931
+        },
+        "15": {
+          "pointwise_wasserstein_kwh": 0.05123838083289395,
+          "daily_energy_wasserstein_kwh": 2.066553668386928,
+          "ramp_wasserstein_kw": 0.1712282722489108,
+          "diversity_ratio": 0.9701448814508721
+        },
+        "16": {
+          "pointwise_wasserstein_kwh": 0.11650295137697557,
+          "daily_energy_wasserstein_kwh": 9.071279295597334,
+          "ramp_wasserstein_kw": 0.16072590471241074,
+          "diversity_ratio": 0.10923820915116153
+        },
+        "17": {
+          "pointwise_wasserstein_kwh": 0.09523500328093511,
+          "daily_energy_wasserstein_kwh": 7.534134217142738,
+          "ramp_wasserstein_kw": 0.15335601960642245,
+          "diversity_ratio": 0.0970217114978878
+        },
+        "18": {
+          "pointwise_wasserstein_kwh": 0.05317590564267468,
+          "daily_energy_wasserstein_kwh": 1.1931004640279754,
+          "ramp_wasserstein_kw": 0.15262757915267902,
+          "diversity_ratio": 0.5491375991803801
+        },
+        "19": {
+          "pointwise_wasserstein_kwh": 0.10815450914930798,
+          "daily_energy_wasserstein_kwh": 8.644573758960748,
+          "ramp_wasserstein_kw": 0.15904556585484309,
+          "diversity_ratio": 0.10953384802208901
+        },
+        "20": {
+          "pointwise_wasserstein_kwh": 0.1525564958253432,
+          "daily_energy_wasserstein_kwh": 13.048003759163459,
+          "ramp_wasserstein_kw": 0.18516140392835187,
+          "diversity_ratio": 0.10699706308158759
+        },
+        "21": {
+          "pointwise_wasserstein_kwh": 0.09919514592783459,
+          "daily_energy_wasserstein_kwh": 7.218253068871164,
+          "ramp_wasserstein_kw": 0.1584848972358251,
+          "diversity_ratio": 0.1317426916556344
+        },
+        "22": {
+          "pointwise_wasserstein_kwh": 0.058914329755114826,
+          "daily_energy_wasserstein_kwh": 2.4029140943083624,
+          "ramp_wasserstein_kw": 0.14484963136054826,
+          "diversity_ratio": 0.44562039733304526
+        },
+        "23": {
+          "pointwise_wasserstein_kwh": 0.09503924862867663,
+          "daily_energy_wasserstein_kwh": 7.4058796888942755,
+          "ramp_wasserstein_kw": 0.16870885196740845,
+          "diversity_ratio": 0.12100795774776164
+        },
+        "24": {
+          "pointwise_wasserstein_kwh": 0.0682797826099284,
+          "daily_energy_wasserstein_kwh": 4.505021791104084,
+          "ramp_wasserstein_kw": 0.1415322561433399,
+          "diversity_ratio": 0.370948742961351
+        },
+        "25": {
+          "pointwise_wasserstein_kwh": 0.07586558250928589,
+          "daily_energy_wasserstein_kwh": 3.875567846953111,
+          "ramp_wasserstein_kw": 0.16427793199463464,
+          "diversity_ratio": 0.42470961548868646
+        },
+        "26": {
+          "pointwise_wasserstein_kwh": 0.11044035903814291,
+          "daily_energy_wasserstein_kwh": 6.885631657662297,
+          "ramp_wasserstein_kw": 0.1421441486672273,
+          "diversity_ratio": 0.3654891273335639
+        },
+        "27": {
+          "pointwise_wasserstein_kwh": 0.05996886619957879,
+          "daily_energy_wasserstein_kwh": 2.7438472929455657,
+          "ramp_wasserstein_kw": 0.14662344114978268,
+          "diversity_ratio": 0.38597298003187314
+        },
+        "28": {
+          "pointwise_wasserstein_kwh": 0.07125193075530813,
+          "daily_energy_wasserstein_kwh": 4.274893437208812,
+          "ramp_wasserstein_kw": 0.14024324849948874,
+          "diversity_ratio": 0.2328188681361939
+        },
+        "29": {
+          "pointwise_wasserstein_kwh": 0.1084169887736285,
+          "daily_energy_wasserstein_kwh": 6.812597164037617,
+          "ramp_wasserstein_kw": 0.12870483353427656,
+          "diversity_ratio": 0.20875579582632658
+        },
+        "30": {
+          "pointwise_wasserstein_kwh": 0.13478587409076057,
+          "daily_energy_wasserstein_kwh": 9.086740183466883,
+          "ramp_wasserstein_kw": 0.13104584129508975,
+          "diversity_ratio": 0.2779743682882111
+        },
+        "31": {
+          "pointwise_wasserstein_kwh": 0.08030773250000087,
+          "daily_energy_wasserstein_kwh": 5.763716385208509,
+          "ramp_wasserstein_kw": 0.14182512071651346,
+          "diversity_ratio": 0.2704275060491935
+        },
+        "32": {
+          "pointwise_wasserstein_kwh": 0.19068312557184228,
+          "daily_energy_wasserstein_kwh": 18.116148580696173,
+          "ramp_wasserstein_kw": 0.18374585811284033,
+          "diversity_ratio": 0.11006645022917033
+        },
+        "33": {
+          "pointwise_wasserstein_kwh": 0.09870745419550758,
+          "daily_energy_wasserstein_kwh": 7.5590453841367715,
+          "ramp_wasserstein_kw": 0.14660351459512871,
+          "diversity_ratio": 0.1991908695537167
+        },
+        "34": {
+          "pointwise_wasserstein_kwh": 0.04343237269299746,
+          "daily_energy_wasserstein_kwh": 2.147219063890649,
+          "ramp_wasserstein_kw": 0.13015034496134723,
+          "diversity_ratio": 0.9777498695063003
+        },
+        "35": {
+          "pointwise_wasserstein_kwh": 0.08938603146771851,
+          "daily_energy_wasserstein_kwh": 8.01844697239936,
+          "ramp_wasserstein_kw": 0.12963925808737048,
+          "diversity_ratio": 0.24146958771279584
+        },
+        "36": {
+          "pointwise_wasserstein_kwh": 0.24831692172855926,
+          "daily_energy_wasserstein_kwh": 23.797240316363787,
+          "ramp_wasserstein_kw": 0.18891640259415898,
+          "diversity_ratio": 0.08346665788591831
+        },
+        "37": {
+          "pointwise_wasserstein_kwh": 0.10214553905133776,
+          "daily_energy_wasserstein_kwh": 9.303848462851311,
+          "ramp_wasserstein_kw": 0.15566078541789324,
+          "diversity_ratio": 0.19047195753855078
+        },
+        "38": {
+          "pointwise_wasserstein_kwh": 0.05546195346076473,
+          "daily_energy_wasserstein_kwh": 1.9420750260106163,
+          "ramp_wasserstein_kw": 0.15565639729172037,
+          "diversity_ratio": 1.1085972938111115
+        },
+        "39": {
+          "pointwise_wasserstein_kwh": 0.12896539414726552,
+          "daily_energy_wasserstein_kwh": 12.192564357978409,
+          "ramp_wasserstein_kw": 0.13977595327073994,
+          "diversity_ratio": 0.12321805008944386
+        },
+        "40": {
+          "pointwise_wasserstein_kwh": 0.10108696381200873,
+          "daily_energy_wasserstein_kwh": 8.085770448743887,
+          "ramp_wasserstein_kw": 0.11134470169065364,
+          "diversity_ratio": 0.5922861832545584
+        },
+        "41": {
+          "pointwise_wasserstein_kwh": 0.07300934764822642,
+          "daily_energy_wasserstein_kwh": 4.021319413254832,
+          "ramp_wasserstein_kw": 0.12352115211613614,
+          "diversity_ratio": 0.459286508205734
+        },
+        "42": {
+          "pointwise_wasserstein_kwh": 0.12624177929501845,
+          "daily_energy_wasserstein_kwh": 8.90438798122238,
+          "ramp_wasserstein_kw": 0.12222049192769917,
+          "diversity_ratio": 0.2823457881837806
+        },
+        "43": {
+          "pointwise_wasserstein_kwh": 0.07307172505051618,
+          "daily_energy_wasserstein_kwh": 5.473473925287146,
+          "ramp_wasserstein_kw": 0.1224595335142451,
+          "diversity_ratio": 0.3746305284787748
+        },
+        "44": {
+          "pointwise_wasserstein_kwh": 0.15546855372952886,
+          "daily_energy_wasserstein_kwh": 14.121021055883157,
+          "ramp_wasserstein_kw": 0.10057672666173773,
+          "diversity_ratio": 0.28589182428665394
+        },
+        "45": {
+          "pointwise_wasserstein_kwh": 0.11297554933573646,
+          "daily_energy_wasserstein_kwh": 6.900009066951749,
+          "ramp_wasserstein_kw": 0.12878591668170125,
+          "diversity_ratio": 0.266239862695641
+        },
+        "46": {
+          "pointwise_wasserstein_kwh": 0.13014555844572706,
+          "daily_energy_wasserstein_kwh": 10.10902257281803,
+          "ramp_wasserstein_kw": 0.12991948532324443,
+          "diversity_ratio": 0.36429405660247655
+        },
+        "47": {
+          "pointwise_wasserstein_kwh": 0.10104051759906156,
+          "daily_energy_wasserstein_kwh": 7.274064470319535,
+          "ramp_wasserstein_kw": 0.12092351597914389,
+          "diversity_ratio": 0.3244061904816592
+        },
+        "48": {
+          "pointwise_wasserstein_kwh": 0.21523356092636906,
+          "daily_energy_wasserstein_kwh": 20.3683098852038,
+          "ramp_wasserstein_kw": 0.2509481402039145,
+          "diversity_ratio": 0.15872868854871316
+        },
+        "49": {
+          "pointwise_wasserstein_kwh": 0.13441911486998406,
+          "daily_energy_wasserstein_kwh": 10.961422600794931,
+          "ramp_wasserstein_kw": 0.22733393368364746,
+          "diversity_ratio": 0.20333846962584753
+        },
+        "50": {
+          "pointwise_wasserstein_kwh": 0.0625381246987854,
+          "daily_energy_wasserstein_kwh": 1.182987202436343,
+          "ramp_wasserstein_kw": 0.1657283857012386,
+          "diversity_ratio": 0.7737491147773221
+        },
+        "51": {
+          "pointwise_wasserstein_kwh": 0.12595882272107436,
+          "daily_energy_wasserstein_kwh": 10.962849947061947,
+          "ramp_wasserstein_kw": 0.17378612562614537,
+          "diversity_ratio": 0.13537469297527266
+        },
+        "52": {
+          "pointwise_wasserstein_kwh": 0.31135548939037455,
+          "daily_energy_wasserstein_kwh": 29.708443078248862,
+          "ramp_wasserstein_kw": 0.3032478622569926,
+          "diversity_ratio": 0.12453327885525205
+        },
+        "53": {
+          "pointwise_wasserstein_kwh": 0.12333010748378193,
+          "daily_energy_wasserstein_kwh": 10.829522684551957,
+          "ramp_wasserstein_kw": 0.17807007432515778,
+          "diversity_ratio": 0.2107082452731854
+        },
+        "54": {
+          "pointwise_wasserstein_kwh": 0.06577216129904272,
+          "daily_energy_wasserstein_kwh": 1.8364637031763644,
+          "ramp_wasserstein_kw": 0.18088357466998028,
+          "diversity_ratio": 0.4457601681974708
+        },
+        "55": {
+          "pointwise_wasserstein_kwh": 0.14335436551256012,
+          "daily_energy_wasserstein_kwh": 12.93400902247673,
+          "ramp_wasserstein_kw": 0.1658970094350164,
+          "diversity_ratio": 0.18159830771275332
+        },
+        "56": {
+          "pointwise_wasserstein_kwh": 0.2485181385091729,
+          "daily_energy_wasserstein_kwh": 22.552679073716757,
+          "ramp_wasserstein_kw": 0.21505753803998695,
+          "diversity_ratio": 0.1310424054827569
+        },
+        "57": {
+          "pointwise_wasserstein_kwh": 0.18003520918639726,
+          "daily_energy_wasserstein_kwh": 11.772844214312572,
+          "ramp_wasserstein_kw": 0.18002448045101174,
+          "diversity_ratio": 0.16830148314093035
+        },
+        "58": {
+          "pointwise_wasserstein_kwh": 0.17291799528467344,
+          "daily_energy_wasserstein_kwh": 11.6391996641152,
+          "ramp_wasserstein_kw": 0.16085878755213098,
+          "diversity_ratio": 0.17174206484763913
+        },
+        "59": {
+          "pointwise_wasserstein_kwh": 0.15554798788781865,
+          "daily_energy_wasserstein_kwh": 12.41991697136163,
+          "ramp_wasserstein_kw": 0.19764640960602173,
+          "diversity_ratio": 0.10721753589579808
+        },
+        "60": {
+          "pointwise_wasserstein_kwh": 0.28059480706929113,
+          "daily_energy_wasserstein_kwh": 26.245561759390018,
+          "ramp_wasserstein_kw": 0.20258725143071893,
+          "diversity_ratio": 0.11507420409989184
+        },
+        "61": {
+          "pointwise_wasserstein_kwh": 0.20152487076470835,
+          "daily_energy_wasserstein_kwh": 14.269174900492214,
+          "ramp_wasserstein_kw": 0.19893020606557466,
+          "diversity_ratio": 0.10894831328322428
+        },
+        "62": {
+          "pointwise_wasserstein_kwh": 0.1851159492708171,
+          "daily_energy_wasserstein_kwh": 12.338451441865757,
+          "ramp_wasserstein_kw": 0.18039735878104837,
+          "diversity_ratio": 0.129623945548521
+        },
+        "63": {
+          "pointwise_wasserstein_kwh": 0.1352639382972717,
+          "daily_energy_wasserstein_kwh": 11.359884986812741,
+          "ramp_wasserstein_kw": 0.1879407095997242,
+          "diversity_ratio": 0.21526620443863378
+        }
+      },
+      "history": [
+        {
+          "elapsed_seconds": 2.206383841999923,
+          "epoch": 1,
+          "loss_d": 0.42450576019473374,
+          "loss_g": 0.9467882197350264,
+          "validation_score": 0.4732361763825302
+        },
+        {
+          "elapsed_seconds": 2.2579384250129806,
+          "epoch": 2,
+          "loss_d": 0.13607408275129274,
+          "loss_g": 2.7054979149252176,
+          "validation_score": 0.4832088616395985
+        },
+        {
+          "elapsed_seconds": 2.0683354740031064,
+          "epoch": 3,
+          "loss_d": 0.12747023394331336,
+          "loss_g": 3.7327485270798206,
+          "validation_score": 0.4780897478650547
+        },
+        {
+          "elapsed_seconds": 2.2933999880042393,
+          "epoch": 4,
+          "loss_d": 0.09816875000251457,
+          "loss_g": 4.08456127718091,
+          "validation_score": 0.46530444220308304
+        },
+        {
+          "elapsed_seconds": 2.2092126149946125,
+          "epoch": 5,
+          "loss_d": 0.08509658538969234,
+          "loss_g": 4.396757714450359,
+          "validation_score": 0.4718296757876755
+        },
+        {
+          "elapsed_seconds": 2.187360356008867,
+          "epoch": 6,
+          "loss_d": 0.041020989636308514,
+          "loss_g": 5.294490076601505,
+          "validation_score": 0.4788529630337111
+        },
+        {
+          "elapsed_seconds": 2.2527748360007536,
+          "epoch": 7,
+          "loss_d": 0.06885232057538815,
+          "loss_g": 5.716517131775618,
+          "validation_score": 0.4406869266750284
+        },
+        {
+          "elapsed_seconds": 2.648548457000288,
+          "epoch": 8,
+          "loss_d": 0.05354511433688458,
+          "loss_g": 5.407440289855003,
+          "validation_score": 0.45397757613649176
+        },
+        {
+          "elapsed_seconds": 2.1903574179887073,
+          "epoch": 9,
+          "loss_d": 0.03936841887480114,
+          "loss_g": 5.3985434509813786,
+          "validation_score": 0.4629128180464936
+        },
+        {
+          "elapsed_seconds": 2.5082914530066773,
+          "epoch": 10,
+          "loss_d": 0.04504446659120731,
+          "loss_g": 5.235650345683098,
+          "validation_score": 0.43095346041055915
+        },
+        {
+          "elapsed_seconds": 2.514009545004228,
+          "epoch": 11,
+          "loss_d": 0.04255859678960405,
+          "loss_g": 5.199831496924162,
+          "validation_score": 0.4300039387814178
+        },
+        {
+          "elapsed_seconds": 2.1623453030042583,
+          "epoch": 12,
+          "loss_d": 0.046422899948083796,
+          "loss_g": 5.816280834376812,
+          "validation_score": 0.4298358059674623
+        },
+        {
+          "elapsed_seconds": 2.0830009530036477,
+          "epoch": 13,
+          "loss_d": 0.0649456383252982,
+          "loss_g": 5.375687807798386,
+          "validation_score": 0.4170000613460583
+        },
+        {
+          "elapsed_seconds": 2.2228706890018657,
+          "epoch": 14,
+          "loss_d": 0.05621795917977579,
+          "loss_g": 4.906624965369701,
+          "validation_score": 0.4085640053209551
+        },
+        {
+          "elapsed_seconds": 2.2089616709999973,
+          "epoch": 15,
+          "loss_d": 0.05876968803931959,
+          "loss_g": 4.966433681547642,
+          "validation_score": 0.387987813243929
+        },
+        {
+          "elapsed_seconds": 2.5728472599876113,
+          "epoch": 16,
+          "loss_d": 0.05469233586336486,
+          "loss_g": 4.831969998776913,
+          "validation_score": 0.38818224061828294
+        },
+        {
+          "elapsed_seconds": 2.695182131996262,
+          "epoch": 17,
+          "loss_d": 0.06570756372821052,
+          "loss_g": 4.644788783043623,
+          "validation_score": 0.3810875410965471
+        },
+        {
+          "elapsed_seconds": 2.2781521350116236,
+          "epoch": 18,
+          "loss_d": 0.06986951368162408,
+          "loss_g": 4.851405769586563,
+          "validation_score": 0.37689437412987514
+        },
+        {
+          "elapsed_seconds": 2.116132943003322,
+          "epoch": 19,
+          "loss_d": 0.07714466986362822,
+          "loss_g": 4.661469548940659,
+          "validation_score": 0.3891199047701184
+        },
+        {
+          "elapsed_seconds": 2.082295389001956,
+          "epoch": 20,
+          "loss_d": 0.07270534452982247,
+          "loss_g": 4.620179019868374,
+          "validation_score": 0.4094804338068612
+        },
+        {
+          "elapsed_seconds": 2.1961766589956824,
+          "epoch": 21,
+          "loss_d": 0.08770034380722791,
+          "loss_g": 4.553141117095947,
+          "validation_score": 0.399653526703248
+        },
+        {
+          "elapsed_seconds": 2.0153372310014674,
+          "epoch": 22,
+          "loss_d": 0.06887257829657756,
+          "loss_g": 4.800971828401089,
+          "validation_score": 0.39209325274310336
+        },
+        {
+          "elapsed_seconds": 2.104697679009405,
+          "epoch": 23,
+          "loss_d": 0.08782425330718979,
+          "loss_g": 4.666917912662029,
+          "validation_score": 0.38657334642412255
+        },
+        {
+          "elapsed_seconds": 2.177905696007656,
+          "epoch": 24,
+          "loss_d": 0.07140661266748793,
+          "loss_g": 4.663944818079472,
+          "validation_score": 0.37199022553716726
+        },
+        {
+          "elapsed_seconds": 2.4697247820004122,
+          "epoch": 25,
+          "loss_d": 0.06128322071162984,
+          "loss_g": 4.872196763753891,
+          "validation_score": 0.3536633670600334
+        },
+        {
+          "elapsed_seconds": 2.2371668910054723,
+          "epoch": 26,
+          "loss_d": 0.08736038685310632,
+          "loss_g": 4.414211627095938,
+          "validation_score": 0.35425002334163835
+        },
+        {
+          "elapsed_seconds": 2.118712046998553,
+          "epoch": 27,
+          "loss_d": 0.09721563587663695,
+          "loss_g": 4.143173482269049,
+          "validation_score": 0.35339854416536937
+        },
+        {
+          "elapsed_seconds": 2.6047980720031774,
+          "epoch": 28,
+          "loss_d": 0.08279408063390292,
+          "loss_g": 4.5657704044133425,
+          "validation_score": 0.34661881433570335
+        },
+        {
+          "elapsed_seconds": 2.4910523449943867,
+          "epoch": 29,
+          "loss_d": 0.09267697582254186,
+          "loss_g": 4.304368371143937,
+          "validation_score": 0.348000843000223
+        },
+        {
+          "elapsed_seconds": 2.5497387270006584,
+          "epoch": 30,
+          "loss_d": 0.128010316810105,
+          "loss_g": 4.219439897686243,
+          "validation_score": 0.34760825573869675
+        },
+        {
+          "elapsed_seconds": 2.5375031829898944,
+          "epoch": 31,
+          "loss_d": 0.10751592076849192,
+          "loss_g": 4.0894887540489435,
+          "validation_score": 0.35143081017770283
+        },
+        {
+          "elapsed_seconds": 2.2496946019964525,
+          "epoch": 32,
+          "loss_d": 0.1034817470354028,
+          "loss_g": 4.216833349317312,
+          "validation_score": 0.36432899735990265
+        },
+        {
+          "elapsed_seconds": 2.2970305380003992,
+          "epoch": 33,
+          "loss_d": 0.09611913945991546,
+          "loss_g": 4.275403467938304,
+          "validation_score": 0.35574496986810455
+        },
+        {
+          "elapsed_seconds": 2.6027571449958486,
+          "epoch": 34,
+          "loss_d": 0.07995716869481839,
+          "loss_g": 4.595092203468084,
+          "validation_score": 0.3417848063320597
+        },
+        {
+          "elapsed_seconds": 2.56927137299499,
+          "epoch": 35,
+          "loss_d": 0.09467859411961399,
+          "loss_g": 4.34072339721024,
+          "validation_score": 0.32895019343684967
+        },
+        {
+          "elapsed_seconds": 2.777768214000389,
+          "epoch": 36,
+          "loss_d": 0.10307748484774493,
+          "loss_g": 4.1668843403458595,
+          "validation_score": 0.3334024902775963
+        },
+        {
+          "elapsed_seconds": 2.7902043310023146,
+          "epoch": 37,
+          "loss_d": 0.09515254179132171,
+          "loss_g": 4.004470324143767,
+          "validation_score": 0.3369284886175219
+        },
+        {
+          "elapsed_seconds": 2.590343485993799,
+          "epoch": 38,
+          "loss_d": 0.11556681571528316,
+          "loss_g": 4.059670398011804,
+          "validation_score": 0.3163219907097486
+        },
+        {
+          "elapsed_seconds": 2.1905109329964034,
+          "epoch": 39,
+          "loss_d": 0.08962772693485022,
+          "loss_g": 3.965110758319497,
+          "validation_score": 0.3259295631599466
+        },
+        {
+          "elapsed_seconds": 2.0735490969964303,
+          "epoch": 40,
+          "loss_d": 0.09042240443523042,
+          "loss_g": 4.134541152045131,
+          "validation_score": 0.3531163614641337
+        },
+        {
+          "elapsed_seconds": 2.1711310020036763,
+          "epoch": 41,
+          "loss_d": 0.10756770576699637,
+          "loss_g": 4.068415334448218,
+          "validation_score": 0.3552945070130982
+        },
+        {
+          "elapsed_seconds": 2.1276255889970344,
+          "epoch": 42,
+          "loss_d": 0.1153538424987346,
+          "loss_g": 3.6294713765382767,
+          "validation_score": 0.33648124535114016
+        },
+        {
+          "elapsed_seconds": 2.209633894992294,
+          "epoch": 43,
+          "loss_d": 0.10263767366996035,
+          "loss_g": 3.8170414958149195,
+          "validation_score": 0.3247417181592394
+        },
+        {
+          "elapsed_seconds": 2.1037352540006395,
+          "epoch": 44,
+          "loss_d": 0.11446528090164065,
+          "loss_g": 3.8666945826262236,
+          "validation_score": 0.32720275158505485
+        },
+        {
+          "elapsed_seconds": 2.695871256000828,
+          "epoch": 45,
+          "loss_d": 0.10545146383810788,
+          "loss_g": 4.041776379570365,
+          "validation_score": 0.32591208302468555
+        },
+        {
+          "elapsed_seconds": 2.171713888994418,
+          "epoch": 46,
+          "loss_d": 0.10411075968295336,
+          "loss_g": 3.8989214561879635,
+          "validation_score": 0.3229915793368889
+        },
+        {
+          "elapsed_seconds": 1.9237267179996707,
+          "epoch": 47,
+          "loss_d": 0.09826472122222185,
+          "loss_g": 4.201707581058145,
+          "validation_score": 0.333086670498167
+        },
+        {
+          "elapsed_seconds": 2.042955377997714,
+          "epoch": 48,
+          "loss_d": 0.11572497733868659,
+          "loss_g": 4.109523246064782,
+          "validation_score": 0.32710344578235545
+        },
+        {
+          "elapsed_seconds": 2.0837226059957175,
+          "epoch": 49,
+          "loss_d": 0.11009710462531075,
+          "loss_g": 3.862997230142355,
+          "validation_score": 0.31847028734739746
+        },
+        {
+          "elapsed_seconds": 2.058989027995267,
+          "epoch": 50,
+          "loss_d": 0.10365575004834682,
+          "loss_g": 4.0527677051723,
+          "validation_score": 0.31448399596223275
+        },
+        {
+          "elapsed_seconds": 2.2574273939972045,
+          "epoch": 51,
+          "loss_d": 0.11515140195842832,
+          "loss_g": 4.151154218241572,
+          "validation_score": 0.327487027318823
+        },
+        {
+          "elapsed_seconds": 2.065768216998549,
+          "epoch": 52,
+          "loss_d": 0.13786828116280958,
+          "loss_g": 3.8162135425955057,
+          "validation_score": 0.31349276670096327
+        },
+        {
+          "elapsed_seconds": 2.019226272997912,
+          "epoch": 53,
+          "loss_d": 0.15070288226706907,
+          "loss_g": 3.5736171398311853,
+          "validation_score": 0.3096569839379901
+        },
+        {
+          "elapsed_seconds": 2.2657234689977486,
+          "epoch": 54,
+          "loss_d": 0.13612711342284456,
+          "loss_g": 3.70600607432425,
+          "validation_score": 0.3037778967777598
+        },
+        {
+          "elapsed_seconds": 2.075183734006714,
+          "epoch": 55,
+          "loss_d": 0.13141611585160717,
+          "loss_g": 3.703676350414753,
+          "validation_score": 0.3173896748376972
+        },
+        {
+          "elapsed_seconds": 2.1813565750053385,
+          "epoch": 56,
+          "loss_d": 0.12256248662015423,
+          "loss_g": 3.90726200863719,
+          "validation_score": 0.2967003231962977
+        },
+        {
+          "elapsed_seconds": 1.9010881640133448,
+          "epoch": 57,
+          "loss_d": 0.13187705841846764,
+          "loss_g": 3.749045792967081,
+          "validation_score": 0.286592882764797
+        },
+        {
+          "elapsed_seconds": 2.216036942001665,
+          "epoch": 58,
+          "loss_d": 0.13229472906095907,
+          "loss_g": 3.617699198424816,
+          "validation_score": 0.28373787028063663
+        },
+        {
+          "elapsed_seconds": 2.216813500999706,
+          "epoch": 59,
+          "loss_d": 0.1332719781785272,
+          "loss_g": 3.7261158544570208,
+          "validation_score": 0.28592791051122496
+        },
+        {
+          "elapsed_seconds": 2.198888792001526,
+          "epoch": 60,
+          "loss_d": 0.12806130369426683,
+          "loss_g": 3.798518316820264,
+          "validation_score": 0.2848355391935182
+        },
+        {
+          "elapsed_seconds": 2.019470701998216,
+          "epoch": 61,
+          "loss_d": 0.12746907130349427,
+          "loss_g": 3.97957581654191,
+          "validation_score": 0.29459694499963085
+        },
+        {
+          "elapsed_seconds": 2.002610376002849,
+          "epoch": 62,
+          "loss_d": 0.12850116461049765,
+          "loss_g": 3.812794528901577,
+          "validation_score": 0.2914525031222892
+        },
+        {
+          "elapsed_seconds": 2.161965899998904,
+          "epoch": 63,
+          "loss_d": 0.11946739943232387,
+          "loss_g": 3.8536795172840357,
+          "validation_score": 0.2938500259500983
+        },
+        {
+          "elapsed_seconds": 2.0069425769906957,
+          "epoch": 64,
+          "loss_d": 0.13858453929424286,
+          "loss_g": 3.6636990886181593,
+          "validation_score": 0.2853743572932694
+        },
+        {
+          "elapsed_seconds": 2.131200149990036,
+          "epoch": 65,
+          "loss_d": 0.1383359579485841,
+          "loss_g": 3.6533016115427017,
+          "validation_score": 0.2737468538935432
+        },
+        {
+          "elapsed_seconds": 2.1818085300037637,
+          "epoch": 66,
+          "loss_d": 0.15230100660119206,
+          "loss_g": 3.6722141560167074,
+          "validation_score": 0.2836441080065743
+        },
+        {
+          "elapsed_seconds": 2.064663199998904,
+          "epoch": 67,
+          "loss_d": 0.15397372405277565,
+          "loss_g": 3.4931513871997595,
+          "validation_score": 0.2688581154787008
+        },
+        {
+          "elapsed_seconds": 2.1376741000131005,
+          "epoch": 68,
+          "loss_d": 0.1561857113847509,
+          "loss_g": 3.491851443424821,
+          "validation_score": 0.284479704646321
+        },
+        {
+          "elapsed_seconds": 2.025158774005831,
+          "epoch": 69,
+          "loss_d": 0.17437619267730042,
+          "loss_g": 3.331526817753911,
+          "validation_score": 0.2723205378050893
+        },
+        {
+          "elapsed_seconds": 2.351740494996193,
+          "epoch": 70,
+          "loss_d": 0.1656291100080125,
+          "loss_g": 3.5970162600278854,
+          "validation_score": 0.27004457416344163
+        },
+        {
+          "elapsed_seconds": 2.045106356992619,
+          "epoch": 71,
+          "loss_d": 0.20442209485918283,
+          "loss_g": 3.311029737815261,
+          "validation_score": 0.29006467327970736
+        },
+        {
+          "elapsed_seconds": 1.9050977169972612,
+          "epoch": 72,
+          "loss_d": 0.18949588562827557,
+          "loss_g": 3.4514547903090715,
+          "validation_score": 0.30529360683407497
+        },
+        {
+          "elapsed_seconds": 2.0760338429972762,
+          "epoch": 73,
+          "loss_d": 0.197833756392356,
+          "loss_g": 3.2457540947943926,
+          "validation_score": 0.28264131029710887
+        },
+        {
+          "elapsed_seconds": 2.130060619994765,
+          "epoch": 74,
+          "loss_d": 0.16800721624167636,
+          "loss_g": 3.6296683717519045,
+          "validation_score": 0.2799968056806386
+        },
+        {
+          "elapsed_seconds": 2.087328631008859,
+          "epoch": 75,
+          "loss_d": 0.16725789429619908,
+          "loss_g": 3.4689439460635185,
+          "validation_score": 0.27240734362677327
+        },
+        {
+          "elapsed_seconds": 2.061550938000437,
+          "epoch": 76,
+          "loss_d": 0.15910666715353727,
+          "loss_g": 3.5425465386360884,
+          "validation_score": 0.2707817685022569
+        },
+        {
+          "elapsed_seconds": 2.169832437997684,
+          "epoch": 77,
+          "loss_d": 0.17693738173693419,
+          "loss_g": 3.3287000358104706,
+          "validation_score": 0.28586444848476605
+        },
+        {
+          "elapsed_seconds": 2.0106729209946934,
+          "epoch": 78,
+          "loss_d": 0.16850367025472224,
+          "loss_g": 3.4727158546447754,
+          "validation_score": 0.28193348702697474
+        },
+        {
+          "elapsed_seconds": 2.1789361010014545,
+          "epoch": 79,
+          "loss_d": 0.17675467592198402,
+          "loss_g": 3.4592680670320988,
+          "validation_score": 0.2741854273617796
+        },
+        {
+          "elapsed_seconds": 1.881502852003905,
+          "epoch": 80,
+          "loss_d": 0.16033654275815934,
+          "loss_g": 3.4083457607775927,
+          "validation_score": 0.28143130964228913
+        },
+        {
+          "elapsed_seconds": 2.279923873997177,
+          "epoch": 81,
+          "loss_d": 0.17738518182886764,
+          "loss_g": 3.380138538777828,
+          "validation_score": 0.26087064884667505
+        },
+        {
+          "elapsed_seconds": 2.580095868994249,
+          "epoch": 82,
+          "loss_d": 0.20568079687654972,
+          "loss_g": 3.0865876749157906,
+          "validation_score": 0.26773504344855353
+        },
+        {
+          "elapsed_seconds": 2.02267996800947,
+          "epoch": 83,
+          "loss_d": 0.1792517057619989,
+          "loss_g": 3.1100444458425045,
+          "validation_score": 0.2735589398210176
+        },
+        {
+          "elapsed_seconds": 2.211612304992741,
+          "epoch": 84,
+          "loss_d": 0.19451216841116548,
+          "loss_g": 3.3226158656179905,
+          "validation_score": 0.28066651039577994
+        },
+        {
+          "elapsed_seconds": 1.9857527920103166,
+          "epoch": 85,
+          "loss_d": 0.19016004470176995,
+          "loss_g": 3.2292968817055225,
+          "validation_score": 0.30207893412195297
+        },
+        {
+          "elapsed_seconds": 1.8868354620062746,
+          "epoch": 86,
+          "loss_d": 0.19089017843361944,
+          "loss_g": 3.2333897929638624,
+          "validation_score": 0.2823018676145524
+        },
+        {
+          "elapsed_seconds": 1.959519354000804,
+          "epoch": 87,
+          "loss_d": 0.2314552222378552,
+          "loss_g": 3.0264503341168165,
+          "validation_score": 0.278629179685349
+        },
+        {
+          "elapsed_seconds": 2.0289133460028097,
+          "epoch": 88,
+          "loss_d": 0.2079140756977722,
+          "loss_g": 3.1251051146537066,
+          "validation_score": 0.28040859234132887
+        },
+        {
+          "elapsed_seconds": 2.0460498799948255,
+          "epoch": 89,
+          "loss_d": 0.22758960840292275,
+          "loss_g": 3.2001684084534645,
+          "validation_score": 0.29118736162903885
+        },
+        {
+          "elapsed_seconds": 2.1088681769906543,
+          "epoch": 90,
+          "loss_d": 0.24685521330684423,
+          "loss_g": 2.982111381366849,
+          "validation_score": 0.2807388850296002
+        },
+        {
+          "elapsed_seconds": 2.4904509549960494,
+          "epoch": 91,
+          "loss_d": 0.2186681687599048,
+          "loss_g": 2.8868139311671257,
+          "validation_score": 0.27477336611625325
+        },
+        {
+          "elapsed_seconds": 2.2627994299982674,
+          "epoch": 92,
+          "loss_d": 0.22907851357012987,
+          "loss_g": 2.8588201012462378,
+          "validation_score": 0.263147288790101
+        },
+        {
+          "elapsed_seconds": 2.1606882219930412,
+          "epoch": 93,
+          "loss_d": 0.21806182770524174,
+          "loss_g": 2.8040381390601397,
+          "validation_score": 0.26389682311594004
+        },
+        {
+          "elapsed_seconds": 1.9507251360046212,
+          "epoch": 94,
+          "loss_d": 0.22597426117863506,
+          "loss_g": 2.8216978553682566,
+          "validation_score": 0.2620373738705603
+        },
+        {
+          "elapsed_seconds": 2.033194420990185,
+          "epoch": 95,
+          "loss_d": 0.22087702329736203,
+          "loss_g": 2.883292980492115,
+          "validation_score": 0.2689178070776685
+        },
+        {
+          "elapsed_seconds": 2.073766504006926,
+          "epoch": 96,
+          "loss_d": 0.23960518115200102,
+          "loss_g": 2.8185965940356255,
+          "validation_score": 0.2754225596297533
+        },
+        {
+          "elapsed_seconds": 2.134124061005423,
+          "epoch": 97,
+          "loss_d": 0.23295966011937708,
+          "loss_g": 2.773395761847496,
+          "validation_score": 0.26946803308423234
+        },
+        {
+          "elapsed_seconds": 2.287685909992433,
+          "epoch": 98,
+          "loss_d": 0.24913528724573553,
+          "loss_g": 2.798786649480462,
+          "validation_score": 0.26681185601648255
+        },
+        {
+          "elapsed_seconds": 2.5398219720082125,
+          "epoch": 99,
+          "loss_d": 0.23138925561215729,
+          "loss_g": 2.9051019344478846,
+          "validation_score": 0.2513375234836526
+        },
+        {
+          "elapsed_seconds": 2.5725683580094483,
+          "epoch": 100,
+          "loss_d": 0.2236481523141265,
+          "loss_g": 2.970367329195142,
+          "validation_score": 0.26133425171366564
+        },
+        {
+          "elapsed_seconds": 2.3540011440054514,
+          "epoch": 101,
+          "loss_d": 0.224827075493522,
+          "loss_g": 2.9520943462848663,
+          "validation_score": 0.2689056277513462
+        },
+        {
+          "elapsed_seconds": 2.020932845000061,
+          "epoch": 102,
+          "loss_d": 0.26072933280374855,
+          "loss_g": 2.8670272063463926,
+          "validation_score": 0.2667183094370902
+        },
+        {
+          "elapsed_seconds": 1.9939381860021967,
+          "epoch": 103,
+          "loss_d": 0.2563520345138386,
+          "loss_g": 2.804352257400751,
+          "validation_score": 0.24902878354172162
+        },
+        {
+          "elapsed_seconds": 2.3832281599898124,
+          "epoch": 104,
+          "loss_d": 0.2508425721898675,
+          "loss_g": 2.8519940730184317,
+          "validation_score": 0.26831074552177725
+        },
+        {
+          "elapsed_seconds": 2.4666325360012706,
+          "epoch": 105,
+          "loss_d": 0.2726372132310644,
+          "loss_g": 2.6445908322930336,
+          "validation_score": 0.26176512825171133
+        },
+        {
+          "elapsed_seconds": 2.349611837998964,
+          "epoch": 106,
+          "loss_d": 0.27257469994947314,
+          "loss_g": 2.5740272607654333,
+          "validation_score": 0.26376519938795956
+        },
+        {
+          "elapsed_seconds": 2.427671259996714,
+          "epoch": 107,
+          "loss_d": 0.2700054283486679,
+          "loss_g": 2.5735520608723164,
+          "validation_score": 0.2574110880869502
+        },
+        {
+          "elapsed_seconds": 2.4917687580018537,
+          "epoch": 108,
+          "loss_d": 0.2685684427851811,
+          "loss_g": 2.738333499059081,
+          "validation_score": 0.2629435234816772
+        },
+        {
+          "elapsed_seconds": 2.5458828720002202,
+          "epoch": 109,
+          "loss_d": 0.3023197242291644,
+          "loss_g": 2.5150275751948357,
+          "validation_score": 0.24442592796448195
+        },
+        {
+          "elapsed_seconds": 2.4998999460076448,
+          "epoch": 110,
+          "loss_d": 0.3026427560253069,
+          "loss_g": 2.526750149205327,
+          "validation_score": 0.24081786153496587
+        },
+        {
+          "elapsed_seconds": 2.5367560629965737,
+          "epoch": 111,
+          "loss_d": 0.30751003441400826,
+          "loss_g": 2.428974909707904,
+          "validation_score": 0.2554235916759799
+        },
+        {
+          "elapsed_seconds": 2.261393216002034,
+          "epoch": 112,
+          "loss_d": 0.274332603556104,
+          "loss_g": 2.568481044843793,
+          "validation_score": 0.2463944234988773
+        },
+        {
+          "elapsed_seconds": 2.3268179459992098,
+          "epoch": 113,
+          "loss_d": 0.25661215046420693,
+          "loss_g": 2.689725046977401,
+          "validation_score": 0.25468327640604577
+        },
+        {
+          "elapsed_seconds": 2.2167131769965636,
+          "epoch": 114,
+          "loss_d": 0.2703147968277335,
+          "loss_g": 2.644659861922264,
+          "validation_score": 0.2520656267241428
+        },
+        {
+          "elapsed_seconds": 2.2052985560003435,
+          "epoch": 115,
+          "loss_d": 0.2651251341449097,
+          "loss_g": 2.5989516898989677,
+          "validation_score": 0.23947010790846704
+        },
+        {
+          "elapsed_seconds": 2.0104597469908185,
+          "epoch": 116,
+          "loss_d": 0.24473542778287083,
+          "loss_g": 2.828819239512086,
+          "validation_score": 0.2606743909696318
+        },
+        {
+          "elapsed_seconds": 2.069063914997969,
+          "epoch": 117,
+          "loss_d": 0.276763443602249,
+          "loss_g": 2.678465098142624,
+          "validation_score": 0.24173950391420718
+        },
+        {
+          "elapsed_seconds": 2.1618009340018034,
+          "epoch": 118,
+          "loss_d": 0.28552344092167914,
+          "loss_g": 2.5734592620283365,
+          "validation_score": 0.23610204341347973
+        },
+        {
+          "elapsed_seconds": 2.0922891170048388,
+          "epoch": 119,
+          "loss_d": 0.2889347292948514,
+          "loss_g": 2.550122870132327,
+          "validation_score": 0.2505857999722467
+        },
+        {
+          "elapsed_seconds": 2.1365884020051453,
+          "epoch": 120,
+          "loss_d": 0.3078151529189199,
+          "loss_g": 2.4550551678985357,
+          "validation_score": 0.254504474405486
+        }
+      ]
+    }
+  ]
+}

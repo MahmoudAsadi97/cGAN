@@ -1,0 +1,573 @@
+{
+  "scope": "Only train.npz and val.npz; validation-only descriptive pilot diagnosis; seed 2026; 100 profiles/condition. Counterfactual mean correction is diagnostic, not a deployable model.",
+  "metrics": {
+    "fake": {
+      "pointwise_wasserstein_kwh": 0.5374582146435014,
+      "daily_energy_wasserstein_kwh": 14.189360214060798,
+      "peak_power_wasserstein_kw": 4.232336412850854,
+      "ramp_wasserstein_kw": 2.523131152107426,
+      "mean_profile_rmse_kwh": 0.6268718669795056,
+      "pointwise_variance_rmse_kwh2": 0.11053056567199934,
+      "diversity_ratio": 0.45127424423370344,
+      "generated_mean_daily_energy_kwh": 24.537293545423687,
+      "generated_mean_peak_power_kw": 7.053578216955066,
+      "generated_mean_pointwise_variance_kwh2": 0.021828219849307516,
+      "acf1_mean": 0.029388104576216573,
+      "acf1_wasserstein": 0.6528039136456072
+    },
+    "conditional_fake_mean": {
+      "pointwise_wasserstein_kwh": 0.5618197996885863,
+      "daily_energy_wasserstein_kwh": 17.515206608131606,
+      "peak_power_wasserstein_kw": 4.367491210830298,
+      "ramp_wasserstein_kw": 2.4910313040614054,
+      "mean_profile_rmse_kwh": 0.6268718669795056,
+      "pointwise_variance_rmse_kwh2": 0.12413530699861512,
+      "diversity_ratio": 1.8044370858665773e-29,
+      "generated_mean_daily_energy_kwh": 24.537293545423687,
+      "generated_mean_peak_power_kw": 7.053187283612788,
+      "generated_mean_pointwise_variance_kwh2": 9.337266232841401e-31,
+      "acf1_mean": 0.029849270814532262,
+      "acf1_wasserstein": 0.6540227597572247
+    },
+    "fake_train_mean_corrected": {
+      "pointwise_wasserstein_kwh": 0.12266122110763868,
+      "daily_energy_wasserstein_kwh": 4.778566523423196,
+      "peak_power_wasserstein_kw": 1.5587561454174887,
+      "ramp_wasserstein_kw": 0.24212088749705063,
+      "mean_profile_rmse_kwh": 0.038487931522395095,
+      "pointwise_variance_rmse_kwh2": 0.11053056567199934,
+      "diversity_ratio": 0.45127424423370344,
+      "generated_mean_daily_energy_kwh": 11.599030279491402,
+      "generated_mean_peak_power_kw": 1.6598344482381229,
+      "generated_mean_pointwise_variance_kwh2": 0.021828219849307516,
+      "acf1_mean": 0.38270156177231485,
+      "acf1_wasserstein": 0.30641607917688607
+    },
+    "train_mean": {
+      "pointwise_wasserstein_kwh": 0.17676992456148474,
+      "daily_energy_wasserstein_kwh": 10.18974856679342,
+      "peak_power_wasserstein_kw": 2.229067412005654,
+      "ramp_wasserstein_kw": 0.23938902500665307,
+      "mean_profile_rmse_kwh": 0.0384879315223951,
+      "pointwise_variance_rmse_kwh2": 0.12413530699861512,
+      "diversity_ratio": 8.078669122663343e-31,
+      "generated_mean_daily_energy_kwh": 11.599030279491402,
+      "generated_mean_peak_power_kw": 0.9704631488190718,
+      "generated_mean_pointwise_variance_kwh2": 7.459470937094998e-32,
+      "acf1_mean": 0.962829507668467,
+      "acf1_wasserstein": 0.29095946886775786
+    },
+    "fake_smooth3": {
+      "pointwise_wasserstein_kwh": 0.35139314231961943,
+      "daily_energy_wasserstein_kwh": 14.410031901620066,
+      "peak_power_wasserstein_kw": 2.0520151154070723,
+      "ramp_wasserstein_kw": 0.7548311997971444,
+      "mean_profile_rmse_kwh": 0.38320484566466334,
+      "pointwise_variance_rmse_kwh2": 0.1131400405975246,
+      "diversity_ratio": 0.32022027895719385,
+      "generated_mean_daily_energy_kwh": 24.793340540126987,
+      "generated_mean_peak_power_kw": 4.406700466563925,
+      "generated_mean_pointwise_variance_kwh2": 0.015551714715617948,
+      "acf1_mean": 0.6270982373093343,
+      "acf1_wasserstein": 0.1938094690993822
+    },
+    "fake_smooth5": {
+      "pointwise_wasserstein_kwh": 0.28232357848250456,
+      "daily_energy_wasserstein_kwh": 14.299458503123882,
+      "peak_power_wasserstein_kw": 1.529182749818545,
+      "ramp_wasserstein_kw": 0.3948068600348158,
+      "mean_profile_rmse_kwh": 0.2943844428185589,
+      "pointwise_variance_rmse_kwh2": 0.11379345154950615,
+      "diversity_ratio": 0.29326610770114925,
+      "generated_mean_daily_energy_kwh": 24.66599837510028,
+      "generated_mean_peak_power_kw": 3.5929103661265254,
+      "generated_mean_pointwise_variance_kwh2": 0.014251447691831183,
+      "acf1_mean": 0.7271757588514882,
+      "acf1_wasserstein": 0.17319131756168882
+    }
+  },
+  "temporal": {
+    "real": {
+      "mean_daily_energy": 11.639102508503893,
+      "std_daily_energy": 19.102794934230882,
+      "mean_row_std": 0.21715900333022403,
+      "ramp_rms_kw": 0.6403587621160839,
+      "ramp_abs_mean_kw": 0.2665230115535087,
+      "high_frequency_fraction_above_12_cycles_per_day": 0.12741007978438512,
+      "negative_fraction": 0.12686197916666667,
+      "acf1": 0.6727450496266504
+    },
+    "fake": {
+      "mean_daily_energy": 24.53729354542369,
+      "std_daily_energy": 14.588806091006203,
+      "mean_row_std": 0.6183047756471719,
+      "ramp_rms_kw": 3.470013606948803,
+      "ramp_abs_mean_kw": 2.788831391426886,
+      "high_frequency_fraction_above_12_cycles_per_day": 0.6941363309819232,
+      "negative_fraction": 0.3119840494791667,
+      "acf1": 0.029388104576216573
+    },
+    "conditional_fake_mean": {
+      "mean_daily_energy": 24.537293545423687,
+      "std_daily_energy": 9.878083541285427,
+      "mean_row_std": 0.6117828592760558,
+      "ramp_rms_kw": 3.427494899955935,
+      "ramp_abs_mean_kw": 2.755840108053509,
+      "high_frequency_fraction_above_12_cycles_per_day": 0.6927758616060079,
+      "negative_fraction": 0.3076171875,
+      "acf1": 0.02984927081453226
+    },
+    "fake_condition_residual": {
+      "mean_daily_energy": -3.1988300897012325e-17,
+      "std_daily_energy": 10.735768659596092,
+      "mean_row_std": 0.09216477760579346,
+      "ramp_rms_kw": 0.5415469907458642,
+      "ramp_abs_mean_kw": 0.4122303544947667,
+      "high_frequency_fraction_above_12_cycles_per_day": 0.7487994868801642,
+      "negative_fraction": 0.5420882161458334,
+      "acf1": 0.017122001990461735
+    },
+    "fake_train_mean_corrected": {
+      "mean_daily_energy": 11.599030279491402,
+      "std_daily_energy": 16.212316130677387,
+      "mean_row_std": 0.1300390128014149,
+      "ramp_rms_kw": 0.5432123937539889,
+      "ramp_abs_mean_kw": 0.4136906249047457,
+      "high_frequency_fraction_above_12_cycles_per_day": 0.3659248541906649,
+      "negative_fraction": 0.2571158854166667,
+      "acf1": 0.3827015617723148
+    },
+    "train_mean": {
+      "mean_daily_energy": 11.599030279491403,
+      "std_daily_energy": 12.148352382469671,
+      "mean_row_std": 0.08074032376161601,
+      "ramp_rms_kw": 0.042503665042412306,
+      "ramp_abs_mean_kw": 0.02794514738524537,
+      "high_frequency_fraction_above_12_cycles_per_day": 0.0011227959831703726,
+      "negative_fraction": 0.13606770833333334,
+      "acf1": 0.962829507668467
+    }
+  },
+  "normalization": {
+    "train_quantiles_kwh": {
+      "0": -2.9560000896453857,
+      "0.001": -1.434999942779541,
+      "0.01": -0.8019999861717224,
+      "0.05": -0.26499998569488525,
+      "0.25": 0.017999999225139618,
+      "0.5": 0.05299999937415123,
+      "0.75": 0.14100000262260437,
+      "0.95": 0.6769999861717224,
+      "0.99": 1.4609999656677246,
+      "0.999": 3.1640000343322754,
+      "1": 7.09499979019165
+    },
+    "train_quantiles_normalized": {
+      "0": 0.0,
+      "0.001": 0.15132824246840065,
+      "0.01": 0.21430704698293038,
+      "0.05": 0.26773456731890155,
+      "0.25": 0.2958909685031998,
+      "0.5": 0.29937320913273396,
+      "0.75": 0.30812855728719835,
+      "0.95": 0.36145658334999525,
+      "0.99": 0.43945877107947257,
+      "0.999": 0.6088946569639089,
+      "1": 1.0
+    },
+    "physical_range": 10.050999879837036,
+    "zero_normalized": 0.2941001019784425,
+    "train_std_kwh": 0.35429410208763035,
+    "train_std_normalized": 0.03524963748117911,
+    "middle_90pct_width_normalized": 0.09372201603109372,
+    "statistics_scope": "All prepared training profiles; identical to actual pilot training subset. Affine transform from checkpoint.",
+    "kind": "minmax",
+    "offset": -2.9560000896453857,
+    "scale": 10.050999879837036
+  },
+  "conditioning": {
+    "train": {
+      "between_condition_mean_profile_rms_kwh": 0.14674108215579973,
+      "daily_energy_condition_std_kwh": 12.14835238246967
+    },
+    "val_full": {
+      "between_condition_mean_profile_rms_kwh": 0.1453856940764451,
+      "daily_energy_condition_std_kwh": 12.18280181273997
+    },
+    "fake": {
+      "between_condition_mean_profile_rms_kwh": 0.11388396750052708,
+      "daily_energy_condition_std_kwh": 9.878083541285427
+    },
+    "fake_real_conditional_energy_correlation": 0.842960674529334,
+    "fake_real_conditional_shape_correlation": 0.667761340364311,
+    "negative_fraction_non_pv_real": 0.0,
+    "negative_fraction_non_pv_fake": 0.29883138020833333,
+    "technology": {
+      "0": {
+        "train_daily_mean": 7.467536502879129,
+        "val_daily_mean": 7.6498836828408745,
+        "fake_daily_mean": 21.027953065064775
+      },
+      "1": {
+        "train_daily_mean": -0.872572064809418,
+        "val_daily_mean": -0.03656397926879451,
+        "fake_daily_mean": 15.90785723259453
+      },
+      "2": {
+        "train_daily_mean": 14.592555385288263,
+        "val_daily_mean": 15.950263832408183,
+        "fake_daily_mean": 23.177073603596156
+      },
+      "3": {
+        "train_daily_mean": 3.9191506830649634,
+        "val_daily_mean": 1.7469740849972997,
+        "fake_daily_mean": 19.254532513354242
+      },
+      "4": {
+        "train_daily_mean": 20.225902253731025,
+        "val_daily_mean": 20.643812338680902,
+        "fake_daily_mean": 32.0349632155008
+      },
+      "5": {
+        "train_daily_mean": 6.544337932591453,
+        "val_daily_mean": 5.598682081031061,
+        "fake_daily_mean": 23.916636122093003
+      },
+      "6": {
+        "train_daily_mean": 26.916183284662374,
+        "val_daily_mean": 24.019974012794115,
+        "fake_daily_mean": 34.14483179905465
+      },
+      "7": {
+        "train_daily_mean": 13.99914825852343,
+        "val_daily_mean": 16.17299172588049,
+        "fake_daily_mean": 26.83450081213134
+      }
+    }
+  },
+  "bias": {
+    "macro_mean_absolute_slot_bias_kwh": 0.5076365067245864,
+    "macro_mean_absolute_daily_bias_kwh": 12.989394331714355,
+    "mean_ramp_squared_fraction_in_conditional_mean": 0.975643777195302,
+    "mean_within_row_squared_fraction_in_conditional_mean": 0.9757204828787447
+  },
+  "sampling": {
+    "replicates": 5,
+    "train_resample_vs_fixed_validation": {
+      "pointwise_wasserstein_kwh": {
+        "mean": 0.05411656700275839,
+        "std": 0.0006403989243018824,
+        "min": 0.053009053940949874,
+        "max": 0.05454152835608986
+      },
+      "daily_energy_wasserstein_kwh": {
+        "mean": 2.9672842344727983,
+        "std": 0.05557461814267985,
+        "min": 2.918463592422886,
+        "max": 3.05587127967523
+      },
+      "peak_power_wasserstein_kw": {
+        "mean": 0.5040077863640328,
+        "std": 0.0077803999673775655,
+        "min": 0.49511299506244544,
+        "max": 0.512671732373783
+      },
+      "ramp_wasserstein_kw": {
+        "mean": 0.033929080178328505,
+        "std": 0.0017564787941692574,
+        "min": 0.03171900241954041,
+        "max": 0.03604926619616236
+      },
+      "mean_profile_rmse_kwh": {
+        "mean": 0.0480887614510053,
+        "std": 0.0009264129206561691,
+        "min": 0.046738507536395024,
+        "max": 0.04913532248203877
+      },
+      "pointwise_variance_rmse_kwh2": {
+        "mean": 0.0781660862385026,
+        "std": 0.0033245634944525614,
+        "min": 0.0727023964622063,
+        "max": 0.08137756936476072
+      }
+    },
+    "same_validation_population_resample_floor": {
+      "pointwise_wasserstein_kwh": {
+        "mean": 0.04424109304319985,
+        "std": 0.00045006420423522906,
+        "min": 0.043486578460897936,
+        "max": 0.044647269002044965
+      },
+      "daily_energy_wasserstein_kwh": {
+        "mean": 2.247732361246394,
+        "std": 0.10431915247364973,
+        "min": 2.098996986216644,
+        "max": 2.3461545719655397
+      },
+      "peak_power_wasserstein_kw": {
+        "mean": 0.3414031785312254,
+        "std": 0.014100239552771152,
+        "min": 0.3226573740321328,
+        "max": 0.3561498738113005
+      },
+      "ramp_wasserstein_kw": {
+        "mean": 0.023205661985127586,
+        "std": 0.0007421420473942205,
+        "min": 0.022000532263368316,
+        "max": 0.024020209585308046
+      },
+      "mean_profile_rmse_kwh": {
+        "mean": 0.038230457654185125,
+        "std": 0.0008970607458675483,
+        "min": 0.03681094438747126,
+        "max": 0.03928871347434712
+      },
+      "pointwise_variance_rmse_kwh2": {
+        "mean": 0.053448124612602364,
+        "std": 0.001030515758492348,
+        "min": 0.05225652692894993,
+        "max": 0.05457167885154106
+      }
+    },
+    "fixed_fake_vs_fresh_validation_sample": {
+      "pointwise_wasserstein_kwh": {
+        "mean": 0.5373920202040843,
+        "std": 0.000479846594659384,
+        "min": 0.5367338092118796,
+        "max": 0.5378130101928048
+      },
+      "daily_energy_wasserstein_kwh": {
+        "mean": 14.239210220356364,
+        "std": 0.11357575527621214,
+        "min": 14.074751673041156,
+        "max": 14.39412852655981
+      },
+      "peak_power_wasserstein_kw": {
+        "mean": 4.2227602128178985,
+        "std": 0.01504062843008523,
+        "min": 4.204019199488975,
+        "max": 4.2455085711670115
+      },
+      "ramp_wasserstein_kw": {
+        "mean": 2.524275635813697,
+        "std": 0.002364378832698018,
+        "min": 2.5216926139147122,
+        "max": 2.5278520325386316
+      },
+      "mean_profile_rmse_kwh": {
+        "mean": 0.6274626181676854,
+        "std": 0.0005614616632642202,
+        "min": 0.6266384909768532,
+        "max": 0.6282191871976591
+      },
+      "pointwise_variance_rmse_kwh2": {
+        "mean": 0.1069260797808598,
+        "std": 0.0038540961723892214,
+        "min": 0.1001475841512305,
+        "max": 0.10963267211041133
+      }
+    },
+    "checkpoint_metric_fresh_samples": {
+      "scores": [
+        0.05219191939206867,
+        0.05246844160658764,
+        0.05235756306161829,
+        0.052885983432833496,
+        0.052802430502108255
+      ],
+      "mean": 0.052541267599043276,
+      "std": 0.00029501280479288575,
+      "metric": "mean_interval_wasserstein_normalized",
+      "sample_count": 2048
+    },
+    "interpretation": "Descriptive Monte Carlo variability, not confidence intervals. Same-validation-population draws may overlap the fixed sample and reuse meters; they estimate finite-sample error, not generalization."
+  },
+  "provenance": {
+    "source_sha256": "934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8",
+    "checkpoint_sha256": "06792d7751e72d0a38bd8633d5f5e55a595b6589e8e500d1238772584cb9812c",
+    "checkpoint_epoch": 9,
+    "checkpoint_training_provenance": {
+      "git_commit": "de1188249e704d47d0951371d2dd25803db66e93",
+      "git_dirty": false,
+      "python": "3.12.14",
+      "numpy": "2.3.5",
+      "torch": "2.14.1+cu130",
+      "hardware": {
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+        "machine": "x86_64",
+        "processor": "x86_64",
+        "cpu_count": 9,
+        "device": "cpu",
+        "cuda_device": null
+      }
+    },
+    "data_hashes": {
+      "train.npz": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+      "val.npz": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d",
+      "metadata.json": "36b40313730d206ba3195c228807e184044aa98f35c21a05a4b4fa144539fc63",
+      "scaler.json": "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb"
+    },
+    "training_profiles": {
+      "prepared": 611520,
+      "model": 611520,
+      "diagnostic": 611520
+    },
+    "train_indices_sha256": "e96bc3620ea1565eb81c98163d640957325565413a994dc249c22530f01c07dd",
+    "training_subset_policy": "Pilot used all prepared training profiles; all diagnostic training means and baselines used those same rows.",
+    "generator_used_train_subset_record": {
+      "train_profiles_available": 611520,
+      "train_profiles_used": 611520,
+      "train_indices_sha256": "e96bc3620ea1565eb81c98163d640957325565413a994dc249c22530f01c07dd",
+      "training_seed": 42,
+      "max_train_samples": null
+    },
+    "split": "val",
+    "test_used": false,
+    "seed": 2026,
+    "samples_per_condition_cap": 100,
+    "replicates": 5,
+    "conditions": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "counts": {
+      "0": 100,
+      "1": 100,
+      "2": 100,
+      "3": 100,
+      "4": 100,
+      "5": 100,
+      "6": 100,
+      "7": 100,
+      "8": 100,
+      "9": 100,
+      "10": 100,
+      "11": 100,
+      "12": 100,
+      "13": 100,
+      "14": 100,
+      "15": 100,
+      "16": 100,
+      "17": 100,
+      "18": 100,
+      "19": 100,
+      "20": 100,
+      "21": 100,
+      "22": 100,
+      "23": 100,
+      "24": 100,
+      "25": 100,
+      "26": 100,
+      "27": 100,
+      "28": 100,
+      "29": 100,
+      "30": 100,
+      "31": 100,
+      "32": 100,
+      "33": 100,
+      "34": 100,
+      "35": 100,
+      "36": 100,
+      "37": 100,
+      "38": 100,
+      "39": 100,
+      "40": 100,
+      "41": 100,
+      "42": 100,
+      "43": 100,
+      "44": 100,
+      "45": 100,
+      "46": 100,
+      "47": 100,
+      "48": 100,
+      "49": 100,
+      "50": 100,
+      "51": 100,
+      "52": 100,
+      "53": 100,
+      "54": 100,
+      "55": 100,
+      "56": 100,
+      "57": 100,
+      "58": 100,
+      "59": 100,
+      "60": 100,
+      "61": 100,
+      "62": 100,
+      "63": 100
+    },
+    "validation_profiles": 131040,
+    "validation_unsupported_profiles": 0,
+    "sampled_validation_profiles": 6400,
+    "sampled_validation_meters": 360,
+    "resolution": 96,
+    "interval_hours": 0.25,
+    "target": "net",
+    "units": "kWh/interval",
+    "report_origin": "Existing exploratory pilot measurements preserved unchanged when the reusable CLI was added. Measurements were not regenerated by the generalized CLI.",
+    "reproduction_script": "scripts/diagnose_checkpoint.py",
+    "original_diagnostic_result_sha256": "c5da13d5c8f75aeb8f91be1b09673d72a912171aad2f5c7ffb1667f49c1e811a"
+  }
+}

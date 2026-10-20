@@ -190,7 +190,10 @@ def test_provenance_and_input_mismatches_fail_closed(tmp_path, violation):
     ("adam_beta2", float("nan")), ("adam_beta2", float("inf")), ("adam_beta2", 1),
     ("discriminator_hidden_dim", 0), ("discriminator_hidden_dim", True),
     ("conditional_mean_residual", "false"), ("conditional_mean_residual", 1),
-    ("conditional_mean_residual", None)])
+    ("conditional_mean_residual", None), ("batch_sampling", "weighted"),
+    ("conditions_per_batch", 0), ("conditions_per_batch", True),
+    ("swd_weight", -1), ("swd_weight", float("nan")), ("swd_weight", True),
+    ("swd_projections", 0), ("swd_projections", True), ("validation_selection", "unknown")])
 def test_invalid_config_rejected(tmp_path, key, value):
     data = prepared(tmp_path)
     with pytest.raises(ValueError):
@@ -204,7 +207,8 @@ def test_inverse_scaling_is_used_for_generation(tmp_path):
     checkpoint = torch.load(out / "best.pt", weights_only=True)
     # Checkpoints from before objective/normalization config fields still load.
     for name in ("objective", "normalization", "adam_beta1", "adam_beta2",
-                 "discriminator_hidden_dim", "conditional_mean_residual"):
+                 "discriminator_hidden_dim", "conditional_mean_residual", "batch_sampling",
+                 "conditions_per_batch", "swd_weight", "swd_projections", "validation_selection"):
         checkpoint["config"].pop(name, None)
     for key, value in checkpoint["generator_state_dict"].items():
         checkpoint["generator_state_dict"][key] = torch.zeros_like(value)
@@ -428,3 +432,162 @@ def test_unconditional_residual_uses_one_empirical_global_mean_without_labels(tm
     assert checkpoint["generator_state_dict"]["supported_conditions"].tolist() == [True]
     np.testing.assert_array_equal(generate(out / "best.pt", np.array([0, 8, 0]), seed=31),
                                   generate(out / "best.pt", np.array([8, 0, 8]), seed=31))
+
+
+def test_training_batches_preserve_shuffle_and_balance_distinct_conditions():
+    from fluvius_cgan.training import _training_batches
+    expected = torch.randperm(11, generator=torch.Generator().manual_seed(15))
+    batches = list(_training_batches(11, 4, torch.Generator().manual_seed(15)))
+    assert [len(batch) for batch in batches] == [4, 4, 3]
+    torch.testing.assert_close(torch.cat(batches), expected, rtol=0, atol=0)
+    labels = torch.tensor([0, 0, 8, 16, 16, 24, 32, 40, 40, 40, 40])
+    pools = [torch.where(labels == label)[0] for label in labels.unique()]
+    balanced = list(_training_batches(len(labels), 8, torch.Generator().manual_seed(15),
+                                      condition_indices=pools, conditions_per_batch=4))
+    assert len(balanced) == 2
+    for batch in balanced:
+        assert len(batch) == 8 and ((batch >= 0) & (batch < len(labels))).all()
+        classes, counts = labels[batch].unique(return_counts=True)
+        assert len(classes) == 4 and counts.tolist() == [2] * 4
+
+
+def test_zero_swd_default_preserves_training_and_never_calls_auxiliary(tmp_path, monkeypatch):
+    data = prepared(tmp_path)
+    import fluvius_cgan.training as training
+    monkeypatch.setattr(training, "conditional_sliced_wasserstein_loss",
+                        lambda *args, **kwargs: pytest.fail("zero-weight SWD must not be evaluated"))
+    one, two = tmp_path / "default", tmp_path / "explicit"
+    first = train(data, one, settings())
+    second = train(data, two, settings(batch_sampling="shuffle", conditions_per_batch=1,
+                                      swd_weight=0., swd_projections=3))
+    assert first["best_validation_score"] == second["best_validation_score"]
+    a, b = (torch.load(path / "last.pt", weights_only=True) for path in (one, two))
+    for name in ("generator_state_dict", "discriminator_state_dict"):
+        for key in a[name]:
+            torch.testing.assert_close(a[name][key], b[name][key], rtol=0, atol=0)
+    assert first["samples_seen"] == 16
+    assert first["class_exposure_counts"] == {"0": 8, "8": 8}
+    history = json.loads((one / "history.json").read_text())
+    assert all(row["loss_swd"] == 0 and row["loss_g_adversarial"] == row["loss_g"] for row in history)
+
+
+def test_balanced_swd_uses_selected_rows_matching_labels_and_replays(tmp_path, monkeypatch):
+    data = prepared(tmp_path)
+    import fluvius_cgan.training as training
+    original = training.conditional_sliced_wasserstein_loss
+    options = settings(batch_sampling="balanced_conditions", conditions_per_batch=2,
+                       batch_size=64, max_train_samples=3, normalization="standard",
+                       swd_weight=0.1, swd_projections=4, conditional_mean_residual=True)
+    with np.load(data / "train.npz") as archive:
+        raw, labels = archive["x"].astype(np.float64), archive["y"]
+    selected = np.sort(np.random.default_rng(options["seed"]).choice(len(raw), 3, replace=False))
+    normalized = ((raw - raw.mean()) / raw.std()).astype(np.float32)
+    observed = []
+
+    def observe(real, generated, real_labels, generated_labels, **kwargs):
+        torch.testing.assert_close(real_labels, generated_labels)
+        assert real_labels.unique(return_counts=True)[1].tolist() == [32, 32]
+        assert kwargs["p"] == 2 and kwargs["min_samples_per_condition"] == 32
+        assert kwargs["num_projections"] == 4 and kwargs["generator"] is not None
+        for label in real_labels.unique():
+            allowed = torch.from_numpy(normalized[selected][labels[selected] == int(label)])
+            assert ((real[real_labels == label, None, :] == allowed[None, :, :]).all(dim=2).any(dim=1)).all()
+        loss = original(real, generated, real_labels, generated_labels, **kwargs)
+        gradients = torch.autograd.grad(loss, generated, retain_graph=True)[0]
+        assert torch.isfinite(gradients).all() and torch.any(gradients != 0)
+        observed.append((real.detach().clone(), real_labels.clone()))
+        return loss
+
+    monkeypatch.setattr(training, "conditional_sliced_wasserstein_loss", observe)
+    first, replay = tmp_path / "first", tmp_path / "replay"
+    summary = train(data, first, options)
+    repeat = train(data, replay, options)
+    assert summary["best_validation_score"] == repeat["best_validation_score"]
+    assert summary["samples_seen"] == 128
+    assert summary["generator_updates"] == summary["discriminator_updates"] == 2
+    assert summary["class_exposure_counts"] == {"0": 64, "8": 64}
+    checkpoint = torch.load(first / "last.pt", weights_only=True)
+    assert checkpoint["samples_seen"] == summary["samples_seen"]
+    assert checkpoint["class_exposure_counts"] == summary["class_exposure_counts"]
+    history = json.loads((first / "history.json").read_text())
+    for row in history:
+        assert row["samples_seen"] == 64
+        assert row["class_exposure_counts"] == {"0": 32, "8": 32}
+        assert row["loss_g"] == pytest.approx(row["loss_g_adversarial"] + .1 * row["loss_swd"])
+    for before, after in zip(observed[:2], observed[2:]):
+        for a, b in zip(before, after):
+            torch.testing.assert_close(a, b, rtol=0, atol=0)
+    np.testing.assert_array_equal(generate(first / "best.pt", np.array([0, 8])),
+                                  generate(replay / "best.pt", np.array([0, 8])))
+
+
+def test_unconditional_swd_pools_loss_labels_but_reports_sampled_groups(tmp_path, monkeypatch):
+    data = prepared(tmp_path)
+    import fluvius_cgan.training as training
+    original = training.conditional_sliced_wasserstein_loss
+    calls = []
+
+    def observe(real, generated, real_labels, generated_labels, **kwargs):
+        assert not real_labels.any() and not generated_labels.any()
+        calls.append(len(real))
+        return original(real, generated, real_labels, generated_labels, **kwargs)
+
+    monkeypatch.setattr(training, "conditional_sliced_wasserstein_loss", observe)
+    summary = train(data, tmp_path / "run", settings(epochs=1, unconditional=True,
+                    batch_sampling="balanced_conditions", batch_size=64,
+                    conditions_per_batch=2, swd_weight=.1, swd_projections=4))
+    assert calls == [64]
+    assert summary["class_exposure_counts"] == {"0": 32, "8": 32}
+
+
+@pytest.mark.parametrize("overrides", [
+    {"swd_weight": .1},
+    {"batch_sampling": "balanced_conditions", "batch_size": 7, "conditions_per_batch": 2},
+    {"batch_sampling": "balanced_conditions", "batch_size": 32, "conditions_per_batch": 2, "swd_weight": .1},
+    {"batch_sampling": "balanced_conditions", "batch_size": 128, "conditions_per_batch": 4},
+])
+def test_invalid_distribution_batch_policy_rejected(tmp_path, overrides):
+    with pytest.raises(ValueError):
+        train(prepared(tmp_path), tmp_path / "run", settings(**overrides))
+
+
+def test_conditional_validation_detects_swapped_conditions_hidden_by_pooling():
+    from fluvius_cgan.training import _profile_validation_score
+    labels = np.array([0, 0, 8, 8])
+    real = np.repeat(np.array([[0.], [0.], [10.], [10.]]), 24, axis=1)
+    generated = real[::-1].copy()
+    assert _profile_validation_score(real, generated, labels, "pooled_w1") == 0
+    assert _profile_validation_score(real, generated, labels, "conditional_w1") == 10
+    # Every condition has equal importance even if its capped sample count differs.
+    real = np.zeros((5, 24))
+    generated = np.repeat(np.array([[1.], [1.], [1.], [9.], [9.]]), 24, axis=1)
+    assert _profile_validation_score(real, generated, np.array([0, 0, 0, 8, 8]), "conditional_w1") == 5
+
+
+def test_conditional_validation_sampling_and_metadata_are_fixed_across_arms(tmp_path):
+    data = prepared(tmp_path)
+    options = settings(batch_sampling="balanced_conditions", conditions_per_batch=2,
+                       batch_size=64, validation_selection="conditional_w1",
+                       validation_samples=4, swd_projections=4)
+    control, auxiliary = tmp_path / "control", tmp_path / "auxiliary"
+    summary = train(data, control, options)
+    other = train(data, auxiliary, {**options, "swd_weight": .1})
+    checkpoint = torch.load(control / "best.pt", weights_only=True)
+    assert summary["validation_metric"] == checkpoint["validation_metric"] == "mean_condition_interval_wasserstein_normalized"
+    selection = summary["selection"]
+    assert selection["validation_selection"] == "conditional_w1"
+    assert selection["validation_selection_version"] == 1
+    assert selection["validation_samples_requested"] == 4
+    assert selection["validation_per_condition_cap"] == 2
+    assert selection["validation_profiles_per_condition"] == {"0": 2, "8": 2}
+    assert len(set(selection["validation_indices"])) == 4
+    assert selection == other["selection"]
+
+
+@pytest.mark.parametrize("budget,missing_class", [(5, False), (2, False), (4, True)])
+def test_conditional_validation_rejects_insufficient_or_indivisible_samples(tmp_path, budget, missing_class):
+    data = prepared(tmp_path)
+    if missing_class:
+        change_npz(data / "val.npz", y=np.zeros(6, dtype=np.int64))
+    with pytest.raises(ValueError, match="conditional validation"):
+        train(data, tmp_path / "run", settings(validation_samples=budget, validation_selection="conditional_w1"))

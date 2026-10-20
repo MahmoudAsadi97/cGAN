@@ -89,6 +89,41 @@ standard spectral-hinge/width128 package. Keep the same seed42, 65,536 profiles,
 120 epochs and batch512. These comparisons isolate residual centering within
 each objective. All arms, including ineffective changes, remain in the ledger.
 
+## Conditional distribution screen (declared before execution)
+
+The non-residual spectral-hinge screen's selected model had low pooled normalized
+W1 (0.16321), but macro physical W1 0.13468 kWh, daily-energy W1 8.39869 kWh,
+ramp W1 0.28793 kW and macro diversity 2.18827. Thus pooled fidelity concealed
+important conditional errors. This arm does not pass the gates.
+
+For the next comparison, keep the standardized spectral-hinge model with D width
+128 and G width64, without the residual mean offset. Change all three arms to
+the same condition-balanced sampler: four distinct uniformly chosen conditions
+per update, with 128 actual training rows drawn with replacement per condition.
+Each epoch is now 128 updates (65,536 draws), not a pass over all unique rows.
+Keep 120 epochs and seed42. Record actual exposures and update counts.
+
+Compare auxiliary conditional sliced-Wasserstein weights 0, 1 and 10. The auxiliary
+loss is the condition-macro mean squared difference of sorted whole-profile
+projections, using 128 fresh unit directions per update and a separate seeded RNG.
+It uses TRAIN only and augments, rather than replaces, the adversarial objective.
+Weight zero is the identical-sampler control. At 128 observations per condition,
+finite-minibatch transport bias still exists; more projection directions do not
+remove it. This is an established-method ablation, not a novelty claim.
+
+Prospectively change checkpoint selection for all three arms to condition-macro
+interval W1 on a fixed balanced validation sample of 64 rows per condition
+(4,096 total). The 100-per-condition external evaluation remains unchanged.
+Do not compare these selected checkpoints with earlier pooled-selected runs as
+if selection were controlled. Any final reference comparison must rerun with
+the same declared selection rule and budget.
+
+Foundations: Deshpande et al., CVPR2018,
+https://openaccess.thecvf.com/content_cvpr_2018/html/Deshpande_Generative_Modeling_Using_CVPR_2018_paper.html;
+Lezama et al., ICML2021, https://proceedings.mlr.press/v139/lezama21a.html;
+Fatras et al., AISTATS2020, https://proceedings.mlr.press/v108/fatras20a.html;
+Jang and Noh, AISTATS2026, https://proceedings.mlr.press/v300/jang26b.html.
+
 Published foundations: Gulrajani et al., *Improved Training of Wasserstein GANs*,
 NeurIPS 2017 (https://papers.nips.cc/paper/7159-improved-training-of-wasserstein-gans.pdf);
 Miyato et al., *Spectral Normalization for Generative Adversarial Networks*, ICLR

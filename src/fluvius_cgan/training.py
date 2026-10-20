@@ -25,6 +25,7 @@ from torch.nn import functional as F
 
 from .models import Discriminator, Generator
 from .residual import ResidualGenerator, fit_mean_profiles
+from .distribution_loss import conditional_sliced_wasserstein_loss
 
 
 DEFAULT_CONFIG = {
@@ -34,8 +35,12 @@ DEFAULT_CONFIG = {
     "max_train_samples": None, "patience": None, "normalization": "minmax",
     "objective": "bce", "adam_beta1": 0.9, "adam_beta2": 0.999,
     "discriminator_hidden_dim": None, "conditional_mean_residual": False,
+    "batch_sampling": "shuffle", "conditions_per_batch": 4,
+    "swd_weight": 0.0, "swd_projections": 128,
+    "validation_selection": "pooled_w1",
 }
 VALIDATION_METRIC = "mean_interval_wasserstein_normalized"
+CONDITIONAL_VALIDATION_METRIC = "mean_condition_interval_wasserstein_normalized"
 CHECKPOINT_FORMAT = 1
 
 
@@ -52,7 +57,8 @@ def _config(config):
     if unknown:
         raise ValueError(f"unknown config fields: {sorted(unknown)}")
     result = {**DEFAULT_CONFIG, **config}
-    for name in ("epochs", "batch_size", "latent_dim", "hidden_dim", "num_threads", "validation_samples"):
+    for name in ("epochs", "batch_size", "latent_dim", "hidden_dim", "num_threads", "validation_samples",
+                 "conditions_per_batch", "swd_projections"):
         result[name] = _positive_int(name, result[name])
     result["seed"] = _positive_int("seed", result["seed"], 0)
     if result["seed"] >= 2**32:
@@ -77,6 +83,21 @@ def _config(config):
         raise ValueError("normalization must be minmax or standard")
     if result["objective"] not in ("bce", "hinge_sn"):
         raise ValueError("objective must be bce or hinge_sn")
+    if result["batch_sampling"] not in ("shuffle", "balanced_conditions"):
+        raise ValueError("batch_sampling must be shuffle or balanced_conditions")
+    if result["validation_selection"] not in ("pooled_w1", "conditional_w1"):
+        raise ValueError("validation_selection must be pooled_w1 or conditional_w1")
+    weight = result["swd_weight"]
+    if isinstance(weight, bool) or not isinstance(weight, Real) or not math.isfinite(weight) or weight < 0:
+        raise ValueError("swd_weight must be nonnegative and finite")
+    result["swd_weight"] = float(weight)
+    if result["batch_sampling"] == "balanced_conditions":
+        if result["batch_size"] % result["conditions_per_batch"]:
+            raise ValueError("balanced batch_size must be divisible by conditions_per_batch")
+        if weight and result["batch_size"] // result["conditions_per_batch"] < 32:
+            raise ValueError("SWD needs at least 32 samples per sampled condition")
+    elif weight:
+        raise ValueError("positive swd_weight requires balanced_conditions sampling")
     if result["device"] == "auto":
         result["device"] = "cuda" if torch.cuda.is_available() else "cpu"
     if not isinstance(result["device"], str) or not re.fullmatch(r"cpu|cuda(?::\d+)?", result["device"]):
@@ -312,8 +333,9 @@ def _normalized(x, scaler):
     return values
 
 
-def _validation_score(generator, normalized, labels, noise, condition_dim, device, batch_size):
-    """Mean_t W1(val[:,t], G(fixed_z, matching_val_labels)[:,t]), normalized units.
+def _validation_score(generator, normalized, labels, noise, condition_dim, device, batch_size,
+                      selection="pooled_w1"):
+    """Fixed-sample interval W1 in normalized units, pooled or condition-macro.
 
     This marginal score is a transparent checkpoint criterion, not a joint-profile
     fidelity or privacy measure.  The independent evaluation reports richer metrics.
@@ -330,8 +352,44 @@ def _validation_score(generator, normalized, labels, noise, condition_dim, devic
     generated = np.concatenate(pieces)
     if not np.isfinite(generated).all():
         raise ValueError("generator produced nonfinite validation profiles")
-    return float(np.mean([wasserstein_distance(normalized[:, t], generated[:, t])
-                          for t in range(normalized.shape[1])]))
+    return _profile_validation_score(normalized, generated, labels, selection)
+
+
+def _profile_validation_score(real, generated, labels, selection):
+    if selection == "pooled_w1":
+        return float(np.mean([wasserstein_distance(real[:, t], generated[:, t])
+                              for t in range(real.shape[1])]))
+    groups = [labels == label for label in np.unique(labels)]
+    return float(np.mean([np.mean([wasserstein_distance(real[group, t], generated[group, t])
+                                  for t in range(real.shape[1])]) for group in groups]))
+
+
+def _validation_indices(labels, supported_labels, sample_count, rng, selection):
+    if selection == "pooled_w1":
+        eligible = np.flatnonzero(np.isin(labels, supported_labels))
+        return np.sort(rng.choice(eligible, min(len(eligible), sample_count), replace=False))
+    if sample_count % len(supported_labels) or sample_count // len(supported_labels) < 2:
+        raise ValueError("conditional validation_samples must be divisible by support size and allow at least 2 per condition")
+    cap = sample_count // len(supported_labels)
+    pieces = []
+    for label in supported_labels:
+        eligible = np.flatnonzero(labels == label)
+        if len(eligible) < 2:
+            raise ValueError("conditional validation needs at least 2 available profiles per supported condition")
+        pieces.append(rng.choice(eligible, min(len(eligible), cap), replace=False))
+    return np.sort(np.concatenate(pieces))
+
+
+def _training_batches(count, batch_size, generator, *, condition_indices=None, conditions_per_batch=4):
+    """Yield actual-training-subset indices; balanced draws use replacement."""
+    if condition_indices is None:
+        yield from torch.randperm(count, generator=generator).split(batch_size)
+        return
+    per_condition = batch_size // conditions_per_batch
+    for _ in range(math.ceil(count / batch_size)):
+        chosen = torch.randperm(len(condition_indices), generator=generator)[:conditions_per_batch]
+        yield torch.cat([condition_indices[int(label)][torch.randint(
+            len(condition_indices[int(label)]), (per_condition,), generator=generator)] for label in chosen])
 
 
 def _discriminator_loss(real_logits, fake_logits, objective):
@@ -414,6 +472,11 @@ def _train(prepared_dir, output_dir, config, started):
         selected = np.sort(subset_rng.choice(count, config["max_train_samples"], replace=False))
     labels = full_train["y"][selected]
     supported_labels = sorted(int(v) for v in np.unique(labels))
+    condition_indices = None
+    if config["batch_sampling"] == "balanced_conditions":
+        if len(supported_labels) < config["conditions_per_batch"]:
+            raise ValueError("actual training support is smaller than conditions_per_batch")
+        condition_indices = [torch.from_numpy(np.flatnonzero(labels == label)) for label in supported_labels]
     train_x = torch.from_numpy(_normalized(full_train["x"][selected], scaler))
     eligible = np.flatnonzero(np.isin(val["y"], supported_labels))
     if len(eligible) < len(val["x"]) and len(selected) == count:
@@ -422,7 +485,8 @@ def _train(prepared_dir, output_dir, config, started):
     if not len(eligible):
         raise ValueError("validation has no labels supported by the actual training subset")
     validation_rng = np.random.default_rng(config["seed"] + 1)
-    val_indices = np.sort(validation_rng.choice(eligible, min(len(eligible), config["validation_samples"]), replace=False))
+    val_indices = _validation_indices(val["y"], supported_labels, config["validation_samples"],
+                                      validation_rng, config["validation_selection"])
     val_x = _normalized(val["x"][val_indices], scaler)
     val_labels = val["y"][val_indices]
     condition_dim = 0 if config["unconditional"] else 64
@@ -430,6 +494,8 @@ def _train(prepared_dir, output_dir, config, started):
     validation_noise = torch.randn((len(val_indices), config["latent_dim"]),
                                    generator=torch.Generator().manual_seed(config["seed"] + 2))
     provenance = _provenance(device)
+    validation_metric = (VALIDATION_METRIC if config["validation_selection"] == "pooled_w1"
+                         else CONDITIONAL_VALIDATION_METRIC)
     selection = {
         "train_profiles_available": count, "train_profiles_used": len(selected),
         "train_indices_sha256": hashlib.sha256(selected.astype("<i8").tobytes()).hexdigest(),
@@ -440,11 +506,20 @@ def _train(prepared_dir, output_dir, config, started):
         "validation_indices": val_indices.tolist(),
         "validation_labels_sha256": hashlib.sha256(val_labels.astype("<i8").tobytes()).hexdigest(),
         "validation_noise_sha256": hashlib.sha256(validation_noise.numpy().tobytes()).hexdigest(),
+        "validation_selection": config["validation_selection"], "validation_selection_version": 1,
+        "validation_samples_requested": config["validation_samples"],
+        "validation_per_condition_cap": (config["validation_samples"] // len(supported_labels)
+                                          if config["validation_selection"] == "conditional_w1" else None),
+        "validation_profiles_per_condition": {str(label): int(np.sum(val_labels == label)) for label in supported_labels},
+        "batch_sampling": config["batch_sampling"],
+        "swd_conditioning": "pooled" if config["unconditional"] else "conditional",
     }
     output_dir.mkdir(parents=True, exist_ok=True)
     _atomic_json(output_dir / "config.json", config)
     history = []
     generator_updates = discriminator_updates = 0
+    samples_seen = 0
+    class_exposure_counts = {str(label): 0 for label in supported_labels}
     best_score, best_epoch, stale_epochs = math.inf, 0, 0
     with _deterministic(config["seed"], config["num_threads"], device):
         generator = Generator(config["latent_dim"], condition_dim, config["hidden_dim"], metadata["resolution"]).to(device)
@@ -458,17 +533,21 @@ def _train(prepared_dir, output_dir, config, started):
         optimizer_g = torch.optim.Adam(generator.parameters(), lr=config["lr_g"], betas=betas)
         optimizer_d = torch.optim.Adam(discriminator.parameters(), lr=config["lr_d"], betas=betas)
         shuffle_rng = torch.Generator().manual_seed(config["seed"] + 3)
+        swd_rng = (torch.Generator(device=device).manual_seed(config["seed"] + 4)
+                   if config["swd_weight"] else None)
         for epoch in range(1, config["epochs"] + 1):
             epoch_started = time.perf_counter()
             generator.train()
             discriminator.train()
-            permutation = torch.randperm(len(selected), generator=shuffle_rng)
-            total_g = total_d = 0.0
+            total_g = total_d = total_adversarial = total_swd = 0.0
+            epoch_samples_seen = 0
+            epoch_class_exposure_counts = {str(label): 0 for label in supported_labels}
             epoch_generator_updates = epoch_discriminator_updates = 0
-            for start in range(0, len(selected), config["batch_size"]):
-                batch_indices = permutation[start:start + config["batch_size"]]
+            for batch_indices in _training_batches(len(selected), config["batch_size"], shuffle_rng,
+                    condition_indices=condition_indices, conditions_per_batch=config["conditions_per_batch"]):
                 real = train_x[batch_indices].to(device)
-                c = _conditions(labels[batch_indices.numpy()], condition_dim, device)
+                batch_labels = labels[batch_indices.numpy()]
+                c = _conditions(batch_labels, condition_dim, device)
                 optimizer_d.zero_grad(set_to_none=True)
                 noise = torch.randn((len(real), config["latent_dim"]), device=device)
                 # No G graph is retained for the discriminator step.
@@ -485,7 +564,20 @@ def _train(prepared_dir, output_dir, config, started):
                 optimizer_g.zero_grad(set_to_none=True)
                 with _frozen_discriminator(discriminator, freeze_buffers=config["objective"] == "hinge_sn"):
                     noise = torch.randn((len(real), config["latent_dim"]), device=device)
-                    loss_g = _generator_loss(discriminator(generator(noise, c), c), config["objective"])
+                    fake = generator(noise, c)
+                    loss_adversarial = _generator_loss(discriminator(fake, c), config["objective"])
+                    loss_g = loss_adversarial
+                    swd_value = 0.0
+                    if config["swd_weight"]:
+                        swd_labels = torch.as_tensor(batch_labels, dtype=torch.int64, device=device)
+                        if config["unconditional"]:
+                            swd_labels = torch.zeros_like(swd_labels)
+                        loss_swd = conditional_sliced_wasserstein_loss(
+                            real, fake, swd_labels, swd_labels, p=2,
+                            num_projections=config["swd_projections"], min_samples_per_condition=32,
+                            generator=swd_rng)
+                        loss_g = loss_adversarial + config["swd_weight"] * loss_swd
+                        swd_value = float(loss_swd.detach())
                     if not torch.isfinite(loss_g):
                         raise ValueError("nonfinite generator loss")
                     loss_g.backward()
@@ -494,12 +586,24 @@ def _train(prepared_dir, output_dir, config, started):
                     epoch_generator_updates += 1
                 total_g += float(loss_g.detach()) * len(real)
                 total_d += float(loss_d.detach()) * len(real)
-            score = _validation_score(generator, val_x, val_labels, validation_noise,
-                                      condition_dim, device, config["batch_size"])
+                total_adversarial += float(loss_adversarial.detach()) * len(real)
+                total_swd += swd_value * len(real)
+                samples_seen += len(real)
+                epoch_samples_seen += len(real)
+                for label, exposure in zip(*np.unique(batch_labels, return_counts=True)):
+                    class_exposure_counts[str(label)] += int(exposure)
+                    epoch_class_exposure_counts[str(label)] += int(exposure)
+            score_args = (generator, val_x, val_labels, validation_noise, condition_dim, device, config["batch_size"])
+            score = (_validation_score(*score_args) if config["validation_selection"] == "pooled_w1"
+                     else _validation_score(*score_args, selection="conditional_w1"))
             if not math.isfinite(score):
                 raise ValueError("nonfinite validation score")
-            history.append({"epoch": epoch, "loss_g": total_g / len(selected),
-                            "loss_d": total_d / len(selected), "validation_score": score,
+            history.append({"epoch": epoch, "loss_g": total_g / epoch_samples_seen,
+                            "loss_d": total_d / epoch_samples_seen, "validation_score": score,
+                            "loss_g_adversarial": total_adversarial / epoch_samples_seen,
+                            "loss_swd": total_swd / epoch_samples_seen,
+                            "samples_seen": epoch_samples_seen,
+                            "class_exposure_counts": epoch_class_exposure_counts,
                             "generator_updates": epoch_generator_updates,
                             "discriminator_updates": epoch_discriminator_updates,
                             "elapsed_seconds": time.perf_counter() - epoch_started})
@@ -514,10 +618,12 @@ def _train(prepared_dir, output_dir, config, started):
                 "output_dim": metadata["resolution"], "scaler": scaler,
                 "metadata": metadata, "data_hashes": hashes,
                 "supported_labels": supported_labels, "selection": selection,
-                "provenance": provenance, "validation_metric": VALIDATION_METRIC,
+                "provenance": provenance, "validation_metric": validation_metric,
                 "validation_score": score, "best_epoch": best_epoch,
                 "best_validation_score": best_score,
                 "generator_updates": generator_updates, "discriminator_updates": discriminator_updates,
+                "samples_seen": samples_seen, "class_exposure_counts": dict(class_exposure_counts),
+                "epoch_metrics": history[-1],
                 "generator_state_dict": generator.state_dict(),
                 "discriminator_state_dict": discriminator.state_dict(),
                 "optimizer_g_state_dict": optimizer_g.state_dict(),
@@ -534,8 +640,10 @@ def _train(prepared_dir, output_dir, config, started):
                 break
     summary = {
         "best_epoch": best_epoch, "best_validation_score": best_score,
-        "validation_metric": VALIDATION_METRIC, "epochs_completed": len(history),
+        "validation_metric": validation_metric, "epochs_completed": len(history),
         "generator_updates": generator_updates, "discriminator_updates": discriminator_updates,
+        "samples_seen": samples_seen, "class_exposure_counts": class_exposure_counts,
+        "last_epoch_metrics": history[-1],
         "stopped_early": len(history) < config["epochs"],
         "supported_labels": supported_labels, "condition_dim": condition_dim,
         "resolution": metadata["resolution"], "target": metadata["target"],

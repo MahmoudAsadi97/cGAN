@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "split": "val",
+  "test_used": false,
+  "source_sha256": "934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8",
+  "checkpoint_sha256": "12159e0495b1a6a53e5814eebd1cff54ad50d53a259fdbe3e64cbc4d6e703a4b",
+  "checkpoint_epoch": 25,
+  "data_hashes": {
+    "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+    "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+    "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+    "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1"
+  },
+  "train_indices_sha256": "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23",
+  "seed": 2026,
+  "samples_per_condition_cap": 100,
+  "label_counts": {
+    "0": 100,
+    "1": 100,
+    "2": 100,
+    "3": 100,
+    "4": 100,
+    "5": 100,
+    "6": 100,
+    "7": 100,
+    "8": 100,
+    "9": 100,
+    "10": 100,
+    "11": 100,
+    "12": 100,
+    "13": 100,
+    "14": 100,
+    "15": 100,
+    "16": 100,
+    "17": 100,
+    "18": 100,
+    "19": 100,
+    "20": 100,
+    "21": 100,
+    "22": 100,
+    "23": 100,
+    "24": 100,
+    "25": 100,
+    "26": 100,
+    "27": 100,
+    "28": 100,
+    "29": 100,
+    "30": 100,
+    "31": 100,
+    "32": 100,
+    "33": 100,
+    "34": 100,
+    "35": 100,
+    "36": 100,
+    "37": 100,
+    "38": 100,
+    "39": 100,
+    "40": 100,
+    "41": 100,
+    "42": 100,
+    "43": 100,
+    "44": 100,
+    "45": 100,
+    "46": 100,
+    "47": 100,
+    "48": 100,
+    "49": 100,
+    "50": 100,
+    "51": 100,
+    "52": 100,
+    "53": 100,
+    "54": 100,
+    "55": 100,
+    "56": 100,
+    "57": 100,
+    "58": 100,
+    "59": 100,
+    "60": 100,
+    "61": 100,
+    "62": 100,
+    "63": 100
+  },
+  "profile_count": 6400,
+  "selected_validation_indices_sha256": "4e112c419e11f4f78ff2d8215f3a68148a2ca9a62584b65c594c8a47ef72ba20",
+  "generated_label_order_sha256": "1644cb43aee75cc7ff574d9431a4a4b446ab8ccdf4c10144dc8ac70930a7028e",
+  "resolution": 96,
+  "interval_hours": 0.25,
+  "stored_units": "kWh/interval",
+  "plotted_profile_units": "kW",
+  "example_selection": "First up to three rows in seeded sample order for every label; independent real/generated profiles. Fixed saved marginal map applied to generated rows; no current-batch ranks, refitting, sample ranking, or smoothing.",
+  "interpretation": "Exploratory validation-only figures for a frozen calibrated pipeline. Empirical pointwise bands are not confidence intervals; examples are unpaired. Marginal improvement is imposed by the map and does not independently establish learned dependence or joint-profile fidelity. No final test data are used.",
+  "artifacts": {
+    "winter_weekday_quantiles.svg": {
+      "sha256": "a90323d156b950db774ca28e60816426f55a608dc20d7d53ec8fb09c73d7ab04"
+    },
+    "winter_weekday_quantiles.png": {
+      "sha256": "067c56cea2ee5c5a2b8d707e23d0c1c5e846076966c1cc4a29ff45e731ead283"
+    },
+    "conditional_metric_heatmaps.svg": {
+      "sha256": "dbc8d05ccb933f314914e8183b62982ad14df0f6ab8f6431f7a0dcbda39dda38"
+    },
+    "conditional_metric_heatmaps.png": {
+      "sha256": "bd34b53b29e832c0e72f36f5d6688e48d1fcc9f20ee0f0576063075a221c8800"
+    },
+    "profile_examples_technology_0.svg": {
+      "sha256": "f47855d3692ba29c5e33e21088f7d57d1e4a0816feebbc524ca6ef59817abf5d"
+    },
+    "profile_examples_technology_0.png": {
+      "sha256": "7ed41ecd7ff91745305a578d914cd605f01f395fde522b084a7a87f5c8f793ef"
+    },
+    "profile_examples_technology_1.svg": {
+      "sha256": "fce20da85169ed951f60b45192fe778e31d673df3b3362f2047486a0c1637e24"
+    },
+    "profile_examples_technology_1.png": {
+      "sha256": "5f79ff77d3fb9343bee41288abf815832dbee2e19b48503c6432e015e5704648"
+    },
+    "profile_examples_technology_2.svg": {
+      "sha256": "080f373313189176c55de8da6ee9b8562ae5d88459b119c7b4b83b5da7d9fa84"
+    },
+    "profile_examples_technology_2.png": {
+      "sha256": "747c1a8354dde3b108351c3627908a9b534295449d8452179fcd41e2e8b2f969"
+    },
+    "profile_examples_technology_3.svg": {
+      "sha256": "e7848500b35fe47ab24807f945609426da4c00f1f48d4a33a73da07252457b6c"
+    },
+    "profile_examples_technology_3.png": {
+      "sha256": "00ac417d5febb8049e5eefe418034d65e5c1b374600da875b249f22cc27c82b9"
+    },
+    "profile_examples_technology_4.svg": {
+      "sha256": "295980ddb8664ba65b307f1cee3afb889cf71f3cde9cac9ada16bd9c53d24463"
+    },
+    "profile_examples_technology_4.png": {
+      "sha256": "d66f006c44c4fb6b3af2d8282e56842834adce3e3cc06dc09cdc21f42c1ab662"
+    },
+    "profile_examples_technology_5.svg": {
+      "sha256": "14320c7cd6311a2cbeed51437ad5bf2eed8bbfee96f34805a125f31d04b46b22"
+    },
+    "profile_examples_technology_5.png": {
+      "sha256": "a58a29c7deaebf786f764745b9d2a3c0f703f402d2fe72b714f2f0ca954f1a5d"
+    },
+    "profile_examples_technology_6.svg": {
+      "sha256": "62ae0406e59e7f3aa844df8c82bbba142b8edb6713d54ce9deafe85ba9f521f3"
+    },
+    "profile_examples_technology_6.png": {
+      "sha256": "db43d31016393b23df152ce6d9bd56594e55c6b43c6328f4bedfc157af263c39"
+    },
+    "profile_examples_technology_7.svg": {
+      "sha256": "a9b399c09d599475ece6287c87c22e46df3fb5bb33896e3fcd4ebdae563c59b0"
+    },
+    "profile_examples_technology_7.png": {
+      "sha256": "ad7eb0e0c167b53a1276947d23767464d9d837c4e429ba5cf34a8743220e5890"
+    }
+  },
+  "verified_at_utc": "2026-10-20T13:47:21.157038+00:00",
+  "manifest": {
+    "path": "runs/curated_swd10/seed_11/figures_verified/plot_manifest.json",
+    "sha256": "77cbdd1a5f76f3a2cb9c51489ecd0e3e7475dd34fcf05396ec3d85463d6a72a4",
+    "bytes": 26082
+  },
+  "artifact_hashes_verified": true,
+  "visual_review": {
+    "inspected": [
+      "winter_weekday_quantiles.png",
+      "conditional_metric_heatmaps.png"
+    ],
+    "assessment": "Labels, units and legends readable; empirical bands and unpaired examples are distinguished from confidence intervals; raw/calibrated heatmaps share scales. Visual review is not a model-quality acceptance test."
+  },
+  "recovery_note": "Complete20-file rerun; earlier partial figures directory retained separately."
+}

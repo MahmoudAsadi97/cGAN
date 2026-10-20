@@ -88,6 +88,14 @@ Against the Gaussian control, peak and ramp intervals lie below zero in every se
 
 ## Coverage, provenance and limits
 
+The fixed seed-11 figure run is complete: 20 SVG/PNG files cover quantile bands,
+raw/calibrated heatmaps and unpaired examples for all eight technology groups.
+Its [verification record](../reports/original_figures_verification.json) retains
+every file hash and the full manifest's hash. The complete files are under
+`runs/curated_swd10/seed_11/figures_verified`; the earlier interrupted plotting
+directory remains separate. These figures illustrate validation behavior and
+do not replace the five-seed quantitative comparisons.
+
 The [compact JSON](../reports/curated_completed_validation.json) retains every run’s 10 input artifact hashes, all source-code hash variants and the compact source/input SHA-256 list (excluding per-meter identity fingerprints), common protocol settings, per-seed physical and utility macros/ratios, aggregate metrics, every paired interval endpoint and complete coverage counts. Exact per-condition details, source histories and metadata associations remain in the full collector report.
 
 Full report: `runs/curated_swd10/completed_validation_study.json` (15,744,128 bytes). SHA-256: `c5e773c3e32f985b96a6b2fed7ab1da1b351572710a432a41f8851b7fafd5fd0`. Its companion Markdown is `runs/curated_swd10/completed_validation_study.md`. Collector SHA-256: `6ad46ce7f8bb2dd35018555fc76c338f10bf8d6cab3fad57cd2c6cfceef965c8`.

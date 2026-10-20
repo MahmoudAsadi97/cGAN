@@ -121,7 +121,9 @@ scale. Its three-seed promotion criteria are fixed in
 from the added loss. Keep each arm, failed gates and interrupted attempts.
 The completed three-seed [SWD attribution comparison](docs/CURATED_SWD_ATTRIBUTION.md)
 finds lower calibrated peak/ramp errors with weight 10, alongside ACF and battery
-tradeoffs. [EXPERIMENT_LEDGER.md](docs/EXPERIMENT_LEDGER.md) separates retained
+tradeoffs. Its [matched utility comparison](docs/CURATED_SWD_UTILITY_ATTRIBUTION.md)
+also finds lower forecasting errors in all three seeds, without a paired utility
+uncertainty claim. [EXPERIMENT_LEDGER.md](docs/EXPERIMENT_LEDGER.md) separates retained
 historical screens, current runs and outstanding manuscript experiments.
 
 ```bash
@@ -162,11 +164,13 @@ python scripts/evaluate_calibration.py --prepared data/curated96 \
   --quantile-knots 1025 --samples-per-condition 100 --seed 2026 \
   --output "$run_dir/calibration_validation.json"
 
-# Paired real-meter bootstrap against the matched-knot Gaussian copula.
-python scripts/compare_calibrated.py --prepared data/curated96 \
-  --checkpoint "$run_dir/best.pt" --calibrator "$run_dir/calibration.npz" \
-  --baseline gaussian_copula --samples-per-condition 100 --seed 2026 \
-  --replicates 500 --output "$run_dir/comparison_gaussian_copula.json"
+# Paired real-meter bootstrap against both declared comparators.
+for baseline in gaussian_copula conditional_resampling; do
+  python scripts/compare_calibrated.py --prepared data/curated96 \
+    --checkpoint "$run_dir/best.pt" --calibrator "$run_dir/calibration.npz" \
+    --baseline "$baseline" --samples-per-condition 100 --seed 2026 \
+    --replicates 500 --output "$run_dir/uncertainty_${baseline}.json"
+done
 
 # Within-day, observed-history next-interval ridge utility on real validation days.
 # No training-profile cap: all methods use the actual full training pool.

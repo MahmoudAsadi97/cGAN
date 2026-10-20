@@ -1,0 +1,14 @@
+{
+  "epochs": 3,
+  "batch_size": 256,
+  "seed": 42,
+  "latent_dim": 24,
+  "hidden_dim": 64,
+  "lr_g": 0.0001,
+  "lr_d": 0.0002,
+  "device": "cpu",
+  "num_threads": 2,
+  "unconditional": false,
+  "validation_samples": 512,
+  "max_train_samples": 4096
+}

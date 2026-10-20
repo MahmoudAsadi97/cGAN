@@ -6,8 +6,12 @@ recomputed SHA256 is
 The eight CSVs contain **84,326,400 observations** and occupy 6,389,855,650 bytes
 uncompressed. A separate complete scan checks the local calendar slot sequence.
 The compact executed evidence is [`reports/dataset_audit.json`](../reports/dataset_audit.json).
-This establishes the contents of this archive; it does not independently verify
-its download origin, licensing, or population representativeness.
+This audit establishes the archive's contents. A separate
+[official-source verification](DATA_PROVENANCE.md) confirms that all eight CSVs
+and the legend match the official Fluvius attachments by SHA-256 and byte length,
+and documents the current custom Fluvius licence and attribution requirements.
+These checks do not establish population representativeness, household
+independence or privacy.
 
 ## Reproduce the checks
 

@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "input_report": "/workspace/scratch/bd8d9697d969/cGAN/reports/curated_calibration_robustness.json",
+  "input_sha256": "8904a50dc7406c04e5fd55f158454c06e48846446c5a3e9a0eeb3a0181ca450b",
+  "script_sha256": "ddc328d119f024a6a76057e73a2743dceac52b4983d828055bc2e659f4251b57",
+  "python": "3.12.14",
+  "matplotlib": "3.10.8",
+  "data_access": "Compact input JSON only; no dataset, checkpoint or full run report loaded",
+  "validation_cap": 100,
+  "training_seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "coverage": {
+    "profiles_per_condition": 100,
+    "selected_profiles": 6400,
+    "selected_meters": 353,
+    "selected_indices_sha256": "4e112c419e11f4f78ff2d8215f3a68148a2ca9a62584b65c594c8a47ef72ba20",
+    "labels_sha256": "1644cb43aee75cc7ff574d9431a4a4b446ab8ccdf4c10144dc8ac70930a7028e",
+    "real_profiles_sha256": "96ae5abc70e1d2b267eba2d3d4b50dfcbfb739b40f7379264b66a9e55d6c2a61",
+    "identical_frozen_statistical_controls_verified": true
+  },
+  "method_order": [
+    "raw_cgan",
+    "calibrated_cgan",
+    "gaussian_copula",
+    "conditional_resampling"
+  ],
+  "panels": [
+    {
+      "metric": "daily_energy_wasserstein_kwh",
+      "title": "Daily energy",
+      "unit": "kWh",
+      "target": 5.0,
+      "methods": {
+        "raw_cgan": {
+          "displayed_points": [
+            2.985166374482538,
+            3.0162077589053524,
+            2.9672537030914734,
+            3.0482373043180333,
+            2.9352748106906317
+          ],
+          "mean": 2.9904279902976056,
+          "sample_sd": 0.043626593570430715
+        },
+        "calibrated_cgan": {
+          "displayed_points": [
+            3.165317400565605,
+            3.3589236080923883,
+            3.221379776754639,
+            3.3210751972064747,
+            3.3100576189638895
+          ],
+          "mean": 3.2753507203165992,
+          "sample_sd": 0.07952974031163355
+        },
+        "gaussian_copula": {
+          "displayed_points": [
+            2.9385043936164355
+          ],
+          "mean": 2.9385043936164355,
+          "sample_sd": null
+        },
+        "conditional_resampling": {
+          "displayed_points": [
+            2.8256941699447635
+          ],
+          "mean": 2.8256941699447635,
+          "sample_sd": null
+        }
+      }
+    },
+    {
+      "metric": "peak_power_wasserstein_kw",
+      "title": "Peak power",
+      "unit": "kW",
+      "target": 1.0,
+      "methods": {
+        "raw_cgan": {
+          "displayed_points": [
+            0.7420736156775093,
+            0.7462692284210062,
+            0.7546204812869837,
+            0.7165120682770794,
+            0.7035917073673046
+          ],
+          "mean": 0.7326134202059766,
+          "sample_sd": 0.0215742930580413
+        },
+        "calibrated_cgan": {
+          "displayed_points": [
+            0.7765825149167422,
+            0.7942376059888471,
+            0.7885203482101544,
+            0.7633059012932744,
+            0.7938082341404828
+          ],
+          "mean": 0.7832909209099002,
+          "sample_sd": 0.013249475666440804
+        },
+        "gaussian_copula": {
+          "displayed_points": [
+            0.9942958432210871
+          ],
+          "mean": 0.9942958432210871,
+          "sample_sd": null
+        },
+        "conditional_resampling": {
+          "displayed_points": [
+            0.5010774106935424
+          ],
+          "mean": 0.5010774106935424,
+          "sample_sd": null
+        }
+      }
+    },
+    {
+      "metric": "ramp_wasserstein_kw",
+      "title": "Ramps",
+      "unit": "kW",
+      "target": 0.1,
+      "methods": {
+        "raw_cgan": {
+          "displayed_points": [
+            0.20830791883315436,
+            0.18501491830050137,
+            0.1989536103055964,
+            0.21661397955724115,
+            0.21227138265023515
+          ],
+          "mean": 0.20423236192934568,
+          "sample_sd": 0.012566978869675966
+        },
+        "calibrated_cgan": {
+          "displayed_points": [
+            0.10226174681737112,
+            0.0907247080811097,
+            0.1013202297858884,
+            0.10706963285373862,
+            0.10189988667040856
+          ],
+          "mean": 0.10065524084170328,
+          "sample_sd": 0.006006915197877014
+        },
+        "gaussian_copula": {
+          "displayed_points": [
+            0.14103696927202913
+          ],
+          "mean": 0.14103696927202913,
+          "sample_sd": null
+        },
+        "conditional_resampling": {
+          "displayed_points": [
+            0.0341687132975218
+          ],
+          "mean": 0.0341687132975218,
+          "sample_sd": null
+        }
+      }
+    },
+    {
+      "metric": "lag_one_acf_wasserstein",
+      "title": "Lag-one autocorrelation",
+      "unit": "unitless",
+      "target": 0.1,
+      "methods": {
+        "raw_cgan": {
+          "displayed_points": [
+            0.09636523233668375,
+            0.10462146476074496,
+            0.09371544190317048,
+            0.08535051510632478,
+            0.09022585589681231
+          ],
+          "mean": 0.09405570200074725,
+          "sample_sd": 0.007203003714663396
+        },
+        "calibrated_cgan": {
+          "displayed_points": [
+            0.0815189474512369,
+            0.09242641043980945,
+            0.0866105683319437,
+            0.07577267954613803,
+            0.08016910953518118
+          ],
+          "mean": 0.08329954306086185,
+          "sample_sd": 0.006400906296213885
+        },
+        "gaussian_copula": {
+          "displayed_points": [
+            0.08536435048798192
+          ],
+          "mean": 0.08536435048798192,
+          "sample_sd": null
+        },
+        "conditional_resampling": {
+          "displayed_points": [
+            0.046469874541705064
+          ],
+          "mean": 0.046469874541705064,
+          "sample_sd": null
+        }
+      }
+    }
+  ],
+  "uncertainty_display": "Neural mean +/- sample SD across five training seeds; fixed controls appear once without error bars",
+  "svg_fonttype": "none",
+  "svg_sha256": "8406d51c0bad9bc23b9ee2014c3f957d02548c4910feb192720e329fd5175c06",
+  "png_sha256": "6a62d341a728b496c05300e1347722b19386105e0c9f48f146e3c78a3c949997"
+}

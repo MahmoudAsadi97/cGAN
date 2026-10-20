@@ -72,6 +72,9 @@ After freezing choices, evaluate each model's best validation checkpoint on test
 once. The CLI defaults to validation; test requires `--split test`. This operational
 choice cannot prevent a researcher from repeatedly viewing test results, so maintain
 an experiment log and declare any reuse. Never tune to numbers in the final report.
+That CLI evaluates raw reference models. The calibrated candidate instead uses
+the five-seed seal and separate evaluator in [FROZEN_TEST.md](FROZEN_TEST.md),
+which retain checkpoint/map pairs, fixed references, utility states and attempts.
 
 Report overall and per-condition counts plus equally weighted condition means:
 
@@ -105,7 +108,10 @@ independent households. Predeclare primary metrics and multiple-comparison handl
 An application claim needs an application experiment. For example, a separately
 specified train-on-synthetic/test-on-real forecasting task can quantify utility,
 but its forecast horizon, leakage controls, downstream model and baselines must be
-fixed first. No downstream utility experiment is currently claimed.
+fixed first. The current curated study reports its separately specified
+observed-history next-interval ridge task in
+[CURATED_COMPLETED_VALIDATION.md](CURATED_COMPLETED_VALIDATION.md). Its descriptive
+RMSE tolerance is not formal noninferiority or day-ahead/future-year validation.
 
 Nearest-neighbor distances and exact-copy fractions are descriptive diagnostics.
 The bounded reference subsample can miss memorized records. A privacy claim requires
@@ -116,9 +122,11 @@ as anonymous merely because a GAN generated them.
 
 ## Completion criteria for a manuscript
 
-1. Full data audit and legend interpretation reviewed; data use/license and source
-   provenance confirmed for redistribution/publication. Repository release access
-   alone does not settle dataset licensing.
+1. Full data audit and legend interpretation reviewed. Official CSV/legend content
+   identity and the current custom Fluvius licence are documented in
+   [DATA_PROVENANCE.md](DATA_PROVENANCE.md). Redistribution/publication must follow
+   those terms, including Fluvius attribution and the last-update date. This
+   verification does not establish privacy or household independence.
 2. Full-data training finished for all planned methods/seeds with logs, checkpoints,
    source commit, environment versions, hardware, duration, configuration and hashes.
 3. Validation decisions frozen before test; all final conditions/seeds reported,

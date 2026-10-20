@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "scope": "Synthetic-only numeric verification of the shared empirical inverse-quantile interpolation correction.",
+  "recorded_at_utc": "2026-10-20T13:34:09.918832+00:00",
+  "actual_study_arrays_read": false,
+  "test_data_read": false,
+  "source_sha256": {
+    "copula_before": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+    "copula_after": "f692737d98c4452eeec92a07777386c848648f3345477b561e4457b83304624c",
+    "regression_tests": "d9610a71cc3dce514d6bd582d484b942390ad1e1923e7bb01d6bdb3e945822b5"
+  },
+  "evidence_sha256": {
+    "original_verification_json": "a418a6bfa2793e1effbef000ce9d9a2db00fcf1d3bf343c566259417c1fb2016",
+    "synthetic_before_npz": "b30eb5d54a5e57aa257f2656d782109fe44ce41efd3c23bec2ab31be7342fefd"
+  },
+  "numeric_environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "rng": "numpy.random.default_rng / PCG64",
+    "OPENBLAS_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1
+  },
+  "tie_reproduction": {
+    "seed": 7312,
+    "source": "Repeat each row of default_rng(7312).normal(size=(8,24)) 512 times.",
+    "source_shape": [
+      4096,
+      24
+    ],
+    "source_dtype": "float64",
+    "quantile_knots": 1025,
+    "quantile_probabilities": "linspace(0,1,1025); linear inverse on sorted source values",
+    "train_for_calibration_replay": "The next 2x24 normal values from the same RNG; one condition, label0.",
+    "old_descending_steps": 931,
+    "old_minimum_increment": -4.440892098500626e-16,
+    "old_calibration_failure": "invalid source quantile table",
+    "new_descending_steps": 0,
+    "new_calibration_fit": "accepted",
+    "difference": {
+      "count": 24600,
+      "changed_values": 1372,
+      "max_absolute_difference": 4.440892098500626e-16,
+      "mean_absolute_difference": 4.749898532310804e-18,
+      "same_array_sha256": false
+    }
+  },
+  "float32_replay_settings": {
+    "input_seed": 20261020,
+    "input_shape": [
+      8192,
+      96
+    ],
+    "input_dtype": "float32",
+    "input_range_kwh": [
+      -2.821291208267212,
+      3.85219669342041
+    ],
+    "input_recipe": [
+      "s=arange(96)/96; load=.15+.1*sin(2*pi*(s-.1))**2+.2*exp(-((s-.78)/.12)**2); solar=maximum(0,sin(2*pi*(s-.25))).",
+      "Using one default_rng(20261020), draw lognormal(0,.5,(8192,1)), then lognormal(-1,.6,(8192,1)), then normal(0,.025,(8192,96)).",
+      "x=(first_draw*load-second_draw*solar+third_draw).astype(float32); x[::101]=0.",
+      "After these input draws, draw direct-inverse probabilities rng.random((6400,96)); invert against sorted float64 x[:4096]."
+    ],
+    "conditions": [
+      0,
+      1
+    ],
+    "train_profiles_per_condition": 4096,
+    "generated_profiles_per_condition": 3200,
+    "quantile_knots": 1025,
+    "copula_shrinkage": 0.01,
+    "generation_seed": 2026,
+    "generation_batch_size": 4096,
+    "calibration_reference_seed": 7301,
+    "calibration_reference_profiles_per_condition": 4096,
+    "calibration_reference": "(x*.85+.03+default_rng(7301).normal(0,.04,size=x.shape)).astype(float32)",
+    "calibration_transform_input": "The OLD generated copula array cast to float32, held identical for old/new maps.",
+    "labels_order": "repeat([0,1],4096) for training/reference; repeat([0,1],3200) for generation/transform."
+  },
+  "float32_replay_results": {
+    "float32_compressed_copula_knots": {
+      "count": 196800,
+      "changed_values": 0,
+      "max_absolute_difference": 0.0,
+      "mean_absolute_difference": 0.0,
+      "same_array_sha256": true
+    },
+    "float32_copula_generated": {
+      "count": 614400,
+      "changed_values": 141685,
+      "max_absolute_difference": 4.440892098500626e-16,
+      "mean_absolute_difference": 9.057376542334457e-18,
+      "same_array_sha256": false
+    },
+    "float32_direct_inverse": {
+      "count": 614400,
+      "changed_values": 140840,
+      "max_absolute_difference": 4.440892098500626e-16,
+      "mean_absolute_difference": 9.021596778764027e-18,
+      "same_array_sha256": false
+    },
+    "float32_calibration_source_knots": {
+      "count": 196800,
+      "changed_values": 0,
+      "max_absolute_difference": 0.0,
+      "mean_absolute_difference": 0.0,
+      "same_array_sha256": true
+    },
+    "float32_calibration_target_knots": {
+      "count": 196800,
+      "changed_values": 0,
+      "max_absolute_difference": 0.0,
+      "mean_absolute_difference": 0.0,
+      "same_array_sha256": true
+    },
+    "float32_calibration_transformed": {
+      "count": 614400,
+      "changed_values": 140841,
+      "max_absolute_difference": 4.440892098500626e-16,
+      "mean_absolute_difference": 9.874728971216308e-18,
+      "same_array_sha256": false
+    }
+  },
+  "verification": {
+    "new_regression_file": "tests/test_quantile_interpolation.py",
+    "before_correction": {
+      "passed": 3,
+      "failed": 3,
+      "pytest_elapsed_seconds": 11.13
+    },
+    "after_correction": {
+      "files": [
+        "tests/test_quantile_interpolation.py",
+        "tests/test_copula.py",
+        "tests/test_calibration.py"
+      ],
+      "passed": 126,
+      "failed": 0,
+      "pytest_elapsed_seconds": 3.73
+    },
+    "covered_edges": [
+      "Exact tied float64 plateaus",
+      "Calibration fit rejection regression",
+      "Copula save/load monotonic-knot regression",
+      "Finite opposite-sign float64 extremes without overflowing subtraction",
+      "Ordered random finite knots and segment boundaries",
+      "Exact endpoints and manual linear-quantile oracle"
+    ],
+    "numeric_replay_elapsed_seconds": null,
+    "timing_note": "Only the observed pytest-reported durations were retained; the numeric replay was not separately timed. These are not performance benchmarks."
+  },
+  "provenance_limits": [
+    "Ongoing pinned validation jobs use the old interpolation implementation and retain its original source/output hashes.",
+    "The final freeze must use the corrected source and record its exact source and sealed-array hashes. Existing fitted maps may be loaded, but their transforms now use the corrected shared primitive.",
+    "The maximum observed synthetic output difference was 4.440892098500626e-16; this does not establish equality or a bound for actual-study arrays, metrics, hashes, or conclusions.",
+    "Float32 compressed/source/target knots were bit-identical only in this synthetic replay; generated/transformed float64 arrays changed byte hashes.",
+    "No actual-study reevaluation or statistical equivalence claim is made. The synthetic archive is an intermediate evidence artifact; reproducible settings and scalar outcomes are retained here."
+  ],
+  "synthetic_only": true
+}

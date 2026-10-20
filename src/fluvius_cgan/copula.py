@@ -87,17 +87,35 @@ def _repair_correlation(correlation: np.ndarray, eigenvalue_floor: float = 1e-10
 
 
 def _inverse_quantiles(uniform: np.ndarray, quantiles: np.ndarray) -> np.ndarray:
-    """Linear inverse on uniform knots, clamped at the empirical endpoints."""
+    """Monotone linear inverse with exact ties/endpoints and bounded probabilities.
+
+    Anchor same-sign intervals at the endpoint nearest zero. This avoids the
+    rounding variation of two weighted copies of an equal value, and avoids
+    cancellation near zero. Opposite-sign intervals use the weighted form so
+    their endpoint difference never overflows. Each fixed interval formula is
+    monotone in the probability; no output clipping or cumulative repair is
+    needed.
+    """
     positions = np.clip(uniform, 0.0, 1.0) * (len(quantiles) - 1)
     lower = np.minimum(positions.astype(np.int64), len(quantiles) - 2)
     weight = positions - lower
     columns = np.arange(quantiles.shape[1])
-    values = ((1.0 - weight) * quantiles[lower, columns]
-              + weight * quantiles[lower + 1, columns])
-    # Preserve constants exactly and guard only against endpoint roundoff.
-    constant = quantiles[0] == quantiles[-1]
-    values[:, constant] = quantiles[0, constant]
-    return np.clip(values, quantiles[0], quantiles[-1])
+    left, right = quantiles[lower, columns], quantiles[lower + 1, columns]
+    nonnegative = left >= 0
+    nonpositive = (right <= 0) & ~nonnegative
+    crossing = ~(nonnegative | nonpositive)
+    values = np.empty_like(weight)
+    # Mask before arithmetic: np.where would still evaluate overflowing
+    # right-left differences on intervals spanning both float64 extremes.
+    values[nonnegative] = (left[nonnegative]
+                          + weight[nonnegative] * (right[nonnegative] - left[nonnegative]))
+    values[nonpositive] = (right[nonpositive]
+                          - (1.0 - weight[nonpositive]) * (right[nonpositive] - left[nonpositive]))
+    values[crossing] = ((1.0 - weight[crossing]) * left[crossing]
+                        + weight[crossing] * right[crossing])
+    np.copyto(values, left, where=weight == 0)
+    np.copyto(values, right, where=weight == 1)
+    return values
 
 
 @dataclass(frozen=True)

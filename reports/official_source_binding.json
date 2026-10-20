@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "status": "all_eight_csvs_and_legend_match_official_fluvius_attachments",
+  "created_at_utc": "2026-10-20T13:27:49.748412+00:00",
+  "verification_started_at_utc": "2026-10-20T13:23:18.400076+00:00",
+  "verification_completed_at_utc": "2026-10-20T13:25:52.114979+00:00",
+  "official_catalog": {
+    "dataset_id": "1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar",
+    "dataset_uid": "da_rtnavn",
+    "page_url": "https://opendata.fluvius.be/explore/dataset/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/?flg=en-gb",
+    "api_url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar",
+    "publisher": "Dataroom Fluvius",
+    "title_en": "Consumption profiles of digital electricity meters: 15-minute values for a full year.",
+    "catalog_modified": "2025-09-29T08:41:01.980000+00:00",
+    "metadata_processed": "2026-09-21T09:29:07.238000+00:00",
+    "data_processed": null,
+    "date_interpretation": "Catalog modified is distinct from metadata processing and attachment Last-Modified. No historical publication/version date is inferred.",
+    "license_label": "Open data license - FLUVIUS",
+    "license_url": "https://opendata.fluvius.be/p/licentieopendatafluvius",
+    "advertised_meter_count": 2400,
+    "advertised_technology_categories": 8,
+    "advertised_meters_per_category": 300
+  },
+  "raw_release_archive": {
+    "path": "data/raw.zip",
+    "basename": "raw.zip",
+    "bytes": 395085174,
+    "sha256": "934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8",
+    "container_is_official_attachment": false,
+    "packaging_note": "Combined release ZIP; official source distributes two ZIPs plus a separate XLSX. The release also contains _prepare.log."
+  },
+  "matching_summary": {
+    "csv_count": 8,
+    "csv_uncompressed_bytes": 6389855650,
+    "legend_count": 1,
+    "legend_bytes": 20436,
+    "all_csv_and_legend_members_match": true,
+    "official_attachment_bytes_downloaded": 396772725
+  },
+  "member_matches": [
+    {
+      "basename": "P6269_Open_Data_EV_geen_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_2_zip",
+      "official_member": "P6269_Open_Data_EV_geen_ZP.csv",
+      "uncompressed_bytes": 800926499,
+      "sha256": "6a993a4d1778343ba356c55aa9c9783c7d50719f64825aa76b762dcbe610ecc8",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "P6269_Open_Data_EV_met_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_met_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_2_zip",
+      "official_member": "P6269_Open_Data_EV_met_ZP.csv",
+      "uncompressed_bytes": 804175121,
+      "sha256": "4925fe8aeeb7c032e62658904295212608e0590ca22c5b072720456bcf485fb7",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_2_zip",
+      "official_member": "P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "uncompressed_bytes": 800697761,
+      "sha256": "d39727ea98c23255568366d2e15371f13960874ea8ea1ea519a00c7c34c2c826",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "P6269_Open_Data_WP_EV_met_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_met_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_2_zip",
+      "official_member": "P6269_Open_Data_WP_EV_met_ZP.csv",
+      "uncompressed_bytes": 808132319,
+      "sha256": "0c0c96bc2de8de54f43717c9532353287e300a750917ee699c8089bf9fbc7e77",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "P6269_Open_Data_WP_geen_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_1_zip",
+      "official_member": "P6269_Open_Data_WP_geen_ZP.csv",
+      "uncompressed_bytes": 797294675,
+      "sha256": "ef3cbf1e441a96879987eee63d4dc0fb842142a2a9e3381e006372c034020967",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "P6269_Open_Data_WP_met_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_met_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_1_zip",
+      "official_member": "P6269_Open_Data_WP_met_ZP.csv",
+      "uncompressed_bytes": 797786309,
+      "sha256": "8ec22469ce1674bc14fc43eb89a79d78db53d7047c932c21f23af3eabba8b0ab",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "P6269_Open_Data_enkel_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_enkel_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_1_zip",
+      "official_member": "P6269_Open_Data_enkel_ZP.csv",
+      "uncompressed_bytes": 790497785,
+      "sha256": "16d55c99fc6ea47a2bd0efd1d908a857b9ded1fc08e2be38001cbb28002670b6",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "P6269_Open_Data_geen_ZP.csv",
+      "kind": "csv",
+      "release_member": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_geen_ZP.csv",
+      "official_attachment_id": "p6269_1_50_dmk_sample_elek_2024_deel_1_zip",
+      "official_member": "P6269_Open_Data_geen_ZP.csv",
+      "uncompressed_bytes": 790345181,
+      "sha256": "f4e31d559ac46faf94f629cce35e3edc520c2bb210c44b2fbc16f19a6f567692",
+      "match": true,
+      "comparison": "Uncompressed byte length and SHA-256; no parsing or canonicalization"
+    },
+    {
+      "basename": "1.50 Aanleveirng DMK Elek Fluvius Legende 25200929.xlsx",
+      "kind": "legend_xlsx",
+      "release_member": "1.50 Aanleveirng DMK Elek Fluvius Legende 25200929.xlsx",
+      "official_attachment_id": "1_50_aanleveirng_dmk_elek_fluvius_legende_25200929_xlsx",
+      "uncompressed_bytes": 20436,
+      "sha256": "344ac3a69adab39bb0e6cdf490b63380ea5ebb0c83cc26ab964c73430c1b0acf",
+      "match": true,
+      "comparison": "Whole XLSX file byte length and SHA-256; workbook not parsed in this check"
+    }
+  ],
+  "official_attachments": [
+    {
+      "id": "p6269_1_50_dmk_sample_elek_2024_deel_1_zip",
+      "title": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1.zip",
+      "mimetype": "application/zip",
+      "url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/attachments/p6269_1_50_dmk_sample_elek_2024_deel_1_zip",
+      "requested_at_utc": "2026-10-20T13:23:48.296632+00:00",
+      "final_url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/attachments/p6269_1_50_dmk_sample_elek_2024_deel_1_zip",
+      "http_status": 200,
+      "bytes": 197375122,
+      "sha256": "0f8addd57bd9f7bc0fd0c28b019a4b6c8753a19e3fd301de758f5a5858c9d86c",
+      "download_completed_at_utc": "2026-10-20T13:24:24.058299+00:00",
+      "members": [
+        {
+          "member": "P6269_Open_Data_WP_met_ZP.csv",
+          "basename": "P6269_Open_Data_WP_met_ZP.csv",
+          "uncompressed_bytes": 797786309,
+          "sha256": "8ec22469ce1674bc14fc43eb89a79d78db53d7047c932c21f23af3eabba8b0ab",
+          "zip_crc32": "03efe762"
+        },
+        {
+          "member": "P6269_Open_Data_enkel_ZP.csv",
+          "basename": "P6269_Open_Data_enkel_ZP.csv",
+          "uncompressed_bytes": 790497785,
+          "sha256": "16d55c99fc6ea47a2bd0efd1d908a857b9ded1fc08e2be38001cbb28002670b6",
+          "zip_crc32": "8d950ffc"
+        },
+        {
+          "member": "P6269_Open_Data_geen_ZP.csv",
+          "basename": "P6269_Open_Data_geen_ZP.csv",
+          "uncompressed_bytes": 790345181,
+          "sha256": "f4e31d559ac46faf94f629cce35e3edc520c2bb210c44b2fbc16f19a6f567692",
+          "zip_crc32": "cf8f0015"
+        },
+        {
+          "member": "P6269_Open_Data_WP_geen_ZP.csv",
+          "basename": "P6269_Open_Data_WP_geen_ZP.csv",
+          "uncompressed_bytes": 797294675,
+          "sha256": "ef3cbf1e441a96879987eee63d4dc0fb842142a2a9e3381e006372c034020967",
+          "zip_crc32": "af29c92a"
+        }
+      ],
+      "completed_at_utc": "2026-10-20T13:24:37.801054+00:00",
+      "headers": {
+        "date": "Tue, 20 Oct 2026 13:23:53 GMT",
+        "content-type": "binary/octet-stream",
+        "content-length": "197375122",
+        "content-disposition": "attachment; filename*=UTF-8''P6269_1_50_DMK_Sample_Elek_2024_Deel_1.zip",
+        "last-modified": "Wed, 30 Jul 2025 08:31:29 GMT",
+        "etag": "\"a18a54108b5685b179d2d8c466a68477-24\""
+      }
+    },
+    {
+      "id": "p6269_1_50_dmk_sample_elek_2024_deel_2_zip",
+      "title": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2.zip",
+      "mimetype": "application/zip",
+      "url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/attachments/p6269_1_50_dmk_sample_elek_2024_deel_2_zip",
+      "requested_at_utc": "2026-10-20T13:24:37.801913+00:00",
+      "final_url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/attachments/p6269_1_50_dmk_sample_elek_2024_deel_2_zip",
+      "http_status": 200,
+      "bytes": 199377167,
+      "sha256": "cfef37973c40e503fe53afa4966bbdcd7a12525fb8b20881f365d0ee8616a3d6",
+      "download_completed_at_utc": "2026-10-20T13:25:29.658682+00:00",
+      "members": [
+        {
+          "member": "P6269_Open_Data_WP_EV_geen_ZP.csv",
+          "basename": "P6269_Open_Data_WP_EV_geen_ZP.csv",
+          "uncompressed_bytes": 800697761,
+          "sha256": "d39727ea98c23255568366d2e15371f13960874ea8ea1ea519a00c7c34c2c826",
+          "zip_crc32": "4ef7ca23"
+        },
+        {
+          "member": "P6269_Open_Data_WP_EV_met_ZP.csv",
+          "basename": "P6269_Open_Data_WP_EV_met_ZP.csv",
+          "uncompressed_bytes": 808132319,
+          "sha256": "0c0c96bc2de8de54f43717c9532353287e300a750917ee699c8089bf9fbc7e77",
+          "zip_crc32": "5099cd17"
+        },
+        {
+          "member": "P6269_Open_Data_EV_geen_ZP.csv",
+          "basename": "P6269_Open_Data_EV_geen_ZP.csv",
+          "uncompressed_bytes": 800926499,
+          "sha256": "6a993a4d1778343ba356c55aa9c9783c7d50719f64825aa76b762dcbe610ecc8",
+          "zip_crc32": "1ea17243"
+        },
+        {
+          "member": "P6269_Open_Data_EV_met_ZP.csv",
+          "basename": "P6269_Open_Data_EV_met_ZP.csv",
+          "uncompressed_bytes": 804175121,
+          "sha256": "4925fe8aeeb7c032e62658904295212608e0590ca22c5b072720456bcf485fb7",
+          "zip_crc32": "7de8fe5e"
+        }
+      ],
+      "completed_at_utc": "2026-10-20T13:25:46.854127+00:00",
+      "headers": {
+        "date": "Tue, 20 Oct 2026 13:24:44 GMT",
+        "content-type": "binary/octet-stream",
+        "content-length": "199377167",
+        "content-disposition": "attachment; filename*=UTF-8''P6269_1_50_DMK_Sample_Elek_2024_Deel_2.zip",
+        "last-modified": "Wed, 30 Jul 2025 08:32:09 GMT",
+        "etag": "\"9c8ddf20867b6f7ca6f83fe36f59632b-24\""
+      }
+    },
+    {
+      "id": "1_50_aanleveirng_dmk_elek_fluvius_legende_25200929_xlsx",
+      "title": "1.50 Aanleveirng DMK Elek Fluvius Legende 25200929.xlsx",
+      "mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/attachments/1_50_aanleveirng_dmk_elek_fluvius_legende_25200929_xlsx",
+      "requested_at_utc": "2026-10-20T13:25:46.864858+00:00",
+      "final_url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/attachments/1_50_aanleveirng_dmk_elek_fluvius_legende_25200929_xlsx",
+      "http_status": 200,
+      "bytes": 20436,
+      "sha256": "344ac3a69adab39bb0e6cdf490b63380ea5ebb0c83cc26ab964c73430c1b0acf",
+      "download_completed_at_utc": "2026-10-20T13:25:52.104986+00:00",
+      "completed_at_utc": "2026-10-20T13:25:52.105235+00:00",
+      "headers": {
+        "date": "Tue, 20 Oct 2026 13:25:51 GMT",
+        "content-type": "binary/octet-stream",
+        "content-length": "20436",
+        "content-disposition": "attachment; filename*=UTF-8''1.50%20Aanleveirng%20DMK%20Elek%20Fluvius%20Legende%2025200929.xlsx",
+        "last-modified": "Mon, 29 Sep 2025 08:41:00 GMT",
+        "etag": "\"f79a68a75bd1a50570b28c191fc3eada\""
+      }
+    }
+  ],
+  "additional_release_members": [
+    {
+      "member": "_prepare.log",
+      "basename": "_prepare.log",
+      "uncompressed_bytes": 555,
+      "sha256": "5201051c62b241b42657ae4699436cca78e083cd3760c2b96f9f28631ed9cda5",
+      "zip_crc32": "2ac897d8"
+    }
+  ],
+  "metadata_and_license_retrievals": [
+    {
+      "url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar",
+      "requested_at_utc": "2026-10-20T13:21:17.029936+00:00",
+      "final_url": "https://opendata.fluvius.be/api/explore/v2.1/catalog/datasets/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar",
+      "status": 200,
+      "headers": {
+        "date": "Tue, 20 Oct 2026 13:21:22 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "8859"
+      },
+      "bytes": 8859,
+      "sha256": "a7257f0477a0fc7bbbc60c10fe8fd094721905f4b084c67bb810279e5b5ac329",
+      "completed_at_utc": "2026-10-20T13:21:22.640192+00:00"
+    },
+    {
+      "url": "https://opendata.fluvius.be/explore/dataset/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/?flg=en-gb",
+      "requested_at_utc": "2026-10-20T13:21:22.640209+00:00",
+      "final_url": "https://opendata.fluvius.be/explore/dataset/1_50-verbruiksprofielen-dm-elek-kwartierwaarden-voor-een-volledig-jaar/?flg=en-gb",
+      "status": 200,
+      "headers": {
+        "date": "Tue, 20 Oct 2026 13:21:27 GMT",
+        "content-type": "text/html; charset=utf-8",
+        "content-length": "104447"
+      },
+      "bytes": 104447,
+      "sha256": "f3460696a2ce67deaffd6df813728cf76240c68cf82de960cb964a53842ccdfc",
+      "completed_at_utc": "2026-10-20T13:21:27.934696+00:00"
+    },
+    {
+      "url": "https://opendata.fluvius.be/p/licentieopendatafluvius/",
+      "requested_at_utc": "2026-10-20T13:21:27.934716+00:00",
+      "final_url": "https://opendata.fluvius.be/p/licentieopendatafluvius/",
+      "status": 200,
+      "headers": {
+        "date": "Tue, 20 Oct 2026 13:21:33 GMT",
+        "content-type": "text/html; charset=utf-8",
+        "content-length": "75812"
+      },
+      "bytes": 75812,
+      "sha256": "e8c0c4dbe99c723d2b956ec8c698dfd05e84ff7b8bb6c7c02824a34d49b07d2e",
+      "completed_at_utc": "2026-10-20T13:21:33.831610+00:00"
+    }
+  ],
+  "license": {
+    "title": "Licentie open data Fluvius",
+    "terms_sha256_utf8": "6d866d796447109095d9f3c504bb33869892fc37a63b011c6cce65dc710c881b",
+    "terms_unicode_characters": 4796,
+    "extraction_method": "json.JSONDecoder.raw_decode on blocks JSON; no JavaScript evaluation",
+    "title_json_path": "blocks.block_KYJVE6X34N061.configuration.content",
+    "terms_json_path": "blocks.block_KYJVEC1NJQ2Z6.configuration.content",
+    "official_url": "https://opendata.fluvius.be/p/licentieopendatafluvius/",
+    "numbered_version": null,
+    "page_json_ld_date_modified": "2026-06-02T08:48:12.019000+00:00",
+    "version_note": "The page modification timestamp is not a numbered license version or dataset-update date.",
+    "reuse_permissions": [
+      "copy",
+      "publish",
+      "redistribute",
+      "adapt",
+      "derive",
+      "commercial use"
+    ],
+    "attribution_required": [
+      "Fluvius name",
+      "last-update date"
+    ],
+    "other_requirements": [
+      "No misleading content, source, dates, official status or endorsement",
+      "Applicable law, including personal-data protection"
+    ],
+    "summary_location": "docs/DATA_PROVENANCE.md; official linked terms control"
+  },
+  "method": {
+    "chunk_bytes": 8388608,
+    "digest": "SHA-256",
+    "csv_encoding_or_line_endings_changed": false,
+    "zip_members_extracted_to_disk": false,
+    "comparison_uses_uncompressed_bytes": true,
+    "javascript_evaluated": false,
+    "archive_member_crc_checked_by": "Python zipfile while reading complete members",
+    "max_resident_set_kib": 64620,
+    "process_threads_requested": 1,
+    "prepared_split_files_opened_or_hashed": false,
+    "csv_records_parsed": false,
+    "profile_statistics_computed": false,
+    "test_performance_evaluated": false
+  },
+  "limitations": [
+    "Content identity is bound to official attachments retrieved on the recorded dates; this does not reconstruct earlier hosting or the release repackaging chain.",
+    "The combined release ZIP itself and its extra _prepare.log are not claimed to be official Fluvius attachments.",
+    "The current catalog license designation and retrieved terms are documented; no historical license-version claim, blanket legal clearance or anonymization/privacy guarantee is made.",
+    "Hash agreement does not establish data accuracy, representativeness, household independence, or absence of near-duplicates.",
+    "Raw source bytes were hashed, including all original source members; no prepared TEST file or performance endpoint was accessed."
+  ]
+}

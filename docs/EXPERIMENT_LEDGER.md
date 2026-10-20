@@ -75,10 +75,15 @@ source commit/tree and exact source-file hashes in each artifact resolve changes
 made during development; `reports/provenance_commits.json` documents relevant
 content-equivalent Git-data publication mappings.
 
+Official CSV/legend content identity and the current custom Fluvius licence are
+confirmed in [DATA_PROVENANCE.md](DATA_PROVENANCE.md). Publication must comply
+with its attribution and other reuse conditions. This does not establish privacy,
+household independence or methodological novelty.
+
 The reference BCE architecture, unconditional control and common-membership
 hourly sensitivity remain manuscript experiments. They are not satisfied by the
 weight-zero attribution control or by software tests. A promising current model
 would still require the frozen final-test assessment, justified contribution,
-data-use/license confirmation and claims confined to this population, year and
-observed-history utility task. No TEST result may be used to reopen model tuning
+and claims confined to this population, year and observed-history utility task.
+No TEST result may be used to reopen model tuning
 while retaining the same partition as an independent final holdout.

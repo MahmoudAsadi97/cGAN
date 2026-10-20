@@ -11,7 +11,10 @@ passing tests or a short training run does not establish publication readiness.
 their primary/precision calibration evaluations are complete. Mean primary ramp
 W1 is 0.100655 kW, 28.63% below the matched Gaussian copula, but narrowly above
 the fixed 0.10 kW practical target. Daily-energy and whole-profile tradeoffs remain;
-see [the robustness report](docs/CURATED_CALIBRATION_ROBUSTNESS.md). This is
+see [the robustness report](docs/CURATED_CALIBRATION_ROBUSTNESS.md). All five
+observed-history utility checks meet the declared tolerance, and the
+[completed validation report](docs/CURATED_COMPLETED_VALIDATION.md) retains each
+seed's paired uncertainty and the stronger resampling results. This is
 validation evidence, not a completed publication result. A fixed three-seed
 [temporal-loss refinement](docs/TEMPORAL_REFINEMENT.md) is now being tested;
 final test performance remains unseen. Earlier reference-architecture runs and
@@ -83,6 +86,13 @@ The observed research environment is recorded in
 [requirements-research.txt](requirements-research.txt).
 
 ## Current curated calibration study
+
+![Five-seed primary validation metrics and fixed statistical controls](reports/figures/curated_primary_physical.svg)
+
+The figure shows the original SWD10 arm's primary validation results. Dots retain
+every declared neural seed; error bars are sample SD, not confidence intervals.
+The shared controls appear once. Its source report and figure hashes are recorded
+in [the provenance sidecar](reports/figures/curated_primary_physical.provenance.json).
 
 The fixed configurations and training seeds are:
 
@@ -184,6 +194,10 @@ rank the current output batch or refit a map during inference. Figures are
 written as SVG and PNG with a provenance manifest; pointwise bands are empirical
 ranges, not confidence intervals.
 
+The shared quantile interpolator now preserves float64 plateaus exactly;
+[NUMERICAL_INTERPOLATION.md](docs/NUMERICAL_INTERPOLATION.md) records the regression,
+synthetic checks and source-version distinction from the pinned study runs.
+
 Calibration evaluation includes raw cGAN, calibrated cGAN, a Gaussian copula and
 independent margins with the same 1,025 target knots, conditional resampling, and
 a secondary copula using all training order statistics with linear interpolation.
@@ -234,6 +248,10 @@ authorizes promotion. Full reports retain all conditions and diagnostics; compac
 tracked summaries must preserve their input hashes and disclose failed gates.
 
 ## Dataset handling
+
+All eight source CSVs and the legend match the official Fluvius downloads by
+SHA-256 and byte length. [DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) records
+the official source, the custom Fluvius licence and required attribution.
 
 The supplied archive contains 2,400 residential meters and 84,326,400 quarter-hour
 records for 2024. The legend says Belgian local CET/CEST even though strings end in
@@ -300,9 +318,14 @@ fluvius-cgan evaluate --prepared data/curated96 \
 
 `fluvius-cgan evaluate` evaluates raw checkpoint outputs against raw empirical
 baselines. It does **not** evaluate the calibrated pipeline, even if given a
-candidate checkpoint. The calibrated scripts currently have no final-test option;
-the eventual calibrated final evaluation must apply the frozen checkpoint and map
-together under the frozen protocol. Final-test performance remains unseen.
+candidate checkpoint. Use the separate
+[frozen calibrated test workflow](docs/FROZEN_TEST.md) for the current pipeline:
+`scripts/freeze_test_manifest.py` seals all five checkpoint/map pairs, source,
+protocol, development evidence, generated references and fitted utility models
+before TEST access. `scripts/evaluate_frozen_test.py` requires the manifest's
+SHA-256, verifies the complete retained TEST identity, and evaluates without
+fitting or generation. Keep every seed and attempt. Final-test performance remains
+unseen; the workflow's synthetic tests are software checks only.
 
 Validation reuse means the curated study remains exploratory. Bounded
 nearest-neighbor diagnostics do not establish privacy or absence of memorization.
@@ -321,5 +344,10 @@ Li, Y., Dong, B., and Qiu, Y. (2025). *Conditional generative adversarial networ
 for generating building load profiles with photovoltaics and electric vehicles.*
 Energy and Buildings 335, 115584. [DOI](https://doi.org/10.1016/j.enbuild.2025.115584).
 The upstream MIT notice is preserved in [UPSTREAM_LICENSE.txt](docs/UPSTREAM_LICENSE.txt).
-Dataset licensing and provenance must be confirmed separately before redistribution
-or publication; the upstream code license does not license this dataset.
+[LITERATURE_CONTEXT.md](docs/LITERATURE_CONTEXT.md) connects the established
+methods to this study's empirical question and limits its novelty claims.
+Source data: Fluvius (Dataroom Fluvius), 2024 digital electricity-meter profiles;
+catalogue modified 29 September 2025, retrieved 20 October 2026. The data use the
+custom [Fluvius licence](https://opendata.fluvius.be/p/licentieopendatafluvius/),
+separate from the software licence. See [DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md)
+for the official dataset link, byte-level binding and attribution requirements.

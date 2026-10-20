@@ -1,0 +1,1826 @@
+{
+ "schema_version": 1,
+ "scope": "Completed five-seed primary validation snapshot; no test evaluation; no model or prepared-profile loads in compacting this report.",
+ "split": "val",
+ "test_used": false,
+ "full_report": {
+  "path": "runs/curated_swd10/completed_validation_study.json",
+  "sha256": "c5e773c3e32f985b96a6b2fed7ab1da1b351572710a432a41f8851b7fafd5fd0",
+  "bytes": 15744128,
+  "markdown": "runs/curated_swd10/completed_validation_study.md"
+ },
+ "collector_sha256": "6ad46ce7f8bb2dd35018555fc76c338f10bf8d6cab3fad57cd2c6cfceef965c8",
+ "group_sha256": "6f309e9a35075b6d0b775c11d3827a3a02cb16a39a38af1a8d66fb0ae267e41c",
+ "protocol": {
+  "training_config_except_seed": {
+   "adam_beta1": 0.5,
+   "adam_beta2": 0.999,
+   "allow_uncurated_data": false,
+   "batch_sampling": "balanced_conditions",
+   "batch_size": 512,
+   "conditional_mean_residual": false,
+   "conditions_per_batch": 4,
+   "device": "cpu",
+   "discriminator_hidden_dim": 128,
+   "epochs": 26,
+   "hidden_dim": 64,
+   "latent_dim": 24,
+   "lr_d": 0.0002,
+   "lr_g": 0.0001,
+   "max_train_samples": null,
+   "normalization": "standard",
+   "num_threads": 1,
+   "objective": "hinge_sn",
+   "patience": null,
+   "swd_projections": 128,
+   "swd_weight": 10.0,
+   "unconditional": false,
+   "validation_samples": 4096,
+   "validation_selection": "conditional_w1"
+  },
+  "prepared_data_hashes": {
+   "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+   "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+   "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+   "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1"
+  },
+  "checkpoint_data_hashes": {
+   "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+   "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+   "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+   "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+   "curation_manifest.json": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3"
+  },
+  "training_core_files_sha256": {
+   "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+   "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+   "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+   "src/fluvius_cgan/distribution_loss.py": "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a",
+   "src/fluvius_cgan/temporal_loss.py": null
+  },
+  "evaluation_core_files_sha256": {
+   "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+   "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+   "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f"
+  },
+  "evaluation_seed": 2026,
+  "samples_per_condition": 100,
+  "calibration_seed": 7301,
+  "calibration_samples_per_condition": 4096,
+  "quantile_knots": 1025,
+  "baselines": {
+   "gaussian_copula": {
+    "quantile_knots": 1025,
+    "shrinkage": 0.01,
+    "purpose": "Primary comparator using the same target marginal knots as calibration."
+   },
+   "independent_marginals": {
+    "quantile_knots": 1025,
+    "shrinkage": 1.0,
+    "purpose": "Same target marginal knots as calibration, with independent latent coordinates."
+   },
+   "exact_marginal_copula": {
+    "quantile_knots": null,
+    "shrinkage": 0.01,
+    "purpose": "Secondary reference retaining every sorted training observation."
+   },
+   "conditional_resampling": {
+    "reference": "Same exact selected training subset",
+    "seed": 2026
+   }
+  },
+  "validation_indices_sha256": "4e112c419e11f4f78ff2d8215f3a68148a2ca9a62584b65c594c8a47ef72ba20",
+  "validation_labels_sha256": "1644cb43aee75cc7ff574d9431a4a4b446ab8ccdf4c10144dc8ac70930a7028e",
+  "validation_profiles_sha256": "96ae5abc70e1d2b267eba2d3d4b50dfcbfb739b40f7379264b66a9e55d6c2a61"
+ },
+ "coverage": {
+  "training_seeds": [
+   11,
+   22,
+   33,
+   44,
+   55
+  ],
+  "settings_groups": 1,
+  "physical_reports": 5,
+  "utility_reports": 5,
+  "paired_physical_comparisons": 10,
+  "comparators": [
+   "gaussian_copula",
+   "conditional_resampling"
+  ],
+  "bootstrap_replicates_per_comparison": 500,
+  "valid_replicates_per_comparison": 500,
+  "conditions": 64,
+  "profiles_per_condition": 100,
+  "profiles_per_method": 6400,
+  "validation_meters_in_fixed_sample": 353,
+  "missing_optional_artifacts": [],
+  "primary_cap": 100,
+  "precision_cap_1000_is_separate": true
+ },
+ "physical": {
+  "metric_order": [
+   "pointwise_wasserstein_kwh",
+   "daily_energy_wasserstein_kwh",
+   "peak_power_wasserstein_kw",
+   "ramp_wasserstein_kw",
+   "lag_one_acf_wasserstein",
+   "diversity_ratio"
+  ],
+  "units": [
+   "kWh/interval",
+   "kWh/day",
+   "kW",
+   "kW",
+   "dimensionless",
+   "dimensionless ratio"
+  ],
+  "aggregation": "Arithmetic mean over 64 condition-specific metrics. Diversity near 1 is descriptive; lower W1 is better.",
+  "aggregate_value_order": [
+   "mean",
+   "sample_sd",
+   "minimum",
+   "maximum"
+  ],
+  "neural_seed_count": 5,
+  "neural_aggregate": {
+   "raw_cgan": [
+    [
+     0.09038274319546816,
+     0.0013626471409601375,
+     0.08854883590786254,
+     0.09183612772065633
+    ],
+    [
+     2.9904279902976056,
+     0.043626593570430715,
+     2.9352748106906317,
+     3.0482373043180333
+    ],
+    [
+     0.7326134202059766,
+     0.0215742930580413,
+     0.7035917073673046,
+     0.7546204812869837
+    ],
+    [
+     0.20423236192934568,
+     0.012566978869675966,
+     0.18501491830050137,
+     0.21661397955724115
+    ],
+    [
+     0.09405570200074725,
+     0.007203003714663396,
+     0.08535051510632478,
+     0.10462146476074496
+    ],
+    [
+     0.9929678143035758,
+     0.038316617580065625,
+     0.9467609284790726,
+     1.0370051995424667
+    ]
+   ],
+   "calibrated_cgan": [
+    [
+     0.05461115543648639,
+     0.0009581334902147658,
+     0.05354387347559043,
+     0.05586562716144439
+    ],
+    [
+     3.2753507203165992,
+     0.07952974031163355,
+     3.165317400565605,
+     3.3589236080923883
+    ],
+    [
+     0.7832909209099002,
+     0.013249475666440804,
+     0.7633059012932744,
+     0.7942376059888471
+    ],
+    [
+     0.10065524084170328,
+     0.006006915197877014,
+     0.0907247080811097,
+     0.10706963285373862
+    ],
+    [
+     0.08329954306086185,
+     0.006400906296213885,
+     0.07577267954613803,
+     0.09242641043980945
+    ],
+    [
+     1.1287613035426682,
+     0.06686872692956616,
+     1.0695638428926328,
+     1.2390954055098096
+    ]
+   ]
+  },
+  "identical_controls": {
+   "gaussian_copula": [
+    0.05362666547416587,
+    2.9385043936164355,
+    0.9942958432210871,
+    0.14103696927202913,
+    0.08536435048798192,
+    1.0881542883521476
+   ],
+   "independent_marginals": [
+    0.05396572142099003,
+    8.044769706649506,
+    3.4208242796012254,
+    0.7057308293854545,
+    0.599994312626978,
+    1.1263288690728364
+   ],
+   "exact_marginal_copula": [
+    0.05342858315924341,
+    2.9272155720585946,
+    0.9723223627903392,
+    0.14013278643877425,
+    0.08503322989339893,
+    1.0745221946275958
+   ],
+   "conditional_resampling": [
+    0.05464980454283137,
+    2.8256941699447635,
+    0.5010774106935424,
+    0.0341687132975218,
+    0.046469874541705064,
+    1.1584933362251093
+   ]
+  },
+  "control_replay": {
+   "all_frozen_hashes_identical": true,
+   "independent_replications_per_control": 1,
+   "profiles_sha256": {
+    "gaussian_copula": "64c3c1bc101e0d2685efc0c6b4bf095ef3c30c4118c2e6b51933d001712399fa",
+    "independent_marginals": "c0d5de390e8340da40b9272f6d5c1b24c4657e7f86fa2afb29764ba166da7d30",
+    "exact_marginal_copula": "b9ee9e7602b79ea3bcc59ec7a391c35aef81bb1202c0d914319c8bcb0658d183",
+    "conditional_resampling": "3028fe8d8fe53f415e1ec06101b53e447360cd3f3360b6eeb6a2d01053de0611"
+   },
+   "interpretation": "Identical controls are reported once; repeated reports do not supply independent seed replications."
+  },
+  "calibrated_ratio_metric_order": [
+   "pointwise_wasserstein_kwh",
+   "daily_energy_wasserstein_kwh",
+   "peak_power_wasserstein_kw",
+   "ramp_wasserstein_kw",
+   "lag_one_acf_wasserstein"
+  ],
+  "absolute_thresholds": {
+   "daily_energy_wasserstein_kwh": 5.0,
+   "peak_power_wasserstein_kw": 1.0,
+   "ramp_wasserstein_kw": 0.1,
+   "lag_one_acf_wasserstein": 0.1
+  },
+  "absolute_gate_pass_of_mean": {
+   "daily_energy_wasserstein_kwh": true,
+   "peak_power_wasserstein_kw": true,
+   "ramp_wasserstein_kw": false,
+   "lag_one_acf_wasserstein": true
+  },
+  "all_absolute_gates_pass_seeds": [
+   22
+  ],
+  "primary_ramp_signal": {
+   "comparator": "gaussian_copula",
+   "target_mean_reduction_fraction": 0.2,
+   "target_consistent_seeds": 4,
+   "actual_mean_reduction_fraction": 0.28632016583140285,
+   "actual_lower_seeds": 5,
+   "interpretation": "The relative ramp signal is met, but the required absolute ramp gate is not met by the five-seed primary mean."
+  }
+ },
+ "utility": {
+  "metric_order": [
+   "rmse_kwh",
+   "mae_kwh"
+  ],
+  "units": "kWh/interval",
+  "task": {
+   "name": "within_day_observed_history_next_interval_linear_ridge",
+   "resolution": 96,
+   "lags": 12,
+   "forecast_horizon_intervals": 1,
+   "forecast_horizon_hours": 0.25,
+   "target_slots_inclusive": [
+    12,
+    95
+   ],
+   "feature_names": [
+    "lag_12_intervals",
+    "lag_11_intervals",
+    "lag_10_intervals",
+    "lag_9_intervals",
+    "lag_8_intervals",
+    "lag_7_intervals",
+    "lag_6_intervals",
+    "lag_5_intervals",
+    "lag_4_intervals",
+    "lag_3_intervals",
+    "lag_2_intervals",
+    "lag_1_intervals",
+    "clock_sin_1",
+    "clock_cos_1",
+    "clock_sin_2",
+    "clock_cos_2",
+    "condition_0",
+    "condition_1",
+    "condition_2",
+    "condition_3",
+    "condition_4",
+    "condition_5",
+    "condition_6",
+    "condition_7",
+    "condition_8",
+    "condition_9",
+    "condition_10",
+    "condition_11",
+    "condition_12",
+    "condition_13",
+    "condition_14",
+    "condition_15",
+    "condition_16",
+    "condition_17",
+    "condition_18",
+    "condition_19",
+    "condition_20",
+    "condition_21",
+    "condition_22",
+    "condition_23",
+    "condition_24",
+    "condition_25",
+    "condition_26",
+    "condition_27",
+    "condition_28",
+    "condition_29",
+    "condition_30",
+    "condition_31",
+    "condition_32",
+    "condition_33",
+    "condition_34",
+    "condition_35",
+    "condition_36",
+    "condition_37",
+    "condition_38",
+    "condition_39",
+    "condition_40",
+    "condition_41",
+    "condition_42",
+    "condition_43",
+    "condition_44",
+    "condition_45",
+    "condition_46",
+    "condition_47",
+    "condition_48",
+    "condition_49",
+    "condition_50",
+    "condition_51",
+    "condition_52",
+    "condition_53",
+    "condition_54",
+    "condition_55",
+    "condition_56",
+    "condition_57",
+    "condition_58",
+    "condition_59",
+    "condition_60",
+    "condition_61",
+    "condition_62",
+    "condition_63",
+    "intercept"
+   ],
+   "ridge_alpha": 1.0,
+   "ridge_objective": "sum_squared_error_plus_alpha_nonintercept_squared_norm",
+   "feature_scaling": "none; native kWh/interval",
+   "batch_profiles": 256,
+   "macro_definition": "Arithmetic mean of per-condition RMSE/MAE; each condition has equal weight."
+  },
+  "training_profiles_per_method": 606060,
+  "training_windows_per_method": 50909040,
+  "validation_profiles": 6400,
+  "validation_windows": 537600,
+  "aggregation": "Arithmetic mean of per-condition RMSE or MAE across 64 conditions, not RMSE pooled across conditions.",
+  "neural_aggregate": {
+   "training_cgan": [
+    [
+     0.14571212403418213,
+     0.0004139455917609457,
+     0.14542379462659244,
+     0.1464091591051729
+    ],
+    [
+     0.07431246575865574,
+     0.0006328122674938211,
+     0.07347182187649538,
+     0.07524060541573899
+    ]
+   ],
+   "training_calibrated_cgan": [
+    [
+     0.1454888408188263,
+     0.0002885182583972296,
+     0.14516134828274302,
+     0.1458995287267279
+    ],
+    [
+     0.07347169854683669,
+     0.0005466323207133139,
+     0.07261325480499045,
+     0.07409871681600688
+    ]
+   ]
+  },
+  "identical_controls": {
+   "training_real": [
+    0.14488224995380156,
+    0.07264503140401526
+   ],
+   "training_resampling": [
+    0.1448808404654576,
+    0.07265155865845165
+   ],
+   "training_copula": [
+    0.14752831544413034,
+    0.07674517021648682
+   ],
+   "persistence": [
+    0.15024220538922758,
+    0.06875339870285968
+   ]
+  },
+  "descriptive_rmse_ratio_threshold": 1.1,
+  "references": [
+   "training_real",
+   "training_resampling"
+  ],
+  "all_five_rmse_tolerance_pass": true,
+  "interpretation": "Point-estimate RMSE tolerance only; MAE ratios are descriptive. No utility intervals are supplied by the physical bootstrap. This is not a formal noninferiority or broad forecasting claim."
+ },
+ "paired_physical_interval_protocol": {
+  "method": "paired_percentile_cluster_bootstrap",
+  "resampling_unit": "real_meter",
+  "resampling_scheme": "within_stratum_real_meter",
+  "stratum_meter_counts": {
+   "0": 45,
+   "1": 45,
+   "2": 44,
+   "3": 45,
+   "4": 43,
+   "5": 45,
+   "6": 41,
+   "7": 45
+  },
+  "coverage_interpretation": "Descriptive marginal percentile intervals; nominal coverage is not guaranteed, particularly near coincident CDFs where W1 is nonsmooth. Not a significance claim.",
+  "condition_weighting": "equal_over_original_observed_support",
+  "generated_sample_policy": "fixed_condition_reference",
+  "comparator_sample_policy": "fixed_condition_reference",
+  "comparison": "generated_minus_comparator",
+  "negative_difference_favors": "generated",
+  "uncertainty_scope": "real-meter sampling conditional on frozen models and reference arrays; excludes training-seed, generated-sample, comparator-sample, preprocessing-fit, model-selection, and future-period uncertainty",
+  "interval_status": "complete",
+  "missing_condition_policy": "withhold_all_intervals_if_any_draw_lacks_original_support",
+  "n_meters": 353,
+  "n_conditions": 64,
+  "interval_hours": 0.25,
+  "n_bootstrap": 500,
+  "confidence": 0.95,
+  "seed": 2026,
+  "all_three_references_profiles_per_condition": 100,
+  "metric_order": [
+   "pointwise_wasserstein_kwh",
+   "daily_energy_wasserstein_kwh",
+   "peak_power_wasserstein_kw",
+   "ramp_wasserstein_kw",
+   "lag_one_acf_wasserstein"
+  ],
+  "value_order": [
+   "estimate",
+   "lower",
+   "upper"
+  ],
+  "no_interval_averaging": true
+ },
+ "paired_interval_sign_counts": {
+  "interpretation": "Descriptive counts of individual interval positions; not pooled significance, joint coverage, or a multiplicity-adjusted test.",
+  "comparators": {
+   "gaussian_copula": {
+    "pointwise_wasserstein_kwh": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 1
+    },
+    "daily_energy_wasserstein_kwh": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 3
+    },
+    "peak_power_wasserstein_kw": {
+     "entirely_below_zero": 5,
+     "entirely_above_zero": 0
+    },
+    "ramp_wasserstein_kw": {
+     "entirely_below_zero": 5,
+     "entirely_above_zero": 0
+    },
+    "lag_one_acf_wasserstein": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 0
+    }
+   },
+   "conditional_resampling": {
+    "pointwise_wasserstein_kwh": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 0
+    },
+    "daily_energy_wasserstein_kwh": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 5
+    },
+    "peak_power_wasserstein_kw": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 5
+    },
+    "ramp_wasserstein_kw": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 5
+    },
+    "lag_one_acf_wasserstein": {
+     "entirely_below_zero": 0,
+     "entirely_above_zero": 5
+    }
+   }
+  }
+ },
+ "runs": [
+  {
+   "name": "seed11",
+   "training_seed": 11,
+   "directory": "runs/curated_swd10/seed_11",
+   "best_epoch": 25,
+   "epochs_completed": 26,
+   "selection_metric": "mean_condition_interval_wasserstein_normalized",
+   "best_selection_score": 0.2716647651429825,
+   "generator_updates": 30784,
+   "input_artifact_sha256": {
+    "config.json": "22b27b295beff5e77f05e1fc28563d78f8062adc4c6092d6bbc2ab691f97cefb",
+    "summary.json": "b8c0df0b92012dd74f7c4112503566ddeaa4a8d4f7c9f0ec750b8664a01a5378",
+    "history.json": "c38ac8750f9bda8fcb6c35562a6faf6f3cbba9a32118ef4fa9a53ab8f65f46dc",
+    "best.pt": "12159e0495b1a6a53e5814eebd1cff54ad50d53a259fdbe3e64cbc4d6e703a4b",
+    "validation_report.json": "81cf4924a7672dd4a1b31383bf759dc978172acd831492f8bd1ad07c070d6679",
+    "calibration_validation.json": "4e6903f67d346fb67df7a7394ef46d166cd709836309f2c849d7ec7dc33056ec",
+    "calibration.npz": "74fd16d428d98e93f6bf1fa6469cc0638d59da979a77991fc5571d84da91aca5",
+    "utility_validation.json": "cc500f622c4afc9c0690ab4984b7cf86602e9b94af911cc56ca683002f9fe5c5",
+    "uncertainty_conditional_resampling.json": "5de7163ad294d6a7c044f0ab7de60dfa983b9afe9d06341b65b35ede53425f67",
+    "uncertainty_gaussian_copula.json": "5f5c2ac45cafc1a9ceba9dd41cd0b9edc84dbc9d1502b8d76ffe2800734ad2fd"
+   },
+   "provenance": {
+    "training_checkpoint": {
+     "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+     "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+     "git_dirty": true
+    },
+    "training_summary": {
+     "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+     "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+     "git_dirty": true
+    },
+    "calibration_evaluation": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "evaluation_script_sha256": "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+     "checkpoint_sha256": "12159e0495b1a6a53e5814eebd1cff54ad50d53a259fdbe3e64cbc4d6e703a4b",
+     "train_indices_sha256": "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23"
+    },
+    "utility": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "source_file_sha256": {
+      "scripts/evaluate_utility.py": "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+      "scripts/compare_checkpoints.py": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+      "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+      "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+      "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+      "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+      "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+      "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+      "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e"
+     }
+    },
+    "uncertainty_conditional_resampling": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    },
+    "uncertainty_gaussian_copula": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    }
+   },
+   "physical_neural_macros": {
+    "raw_cgan": [
+     0.09090693211398827,
+     2.985166374482538,
+     0.7420736156775093,
+     0.20830791883315436,
+     0.09636523233668375,
+     0.9890360160837111
+    ],
+    "calibrated_cgan": [
+     0.054007336797724625,
+     3.165317400565605,
+     0.7765825149167422,
+     0.10226174681737112,
+     0.0815189474512369,
+     1.0818713694980882
+    ]
+   },
+   "physical_calibrated_ratio_to": {
+    "gaussian_copula": [
+     1.0070985454753314,
+     1.0771865468167734,
+     0.781037676272438,
+     0.7250705070110435,
+     0.9549530569287656
+    ],
+    "conditional_resampling": [
+     0.9882439150426747,
+     1.1201910787916163,
+     1.549825432844543,
+     2.992847460392604,
+     1.7542321397505936
+    ]
+   },
+   "physical_absolute_gate_pass": {
+    "daily_energy_wasserstein_kwh": true,
+    "peak_power_wasserstein_kw": true,
+    "ramp_wasserstein_kw": false,
+    "lag_one_acf_wasserstein": true
+   },
+   "ramp_conditions_lower_than": {
+    "gaussian_copula": 49,
+    "conditional_resampling": 1
+   },
+   "utility_neural_macros": {
+    "training_cgan": [
+     0.14542379462659244,
+     0.07435897034637778
+    ],
+    "training_calibrated_cgan": [
+     0.14529783410387223,
+     0.0736616745784345
+    ]
+   },
+   "utility_calibrated_ratio_to": {
+    "training_real": [
+     1.0028684269481127,
+     1.0139946690746844
+    ],
+    "training_resampling": [
+     1.00287818345804,
+     1.0139035684661852
+    ]
+   },
+   "utility_rmse_tolerance_pass": true,
+   "paired_physical_intervals": {
+    "conditional_resampling": {
+     "file": "uncertainty_conditional_resampling.json",
+     "sha256": "5de7163ad294d6a7c044f0ab7de60dfa983b9afe9d06341b65b35ede53425f67",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       -0.0006424677451067201,
+       -0.0023943586613403263,
+       0.000345069629381873
+      ],
+      [
+       0.3396232306208429,
+       0.030848616699449417,
+       0.5211556037724239
+      ],
+      [
+       0.2755051042231996,
+       0.16824487491136034,
+       0.3136386116169289
+      ],
+      [
+       0.06809303351984936,
+       0.05567678650158396,
+       0.07012665487559375
+      ],
+      [
+       0.03504907290953179,
+       0.021575149482535125,
+       0.035944775802671386
+      ]
+     ]
+    },
+    "gaussian_copula": {
+     "file": "uncertainty_gaussian_copula.json",
+     "sha256": "5f5c2ac45cafc1a9ceba9dd41cd0b9edc84dbc9d1502b8d76ffe2800734ad2fd",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       0.00038067132355875527,
+       -0.0011605061730351955,
+       0.0012954145813308853
+      ],
+      [
+       0.22681300694916917,
+       -0.03954855621864526,
+       0.39934618886628054
+      ],
+      [
+       -0.21771332830434553,
+       -0.33553253937515776,
+       -0.085233429707583
+      ],
+      [
+       -0.03877522245465792,
+       -0.043046904382928824,
+       -0.030778299324375286
+      ],
+      [
+       -0.0038454030367450487,
+       -0.01440655074105517,
+       0.006591733071278266
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "name": "seed22",
+   "training_seed": 22,
+   "directory": "runs/curated_swd10/seed_22",
+   "best_epoch": 25,
+   "epochs_completed": 26,
+   "selection_metric": "mean_condition_interval_wasserstein_normalized",
+   "best_selection_score": 0.26738057960617556,
+   "generator_updates": 30784,
+   "input_artifact_sha256": {
+    "config.json": "d43faf2d6315fdb0f3321642f558dc3680aee16042e00ff157f27bbd46c84e44",
+    "summary.json": "73ad91f1873fa83f830df33a71b8f572e6e91f5bd31d6abd6bdddca8a0a84ba8",
+    "history.json": "df5b2aac10e53274d2ab0d8c297d94381eb1ab79c3327d308364a6f1d7dcb5c2",
+    "best.pt": "71600382449bdd109a1f05ce2898c4eac02b17d155d7e4363d863b7fefb23765",
+    "validation_report.json": "3d33d55198ea728ca15a0e78a3daec64955d448b613551d6adf3d459c1a8d312",
+    "calibration_validation.json": "da4e9457d5d91e21d394b49bd58a3c2c18ef6a8fff49f76d341878064c389665",
+    "calibration.npz": "7ce4fc08449755f4e653783bb2f3760ca0bfb74403e6ca74cd71d19ee6a336e3",
+    "utility_validation.json": "34ed240db6309b4e76725d71cbe978ff51f57e930de5e3c5c1c4964465627fd4",
+    "uncertainty_conditional_resampling.json": "65e94ebceefa88e77338ed3a66fac79a3d2b55745bec2700fafacf21179f5bfb",
+    "uncertainty_gaussian_copula.json": "5096478c54f38d6d046444c70d27740ae3633f530d63e58cf7ed62a74e6d4d2e"
+   },
+   "provenance": {
+    "training_checkpoint": {
+     "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+     "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+     "git_dirty": true
+    },
+    "training_summary": {
+     "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+     "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+     "git_dirty": true
+    },
+    "calibration_evaluation": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "evaluation_script_sha256": "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+     "checkpoint_sha256": "71600382449bdd109a1f05ce2898c4eac02b17d155d7e4363d863b7fefb23765",
+     "train_indices_sha256": "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23"
+    },
+    "utility": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "source_file_sha256": {
+      "scripts/evaluate_utility.py": "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+      "scripts/compare_checkpoints.py": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+      "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+      "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+      "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+      "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+      "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+      "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+      "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e"
+     }
+    },
+    "uncertainty_conditional_resampling": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    },
+    "uncertainty_gaussian_copula": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    }
+   },
+   "physical_neural_macros": {
+    "raw_cgan": [
+     0.08854883590786254,
+     3.0162077589053524,
+     0.7462692284210062,
+     0.18501491830050137,
+     0.10462146476074496,
+     0.9467609284790726
+    ],
+    "calibrated_cgan": [
+     0.05354387347559043,
+     3.3589236080923883,
+     0.7942376059888471,
+     0.0907247080811097,
+     0.09242641043980945,
+     1.0695638428926328
+    ]
+   },
+   "physical_calibrated_ratio_to": {
+    "gaussian_copula": [
+     0.9984561412155054,
+     1.1430725151846857,
+     0.7987940524983609,
+     0.6432689850710122,
+     1.0827284447366792
+    ],
+    "conditional_resampling": [
+     0.9797633115709649,
+     1.1887074134983435,
+     1.5850596914547415,
+     2.655198259622197,
+     1.988953302571541
+    ]
+   },
+   "physical_absolute_gate_pass": {
+    "daily_energy_wasserstein_kwh": true,
+    "peak_power_wasserstein_kw": true,
+    "ramp_wasserstein_kw": true,
+    "lag_one_acf_wasserstein": true
+   },
+   "ramp_conditions_lower_than": {
+    "gaussian_copula": 53,
+    "conditional_resampling": 0
+   },
+   "utility_neural_macros": {
+    "training_cgan": [
+     0.14544847165371433,
+     0.07347182187649538
+    ],
+    "training_calibrated_cgan": [
+     0.14516134828274302,
+     0.07261325480499045
+    ]
+   },
+   "utility_calibrated_ratio_to": {
+    "training_real": [
+     1.0019263804160308,
+     0.9995625771176546
+    ],
+    "training_resampling": [
+     1.0019361277611605,
+     0.9994727731356561
+    ]
+   },
+   "utility_rmse_tolerance_pass": true,
+   "paired_physical_intervals": {
+    "conditional_resampling": {
+     "file": "uncertainty_conditional_resampling.json",
+     "sha256": "65e94ebceefa88e77338ed3a66fac79a3d2b55745bec2700fafacf21179f5bfb",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       -0.0011059310672409187,
+       -0.003244015470265624,
+       0.00022952496865717129
+      ],
+      [
+       0.5332294381476252,
+       0.1520962466443057,
+       0.7374075467548331
+      ],
+      [
+       0.293160195295305,
+       0.16912682947320018,
+       0.3314245452430225
+      ],
+      [
+       0.056555994783587915,
+       0.0446975734625984,
+       0.05729562203729813
+      ],
+      [
+       0.04595653589810438,
+       0.03094653683662929,
+       0.04727146064630746
+      ]
+     ]
+    },
+    "gaussian_copula": {
+     "file": "uncertainty_gaussian_copula.json",
+     "sha256": "5096478c54f38d6d046444c70d27740ae3633f530d63e58cf7ed62a74e6d4d2e",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       -8.279199857544328e-05,
+       -0.0018848044707526204,
+       0.0010362687912818084
+      ],
+      [
+       0.42041921447595154,
+       0.08042551962723919,
+       0.6262108876682754
+      ],
+      [
+       -0.20005823723224014,
+       -0.3440958431064921,
+       -0.06451834724739602
+      ],
+      [
+       -0.05031226119091936,
+       -0.057261943938431425,
+       -0.04073720414242353
+      ],
+      [
+       0.007062059951827543,
+       -0.006020787598631668,
+       0.018395991347127064
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "name": "seed33",
+   "training_seed": 33,
+   "directory": "runs/curated_swd10/seed_33",
+   "best_epoch": 24,
+   "epochs_completed": 26,
+   "selection_metric": "mean_condition_interval_wasserstein_normalized",
+   "best_selection_score": 0.26813960666252196,
+   "generator_updates": 30784,
+   "input_artifact_sha256": {
+    "config.json": "320cf4d49f864d105c94702a4580ba1c9e7d96574e7913ea0b668d755c5b4655",
+    "summary.json": "eab79bc3a80725a19db2861f42d513ca0e65fcd1c72ef5c2a2171072fac17020",
+    "history.json": "11f969353f6882137cff67c2f9f825ebc528dd83325a17f0eba90635e227754b",
+    "best.pt": "fd866bc7e2b032997576609575a953750f6d5a5af13448d8518476e213bdc1aa",
+    "validation_report.json": "20c45c2c87432b6d6fdba4c1c66126dc731366f4c466628d792f3eff65fc51fd",
+    "calibration_validation.json": "8daf1b0970f78c9f52c0b2cf7c40235c53886677b93eebc29d5b9ab6b6800091",
+    "calibration.npz": "62794b732cd2dd3ea09db7b8d3738e02871e42cad8d310785c46441a8be73dde",
+    "utility_validation.json": "93f8de3a916a8c4789166f2902a3b73bf6c081e9880a8ed8bad3822cc35eb12e",
+    "uncertainty_conditional_resampling.json": "58c48594fab25655a79497c10ba1b8f8ccb5229f0bf63380ead881cf32544fcc",
+    "uncertainty_gaussian_copula.json": "e16be6fb2d1794a49df8b95fe62fa6ed57c2ea652ded553464777808bc262e6f"
+   },
+   "provenance": {
+    "training_checkpoint": {
+     "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+     "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+     "git_dirty": true
+    },
+    "training_summary": {
+     "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+     "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+     "git_dirty": true
+    },
+    "calibration_evaluation": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "evaluation_script_sha256": "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+     "checkpoint_sha256": "fd866bc7e2b032997576609575a953750f6d5a5af13448d8518476e213bdc1aa",
+     "train_indices_sha256": "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23"
+    },
+    "utility": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "source_file_sha256": {
+      "scripts/evaluate_utility.py": "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+      "scripts/compare_checkpoints.py": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+      "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+      "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+      "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+      "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+      "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+      "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+      "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e"
+     }
+    },
+    "uncertainty_conditional_resampling": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    },
+    "uncertainty_gaussian_copula": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    }
+   },
+   "physical_neural_macros": {
+    "raw_cgan": [
+     0.08939805952696568,
+     2.9672537030914734,
+     0.7546204812869837,
+     0.1989536103055964,
+     0.09371544190317048,
+     0.9663181844649316
+    ],
+    "calibrated_cgan": [
+     0.054315534218529644,
+     3.221379776754639,
+     0.7885203482101544,
+     0.1013202297858884,
+     0.0866105683319437,
+     1.1264508879097468
+    ]
+   },
+   "physical_calibrated_ratio_to": {
+    "gaussian_copula": [
+     1.0128456382337558,
+     1.0962650876931537,
+     0.7930439954930221,
+     0.7183948315740114,
+     1.014598808950549
+    ],
+    "conditional_resampling": [
+     0.9938834122628976,
+     1.1400312924939116,
+     1.5736497622568169,
+     2.965292514928766,
+     1.8638003477761442
+    ]
+   },
+   "physical_absolute_gate_pass": {
+    "daily_energy_wasserstein_kwh": true,
+    "peak_power_wasserstein_kw": true,
+    "ramp_wasserstein_kw": false,
+    "lag_one_acf_wasserstein": true
+   },
+   "ramp_conditions_lower_than": {
+    "gaussian_copula": 51,
+    "conditional_resampling": 1
+   },
+   "utility_neural_macros": {
+    "training_cgan": [
+     0.14550472843944984,
+     0.074139306784422
+    ],
+    "training_calibrated_cgan": [
+     0.1454568395208995,
+     0.07337367966177738
+    ]
+   },
+   "utility_calibrated_ratio_to": {
+    "training_real": [
+     1.0039659072611113,
+     1.0100302559401446
+    ],
+    "training_resampling": [
+     1.0039756744479904,
+     1.009939511507531
+    ]
+   },
+   "utility_rmse_tolerance_pass": true,
+   "paired_physical_intervals": {
+    "conditional_resampling": {
+     "file": "uncertainty_conditional_resampling.json",
+     "sha256": "58c48594fab25655a79497c10ba1b8f8ccb5229f0bf63380ead881cf32544fcc",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       -0.00033427032430169423,
+       -0.00206818683602302,
+       0.0008011721238958499
+      ],
+      [
+       0.39568560680987597,
+       0.08001898516546467,
+       0.6111882611621006
+      ],
+      [
+       0.2874429375166121,
+       0.17389454738027274,
+       0.32300533815474836
+      ],
+      [
+       0.0671515164883666,
+       0.054871943630702046,
+       0.06954876026733284
+      ],
+      [
+       0.04014069379023865,
+       0.02621553078462777,
+       0.041487774532638425
+      ]
+     ]
+    },
+    "gaussian_copula": {
+     "file": "uncertainty_gaussian_copula.json",
+     "sha256": "e16be6fb2d1794a49df8b95fe62fa6ed57c2ea652ded553464777808bc262e6f",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       0.0006888687443637811,
+       -0.0008018417349135104,
+       0.0016906866839575454
+      ],
+      [
+       0.28287538313820226,
+       -0.008773517158552673,
+       0.46690922684475034
+      ],
+      [
+       -0.20577549501093306,
+       -0.3344839468712253,
+       -0.0751892459955387
+      ],
+      [
+       -0.03971673948614067,
+       -0.044429801874451606,
+       -0.031347230249131365
+      ],
+      [
+       0.001246217843961811,
+       -0.010615101213515252,
+       0.012517421422304326
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "name": "seed44",
+   "training_seed": 44,
+   "directory": "runs/curated_swd10/seed_44",
+   "best_epoch": 26,
+   "epochs_completed": 26,
+   "selection_metric": "mean_condition_interval_wasserstein_normalized",
+   "best_selection_score": 0.27746507496725015,
+   "generator_updates": 30784,
+   "input_artifact_sha256": {
+    "config.json": "b2d489e4a761a113281813237b6e2bdf2de874a960c2c4e00d7847bd04fe04d2",
+    "summary.json": "7940b317b139759e6b8d46254334265958bdd68c96c5a807c72e8e24610fb8bc",
+    "history.json": "314d13c7561ebabd4bd695ac4d58ff0bca4315d84872e6a08b18da34c18ee985",
+    "best.pt": "fd1d24d3277dc5c528e9fc2dcac7e41a286e887ffc95c940418e4a9603c17cd3",
+    "validation_report.json": "3c59b781c84d35c95e650b345fa71ff1d8dd03d626c2cf294ef64cacd4ae9eae",
+    "calibration_validation.json": "91df24c87fc8d30a010a207d035318d860dbb3b3c06541977373cbe0761fd21e",
+    "calibration.npz": "62025625605bc2241b315de66cc4b7f088cca4dee3b521b4fd1b3f20a00dd56b",
+    "utility_validation.json": "5f9db84af6b4aafc354413c429747ea91ffa701bbd1dcddaf5cc810f254e5412",
+    "uncertainty_conditional_resampling.json": "8cee9fbb50d10acd24e2a6554d2d42740b40d54e1c3c57322c94d92787bac930",
+    "uncertainty_gaussian_copula.json": "0ea8cf7129c11d78499bb96530d7cea45b18c539426ea2364c343f748179933d"
+   },
+   "provenance": {
+    "training_checkpoint": {
+     "git_commit": "3b46678819a1a35a3e306a3af2025bb5dd307b37",
+     "git_commit_tree": "859c78ca2d5441df7602feaddec622b09061f04e",
+     "git_dirty": true
+    },
+    "training_summary": {
+     "git_commit": "3b46678819a1a35a3e306a3af2025bb5dd307b37",
+     "git_commit_tree": "859c78ca2d5441df7602feaddec622b09061f04e",
+     "git_dirty": true
+    },
+    "calibration_evaluation": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "evaluation_script_sha256": "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+     "checkpoint_sha256": "fd1d24d3277dc5c528e9fc2dcac7e41a286e887ffc95c940418e4a9603c17cd3",
+     "train_indices_sha256": "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23"
+    },
+    "utility": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "source_file_sha256": {
+      "scripts/evaluate_utility.py": "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+      "scripts/compare_checkpoints.py": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+      "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+      "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+      "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+      "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+      "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+      "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+      "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e"
+     }
+    },
+    "uncertainty_conditional_resampling": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    },
+    "uncertainty_gaussian_copula": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    }
+   },
+   "physical_neural_macros": {
+    "raw_cgan": [
+     0.09122376070786795,
+     3.0482373043180333,
+     0.7165120682770794,
+     0.21661397955724115,
+     0.08535051510632478,
+     1.0370051995424667
+    ],
+    "calibrated_cgan": [
+     0.05586562716144439,
+     3.3210751972064747,
+     0.7633059012932744,
+     0.10706963285373862,
+     0.07577267954613803,
+     1.2390954055098096
+    ]
+   },
+   "physical_calibrated_ratio_to": {
+    "gaussian_copula": [
+     1.0417509026056657,
+     1.1301923537773606,
+     0.7676848962985648,
+     0.759160051484267,
+     0.8876384475836402
+    ],
+    "conditional_resampling": [
+     1.0222475199826218,
+     1.1753130372461345,
+     1.5233293000312684,
+     3.1335576473552544,
+     1.6305763743376311
+    ]
+   },
+   "physical_absolute_gate_pass": {
+    "daily_energy_wasserstein_kwh": true,
+    "peak_power_wasserstein_kw": true,
+    "ramp_wasserstein_kw": false,
+    "lag_one_acf_wasserstein": true
+   },
+   "ramp_conditions_lower_than": {
+    "gaussian_copula": 44,
+    "conditional_resampling": 2
+   },
+   "utility_neural_macros": {
+    "training_cgan": [
+     0.1464091591051729,
+     0.07524060541573899
+    ],
+    "training_calibrated_cgan": [
+     0.1458995287267279,
+     0.07409871681600688
+    ]
+   },
+   "utility_calibrated_ratio_to": {
+    "training_real": [
+     1.0070214175528798,
+     1.020010802995004
+    ],
+    "training_resampling": [
+     1.0070312144656088,
+     1.0199191618772916
+    ]
+   },
+   "utility_rmse_tolerance_pass": true,
+   "paired_physical_intervals": {
+    "conditional_resampling": {
+     "file": "uncertainty_conditional_resampling.json",
+     "sha256": "8cee9fbb50d10acd24e2a6554d2d42740b40d54e1c3c57322c94d92787bac930",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       0.0012158226186130341,
+       -0.0004258379800791069,
+       0.0021278799860743234
+      ],
+      [
+       0.49538102726171296,
+       0.16922561887290344,
+       0.6582117272581939
+      ],
+      [
+       0.26222849059973197,
+       0.1601504736372899,
+       0.3094862114501809
+      ],
+      [
+       0.07290091955621679,
+       0.05977921796523635,
+       0.07525238327739167
+      ],
+      [
+       0.029302805004432976,
+       0.016311788553065774,
+       0.030383488532746545
+      ]
+     ]
+    },
+    "gaussian_copula": {
+     "file": "uncertainty_gaussian_copula.json",
+     "sha256": "0ea8cf7129c11d78499bb96530d7cea45b18c539426ea2364c343f748179933d",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       0.0022389616872785095,
+       0.000717964779436502,
+       0.003129050003484101
+      ],
+      [
+       0.38257080359003925,
+       0.09029985721586431,
+       0.5437704939476329
+      ],
+      [
+       -0.2309899419278132,
+       -0.3459896045930835,
+       -0.09332448776237438
+      ],
+      [
+       -0.033967336418290486,
+       -0.03738238469830527,
+       -0.026682359803663975
+      ],
+      [
+       -0.009591670941843863,
+       -0.019946939689729985,
+       0.0014314561762546018
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "name": "seed55",
+   "training_seed": 55,
+   "directory": "runs/curated_swd10/seed_55",
+   "best_epoch": 26,
+   "epochs_completed": 26,
+   "selection_metric": "mean_condition_interval_wasserstein_normalized",
+   "best_selection_score": 0.2791861940552522,
+   "generator_updates": 30784,
+   "input_artifact_sha256": {
+    "config.json": "08a9d1bbcc6cd672cfe4e61ee0b73f728b9e52ab848bf4656405229df2e1d700",
+    "summary.json": "9ec82f4f6398980137b860bcf2fbec4f8ebcba61e54aa0d6f96d8828d84a0db9",
+    "history.json": "53307b768cc653c3af0d46e98f70c9df5d3d4d7696c687a7cd75f03fe8a2bc96",
+    "best.pt": "a25eaa3cb3ba31e93eb8f7a1a756ac15e66132dec773affbad4b4c20b081b6ea",
+    "validation_report.json": "3a376ac84042e90834037ab4d9ba55a2ab90b74f2ce2579268f2c4a6d5c87590",
+    "calibration_validation.json": "e31fe8d362725dc0fc4db7e20b1cfbbbec7083bf063c50ede6913d545e6d3865",
+    "calibration.npz": "0ca7862137f7c2cb6f86f42daaff48900a36e21d787b4b0779137ff8cb5698e1",
+    "utility_validation.json": "8de839f008cf43589a760aeefb9b9e4fa91e6abc3292027217854d67240b9900",
+    "uncertainty_conditional_resampling.json": "f5be3bd6cd5dadf5c6bb6714efa9255cdf0eae81a0480864a5eb67f0f133467b",
+    "uncertainty_gaussian_copula.json": "4497ecd7a9dcf78b3e79e35084c9f6959273cb6f2a6290ba35c2246843cb64de"
+   },
+   "provenance": {
+    "training_checkpoint": {
+     "git_commit": "3b46678819a1a35a3e306a3af2025bb5dd307b37",
+     "git_commit_tree": "859c78ca2d5441df7602feaddec622b09061f04e",
+     "git_dirty": true
+    },
+    "training_summary": {
+     "git_commit": "3b46678819a1a35a3e306a3af2025bb5dd307b37",
+     "git_commit_tree": "859c78ca2d5441df7602feaddec622b09061f04e",
+     "git_dirty": true
+    },
+    "calibration_evaluation": {
+     "git_commit": "c590acbb1d5e09eebd7995247d9e3391cd1fda2c",
+     "git_commit_tree": "542830be3cd7cc77bb0f4e0f42b436e3fc79debd",
+     "git_dirty": true,
+     "evaluation_script_sha256": "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+     "checkpoint_sha256": "a25eaa3cb3ba31e93eb8f7a1a756ac15e66132dec773affbad4b4c20b081b6ea",
+     "train_indices_sha256": "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23"
+    },
+    "utility": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "source_file_sha256": {
+      "scripts/evaluate_utility.py": "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+      "scripts/compare_checkpoints.py": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+      "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+      "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+      "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+      "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+      "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+      "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+      "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e"
+     }
+    },
+    "uncertainty_conditional_resampling": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    },
+    "uncertainty_gaussian_copula": {
+     "git_commit": "555b09dadf47947cd991ec9d7fa9de1477e156b6",
+     "git_commit_tree": "084b80b01ad48882df5e72f6556eb1190500f20a",
+     "git_dirty": false,
+     "comparison_script_sha256": "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7"
+    }
+   },
+   "physical_neural_macros": {
+    "raw_cgan": [
+     0.09183612772065633,
+     2.9352748106906317,
+     0.7035917073673046,
+     0.21227138265023515,
+     0.09022585589681231,
+     1.025718742947697
+    ],
+    "calibrated_cgan": [
+     0.05532340552914286,
+     3.3100576189638895,
+     0.7938082341404828,
+     0.10189988667040856,
+     0.08016910953518118,
+     1.1268250119030636
+    ]
+   },
+   "physical_calibrated_ratio_to": {
+    "gaussian_copula": [
+     1.0316398575218961,
+     1.1264429708373453,
+     0.7983622173948637,
+     0.7225047957026516,
+     0.9391403914736965
+    ],
+    "conditional_resampling": [
+     1.0123257711888713,
+     1.1714139676441326,
+     1.5842027942185042,
+     2.982257066080366,
+     1.7251845486097073
+    ]
+   },
+   "physical_absolute_gate_pass": {
+    "daily_energy_wasserstein_kwh": true,
+    "peak_power_wasserstein_kw": true,
+    "ramp_wasserstein_kw": false,
+    "lag_one_acf_wasserstein": true
+   },
+   "ramp_conditions_lower_than": {
+    "gaussian_copula": 49,
+    "conditional_resampling": 0
+   },
+   "utility_neural_macros": {
+    "training_cgan": [
+     0.14577446634598107,
+     0.07435162437024456
+    ],
+    "training_calibrated_cgan": [
+     0.14562865345988885,
+     0.07361116687297425
+    ]
+   },
+   "utility_calibrated_ratio_to": {
+    "training_real": [
+     1.0051517940004748,
+     1.0132994019038388
+    ],
+    "training_resampling": [
+     1.0051615727243766,
+     1.013208363760424
+    ]
+   },
+   "utility_rmse_tolerance_pass": true,
+   "paired_physical_intervals": {
+    "conditional_resampling": {
+     "file": "uncertainty_conditional_resampling.json",
+     "sha256": "f5be3bd6cd5dadf5c6bb6714efa9255cdf0eae81a0480864a5eb67f0f133467b",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       0.0006736009863114803,
+       -0.0018736798401762739,
+       0.001787112746548761
+      ],
+      [
+       0.4843634490191264,
+       0.11587416553631998,
+       0.6784432875974659
+      ],
+      [
+       0.29273082344694057,
+       0.17234184183591106,
+       0.32545279746275374
+      ],
+      [
+       0.06773117337288674,
+       0.05512111177565839,
+       0.06971122925749022
+      ],
+      [
+       0.03369923499347612,
+       0.02008907824077061,
+       0.03489668999742202
+      ]
+     ]
+    },
+    "gaussian_copula": {
+     "file": "uncertainty_gaussian_copula.json",
+     "sha256": "4497ecd7a9dcf78b3e79e35084c9f6959273cb6f2a6290ba35c2246843cb64de",
+     "valid_replicates": 500,
+     "invalid_replicates": 0,
+     "missing_condition_draws": 0,
+     "intervals": [
+      [
+       0.0016967400549769557,
+       -0.0005781677061685466,
+       0.0027977094526457275
+      ],
+      [
+       0.3715532253474527,
+       0.025206104054554895,
+       0.5663594852621915
+      ],
+      [
+       -0.2004876090806046,
+       -0.3314092288708616,
+       -0.07224220581685004
+      ],
+      [
+       -0.039137082601620535,
+       -0.043934388579244914,
+       -0.03149289320535087
+      ],
+      [
+       -0.005195240952800717,
+       -0.01550974852462396,
+       0.005132343944513093
+      ]
+     ]
+    }
+   }
+  }
+ ],
+ "source_code_sha256_by_file": {
+  "src/fluvius_cgan/__init__.py": [
+   "6492d4cfc58c39594f849ec7274ca0d995d12b15fd0108006f27f87e490df548"
+  ],
+  "src/fluvius_cgan/__main__.py": [
+   "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279"
+  ],
+  "src/fluvius_cgan/battery.py": [
+   "f7c7437de23c5b3a9dbc266bd25f1345731ec0fb2112aeaf830332cef730c8e3"
+  ],
+  "src/fluvius_cgan/calibration.py": [
+   "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f"
+  ],
+  "src/fluvius_cgan/cli.py": [
+   "825994a8082e06add40f303d32af4e573dc76bdfb4252c3b4944a3db9b3a56ad"
+  ],
+  "src/fluvius_cgan/copula.py": [
+   "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939"
+  ],
+  "src/fluvius_cgan/curation.py": [
+   "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27"
+  ],
+  "src/fluvius_cgan/data.py": [
+   "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5"
+  ],
+  "src/fluvius_cgan/distribution_loss.py": [
+   "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a"
+  ],
+  "src/fluvius_cgan/evaluation.py": [
+   "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e"
+  ],
+  "src/fluvius_cgan/joint.py": [
+   "1c81d551acf1a627cf46659530c07ddb211d036f3df73eaf2d635ee799944941"
+  ],
+  "src/fluvius_cgan/models.py": [
+   "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7"
+  ],
+  "src/fluvius_cgan/release.py": [
+   "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe"
+  ],
+  "src/fluvius_cgan/residual.py": [
+   "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80"
+  ],
+  "src/fluvius_cgan/training.py": [
+   "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3"
+  ],
+  "src/fluvius_cgan/uncertainty.py": [
+   "468c8abcb3ad85c4b03d7508b13a41a9adaa289fbba1a66c5a3257eea5b3e214"
+  ],
+  "src/fluvius_cgan/utility.py": [
+   "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133"
+  ]
+ },
+ "source_and_input_sha256_values": [
+  "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+  "04628e84c97a4a8d49c8999845f355b6f2096d75c29e12cde59f1ba77a7c6dcd",
+  "08a9d1bbcc6cd672cfe4e61ee0b73f728b9e52ab848bf4656405229df2e1d700",
+  "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+  "0ca7862137f7c2cb6f86f42daaff48900a36e21d787b4b0779137ff8cb5698e1",
+  "0caaf4cae7fcbaf2cb91ce4c5bb9bddf74625082945f19fcb35c3a9c3ad52894",
+  "0ea8cf7129c11d78499bb96530d7cea45b18c539426ea2364c343f748179933d",
+  "11f969353f6882137cff67c2f9f825ebc528dd83325a17f0eba90635e227754b",
+  "12159e0495b1a6a53e5814eebd1cff54ad50d53a259fdbe3e64cbc4d6e703a4b",
+  "151c79f872b11765c6e1d1ce1e8a233e889d80ce3f8a332e4740245abdae65b9",
+  "1644cb43aee75cc7ff574d9431a4a4b446ab8ccdf4c10144dc8ac70930a7028e",
+  "169b6da3cafcf99fc3b82f2d0e8749e29dcba42fae9446c7198f813a7ce6378b",
+  "18d6ff476b49729496970268cf832e2741fd0f1d3830b2e8b81a68de4955f366",
+  "1c81d551acf1a627cf46659530c07ddb211d036f3df73eaf2d635ee799944941",
+  "1dba481b75541717999216c9fbb31b3eb6d591352e70431fccf8ed66d2849f60",
+  "1e7004c17e4d4cb2917cb4d403803b0c3cca7ea24364c6c4f23ff66abd18c046",
+  "1f365216b58605120c0aa0d1884ac660d785e779bfac0de1b93a231d88e93bcb",
+  "20c45c2c87432b6d6fdba4c1c66126dc731366f4c466628d792f3eff65fc51fd",
+  "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e",
+  "22b27b295beff5e77f05e1fc28563d78f8062adc4c6092d6bbc2ab691f97cefb",
+  "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3",
+  "23b8ea2cf0b0ab422dcd55d7ca4976adfd955851040b192cf7b6bb9fbe7d1af5",
+  "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d",
+  "26a45d22ed7bee92c1b07bdef6b82e356671f0b67c73bf234d6b1507de02a490",
+  "3028fe8d8fe53f415e1ec06101b53e447360cd3f3360b6eeb6a2d01053de0611",
+  "3131b5f0fcc263b2c25ec3f5c87fd670b09d7ed25d50b9fcab63856f409ee702",
+  "314d13c7561ebabd4bd695ac4d58ff0bca4315d84872e6a08b18da34c18ee985",
+  "320cf4d49f864d105c94702a4580ba1c9e7d96574e7913ea0b668d755c5b4655",
+  "34ed240db6309b4e76725d71cbe978ff51f57e930de5e3c5c1c4964465627fd4",
+  "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a",
+  "38096ca51a357d42260f912796409c47a96bdfd3288fc71fa8bd363f320c8e06",
+  "3a376ac84042e90834037ab4d9ba55a2ab90b74f2ce2579268f2c4a6d5c87590",
+  "3c59b781c84d35c95e650b345fa71ff1d8dd03d626c2cf294ef64cacd4ae9eae",
+  "3d33d55198ea728ca15a0e78a3daec64955d448b613551d6adf3d459c1a8d312",
+  "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+  "3fd26af9b8333a5dbc4949968c91d9711ed93979f8897fd27387cc72a8c409f3",
+  "41f6e515bfaa9589341cdf9ce2a22dca36bb7678977569bb57370dfeb7414162",
+  "4497ecd7a9dcf78b3e79e35084c9f6959273cb6f2a6290ba35c2246843cb64de",
+  "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb",
+  "468c8abcb3ad85c4b03d7508b13a41a9adaa289fbba1a66c5a3257eea5b3e214",
+  "473a81e41c4a32d0b24879d276f209d33a35612f3cf20cb930027ae4ed62f3c2",
+  "4bcfe10e1981af2de901b737e347a43c76d192111b5ccab56111ee0488cbd4cf",
+  "4e112c419e11f4f78ff2d8215f3a68148a2ca9a62584b65c594c8a47ef72ba20",
+  "4e3fd5e382c556744239a9e4988f200a3cc14a877932ca0b2d330bf096fab687",
+  "4e6903f67d346fb67df7a7394ef46d166cd709836309f2c849d7ec7dc33056ec",
+  "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23",
+  "5096478c54f38d6d046444c70d27740ae3633f530d63e58cf7ed62a74e6d4d2e",
+  "53307b768cc653c3af0d46e98f70c9df5d3d4d7696c687a7cd75f03fe8a2bc96",
+  "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+  "58c48594fab25655a79497c10ba1b8f8ccb5229f0bf63380ead881cf32544fcc",
+  "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+  "5de7163ad294d6a7c044f0ab7de60dfa983b9afe9d06341b65b35ede53425f67",
+  "5f5c2ac45cafc1a9ceba9dd41cd0b9edc84dbc9d1502b8d76ffe2800734ad2fd",
+  "5f9db84af6b4aafc354413c429747ea91ffa701bbd1dcddaf5cc810f254e5412",
+  "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+  "62025625605bc2241b315de66cc4b7f088cca4dee3b521b4fd1b3f20a00dd56b",
+  "62794b732cd2dd3ea09db7b8d3738e02871e42cad8d310785c46441a8be73dde",
+  "6492d4cfc58c39594f849ec7274ca0d995d12b15fd0108006f27f87e490df548",
+  "64c3c1bc101e0d2685efc0c6b4bf095ef3c30c4118c2e6b51933d001712399fa",
+  "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+  "65e94ebceefa88e77338ed3a66fac79a3d2b55745bec2700fafacf21179f5bfb",
+  "693479105d81bee1fcb96fdbe3073dec8728091c96bb16aa5ae850e5b7f0701f",
+  "6ad46ce7f8bb2dd35018555fc76c338f10bf8d6cab3fad57cd2c6cfceef965c8",
+  "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+  "6f309e9a35075b6d0b775c11d3827a3a02cb16a39a38af1a8d66fb0ae267e41c",
+  "71600382449bdd109a1f05ce2898c4eac02b17d155d7e4363d863b7fefb23765",
+  "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe",
+  "73ad91f1873fa83f830df33a71b8f572e6e91f5bd31d6abd6bdddca8a0a84ba8",
+  "74fd16d428d98e93f6bf1fa6469cc0638d59da979a77991fc5571d84da91aca5",
+  "751a658d652a0c7463faa153f4553dac1329d32af4ae70a4fbccf879af008d5c",
+  "7940b317b139759e6b8d46254334265958bdd68c96c5a807c72e8e24610fb8bc",
+  "7ac2490b99e112e74b13132949394615a84a21eb71142412e61d894ddcc0faf9",
+  "7ce4fc08449755f4e653783bb2f3760ca0bfb74403e6ca74cd71d19ee6a336e3",
+  "81cf4924a7672dd4a1b31383bf759dc978172acd831492f8bd1ad07c070d6679",
+  "81e23a5f978c6cf9a5000ac8e15615935b88428ce68bc8409078fd06fedae10e",
+  "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5",
+  "825994a8082e06add40f303d32af4e573dc76bdfb4252c3b4944a3db9b3a56ad",
+  "89b5dfff597efef726f7091783625a684fd1e100412454403b6a34d1cd0a3488",
+  "8cee9fbb50d10acd24e2a6554d2d42740b40d54e1c3c57322c94d92787bac930",
+  "8daf1b0970f78c9f52c0b2cf7c40235c53886677b93eebc29d5b9ab6b6800091",
+  "8de839f008cf43589a760aeefb9b9e4fa91e6abc3292027217854d67240b9900",
+  "91df24c87fc8d30a010a207d035318d860dbb3b3c06541977373cbe0761fd21e",
+  "92b6bf6a80329e022352f78287080ae427ea9677f8c1a3fcca45d5cf07f090e4",
+  "93f8de3a916a8c4789166f2902a3b73bf6c081e9880a8ed8bad3822cc35eb12e",
+  "96ae5abc70e1d2b267eba2d3d4b50dfcbfb739b40f7379264b66a9e55d6c2a61",
+  "973dc8a25e8df52976d16706042195793809cf209b5f60bc553fcac001233644",
+  "980635e29150eeb06447ba7a65c4db9b50376501e9195fdb5ee9875801731e1e",
+  "9c76c043bffe030e72ff674f9ea60de6af28a50237c58143d96957a93153556c",
+  "9ec82f4f6398980137b860bcf2fbec4f8ebcba61e54aa0d6f96d8828d84a0db9",
+  "a25eaa3cb3ba31e93eb8f7a1a756ac15e66132dec773affbad4b4c20b081b6ea",
+  "a37b2f1f9a321375927f2caa33fc08ce99fd3a26c63ad7aae9286a8c6f15c1cd",
+  "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+  "a480451f5856432be8a1e40d859005f08ab6c8898ef8dd7a28ab1ee50908cf56",
+  "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+  "ae24c66223aeef41443533ae6c79e5790dfb24e41a48b69bafc883e7210e817b",
+  "af980aa73d17c68065042c199160118f737596a37e5b7d24255784dbc81e2aeb",
+  "b191ea151aa588fe9c7e17cd44dafb7c4d66b3c39c386c3b084f86116ab465f1",
+  "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+  "b2d489e4a761a113281813237b6e2bdf2de874a960c2c4e00d7847bd04fe04d2",
+  "b5c05369c46cfafafb5af1cf3692c7911a244d9b0b17bfa3945b9e2e6ff149dd",
+  "b5f7a7fda85f6e9882947085eaeeac6bec29f905333ce7134a390caca1ca2535",
+  "b6684c1736880c5ff1bdcf2ddec222b80136d509378fc0420a2220e10cf29add",
+  "b774147a65ad4d6aa97c9f9f77ce925ac1864367b9496801fdcbbbf346a36b81",
+  "b7fcae26f72487b9fc9259fdd1cc95b575955bd9a837d68d5d4d14ac5087243a",
+  "b8c0df0b92012dd74f7c4112503566ddeaa4a8d4f7c9f0ec750b8664a01a5378",
+  "b9ee9e7602b79ea3bcc59ec7a391c35aef81bb1202c0d914319c8bcb0658d183",
+  "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+  "bc646bb0fdc11780ee422f4d1eb1ccbc8050e48c49f02a69a2e646f8a3278c04",
+  "be526a4f7f2449593c9c967e352a630d58236b90bc9594c2128564591464f9e5",
+  "becc3a63e6b108386dc52bf2bf6692e0693a685118dd70ef9ff0a1061e68e27d",
+  "bf8ec5a1678824285a0aa3e72115291e5fee6d871d0941ef36fe869d2b1dac03",
+  "c0d5de390e8340da40b9272f6d5c1b24c4657e7f86fa2afb29764ba166da7d30",
+  "c38ac8750f9bda8fcb6c35562a6faf6f3cbba9a32118ef4fa9a53ab8f65f46dc",
+  "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+  "cc500f622c4afc9c0690ab4984b7cf86602e9b94af911cc56ca683002f9fe5c5",
+  "ce5cd5281192d21a1fa1972c517e2a43d73caed762dfec24df3654d1effcf2fa",
+  "ceae4693308ee46f738662fcc82f9ef2b4ac0923968283c48fc0b97c9328c5ae",
+  "d2a3179f09540195bafa734c2d548ffb8acceac8fb787522bd2818477a713eeb",
+  "d43faf2d6315fdb0f3321642f558dc3680aee16042e00ff157f27bbd46c84e44",
+  "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+  "d6907e10f7c4ccb9e8f260b7d16afd1a27f7c78aea25dc1904d0eaed97c4f6d6",
+  "d8d99f662b9847698feb5472c5db0d60f089a29540a5a3372f96954dfcd141a8",
+  "d8fe7fcb2a2cd2f98f0d3f619ad53c84c5b508871501d90d662e584a684990fd",
+  "da4e9457d5d91e21d394b49bd58a3c2c18ef6a8fff49f76d341878064c389665",
+  "dafcb17368ae6b087e01ccf35b4c588798b7b8ec3012ff31de1fe0eae2d1f6a2",
+  "df5b2aac10e53274d2ab0d8c297d94381eb1ab79c3327d308364a6f1d7dcb5c2",
+  "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+  "dfecbb1463ca779ab233653ed23a5d143267c70dd800c0733560423027836df1",
+  "e0fcbd21951a040a609b6cd6504b2f77cc3afcef26ea678ab0cb459f5824d068",
+  "e16be6fb2d1794a49df8b95fe62fa6ed57c2ea652ded553464777808bc262e6f",
+  "e31fe8d362725dc0fc4db7e20b1cfbbbec7083bf063c50ede6913d545e6d3865",
+  "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+  "eab79bc3a80725a19db2861f42d513ca0e65fcd1c72ef5c2a2171072fac17020",
+  "ece11e0b7708ba70778eeb553676ebd68f990b7292d3ad3a0e6f7946456af9fe",
+  "ed027a8d9d1417f4e5c196e0d00ecf8cdce55b70d56849416be6c626c2ba8617",
+  "ef3d37e59054e065c2779bf6eb5430e309718f97e924daa7580df3e00e2705b0",
+  "f44b5f26a791dd5699f9e7b34b957aa5d7f175dd8647163e93b6f2b6ee127c09",
+  "f4a5fad5a2fa1ab229bd62a6ae84001492dbe463274dbdf8b48e3f44fac9f090",
+  "f4f162e19b5fc72bdd088014d008a83dd544ce9e06674278f38d1dcac900a4e0",
+  "f5be3bd6cd5dadf5c6bb6714efa9255cdf0eae81a0480864a5eb67f0f133467b",
+  "f600c376d0862cd36ec9df36e1461a7e3d9cad3a0a225a47ed5685d9dd5ea0b3",
+  "f653d34efe4d261b3e935ad375bd2c0e1431db8aa073194b42c3e47f982a0a26",
+  "f7206afd730c61bb5cc144636eee37fa7c6ea6b82e48f8d05c97d094ee0b6847",
+  "f7c7437de23c5b3a9dbc266bd25f1345731ec0fb2112aeaf830332cef730c8e3",
+  "fd1d24d3277dc5c528e9fc2dcac7e41a286e887ffc95c940418e4a9603c17cd3",
+  "fd866bc7e2b032997576609575a953750f6d5a5af13448d8518476e213bdc1aa",
+  "fdd1db2d984e024031cf84f0a75a2a25afce25ac2cb483fc2226ab69e0abb57f"
+ ],
+ "hash_list_scope": "Distinct declared SHA-256 values for source code, artifacts, prepared input files, frozen evaluation arrays and grouping identities. Per-meter identity fingerprints and alias/curation identity lists are excluded; their complete audit remains bound by metadata/manifest hashes in the full report.",
+ "related_reports": {
+  "curated_calibration_robustness": {
+   "path": "reports/curated_calibration_robustness.json",
+   "sha256": "8904a50dc7406c04e5fd55f158454c06e48846446c5a3e9a0eeb3a0181ca450b",
+   "documentation": "docs/CURATED_CALIBRATION_ROBUSTNESS.md"
+  },
+  "curated_swd_attribution": {
+   "path": "reports/curated_swd_attribution.json",
+   "sha256": "30f346cf4b5475804c69b8756d3dbe7eaf19a862015ab40aaea4e0bda4827bb8",
+   "documentation": "docs/CURATED_SWD_ATTRIBUTION.md"
+  }
+ },
+ "qualifications": [
+  "Artifact bindings and curation metadata are checked; this collector does not perform identity auditing. Exact-trace curation does not prove household independence or exclude near-duplicates.",
+  "Calibration directly targets training marginals and marginal diversity, with finite-reference approximation; improvements in these diagnostics are not independent joint evidence. Validation was used for development and checkpoint selection; unseen-test performance remains unknown.",
+  "All intervals are conditional on frozen samples and models; do not average their endpoints or treat five deterministic control repeats as independent observations.",
+  "No claim that conditional resampling is beaten: all five daily, peak, ramp and lag-one ACF intervals against it lie above zero.",
+  "The primary mean ramp W1 exceeds 0.10 kW; only seed 22 meets all four descriptive absolute gates. No seed or evaluation cap is selected to reverse this result.",
+  "Utility RMSE is slightly higher than both real-trained and resampling-trained references in all five seeds, although within the descriptive 10% tolerance.",
+  "Validation served development and checkpoint selection. Exact-trace curation is not proof of independent households; unseen-test performance remains unknown."
+ ]
+}

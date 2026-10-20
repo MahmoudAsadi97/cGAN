@@ -88,5 +88,10 @@ commands above reproduce them. Observed package versions are in reports/environm
 
 Full declared training budgets and at least five seeds; unconditional and hourly
 ablations; common-hourly comparisons; meter-level uncertainty; frozen decisions
-followed by final-test evaluation; data licensing/provenance confirmation; and a
+followed by final-test evaluation; and a
 scientific contribution justified against current literature. See RESEARCH_PROTOCOL.md.
+
+Official CSV/legend content identity and the current custom Fluvius licence are
+now documented in [DATA_PROVENANCE.md](DATA_PROVENANCE.md). Attribution and other
+reuse conditions still apply; this verification does not establish privacy or
+household independence.

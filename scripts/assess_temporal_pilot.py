@@ -1,9 +1,12 @@
-"""Assess the fixed three-seed temporal pilot from saved validation artifacts.
+"""Assess a fixed three-seed temporal or capacity validation pilot.
 
 Example (outputs must not exist):
   python scripts/assess_temporal_pilot.py --candidate-root runs/curated_derivative1 \
       --baseline-root runs/curated_swd10 --output runs/temporal_pilot.json \
       --markdown runs/temporal_pilot.md
+
+For the declared capacity pilot, add --candidate-kind capacity and provide its
+candidate root; the original SWD10 baseline and promotion arithmetic are shared.
 
 Reads reports, checkpoint metadata and calibration archives through the existing
 collector; never loads prepared train/val/test arrays, generates, fits or selects
@@ -14,6 +17,7 @@ not a failed scientific gate or permission to promote. Exit codes: 0 pass,
 from __future__ import annotations
 
 import argparse
+from functools import lru_cache
 import hashlib
 import json
 import math
@@ -25,6 +29,7 @@ import sys
 import zipfile
 
 import numpy as np
+import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -33,6 +38,26 @@ import collect_calibrated_study as collector
 from fluvius_cgan.training import _config
 
 SEEDS = (11, 22, 33)
+PROTOCOL_DOCUMENTS = {"temporal": "docs/TEMPORAL_REFINEMENT.md",
+                      "capacity": "docs/CAPACITY_REFINEMENT.md"}
+CAPACITY_COMMIT = "1ca62d0fbe1d77f916f8904e812db7d720f8cf53"
+# Exact blob-byte hashes from the declared execution commit, not today's tree.
+CAPACITY_SOURCE_HASHES = {
+    "src/fluvius_cgan/training.py": "1eabd6ee18c381ba16a2af659247400d0d08557c8fcf7a66dcd3c6fc16b5236a",
+    "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+    "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+    "src/fluvius_cgan/distribution_loss.py": "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a",
+    "src/fluvius_cgan/temporal_loss.py": "498d817001dd009caae0924682a7e0549bfc39897e3592d0fcd90bac3f80207a",
+    "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+    "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+    "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+    "src/fluvius_cgan/joint.py": "1c81d551acf1a627cf46659530c07ddb211d036f3df73eaf2d635ee799944941",
+    "src/fluvius_cgan/battery.py": "f7c7437de23c5b3a9dbc266bd25f1345731ec0fb2112aeaf830332cef730c8e3",
+    "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+    "scripts/evaluate_utility.py": "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+    "scripts/compare_checkpoints.py": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+    "scripts/evaluate_calibration.py": "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e",
+}
 TRAIN_PROFILES = 606060
 EPOCHS, UPDATES, UPDATES_PER_EPOCH = 26, 30784, 1184
 CONDITIONS = {str(i) for i in range(64)}
@@ -116,17 +141,61 @@ def _calibration_diagnostics(run, calibrated):
               for event in CALIBRATION_EVENTS), "calibration application global fractions mismatch")
 
 
-def expected_config(arm, seed):
+def expected_config(arm, seed, *, candidate_kind="temporal"):
     """Freeze the declared settings; normalize only the historical missing weight."""
-    return _config({"epochs": 26, "batch_size": 512, "seed": seed, "latent_dim": 24,
-                    "hidden_dim": 64, "lr_g": .0001, "lr_d": .0002, "device": "cpu",
+    check(candidate_kind in PROTOCOL_DOCUMENTS and arm in ("candidate", "baseline"),
+          "unknown pilot kind or arm")
+    capacity = arm == "candidate" and candidate_kind == "capacity"
+    return _config({"epochs": 26, "batch_size": 512, "seed": seed, "latent_dim": 96 if capacity else 24,
+                    "hidden_dim": 128 if capacity else 64, "lr_g": .0001, "lr_d": .0002, "device": "cpu",
                     "num_threads": 1, "unconditional": False, "validation_samples": 4096,
                     "max_train_samples": None, "normalization": "standard",
                     "discriminator_hidden_dim": 128, "objective": "hinge_sn",
                     "adam_beta1": .5, "adam_beta2": .999, "batch_sampling": "balanced_conditions",
                     "conditions_per_batch": 4, "swd_weight": 10., "swd_projections": 128,
                     "validation_selection": "conditional_w1",
-                    "derivative_swd_weight": 1. if arm == "candidate" else 0.})
+                    "derivative_swd_weight": 1. if arm == "candidate" and candidate_kind == "temporal" else 0.})
+
+
+@lru_cache(maxsize=6)
+def _validation_noise_sha256(seed, latent_dim):
+    """Reconstruct the small fixed selection draw, never model/profile data."""
+    noise = torch.randn((4096, latent_dim), dtype=torch.float32,
+                        generator=torch.Generator().manual_seed(seed + 2))
+    return hashlib.sha256(noise.numpy().astype("<f4", copy=False).tobytes()).hexdigest()
+
+
+def _zero_derivative(run, summary, history):
+    derivative = run["provenance"]["training_checkpoint"].get("derivative_swd")
+    if derivative is not None:
+        check(isinstance(derivative, dict) and derivative.get("enabled") is False
+              and finite(derivative.get("weight")) and derivative["weight"] == 0.
+              and all(derivative.get(key) is None for key in ("scale", "projection_seed", "num_projections")),
+              "capacity study requires absent/disabled zero-weight derivative provenance")
+    check(summary.get("derivative_swd_scale") is None,
+          "capacity study must not fit a derivative scale")
+    check(all(finite(row.get("loss_derivative_swd", 0.)) and row.get("loss_derivative_swd", 0.) == 0.
+              for row in history), "capacity study must have absent/zero derivative loss history")
+
+
+def _capacity_source_pin(run, training_sources, eval_sources, utility_sources):
+    provenance = run["provenance"]
+    training = provenance["training_checkpoint"]
+    check(training.get("git_commit") == CAPACITY_COMMIT and training.get("git_dirty") is False,
+          "capacity candidate training must record the clean pinned commit")
+    for stage, recorded in (("evaluation", provenance["calibration_evaluation"]),
+                            ("utility", run["utility"]["provenance"])):
+        if "git_commit" in recorded:
+            check(recorded["git_commit"] == CAPACITY_COMMIT,
+                  f"capacity candidate {stage} recorded commit differs from pin")
+        if "git_dirty" in recorded:
+            check(recorded["git_dirty"] is False, f"capacity candidate {stage} recorded dirty source tree")
+    aliases = {"evaluation_script_sha256": "scripts/evaluate_calibration.py",
+               "comparison_helper_sha256": "scripts/compare_checkpoints.py"}
+    for stage, sources in (("training", training_sources), ("evaluation", eval_sources), ("utility", utility_sources)):
+        for path, digest in sources.items():
+            check(digest == CAPACITY_SOURCE_HASHES[aliases.get(path, path)],
+                  f"capacity candidate {stage} source differs from pinned bytes: {path}")
 
 
 def _utility_checks(run, report):
@@ -176,9 +245,14 @@ def _utility_checks(run, report):
     return _source_files(utility["provenance"], UTILITY_CORE, "source_file_sha256")
 
 
-def _verify_protocol(run, summary, history, calibrated, utility_report, arm, seed):
+def _verify_protocol(run, summary, history, calibrated, utility_report, arm, seed, *, candidate_kind="temporal"):
     config = {"derivative_swd_weight": 0., **run["config"]}
-    check(config == expected_config(arm, seed), f"{arm} seed {seed}: configuration differs from fixed protocol")
+    check(config == expected_config(arm, seed, candidate_kind=candidate_kind),
+          f"{arm} seed {seed}: configuration differs from fixed {candidate_kind} protocol")
+    if candidate_kind == "capacity" and arm == "candidate":
+        check("derivative_swd_weight" in run["config"], "capacity candidate must explicitly declare derivative_swd_weight=0")
+    if candidate_kind == "capacity":
+        check(finite(config["derivative_swd_weight"]), "capacity derivative configuration requires numeric zero")
     check(run["epochs_completed"] == EPOCHS and run["stopped_early"] is False,
           "full 26-epoch training budget required")
     check(len(history) == EPOCHS and [row["epoch"] for row in history] == list(range(1, 27)),
@@ -189,6 +263,10 @@ def _verify_protocol(run, summary, history, calibrated, utility_report, arm, see
     check(run["selection_metric"] == "mean_condition_interval_wasserstein_normalized",
           "checkpoint selection must use raw condition-macro interval W1")
     selection = run["training_selection"]
+    if candidate_kind == "capacity":
+        check(selection.get("validation_noise_sha256") == _validation_noise_sha256(seed, config["latent_dim"]),
+              "capacity checkpoint-selection noise differs from declared seed/latent width")
+        _zero_derivative(run, summary, history)
     check(selection["train_profiles_used"] == selection["train_profiles_available"] == TRAIN_PROFILES,
           "training must use all 606,060 eligible TRAIN profiles")
     check(run["data_curation_status"] == "curation_metadata_present_not_reaudited"
@@ -271,7 +349,9 @@ def _verify_protocol(run, summary, history, calibrated, utility_report, arm, see
     for path in EVALUATION_CORE:
         if path in utility_sources:
             check(utility_sources[path] == eval_sources[path], f"utility/evaluation implementation differs: {path}")
-    if arm == "candidate":
+    if candidate_kind == "capacity" and arm == "candidate":
+        _capacity_source_pin(run, training_sources, eval_sources, utility_sources)
+    if arm == "candidate" and candidate_kind == "temporal":
         derivative = run["provenance"]["training_checkpoint"]["derivative_swd"]
         scale = derivative["scale"]
         check(derivative["enabled"] is True and derivative["weight"] == 1.
@@ -300,20 +380,22 @@ def _verify_protocol(run, summary, history, calibrated, utility_report, arm, see
     return run
 
 
-def verify_run(arm, seed, directory):
+def verify_run(arm, seed, directory, *, candidate_kind="temporal"):
     run = collector.collect_run(f"{arm}_seed_{seed}", directory)
     paths = {name: Path(directory) / name for name in
              ("summary.json", "history.json", "calibration_validation.json", "utility_validation.json")}
     check(paths["utility_validation.json"].is_file(), "required full-TRAIN utility_validation.json is missing")
     values = {name: collector._json(path) for name, path in paths.items()}
     result = _verify_protocol(run, values["summary.json"], values["history.json"],
-                              values["calibration_validation.json"], values["utility_validation.json"], arm, seed)
+                              values["calibration_validation.json"], values["utility_validation.json"], arm, seed,
+                              candidate_kind=candidate_kind)
     for name, digest in run["artifact_sha256"].items():
         check(collector.sha256_file(Path(directory) / name) == digest, f"artifact changed during pilot assessment: {name}")
     return result
 
 
-def _compatibility(runs):
+def _compatibility(runs, *, candidate_kind="temporal"):
+    check(candidate_kind in PROTOCOL_DOCUMENTS, "unknown pilot kind")
     first = runs[0]
     for run in runs[1:]:
         for key in ("prepared_data_hashes", "checkpoint_data_hashes", "curation_metadata",
@@ -338,8 +420,9 @@ def _compatibility(runs):
             check(same(run["utility"]["methods"][method], first["utility"]["methods"][method])
                   and run["utility"]["training"][method] == first["utility"]["training"][method],
                   f"matched utility reference differs: {method}")
-    # A training implementation change is declared. Do not compare old/new
-    # training.py hashes, nor require historical hashes to match today's files.
+    # Both pilots use the declared newer training harness versus historical
+    # controls. Verify model/profile-loss sources; do not require the old/new
+    # training.py hashes or historical hashes to match today's files.
     for arm in ("candidate", "baseline"):
         members = [run for run in runs if run["arm"] == arm]
         check(all(run["pilot_sources"]["training"] == members[0]["pilot_sources"]["training"] for run in members),
@@ -348,9 +431,19 @@ def _compatibility(runs):
         check(len({run["pilot_sources"]["training"][path] for run in runs}) == 1,
               f"undeclared architecture/profile-loss source change: {path}")
     for seed in SEEDS:
-        pair = [run for run in runs if run["training_seed"] == seed]
-        check(pair[0]["training_selection"] == pair[1]["training_selection"],
-              f"matched seed {seed} checkpoint-selection rows/noise differ")
+        pair = {run["arm"]: run for run in runs if run["training_seed"] == seed}
+        for arm, run in pair.items():
+            check({"derivative_swd_weight": 0., **run["config"]} ==
+                  expected_config(arm, seed, candidate_kind=candidate_kind),
+                  f"matched seed {seed}: undeclared cross-arm configuration difference")
+        left, right = (pair[arm]["training_selection"] for arm in ("candidate", "baseline"))
+        if candidate_kind == "capacity":
+            # Different latent widths require different noise arrays. All real
+            # selection rows/labels/settings still match exactly; each noise
+            # hash was independently reconstructed in _verify_protocol.
+            left, right = ({k: v for k, v in item.items() if k != "validation_noise_sha256"}
+                           for item in (left, right))
+        check(left == right, f"matched seed {seed} checkpoint-selection rows/noise differ")
 
 
 def _value(run, metric):
@@ -401,7 +494,8 @@ def measured_gates(runs):
     return gates
 
 
-def assess(candidate_root, baseline_root):
+def assess(candidate_root, baseline_root, *, candidate_kind="temporal"):
+    check(candidate_kind in PROTOCOL_DOCUMENTS, "unknown pilot kind")
     runs, errors = [], []
     roots = {"candidate": Path(candidate_root), "baseline": Path(baseline_root)}
     requested = [{"arm": arm, "seed": seed, "directory": str(root / f"seed_{seed}")}
@@ -410,13 +504,16 @@ def assess(candidate_root, baseline_root):
         errors.append({"run": "study", "error": "candidate and baseline directories must be distinct"})
     for item in requested:
         try:
-            runs.append(verify_run(item["arm"], item["seed"], item["directory"]))
+            # Retain the original three-argument verifier API for temporal
+            # callers; capacity mode is always explicit.
+            kwargs = {} if candidate_kind == "temporal" else {"candidate_kind": candidate_kind}
+            runs.append(verify_run(item["arm"], item["seed"], item["directory"], **kwargs))
         except (ValueError, OSError, KeyError, TypeError, AttributeError, IndexError, RuntimeError,
                 EOFError, pickle.UnpicklingError, zipfile.BadZipFile) as error:
             errors.append({**item, "error": f"{type(error).__name__}: {error}"})
     if not errors:
         try:
-            _compatibility(runs)
+            _compatibility(runs, candidate_kind=candidate_kind)
         except (ValueError, KeyError, TypeError, AttributeError, IndexError) as error:
             errors.append({"run": "cross_run_compatibility", "error": str(error)})
     complete = not errors and len(runs) == 6
@@ -425,23 +522,31 @@ def assess(candidate_root, baseline_root):
     return {"schema_version": 1, "status": "incomplete" if not complete else "pass" if passed else "fail",
             "complete": complete, "pass": passed, "promotion_eligible": complete and passed is True,
             "scope": "Exploratory validation-only promotion screen; not significance, final-test evaluation, or a general superiority claim.",
-            "test_used": False, "protocol": {"document": "docs/TEMPORAL_REFINEMENT.md", "seeds": list(SEEDS),
+            "test_used": False, "protocol": {"document": PROTOCOL_DOCUMENTS[candidate_kind],
+                "candidate_kind": candidate_kind, "seeds": list(SEEDS),
                 "training_profiles": TRAIN_PROFILES, "epochs": EPOCHS, "updates_per_adversary": UPDATES,
                 "evaluation_seed": 2026, "samples_per_condition": 100, "calibration_seed": 7301,
                 "calibration_samples_per_condition": 4096, "quantile_knots": 1025,
                 "aggregation": "Arithmetic mean of the three seed-level equal-condition macro errors; no seed dropping.",
                 "battery_role": "Required retained secondary diagnostic; not a promotion gate.",
+                "checkpoint_selection_noise": ("Same seed+2, independently verified at latent widths 96 versus 24; no claim of identical noise arrays."
+                    if candidate_kind == "capacity" else "Identical paired-seed noise arrays."),
+                "candidate_source_pin": ({"git_commit": CAPACITY_COMMIT, "training_git_dirty": False,
+                    "core_files_sha256": CAPACITY_SOURCE_HASHES,
+                    "evaluation_utility_git_metadata": "When present, commit must match and dirty must be false; core file hashes are always verified."}
+                    if candidate_kind == "capacity" else None),
                 "source_policy": "Verify within-run bindings and within-arm core source consistency; training implementation hashes may differ across arms. No claim that recorded hashes prove correct execution."},
             "requested_runs": requested, "errors": errors, "gates": gates,
             "failed_gates": [name for name, gate in gates.items() if not gate["pass"]],
             "runs": runs,
             "provenance": {"assessor_sha256": collector.sha256_file(Path(__file__)),
                 "collector_sha256": collector.sha256_file(Path(collector.__file__)),
-                "protocol_sha256": collector.sha256_file(ROOT / "docs/TEMPORAL_REFINEMENT.md")}}
+                "protocol_sha256": collector.sha256_file(ROOT / PROTOCOL_DOCUMENTS[candidate_kind])}}
 
 
 def markdown(report):
-    lines = ["# Temporal pilot assessment", "", f"Status: **{report['status']}**. "
+    kind = report["protocol"].get("candidate_kind", "temporal")
+    lines = [f"# {kind.capitalize()} pilot assessment", "", f"Status: **{report['status']}**. "
              f"Complete: {report['complete']}. Promotion eligible: {report['promotion_eligible']}.", "", report["scope"], ""]
     for item in report["errors"]:
         lines.append(f"- {item.get('arm', item.get('run'))} {item.get('seed', '')}: {item['error']}")
@@ -459,6 +564,8 @@ def markdown(report):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--candidate-root", type=Path, required=True)
+    parser.add_argument("--candidate-kind", choices=tuple(PROTOCOL_DOCUMENTS), default="temporal",
+                        help="Fixed candidate contract; default preserves the temporal pilot")
     parser.add_argument("--baseline-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--markdown", type=Path)
@@ -466,7 +573,7 @@ def main(argv=None):
     outputs = [path for path in (args.output, args.markdown) if path is not None]
     if len({str(path.resolve()) for path in outputs}) != len(outputs) or any(path.exists() for path in outputs):
         parser.error("outputs must be distinct new paths; existing assessments are retained")
-    report = assess(args.candidate_root, args.baseline_root)
+    report = assess(args.candidate_root, args.baseline_root, candidate_kind=args.candidate_kind)
     contents = [json.dumps(report, indent=2, allow_nan=False) + "\n"]
     if args.markdown:
         contents.append(markdown(report))

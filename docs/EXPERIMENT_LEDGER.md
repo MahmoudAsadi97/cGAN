@@ -51,6 +51,9 @@ calibration is a separate TRAIN-target fitting stage with a generated reference.
 | Interrupted weight-zero attempts | 22, 33 | Interrupted after 6 and 5 epochs by resource failure; retained under `runs/interrupted_oom_20261020/`; not accepted as completed runs |
 | Derivative-distribution weight 1, profile weight 10 | 11, 22, 33 | Complete; promotion failed. Ramp error improved 8.79% (required 10%); ACF error worsened 15.56% (allowed 10%). No seeds 44/55 are authorized for this arm. |
 | Larger generator, profile weight 10 | 11, 22, 33 | Activated after the complete derivative failure; fixed width 128 and latent dimension 96 under `docs/CAPACITY_REFINEMENT.md`. Extend to 44/55 only if every pilot gate passes. |
+| Reference conditional BCE96 | 11, 22, 33, 44, 55 | Declared under `docs/REFERENCE_COMPLETION.md`; complete package comparison with the candidate |
+| Reference unconditional BCE96 | 11, 22, 33, 44, 55 | Declared matched network-conditioning comparison within the BCE reference method |
+| Reference conditional BCE24 | 11, 22, 33, 44, 55 | Declared resolution sensitivity; verified derived hourly development preparation required before fitting |
 
 Completed controls 22/33 restart from initialization with the same seeds and full
 budget. The interruption is documented in `reports/resource_incident.json` and

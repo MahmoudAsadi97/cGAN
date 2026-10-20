@@ -301,13 +301,15 @@ truth. EV zero does not prove absence; small exports also occur in some PV 0 rec
 
 ## Reference experiments and final-test scope
 
-The original conditional and unconditional architecture configs remain separate
-reference/attribution experiments. They do not represent the current calibrated
-candidate and do not share its training budget:
+The [reference completion protocol](docs/REFERENCE_COMPLETION.md) declares five
+seeds each for conditional BCE96, unconditional BCE96 and conditional BCE24.
+These explicit configs use the same 26-epoch update budget as the current study.
+The older `cgan96.json` and `unconditional96.json` budgets remain historical
+starting configurations; they are not used for these comparisons:
 
 ```bash
-python scripts/run_experiments.py --prepared data/curated96 --config configs/cgan96.json --output runs/reference_cgan96 --seeds 11 22 33 44 55
-python scripts/run_experiments.py --prepared data/curated96 --config configs/unconditional96.json --output runs/reference_unconditional96 --seeds 11 22 33 44 55
+python scripts/run_experiments.py --prepared data/curated96 --config configs/curated_reference_bce96.json --output runs/curated_reference_bce96 --seeds 11 22 33 44 55 --samples-per-condition 100
+python scripts/run_experiments.py --prepared data/curated96 --config configs/curated_reference_unconditional96.json --output runs/curated_reference_unconditional96 --seeds 11 22 33 44 55 --samples-per-condition 100
 
 # Hourly sensitivity must aggregate curated quarter-hour profiles, preserving
 # their canonical meter membership. Do not independently re-split the raw archive.

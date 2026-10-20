@@ -1,6 +1,8 @@
 """Training invariants that protect held-out data and reproducible experiments."""
 import hashlib
 import json
+from pathlib import Path
+import subprocess
 
 import numpy as np
 import pytest
@@ -66,21 +68,29 @@ def test_model_shapes_gradients_and_logits(condition_dim):
     assert [m.out_features for m in d.modules() if isinstance(m, torch.nn.Linear)] == [4, 8, 16, 1]
 
 
-def test_replay_isolation_scaler_provenance_and_artifacts(tmp_path):
+@pytest.mark.parametrize("normalization", ["minmax", "standard"])
+def test_replay_isolation_scaler_provenance_and_artifacts(tmp_path, normalization):
     data = prepared(tmp_path)
     out1, out2 = tmp_path / "first", tmp_path / "second"
-    first = train(data, out1, settings())
-    second = train(data, out2, settings())
+    first = train(data, out1, settings(normalization=normalization))
+    second = train(data, out2, settings(normalization=normalization))
     assert first["best_validation_score"] == second["best_validation_score"]
     assert first["best_epoch"] == second["best_epoch"]
     assert first["epochs_completed"] == 2
     assert {p.name for p in out1.iterdir()} == {"best.pt", "last.pt", "config.json", "history.json", "summary.json"}
     checkpoint = torch.load(out1 / "best.pt", weights_only=True)
-    assert checkpoint["scaler"] == json.loads((data / "scaler.json").read_text())
+    expected_scaler = json.loads((data / "scaler.json").read_text())
+    if normalization == "standard":
+        x = np.load(data / "train.npz")["x"].astype(np.float64)
+        expected_scaler.update(kind="standard", mean=float(x.mean()), std=float(x.std()))
+    assert checkpoint["scaler"] == expected_scaler
     assert checkpoint["supported_labels"] == [0, 8]
     assert "test.npz" not in checkpoint["data_hashes"]
     assert checkpoint["data_hashes"]["train.npz"] == hashlib.sha256((data / "train.npz").read_bytes()).hexdigest()
+    assert checkpoint["data_hashes"]["scaler.json"] == hashlib.sha256((data / "scaler.json").read_bytes()).hexdigest()
     assert checkpoint["metadata"]["source_sha256"] == "a" * 64
+    assert checkpoint["provenance"]["git_commit_tree"] == subprocess.check_output(
+        ["git", "rev-parse", "HEAD^{tree}"], cwd=Path(__file__).resolve().parents[1], text=True).strip()
     labels = np.array([0, 8, 0], dtype=np.int64)
     a = generate(out1 / "best.pt", labels, seed=30)
     b = generate(out2 / "best.pt", labels, seed=30)
@@ -162,7 +172,8 @@ def test_provenance_and_input_mismatches_fail_closed(tmp_path, violation):
 @pytest.mark.parametrize("key,value", [("epochs", 0), ("batch_size", -1), ("seed", -1),
     ("latent_dim", True), ("lr_g", float("nan")), ("device", "magic"),
     ("num_threads", 0), ("unconditional", "false"), ("validation_samples", 0),
-    ("max_train_samples", 0), ("patience", 0), ("unknown", 1)])
+    ("max_train_samples", 0), ("patience", 0), ("unknown", 1),
+    ("normalization", "robust"), ("normalization", None), ("normalization", [])])
 def test_invalid_config_rejected(tmp_path, key, value):
     data = prepared(tmp_path)
     with pytest.raises(ValueError):
@@ -232,3 +243,52 @@ def test_constant_scaler_inverse_preserves_raw_model_output(tmp_path):
     torch.save(saved, out/'constant.pt')
     # Forward normalization uses denominator1 if span0, so its inverse is y+min.
     np.testing.assert_array_equal(generate(out/'constant.pt', np.array([0])), np.full((1,24), 3.))
+
+
+def test_standard_transform_fits_complete_train_and_applies_to_validation(tmp_path, monkeypatch):
+    data = prepared(tmp_path)
+    import fluvius_cgan.training as training
+    observed = []
+    original = training._normalized
+
+    def observe(x, scaler):
+        values = original(x, scaler)
+        observed.append((x.copy(), values.copy(), scaler.copy()))
+        return values
+
+    monkeypatch.setattr(training, "_normalized", observe)
+    out = tmp_path / "run"
+    train(data, out, settings(epochs=1, max_train_samples=1, normalization="standard"))
+    checkpoint = torch.load(out / "best.pt", weights_only=True)
+    full_train = np.load(data / "train.npz")["x"].astype(np.float64)
+    mean, std = float(full_train.mean()), float(full_train.std())
+    assert checkpoint["scaler"]["mean"] == mean
+    assert checkpoint["scaler"]["std"] == std
+    assert observed[0][0].shape == (1, 24)
+    assert float(observed[0][0].mean()) != pytest.approx(mean)
+    assert len(observed) == 2
+    for raw, normalized, scaler in observed:
+        np.testing.assert_array_equal(normalized, ((raw.astype(np.float64) - mean) / std).astype(np.float32))
+        assert scaler == checkpoint["scaler"]
+    assert observed[1][1].min() > 1  # Validation is not fitted or clipped.
+
+
+@pytest.mark.parametrize("constant", [False, True])
+def test_standard_inverse_preserves_model_output_and_zero_std(tmp_path, constant):
+    data = prepared(tmp_path)
+    if constant:
+        change_npz(data / "train.npz", x=np.full((8, 24), 2., dtype=np.float32))
+        (data / "scaler.json").write_text('{"minimum": 2.0, "maximum": 2.0}')
+    out = tmp_path / "run"
+    train(data, out, settings(epochs=1, normalization="standard"))
+    checkpoint = torch.load(out / "best.pt", weights_only=True)
+    if constant:
+        assert checkpoint["scaler"]["std"] == 0
+    for key, value in checkpoint["generator_state_dict"].items():
+        checkpoint["generator_state_dict"][key] = torch.zeros_like(value)
+    final_bias = [key for key in checkpoint["generator_state_dict"] if key.endswith("bias")][-1]
+    checkpoint["generator_state_dict"][final_bias].fill_(2.)
+    torch.save(checkpoint, out / "fixed.pt")
+    scaler = checkpoint["scaler"]
+    expected = np.float32(scaler["mean"] + 2 * (scaler["std"] or 1.))
+    np.testing.assert_array_equal(generate(out / "fixed.pt", np.array([0, 8])), np.full((2, 24), expected))

@@ -31,7 +31,7 @@ DEFAULT_CONFIG = {
     "epochs": 100, "batch_size": 256, "seed": 42, "latent_dim": 24,
     "hidden_dim": 64, "lr_g": 1e-4, "lr_d": 2e-4, "device": "cpu",
     "num_threads": 1, "unconditional": False, "validation_samples": 2048,
-    "max_train_samples": None, "patience": None,
+    "max_train_samples": None, "patience": None, "normalization": "minmax",
 }
 VALIDATION_METRIC = "mean_interval_wasserstein_normalized"
 CHECKPOINT_FORMAT = 1
@@ -65,6 +65,8 @@ def _config(config):
         result[name] = float(value)
     if not isinstance(result["unconditional"], bool):
         raise ValueError("unconditional must be a boolean")
+    if result["normalization"] not in ("minmax", "standard"):
+        raise ValueError("normalization must be minmax or standard")
     if result["device"] == "auto":
         result["device"] = "cuda" if torch.cuda.is_available() else "cpu"
     if not isinstance(result["device"], str) or not re.fullmatch(r"cpu|cuda(?::\d+)?", result["device"]):
@@ -214,7 +216,8 @@ def _atomic_checkpoint(path, checkpoint):
 
 def _provenance(device):
     root = Path(__file__).resolve().parents[2]
-    result = {"git_commit": None, "git_dirty": None, "python": platform.python_version(),
+    result = {"git_commit": None, "git_commit_tree": None, "git_dirty": None,
+              "python": platform.python_version(),
               "numpy": str(np.__version__), "torch": str(torch.__version__),
               "hardware": {"platform": platform.platform(), "machine": platform.machine(),
                            "processor": platform.processor(), "cpu_count": os.cpu_count(),
@@ -223,6 +226,8 @@ def _provenance(device):
     try:
         result["git_commit"] = subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=root, text=True, stderr=subprocess.DEVNULL).strip()
+        result["git_commit_tree"] = subprocess.check_output(
+            ["git", "rev-parse", "HEAD^{tree}"], cwd=root, text=True, stderr=subprocess.DEVNULL).strip()
         result["git_dirty"] = bool(subprocess.check_output(
             ["git", "status", "--porcelain"], cwd=root, text=True, stderr=subprocess.DEVNULL).strip())
     except (OSError, subprocess.SubprocessError):
@@ -267,9 +272,28 @@ def _conditions(labels, condition_dim, device):
     return F.one_hot(torch.as_tensor(labels, dtype=torch.int64, device=device), num_classes=condition_dim).float()
 
 
+def _scaler_parameters(scaler):
+    """Return the affine offset/scale, including legacy min/max checkpoints."""
+    minimum, maximum = scaler.get("minimum"), scaler.get("maximum")
+    if any(isinstance(v, bool) or not isinstance(v, Real) or not math.isfinite(v)
+           for v in (minimum, maximum)) or maximum < minimum or not math.isfinite(maximum - minimum):
+        raise ValueError("invalid checkpoint scaler")
+    kind = scaler.get("kind", "minmax")
+    if kind == "minmax":
+        offset, scale = minimum, maximum - minimum
+    elif kind == "standard":
+        offset, scale = scaler.get("mean"), scaler.get("std")
+        if any(isinstance(v, bool) or not isinstance(v, Real) or not math.isfinite(v)
+               for v in (offset, scale)) or scale < 0:
+            raise ValueError("invalid standard scaler mean/std")
+    else:
+        raise ValueError("invalid checkpoint scaler kind")
+    return offset, scale if scale else 1.0
+
+
 def _normalized(x, scaler):
-    span = scaler["maximum"] - scaler["minimum"]
-    values = ((x.astype(np.float64) - scaler["minimum"]) / (span if span else 1.0)).astype(np.float32)
+    offset, scale = _scaler_parameters(scaler)
+    values = ((x.astype(np.float64) - offset) / scale).astype(np.float32)
     if not np.isfinite(values).all():
         raise ValueError("normalization produced nonfinite values")
     return values
@@ -332,6 +356,13 @@ def train(prepared_dir, output_dir, config: dict) -> dict:
 
 def _train(prepared_dir, output_dir, config, started):
     full_train, val, metadata, scaler, hashes = _load_prepared(prepared_dir)
+    if config["normalization"] == "standard":
+        # Fit a single population mean/std over all prepared TRAIN values, before
+        # smoke subsampling. Keep the verified original min/max and file hashes.
+        values = full_train["x"].astype(np.float64)
+        scaler = {**scaler, "kind": "standard", "mean": float(values.mean()),
+                  "std": float(values.std())}
+        del values
     subset_rng = np.random.default_rng(config["seed"])
     count = len(full_train["x"])
     selected = np.arange(count, dtype=np.int64)
@@ -456,7 +487,7 @@ def _train(prepared_dir, output_dir, config, started):
         "resolution": metadata["resolution"], "target": metadata["target"],
         "units": metadata["units"], "selection": selection,
         "data_hashes": hashes, "source_sha256": metadata["source_sha256"],
-        "provenance": provenance,
+        "provenance": provenance, "scaler": scaler,
         "elapsed_seconds": time.perf_counter() - started,
         "best_checkpoint": "best.pt", "last_checkpoint": "last.pt",
         "test_used": False,
@@ -492,9 +523,9 @@ def generate(checkpoint, labels: np.ndarray, seed=42, batch_size=1024) -> np.nda
     missing = sorted(set(labels.tolist()) - set(support))
     if missing:
         raise ValueError(f"unsupported generation labels absent from training: {missing}")
-    minimum, maximum = saved["scaler"].get("minimum"), saved["scaler"].get("maximum")
-    if any(isinstance(v, bool) or not isinstance(v, Real) or not math.isfinite(v) for v in (minimum, maximum)) or maximum < minimum or not math.isfinite(maximum - minimum):
-        raise ValueError("invalid checkpoint scaler")
+    offset, scale = _scaler_parameters(saved["scaler"])
+    if saved["scaler"].get("kind", "minmax") != config["normalization"]:
+        raise ValueError("checkpoint scaler kind disagrees with normalization config")
     with _deterministic(seed, config["num_threads"], torch.device("cpu")):
         generator = Generator(config["latent_dim"], condition_dim, config["hidden_dim"], saved["output_dim"])
         generator.load_state_dict(saved["generator_state_dict"], strict=True)
@@ -507,8 +538,7 @@ def generate(checkpoint, labels: np.ndarray, seed=42, batch_size=1024) -> np.nda
                 stop = start + batch_size
                 conditions = _conditions(labels[start:stop], condition_dim, torch.device("cpu"))
                 result[start:stop] = generator(noise[start:stop], conditions).numpy()
-    span = maximum - minimum
-    result = (result.astype(np.float64) * (span if span else 1.0) + minimum).astype(np.float32)
+    result = (result.astype(np.float64) * scale + offset).astype(np.float32)
     if not np.isfinite(result).all():
         raise ValueError("generator produced nonfinite profiles")
     return result

@@ -1,0 +1,2716 @@
+{
+  "status": "Executed full-data ten-epoch pilot only; underperforms empirical baselines; not publication evidence.",
+  "date": "2026-10-20",
+  "config": {
+    "batch_size": 1024,
+    "device": "cpu",
+    "epochs": 10,
+    "hidden_dim": 64,
+    "latent_dim": 24,
+    "lr_d": 0.0002,
+    "lr_g": 0.0001,
+    "max_train_samples": null,
+    "num_threads": 2,
+    "patience": null,
+    "seed": 42,
+    "unconditional": false,
+    "validation_samples": 2048
+  },
+  "training": {
+    "best_checkpoint": "best.pt",
+    "best_epoch": 9,
+    "best_validation_score": 0.052306071421052515,
+    "condition_dim": 64,
+    "data_hashes": {
+      "metadata.json": "36b40313730d206ba3195c228807e184044aa98f35c21a05a4b4fa144539fc63",
+      "scaler.json": "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb",
+      "train.npz": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+      "val.npz": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d"
+    },
+    "elapsed_seconds": 153.32974577799905,
+    "epochs_completed": 10,
+    "last_checkpoint": "last.pt",
+    "provenance": {
+      "git_commit": "de1188249e704d47d0951371d2dd25803db66e93",
+      "git_dirty": false,
+      "hardware": {
+        "cpu_count": 9,
+        "cuda_device": null,
+        "device": "cpu",
+        "machine": "x86_64",
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+        "processor": "x86_64"
+      },
+      "numpy": "2.3.5",
+      "python": "3.12.14",
+      "torch": "2.14.1+cu130"
+    },
+    "resolution": 96,
+    "selection": {
+      "train_indices_sha256": "e96bc3620ea1565eb81c98163d640957325565413a994dc249c22530f01c07dd",
+      "train_profiles_available": 611520,
+      "train_profiles_used": 611520,
+      "validation_labels_sha256": "ccaa6a17fd9c3da1976ebc4e007b42165b11372fcabdea837ce5390f1dbcced7",
+      "validation_noise_sha256": "b23da629252a798a5e893f78080dc8062b9caeeaa95c5e6cbbec08c9c202f62d",
+      "validation_profiles_available": 131040,
+      "validation_profiles_eligible": 131040,
+      "validation_profiles_used": 2048,
+      "validation_unsupported_profiles": 0
+    },
+    "source_sha256": "934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8",
+    "stopped_early": false,
+    "supported_labels": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "target": "net",
+    "test_used": false,
+    "units": "kWh/interval",
+    "validation_metric": "mean_interval_wasserstein_normalized"
+  },
+  "source_revision": {
+    "local_execution_commit": "de1188249e704d47d0951371d2dd25803db66e93",
+    "published_equivalent_commit": "3eca990e3a46a3705672a79b2bedf47ad9d533ae",
+    "identical_git_tree": "fabecfe4047ef74975b35248f8e222fe22d3aa05",
+    "note": "GitHub connector recreated commits with GitHub attribution; source tree equality was verified."
+  },
+  "evaluation": {
+    "split": "val",
+    "seed": 2026,
+    "samples_per_condition_cap": 100,
+    "units": "kWh/interval",
+    "target": "net",
+    "checkpoint_sha256": "06792d7751e72d0a38bd8633d5f5e55a595b6589e8e500d1238772584cb9812c",
+    "train_sha256": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+    "evaluation_sha256": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d",
+    "profile_count": 6400,
+    "meter_count": 360,
+    "training_profiles": {
+      "prepared": 611520,
+      "model": 611520,
+      "baselines": 611520
+    },
+    "sampling": "Uniform without replacement within each observed condition; macro averages weight conditions equally.",
+    "nearest_neighbors": {
+      "reference_scope": "sampled_training_profiles",
+      "total_counts": {
+        "train": 611520,
+        "generated": 6400,
+        "heldout": 6400
+      },
+      "sample_counts": {
+        "train": 1000,
+        "generated": 1000,
+        "heldout": 1000
+      },
+      "seed": 2026,
+      "distance_units": "kWh/interval (Euclidean RMS across slots)",
+      "generated_to_train_mean_rms_kwh": 0.6086792839289576,
+      "generated_to_train_median_rms_kwh": 0.5997167872611051,
+      "generated_to_train_p05_rms_kwh": 0.5478600487818712,
+      "generated_to_train_p95_rms_kwh": 0.6954382533619247,
+      "generated_exact_copy_fraction": 0.0,
+      "heldout_to_train_mean_rms_kwh": 0.1639251282815294,
+      "heldout_to_train_median_rms_kwh": 0.1281500913867234,
+      "heldout_to_train_p05_rms_kwh": 0.020547058457347802,
+      "heldout_to_train_p95_rms_kwh": 0.4403476977767164,
+      "heldout_exact_copy_fraction": 0.0
+    },
+    "raw_output": {
+      "minimum_kwh": -1.5687978267669678,
+      "maximum_kwh": 2.9826228618621826,
+      "negative_fraction": 0.3119840494791667,
+      "negative_values_valid_for_target": true,
+      "clipping_applied": false
+    },
+    "interpretation": "Descriptive held-out diagnostics; no privacy guarantee or significance claim. Repeated test use invalidates a final untouched-test claim."
+  },
+  "methods": {
+    "cgan": {
+      "overall": {
+        "n_real": 6400,
+        "n_generated": 6400,
+        "n_intervals": 96,
+        "interval_hours": 0.25,
+        "pointwise_wasserstein_kwh": 0.5296748249490509,
+        "daily_energy_wasserstein_kwh": 13.395169100441677,
+        "peak_power_wasserstein_kw": 4.1819875879921895,
+        "ramp_wasserstein_kw": 2.5228543091941464,
+        "mean_profile_rmse_kwh": 0.6172005868055351,
+        "pointwise_variance_rmse_kwh2": 0.09478076136212807,
+        "real_mean_daily_energy_kwh": 11.639102508503893,
+        "generated_mean_daily_energy_kwh": 24.53729354542369,
+        "real_mean_peak_power_kw": 3.0686786213926096,
+        "generated_mean_peak_power_kw": 7.053578216955065,
+        "real_mean_ramp_kw": 7.936128632526992e-05,
+        "generated_mean_ramp_kw": -0.009011699195078875,
+        "real_mean_pointwise_variance_kwh2": 0.11930266670665847,
+        "generated_mean_pointwise_variance_kwh2": 0.034797777902968625,
+        "diversity_ratio": 0.29167644666761255,
+        "real_constant_profile_count": 22,
+        "generated_constant_profile_count": 0,
+        "autocorrelation": {
+          "1": {
+            "lag_hours": 0.25,
+            "real_mean": 0.6727450496266504,
+            "generated_mean": 0.029388104576216573,
+            "mean_difference_abs": 0.6433569450504338,
+            "wasserstein": 0.6524955764003432
+          },
+          "4": {
+            "lag_hours": 1.0,
+            "real_mean": 0.35063129455263287,
+            "generated_mean": -0.047633338529174986,
+            "mean_difference_abs": 0.3982646330818079,
+            "wasserstein": 0.4039013936867865
+          },
+          "24": {
+            "lag_hours": 6.0,
+            "real_mean": -0.09445569126878452,
+            "generated_mean": -0.059325608636823145,
+            "mean_difference_abs": 0.03513008263196137,
+            "wasserstein": 0.09528205042898857
+          }
+        }
+      },
+      "macro": {
+        "daily_energy_wasserstein_kwh": 14.189360214060798,
+        "diversity_ratio": 0.45127424423370344,
+        "generated_mean_daily_energy_kwh": 24.537293545423687,
+        "generated_mean_peak_power_kw": 7.053578216955066,
+        "generated_mean_pointwise_variance_kwh2": 0.021828219849307516,
+        "generated_mean_ramp_kw": -0.009011699195078875,
+        "mean_profile_rmse_kwh": 0.6268718669795056,
+        "peak_power_wasserstein_kw": 4.232336412850854,
+        "pointwise_variance_rmse_kwh2": 0.11053056567199934,
+        "pointwise_wasserstein_kwh": 0.5374582146435014,
+        "ramp_wasserstein_kw": 2.523131152107426,
+        "real_mean_daily_energy_kwh": 11.639102508503893,
+        "real_mean_peak_power_kw": 3.0686786213926096,
+        "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+        "real_mean_ramp_kw": 7.936128632526989e-05,
+        "autocorrelation": {
+          "1": {
+            "lag_hours": 0.25,
+            "real_mean": 0.6727450496266503,
+            "generated_mean": 0.029388104576216573,
+            "mean_difference_abs": 0.6433569450504337,
+            "wasserstein": 0.6528039136456072
+          },
+          "4": {
+            "lag_hours": 1.0,
+            "real_mean": 0.3506312945526328,
+            "generated_mean": -0.04763333852917499,
+            "mean_difference_abs": 0.39826463308180776,
+            "wasserstein": 0.40450778045090285
+          },
+          "24": {
+            "lag_hours": 6.0,
+            "real_mean": -0.09445569126878453,
+            "generated_mean": -0.059325608636823145,
+            "mean_difference_abs": 0.05138270690426021,
+            "wasserstein": 0.0977944404985349
+          }
+        }
+      },
+      "macro_undefined_condition_counts": {},
+      "n_conditions": 64,
+      "counts": {
+        "real": {
+          "0": 100,
+          "1": 100,
+          "2": 100,
+          "3": 100,
+          "4": 100,
+          "5": 100,
+          "6": 100,
+          "7": 100,
+          "8": 100,
+          "9": 100,
+          "10": 100,
+          "11": 100,
+          "12": 100,
+          "13": 100,
+          "14": 100,
+          "15": 100,
+          "16": 100,
+          "17": 100,
+          "18": 100,
+          "19": 100,
+          "20": 100,
+          "21": 100,
+          "22": 100,
+          "23": 100,
+          "24": 100,
+          "25": 100,
+          "26": 100,
+          "27": 100,
+          "28": 100,
+          "29": 100,
+          "30": 100,
+          "31": 100,
+          "32": 100,
+          "33": 100,
+          "34": 100,
+          "35": 100,
+          "36": 100,
+          "37": 100,
+          "38": 100,
+          "39": 100,
+          "40": 100,
+          "41": 100,
+          "42": 100,
+          "43": 100,
+          "44": 100,
+          "45": 100,
+          "46": 100,
+          "47": 100,
+          "48": 100,
+          "49": 100,
+          "50": 100,
+          "51": 100,
+          "52": 100,
+          "53": 100,
+          "54": 100,
+          "55": 100,
+          "56": 100,
+          "57": 100,
+          "58": 100,
+          "59": 100,
+          "60": 100,
+          "61": 100,
+          "62": 100,
+          "63": 100
+        },
+        "generated": {
+          "0": 100,
+          "1": 100,
+          "2": 100,
+          "3": 100,
+          "4": 100,
+          "5": 100,
+          "6": 100,
+          "7": 100,
+          "8": 100,
+          "9": 100,
+          "10": 100,
+          "11": 100,
+          "12": 100,
+          "13": 100,
+          "14": 100,
+          "15": 100,
+          "16": 100,
+          "17": 100,
+          "18": 100,
+          "19": 100,
+          "20": 100,
+          "21": 100,
+          "22": 100,
+          "23": 100,
+          "24": 100,
+          "25": 100,
+          "26": 100,
+          "27": 100,
+          "28": 100,
+          "29": 100,
+          "30": 100,
+          "31": 100,
+          "32": 100,
+          "33": 100,
+          "34": 100,
+          "35": 100,
+          "36": 100,
+          "37": 100,
+          "38": 100,
+          "39": 100,
+          "40": 100,
+          "41": 100,
+          "42": 100,
+          "43": 100,
+          "44": 100,
+          "45": 100,
+          "46": 100,
+          "47": 100,
+          "48": 100,
+          "49": 100,
+          "50": 100,
+          "51": 100,
+          "52": 100,
+          "53": 100,
+          "54": 100,
+          "55": 100,
+          "56": 100,
+          "57": 100,
+          "58": 100,
+          "59": 100,
+          "60": 100,
+          "61": 100,
+          "62": 100,
+          "63": 100
+        }
+      }
+    },
+    "conditional_resampling": {
+      "overall": {
+        "n_real": 6400,
+        "n_generated": 6400,
+        "n_intervals": 96,
+        "interval_hours": 0.25,
+        "pointwise_wasserstein_kwh": 0.01330454960734509,
+        "daily_energy_wasserstein_kwh": 0.6131407706346907,
+        "peak_power_wasserstein_kw": 0.15935450480443258,
+        "ramp_wasserstein_kw": 0.008509069864070556,
+        "mean_profile_rmse_kwh": 0.007616672190765009,
+        "pointwise_variance_rmse_kwh2": 0.023483512066587435,
+        "real_mean_daily_energy_kwh": 11.639102508503893,
+        "generated_mean_daily_energy_kwh": 11.558646686294287,
+        "real_mean_peak_power_kw": 3.0686786213926096,
+        "generated_mean_peak_power_kw": 3.2194943765762583,
+        "real_mean_ramp_kw": 7.936128632526992e-05,
+        "generated_mean_ramp_kw": 0.00016929604933600212,
+        "real_mean_pointwise_variance_kwh2": 0.11930266670665847,
+        "generated_mean_pointwise_variance_kwh2": 0.12988524055384562,
+        "diversity_ratio": 1.0887035817330688,
+        "real_constant_profile_count": 22,
+        "generated_constant_profile_count": 4,
+        "autocorrelation": {
+          "1": {
+            "lag_hours": 0.25,
+            "real_mean": 0.6727450496266504,
+            "generated_mean": 0.6907347432838342,
+            "mean_difference_abs": 0.017989693657183836,
+            "wasserstein": 0.018069314586789696
+          },
+          "4": {
+            "lag_hours": 1.0,
+            "real_mean": 0.35063129455263287,
+            "generated_mean": 0.3554703566286911,
+            "mean_difference_abs": 0.00483906207605822,
+            "wasserstein": 0.006233657101560573
+          },
+          "24": {
+            "lag_hours": 6.0,
+            "real_mean": -0.09445569126878452,
+            "generated_mean": -0.09754228421566477,
+            "mean_difference_abs": 0.003086592946880254,
+            "wasserstein": 0.0048578248123400955
+          }
+        }
+      },
+      "macro": {
+        "daily_energy_wasserstein_kwh": 2.986623341057621,
+        "diversity_ratio": 1.1591725321916568,
+        "generated_mean_daily_energy_kwh": 11.558646686294287,
+        "generated_mean_peak_power_kw": 3.2194943765762583,
+        "generated_mean_pointwise_variance_kwh2": 0.10587681303737956,
+        "generated_mean_ramp_kw": 0.0001692960493360021,
+        "mean_profile_rmse_kwh": 0.04774568403254613,
+        "peak_power_wasserstein_kw": 0.49511299506244544,
+        "pointwise_variance_rmse_kwh2": 0.07851198594927829,
+        "pointwise_wasserstein_kwh": 0.05454152835608986,
+        "ramp_wasserstein_kw": 0.03272261461320003,
+        "real_mean_daily_energy_kwh": 11.639102508503893,
+        "real_mean_peak_power_kw": 3.0686786213926096,
+        "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+        "real_mean_ramp_kw": 7.936128632526989e-05,
+        "autocorrelation": {
+          "1": {
+            "lag_hours": 0.25,
+            "real_mean": 0.6727450496266503,
+            "generated_mean": 0.6907347432838342,
+            "mean_difference_abs": 0.0323734513850476,
+            "wasserstein": 0.04591208615292118
+          },
+          "4": {
+            "lag_hours": 1.0,
+            "real_mean": 0.3506312945526328,
+            "generated_mean": 0.3554703566286911,
+            "mean_difference_abs": 0.030761281579332292,
+            "wasserstein": 0.04282632465787277
+          },
+          "24": {
+            "lag_hours": 6.0,
+            "real_mean": -0.09445569126878453,
+            "generated_mean": -0.09754228421566477,
+            "mean_difference_abs": 0.016189559428522488,
+            "wasserstein": 0.024549149851498767
+          }
+        }
+      },
+      "macro_undefined_condition_counts": {},
+      "n_conditions": 64,
+      "counts": {
+        "real": {
+          "0": 100,
+          "1": 100,
+          "2": 100,
+          "3": 100,
+          "4": 100,
+          "5": 100,
+          "6": 100,
+          "7": 100,
+          "8": 100,
+          "9": 100,
+          "10": 100,
+          "11": 100,
+          "12": 100,
+          "13": 100,
+          "14": 100,
+          "15": 100,
+          "16": 100,
+          "17": 100,
+          "18": 100,
+          "19": 100,
+          "20": 100,
+          "21": 100,
+          "22": 100,
+          "23": 100,
+          "24": 100,
+          "25": 100,
+          "26": 100,
+          "27": 100,
+          "28": 100,
+          "29": 100,
+          "30": 100,
+          "31": 100,
+          "32": 100,
+          "33": 100,
+          "34": 100,
+          "35": 100,
+          "36": 100,
+          "37": 100,
+          "38": 100,
+          "39": 100,
+          "40": 100,
+          "41": 100,
+          "42": 100,
+          "43": 100,
+          "44": 100,
+          "45": 100,
+          "46": 100,
+          "47": 100,
+          "48": 100,
+          "49": 100,
+          "50": 100,
+          "51": 100,
+          "52": 100,
+          "53": 100,
+          "54": 100,
+          "55": 100,
+          "56": 100,
+          "57": 100,
+          "58": 100,
+          "59": 100,
+          "60": 100,
+          "61": 100,
+          "62": 100,
+          "63": 100
+        },
+        "generated": {
+          "0": 100,
+          "1": 100,
+          "2": 100,
+          "3": 100,
+          "4": 100,
+          "5": 100,
+          "6": 100,
+          "7": 100,
+          "8": 100,
+          "9": 100,
+          "10": 100,
+          "11": 100,
+          "12": 100,
+          "13": 100,
+          "14": 100,
+          "15": 100,
+          "16": 100,
+          "17": 100,
+          "18": 100,
+          "19": 100,
+          "20": 100,
+          "21": 100,
+          "22": 100,
+          "23": 100,
+          "24": 100,
+          "25": 100,
+          "26": 100,
+          "27": 100,
+          "28": 100,
+          "29": 100,
+          "30": 100,
+          "31": 100,
+          "32": 100,
+          "33": 100,
+          "34": 100,
+          "35": 100,
+          "36": 100,
+          "37": 100,
+          "38": 100,
+          "39": 100,
+          "40": 100,
+          "41": 100,
+          "42": 100,
+          "43": 100,
+          "44": 100,
+          "45": 100,
+          "46": 100,
+          "47": 100,
+          "48": 100,
+          "49": 100,
+          "50": 100,
+          "51": 100,
+          "52": 100,
+          "53": 100,
+          "54": 100,
+          "55": 100,
+          "56": 100,
+          "57": 100,
+          "58": 100,
+          "59": 100,
+          "60": 100,
+          "61": 100,
+          "62": 100,
+          "63": 100
+        }
+      }
+    },
+    "conditional_mean": {
+      "overall": {
+        "n_real": 6400,
+        "n_generated": 6400,
+        "n_intervals": 96,
+        "interval_hours": 0.25,
+        "pointwise_wasserstein_kwh": 0.11601675989604633,
+        "daily_energy_wasserstein_kwh": 4.393212270736729,
+        "peak_power_wasserstein_kw": 2.127126952044869,
+        "ramp_wasserstein_kw": 0.23885371675774075,
+        "mean_profile_rmse_kwh": 0.005480116362508384,
+        "pointwise_variance_rmse_kwh2": 0.10381952885891055,
+        "real_mean_daily_energy_kwh": 11.639102508503893,
+        "generated_mean_daily_energy_kwh": 11.599030279491403,
+        "real_mean_peak_power_kw": 3.0686786213926096,
+        "generated_mean_peak_power_kw": 0.9704631488190717,
+        "real_mean_ramp_kw": 7.936128632526992e-05,
+        "generated_mean_ramp_kw": 0.00018998847935924103,
+        "real_mean_pointwise_variance_kwh2": 0.11930266670665847,
+        "generated_mean_pointwise_variance_kwh2": 0.02153294519225514,
+        "diversity_ratio": 0.1804900576547913,
+        "real_constant_profile_count": 22,
+        "generated_constant_profile_count": 0,
+        "autocorrelation": {
+          "1": {
+            "lag_hours": 0.25,
+            "real_mean": 0.6727450496266504,
+            "generated_mean": 0.962829507668467,
+            "mean_difference_abs": 0.2900844580418166,
+            "wasserstein": 0.29008445804181654
+          },
+          "4": {
+            "lag_hours": 1.0,
+            "real_mean": 0.35063129455263287,
+            "generated_mean": 0.78805799375202,
+            "mean_difference_abs": 0.43742669919938715,
+            "wasserstein": 0.4374266991993872
+          },
+          "24": {
+            "lag_hours": 6.0,
+            "real_mean": -0.09445569126878452,
+            "generated_mean": -0.18116536467624175,
+            "mean_difference_abs": 0.08670967340745724,
+            "wasserstein": 0.09366504472218912
+          }
+        }
+      },
+      "macro": {
+        "daily_energy_wasserstein_kwh": 10.18974856679342,
+        "diversity_ratio": 8.078669122663343e-31,
+        "generated_mean_daily_energy_kwh": 11.599030279491402,
+        "generated_mean_peak_power_kw": 0.9704631488190718,
+        "generated_mean_pointwise_variance_kwh2": 7.459470937094998e-32,
+        "generated_mean_ramp_kw": 0.000189988479359241,
+        "mean_profile_rmse_kwh": 0.0384879315223951,
+        "peak_power_wasserstein_kw": 2.229067412005654,
+        "pointwise_variance_rmse_kwh2": 0.12413530699861512,
+        "pointwise_wasserstein_kwh": 0.17676992456148474,
+        "ramp_wasserstein_kw": 0.23938902500665307,
+        "real_mean_daily_energy_kwh": 11.639102508503893,
+        "real_mean_peak_power_kw": 3.0686786213926096,
+        "real_mean_pointwise_variance_kwh2": 0.09773619415290288,
+        "real_mean_ramp_kw": 7.936128632526989e-05,
+        "autocorrelation": {
+          "1": {
+            "lag_hours": 0.25,
+            "real_mean": 0.6727450496266503,
+            "generated_mean": 0.962829507668467,
+            "mean_difference_abs": 0.2900844580418167,
+            "wasserstein": 0.29095946886775786
+          },
+          "4": {
+            "lag_hours": 1.0,
+            "real_mean": 0.3506312945526328,
+            "generated_mean": 0.7880579937520199,
+            "mean_difference_abs": 0.43742669919938715,
+            "wasserstein": 0.4470845120444039
+          },
+          "24": {
+            "lag_hours": 6.0,
+            "real_mean": -0.09445569126878453,
+            "generated_mean": -0.18116536467624178,
+            "mean_difference_abs": 0.14933589760797228,
+            "wasserstein": 0.17670270441545155
+          }
+        }
+      },
+      "macro_undefined_condition_counts": {},
+      "n_conditions": 64,
+      "counts": {
+        "real": {
+          "0": 100,
+          "1": 100,
+          "2": 100,
+          "3": 100,
+          "4": 100,
+          "5": 100,
+          "6": 100,
+          "7": 100,
+          "8": 100,
+          "9": 100,
+          "10": 100,
+          "11": 100,
+          "12": 100,
+          "13": 100,
+          "14": 100,
+          "15": 100,
+          "16": 100,
+          "17": 100,
+          "18": 100,
+          "19": 100,
+          "20": 100,
+          "21": 100,
+          "22": 100,
+          "23": 100,
+          "24": 100,
+          "25": 100,
+          "26": 100,
+          "27": 100,
+          "28": 100,
+          "29": 100,
+          "30": 100,
+          "31": 100,
+          "32": 100,
+          "33": 100,
+          "34": 100,
+          "35": 100,
+          "36": 100,
+          "37": 100,
+          "38": 100,
+          "39": 100,
+          "40": 100,
+          "41": 100,
+          "42": 100,
+          "43": 100,
+          "44": 100,
+          "45": 100,
+          "46": 100,
+          "47": 100,
+          "48": 100,
+          "49": 100,
+          "50": 100,
+          "51": 100,
+          "52": 100,
+          "53": 100,
+          "54": 100,
+          "55": 100,
+          "56": 100,
+          "57": 100,
+          "58": 100,
+          "59": 100,
+          "60": 100,
+          "61": 100,
+          "62": 100,
+          "63": 100
+        },
+        "generated": {
+          "0": 100,
+          "1": 100,
+          "2": 100,
+          "3": 100,
+          "4": 100,
+          "5": 100,
+          "6": 100,
+          "7": 100,
+          "8": 100,
+          "9": 100,
+          "10": 100,
+          "11": 100,
+          "12": 100,
+          "13": 100,
+          "14": 100,
+          "15": 100,
+          "16": 100,
+          "17": 100,
+          "18": 100,
+          "19": 100,
+          "20": 100,
+          "21": 100,
+          "22": 100,
+          "23": 100,
+          "24": 100,
+          "25": 100,
+          "26": 100,
+          "27": 100,
+          "28": 100,
+          "29": 100,
+          "30": 100,
+          "31": 100,
+          "32": 100,
+          "33": 100,
+          "34": 100,
+          "35": 100,
+          "36": 100,
+          "37": 100,
+          "38": 100,
+          "39": 100,
+          "40": 100,
+          "41": 100,
+          "42": 100,
+          "43": 100,
+          "44": 100,
+          "45": 100,
+          "46": 100,
+          "47": 100,
+          "48": 100,
+          "49": 100,
+          "50": 100,
+          "51": 100,
+          "52": 100,
+          "53": 100,
+          "54": 100,
+          "55": 100,
+          "56": 100,
+          "57": 100,
+          "58": 100,
+          "59": 100,
+          "60": 100,
+          "61": 100,
+          "62": 100,
+          "63": 100
+        }
+      }
+    }
+  },
+  "per_condition_primary_metrics": {
+    "cgan": {
+      "0": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5029355980754792,
+        "daily_energy_wasserstein_kwh": 7.753422363939499,
+        "peak_power_wasserstein_kw": 4.785242225676775,
+        "ramp_wasserstein_kw": 2.598667025994642,
+        "diversity_ratio": 0.7658812403857319
+      },
+      "1": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5121644557185988,
+        "daily_energy_wasserstein_kwh": 10.962919798101739,
+        "peak_power_wasserstein_kw": 4.841105935573578,
+        "ramp_wasserstein_kw": 2.6372715885428835,
+        "diversity_ratio": 1.089561828169345
+      },
+      "2": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5081706639565139,
+        "daily_energy_wasserstein_kwh": 13.081977778681557,
+        "peak_power_wasserstein_kw": 4.984288088567554,
+        "ramp_wasserstein_kw": 2.5872151573867224,
+        "diversity_ratio": 3.06489872562054
+      },
+      "3": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5170257100894627,
+        "daily_energy_wasserstein_kwh": 14.315323273148312,
+        "peak_power_wasserstein_kw": 5.123480649441479,
+        "ramp_wasserstein_kw": 2.6075338262949006,
+        "diversity_ratio": 1.2694367097633374
+      },
+      "4": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5315881828466832,
+        "daily_energy_wasserstein_kwh": 15.091522695212406,
+        "peak_power_wasserstein_kw": 4.895826107710599,
+        "ramp_wasserstein_kw": 2.609364167952291,
+        "diversity_ratio": 0.7653691263045531
+      },
+      "5": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5369495647004904,
+        "daily_energy_wasserstein_kwh": 16.88850744943971,
+        "peak_power_wasserstein_kw": 4.82771381676197,
+        "ramp_wasserstein_kw": 2.6352856853773,
+        "diversity_ratio": 0.6419176884897797
+      },
+      "6": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.49607189512565597,
+        "daily_energy_wasserstein_kwh": 8.242534056266724,
+        "peak_power_wasserstein_kw": 4.602540012747051,
+        "ramp_wasserstein_kw": 2.584206850509688,
+        "diversity_ratio": 1.7932557596609664
+      },
+      "7": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5571164313162413,
+        "daily_energy_wasserstein_kwh": 21.462644914429692,
+        "peak_power_wasserstein_kw": 5.136018239706755,
+        "ramp_wasserstein_kw": 2.6681645827020866,
+        "diversity_ratio": 1.2463496301836687
+      },
+      "8": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.49781955900252955,
+        "daily_energy_wasserstein_kwh": 7.016284922188788,
+        "peak_power_wasserstein_kw": 3.993780039921403,
+        "ramp_wasserstein_kw": 2.5340518653825366,
+        "diversity_ratio": 0.3420102857601014
+      },
+      "9": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5116371047298405,
+        "daily_energy_wasserstein_kwh": 19.641453754885,
+        "peak_power_wasserstein_kw": 4.944277044869959,
+        "ramp_wasserstein_kw": 2.5307610579061715,
+        "diversity_ratio": 1.0451401927009876
+      },
+      "10": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.50764364241884,
+        "daily_energy_wasserstein_kwh": 20.124548949858127,
+        "peak_power_wasserstein_kw": 5.26982933065854,
+        "ramp_wasserstein_kw": 2.4698972392019716,
+        "diversity_ratio": 0.5961179887495481
+      },
+      "11": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.4829248478787174,
+        "daily_energy_wasserstein_kwh": 9.282364795735846,
+        "peak_power_wasserstein_kw": 4.415643611862325,
+        "ramp_wasserstein_kw": 2.5030444676949655,
+        "diversity_ratio": 0.6790660869263992
+      },
+      "12": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5091458113555746,
+        "daily_energy_wasserstein_kwh": 12.127502688888926,
+        "peak_power_wasserstein_kw": 4.739129482656717,
+        "ramp_wasserstein_kw": 2.52530528398461,
+        "diversity_ratio": 0.3521558628395445
+      },
+      "13": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5202329364436006,
+        "daily_energy_wasserstein_kwh": 20.468615514274717,
+        "peak_power_wasserstein_kw": 5.147027118648404,
+        "ramp_wasserstein_kw": 2.5322377494157693,
+        "diversity_ratio": 0.6506069961572141
+      },
+      "14": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5394800109635612,
+        "daily_energy_wasserstein_kwh": 25.27379601429213,
+        "peak_power_wasserstein_kw": 5.345056345975027,
+        "ramp_wasserstein_kw": 2.5236682042608916,
+        "diversity_ratio": 0.5801617156048816
+      },
+      "15": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5089255108343849,
+        "daily_energy_wasserstein_kwh": 15.084792257926038,
+        "peak_power_wasserstein_kw": 5.240459352848121,
+        "ramp_wasserstein_kw": 2.595937947256949,
+        "diversity_ratio": 0.8535466057527819
+      },
+      "16": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5762402318293206,
+        "daily_energy_wasserstein_kwh": 12.259430469369764,
+        "peak_power_wasserstein_kw": 4.0490042343735695,
+        "ramp_wasserstein_kw": 2.6513186866900407,
+        "diversity_ratio": 0.13620565665517978
+      },
+      "17": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5464624949982749,
+        "daily_energy_wasserstein_kwh": 11.331477444869742,
+        "peak_power_wasserstein_kw": 3.9587057843804354,
+        "ramp_wasserstein_kw": 2.5339249396815613,
+        "diversity_ratio": 0.15900854372191156
+      },
+      "18": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.506953830820524,
+        "daily_energy_wasserstein_kwh": 6.059588535271468,
+        "peak_power_wasserstein_kw": 4.351846775412558,
+        "ramp_wasserstein_kw": 2.5945003800274264,
+        "diversity_ratio": 0.6785441008560342
+      },
+      "19": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5374837462003522,
+        "daily_energy_wasserstein_kwh": 8.4481527970593,
+        "peak_power_wasserstein_kw": 4.181918376237155,
+        "ramp_wasserstein_kw": 2.5824832516313827,
+        "diversity_ratio": 0.12647912401622918
+      },
+      "20": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5725406151274551,
+        "daily_energy_wasserstein_kwh": 11.122946597869124,
+        "peak_power_wasserstein_kw": 3.7882035848498345,
+        "ramp_wasserstein_kw": 2.513413994083785,
+        "diversity_ratio": 0.09519516500328198
+      },
+      "21": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5147518519420858,
+        "daily_energy_wasserstein_kwh": 3.8702441161702157,
+        "peak_power_wasserstein_kw": 3.250636694133283,
+        "ramp_wasserstein_kw": 2.4656616189922937,
+        "diversity_ratio": 0.1248137092758896
+      },
+      "22": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5271278223672686,
+        "daily_energy_wasserstein_kwh": 13.745745626747338,
+        "peak_power_wasserstein_kw": 4.3649547231197365,
+        "ramp_wasserstein_kw": 2.5799026377468715,
+        "diversity_ratio": 0.5339443286604909
+      },
+      "23": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5430849693311485,
+        "daily_energy_wasserstein_kwh": 11.16597894095379,
+        "peak_power_wasserstein_kw": 4.006399071812629,
+        "ramp_wasserstein_kw": 2.525149761460109,
+        "diversity_ratio": 0.17176977918173664
+      },
+      "24": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5470372765082417,
+        "daily_energy_wasserstein_kwh": 20.087288296695913,
+        "peak_power_wasserstein_kw": 4.6150511219399055,
+        "ramp_wasserstein_kw": 2.612149972399721,
+        "diversity_ratio": 0.3959057841365138
+      },
+      "25": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5309146989070844,
+        "daily_energy_wasserstein_kwh": 20.52050435501384,
+        "peak_power_wasserstein_kw": 4.991040180698036,
+        "ramp_wasserstein_kw": 2.553841715766656,
+        "diversity_ratio": 0.29056636695933813
+      },
+      "26": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.4868602825274199,
+        "daily_energy_wasserstein_kwh": 11.794021930597953,
+        "peak_power_wasserstein_kw": 4.227342853108421,
+        "ramp_wasserstein_kw": 2.408064808925418,
+        "diversity_ratio": 0.2098043781938961
+      },
+      "27": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.512255486480824,
+        "daily_energy_wasserstein_kwh": 14.9273755090146,
+        "peak_power_wasserstein_kw": 4.505201703719796,
+        "ramp_wasserstein_kw": 2.5395493461380245,
+        "diversity_ratio": 0.2662586037967799
+      },
+      "28": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.530599679891136,
+        "daily_energy_wasserstein_kwh": 12.461849858048877,
+        "peak_power_wasserstein_kw": 4.3164198474586,
+        "ramp_wasserstein_kw": 2.5776350203852147,
+        "diversity_ratio": 0.33184095547238
+      },
+      "29": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5351597783822544,
+        "daily_energy_wasserstein_kwh": 20.241045703227353,
+        "peak_power_wasserstein_kw": 4.939367815470323,
+        "ramp_wasserstein_kw": 2.5131424576620947,
+        "diversity_ratio": 0.23086291032640271
+      },
+      "30": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5524401965449686,
+        "daily_energy_wasserstein_kwh": 25.771894947425032,
+        "peak_power_wasserstein_kw": 5.001900601787491,
+        "ramp_wasserstein_kw": 2.5017440696481104,
+        "diversity_ratio": 0.2760113073000423
+      },
+      "31": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5215667248134446,
+        "daily_energy_wasserstein_kwh": 13.381398459558039,
+        "peak_power_wasserstein_kw": 4.4722532635554675,
+        "ramp_wasserstein_kw": 2.551100180533892,
+        "diversity_ratio": 0.2586507023348094
+      },
+      "32": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.603595633860385,
+        "daily_energy_wasserstein_kwh": 16.789679071393476,
+        "peak_power_wasserstein_kw": 4.77668846309185,
+        "ramp_wasserstein_kw": 2.5617430037305033,
+        "diversity_ratio": 0.10381237605577148
+      },
+      "33": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5616847013492088,
+        "daily_energy_wasserstein_kwh": 12.681147444095838,
+        "peak_power_wasserstein_kw": 4.172379059195519,
+        "ramp_wasserstein_kw": 2.6134516891445845,
+        "diversity_ratio": 0.24010957885673834
+      },
+      "34": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5170152035796112,
+        "daily_energy_wasserstein_kwh": 13.61256453936352,
+        "peak_power_wasserstein_kw": 4.617566789686679,
+        "ramp_wasserstein_kw": 2.590363548625052,
+        "diversity_ratio": 1.0627268372426595
+      },
+      "35": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5276475744925908,
+        "daily_energy_wasserstein_kwh": 10.976683477626647,
+        "peak_power_wasserstein_kw": 4.19056165292859,
+        "ramp_wasserstein_kw": 2.4866389409230267,
+        "diversity_ratio": 0.19006958506933738
+      },
+      "36": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5848331522948214,
+        "daily_energy_wasserstein_kwh": 9.967080756099165,
+        "peak_power_wasserstein_kw": 4.175165598988532,
+        "ramp_wasserstein_kw": 2.451718951925991,
+        "diversity_ratio": 0.0855165298761731
+      },
+      "37": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.529408836768864,
+        "daily_energy_wasserstein_kwh": 4.2927861860290575,
+        "peak_power_wasserstein_kw": 3.9507642430067063,
+        "ramp_wasserstein_kw": 2.507716986478502,
+        "diversity_ratio": 0.17558573091699722
+      },
+      "38": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5624788838389577,
+        "daily_energy_wasserstein_kwh": 22.90083186629112,
+        "peak_power_wasserstein_kw": 4.7672756832092995,
+        "ramp_wasserstein_kw": 2.6050473647997467,
+        "diversity_ratio": 1.0505045696632338
+      },
+      "39": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5599217675964611,
+        "daily_energy_wasserstein_kwh": 11.991122989447325,
+        "peak_power_wasserstein_kw": 4.1500690463185315,
+        "ramp_wasserstein_kw": 2.5800521894612984,
+        "diversity_ratio": 0.1784432719288407
+      },
+      "40": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5028005644037542,
+        "daily_energy_wasserstein_kwh": 3.9759962627352796,
+        "peak_power_wasserstein_kw": 3.6934757781028744,
+        "ramp_wasserstein_kw": 2.4668938253847887,
+        "diversity_ratio": 0.45271224811064315
+      },
+      "41": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5243229010900942,
+        "daily_energy_wasserstein_kwh": 21.947751409339467,
+        "peak_power_wasserstein_kw": 4.7001741373911505,
+        "ramp_wasserstein_kw": 2.4343181100362288,
+        "diversity_ratio": 0.32055653561000963
+      },
+      "42": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.49999598885306923,
+        "daily_energy_wasserstein_kwh": 16.76685464120257,
+        "peak_power_wasserstein_kw": 4.348753002556041,
+        "ramp_wasserstein_kw": 2.407001538627095,
+        "diversity_ratio": 0.20053413766126046
+      },
+      "43": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5113905962065504,
+        "daily_energy_wasserstein_kwh": 14.124195737506671,
+        "peak_power_wasserstein_kw": 4.811079674586654,
+        "ramp_wasserstein_kw": 2.4938446494411486,
+        "diversity_ratio": 0.35028010457874864
+      },
+      "44": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5630273854453541,
+        "daily_energy_wasserstein_kwh": 16.380888382635895,
+        "peak_power_wasserstein_kw": 4.218310832977294,
+        "ramp_wasserstein_kw": 2.5908722730676006,
+        "diversity_ratio": 0.2993428828052836
+      },
+      "45": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5548646727301033,
+        "daily_energy_wasserstein_kwh": 25.25306873966765,
+        "peak_power_wasserstein_kw": 4.63858581829816,
+        "ramp_wasserstein_kw": 2.50729997408591,
+        "diversity_ratio": 0.36266569327627507
+      },
+      "46": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5889579198224525,
+        "daily_energy_wasserstein_kwh": 33.987161948734574,
+        "peak_power_wasserstein_kw": 5.4230425215885045,
+        "ramp_wasserstein_kw": 2.4982992037322465,
+        "diversity_ratio": 0.35731436337089423
+      },
+      "47": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.4943711366129507,
+        "daily_energy_wasserstein_kwh": 9.229247638471715,
+        "peak_power_wasserstein_kw": 3.6612033867090936,
+        "ramp_wasserstein_kw": 2.430529029690281,
+        "diversity_ratio": 0.25673918058165107
+      },
+      "48": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.6390815232038903,
+        "daily_energy_wasserstein_kwh": 22.68895278976692,
+        "peak_power_wasserstein_kw": 3.8527724037691953,
+        "ramp_wasserstein_kw": 2.643106805346575,
+        "diversity_ratio": 0.17352447775932953
+      },
+      "49": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5471158672560674,
+        "daily_energy_wasserstein_kwh": 10.686741769506188,
+        "peak_power_wasserstein_kw": 3.4120105313509703,
+        "ramp_wasserstein_kw": 2.4466729236632148,
+        "diversity_ratio": 0.14869154226891754
+      },
+      "50": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5244698919109206,
+        "daily_energy_wasserstein_kwh": 14.711109150848422,
+        "peak_power_wasserstein_kw": 4.351475377157331,
+        "ramp_wasserstein_kw": 2.5902454514425974,
+        "diversity_ratio": 0.7837741468144849
+      },
+      "51": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5268896667961386,
+        "daily_energy_wasserstein_kwh": 10.14172818113322,
+        "peak_power_wasserstein_kw": 3.5907844718545676,
+        "ramp_wasserstein_kw": 2.428110772913199,
+        "diversity_ratio": 0.1430075644980122
+      },
+      "52": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.6010851228715274,
+        "daily_energy_wasserstein_kwh": 13.667662355020584,
+        "peak_power_wasserstein_kw": 3.2808164168894294,
+        "ramp_wasserstein_kw": 2.4372560329916153,
+        "diversity_ratio": 0.10035754657211622
+      },
+      "53": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5452233145206598,
+        "daily_energy_wasserstein_kwh": 10.26255082389718,
+        "peak_power_wasserstein_kw": 3.7682670057564978,
+        "ramp_wasserstein_kw": 2.5420770639120596,
+        "diversity_ratio": 0.2285630548426151
+      },
+      "54": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5182201027576638,
+        "daily_energy_wasserstein_kwh": 9.163255094688648,
+        "peak_power_wasserstein_kw": 3.7404718311131004,
+        "ramp_wasserstein_kw": 2.5868519353315995,
+        "diversity_ratio": 0.4649854637744896
+      },
+      "55": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5477780979885654,
+        "daily_energy_wasserstein_kwh": 11.72166821428731,
+        "peak_power_wasserstein_kw": 3.6359899644553666,
+        "ramp_wasserstein_kw": 2.506011705230005,
+        "diversity_ratio": 0.15224417774688268
+      },
+      "56": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5868762447700616,
+        "daily_energy_wasserstein_kwh": 8.1585875508553,
+        "peak_power_wasserstein_kw": 2.79076629370451,
+        "ramp_wasserstein_kw": 2.516777965985999,
+        "diversity_ratio": 0.1264201293411162
+      },
+      "57": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.581255264557373,
+        "daily_energy_wasserstein_kwh": 18.42766453629884,
+        "peak_power_wasserstein_kw": 3.134352640425785,
+        "ramp_wasserstein_kw": 2.4436515386283495,
+        "diversity_ratio": 0.14256803285639463
+      },
+      "58": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5292038013734987,
+        "daily_energy_wasserstein_kwh": 16.985136744759878,
+        "peak_power_wasserstein_kw": 3.226591794327833,
+        "ramp_wasserstein_kw": 2.3150526175592274,
+        "diversity_ratio": 0.0935681441383844
+      },
+      "59": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5536836976894727,
+        "daily_energy_wasserstein_kwh": 14.558892050379656,
+        "peak_power_wasserstein_kw": 3.4163653294788676,
+        "ramp_wasserstein_kw": 2.4319217993282765,
+        "diversity_ratio": 0.10735130957648976
+      },
+      "60": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.6114694045251144,
+        "daily_energy_wasserstein_kwh": 14.515342300182382,
+        "peak_power_wasserstein_kw": 2.7617716830968853,
+        "ramp_wasserstein_kw": 2.514314789403696,
+        "diversity_ratio": 0.1153566851268994
+      },
+      "61": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5414949244009851,
+        "daily_energy_wasserstein_kwh": 10.713799669631332,
+        "peak_power_wasserstein_kw": 2.3977743187174196,
+        "ramp_wasserstein_kw": 2.3298394884559332,
+        "diversity_ratio": 0.1032888704447193
+      },
+      "62": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5525440709787534,
+        "daily_energy_wasserstein_kwh": 15.792034313323382,
+        "peak_power_wasserstein_kw": 2.9609278652071955,
+        "ramp_wasserstein_kw": 2.2626513070845973,
+        "diversity_ratio": 0.10107723103350173
+      },
+      "63": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.5233062105101923,
+        "daily_energy_wasserstein_kwh": 7.039712249510194,
+        "peak_power_wasserstein_kw": 2.9416327708307652,
+        "ramp_wasserstein_kw": 2.413864716807344,
+        "diversity_ratio": 0.18852176959785286
+      }
+    },
+    "conditional_resampling": {
+      "0": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.024814583306676172,
+        "daily_energy_wasserstein_kwh": 1.7124399953708054,
+        "peak_power_wasserstein_kw": 0.24835999310016627,
+        "ramp_wasserstein_kw": 0.008644631927146719,
+        "diversity_ratio": 0.47834026399956076
+      },
+      "1": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.024435208281756795,
+        "daily_energy_wasserstein_kwh": 1.1203799897956197,
+        "peak_power_wasserstein_kw": 0.20828001201152807,
+        "ramp_wasserstein_kw": 0.008123368327800034,
+        "diversity_ratio": 0.787565078382468
+      },
+      "2": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.013835208308555594,
+        "daily_energy_wasserstein_kwh": 0.4931200056558008,
+        "peak_power_wasserstein_kw": 0.09475999932736157,
+        "ramp_wasserstein_kw": 0.0047435788640164045,
+        "diversity_ratio": 1.0553123105269775
+      },
+      "3": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.018460833278028686,
+        "daily_energy_wasserstein_kwh": 0.6408200095570646,
+        "peak_power_wasserstein_kw": 0.2646000069379807,
+        "ramp_wasserstein_kw": 0.010419789471565487,
+        "diversity_ratio": 1.1218581447600837
+      },
+      "4": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.02900302080689775,
+        "daily_energy_wasserstein_kwh": 1.0503099973872307,
+        "peak_power_wasserstein_kw": 0.3580400005728008,
+        "ramp_wasserstein_kw": 0.028510316131587592,
+        "diversity_ratio": 1.5505403328973357
+      },
+      "5": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.027844770096113896,
+        "daily_energy_wasserstein_kwh": 1.8701049086416606,
+        "peak_power_wasserstein_kw": 0.38799177199602125,
+        "ramp_wasserstein_kw": 0.020806452860026282,
+        "diversity_ratio": 0.5854026291431771
+      },
+      "6": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.01585833324193421,
+        "daily_energy_wasserstein_kwh": 0.8140800099249466,
+        "peak_power_wasserstein_kw": 0.19524000853300102,
+        "ramp_wasserstein_kw": 0.009232842232100687,
+        "diversity_ratio": 0.8558880982326525
+      },
+      "7": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.022568124976423864,
+        "daily_energy_wasserstein_kwh": 1.705579997779568,
+        "peak_power_wasserstein_kw": 0.24396000131964685,
+        "ramp_wasserstein_kw": 0.007971789576603378,
+        "diversity_ratio": 0.691597063625805
+      },
+      "8": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04654925133876533,
+        "daily_energy_wasserstein_kwh": 3.106801398963436,
+        "peak_power_wasserstein_kw": 0.5805999983660878,
+        "ramp_wasserstein_kw": 0.03659341835181563,
+        "diversity_ratio": 0.25143158906030283
+      },
+      "9": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.03782343742324884,
+        "daily_energy_wasserstein_kwh": 0.9617699987359811,
+        "peak_power_wasserstein_kw": 0.20675999407656498,
+        "ramp_wasserstein_kw": 0.050299367499292674,
+        "diversity_ratio": 1.6760015702483995
+      },
+      "10": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.032121314125106444,
+        "daily_energy_wasserstein_kwh": 1.8689986443286764,
+        "peak_power_wasserstein_kw": 0.20636000154074283,
+        "ramp_wasserstein_kw": 0.014435031005720545,
+        "diversity_ratio": 1.127543047301398
+      },
+      "11": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.02681666243713456,
+        "daily_energy_wasserstein_kwh": 0.6697803958749867,
+        "peak_power_wasserstein_kw": 0.2645999938389287,
+        "ramp_wasserstein_kw": 0.011186643778542497,
+        "diversity_ratio": 1.132284219796134
+      },
+      "12": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.036031190577814426,
+        "daily_energy_wasserstein_kwh": 1.2464938511757653,
+        "peak_power_wasserstein_kw": 0.1951600111275912,
+        "ramp_wasserstein_kw": 0.010804691246220442,
+        "diversity_ratio": 0.6205026223986737
+      },
+      "13": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.03208775352294955,
+        "daily_energy_wasserstein_kwh": 1.4766049887577537,
+        "peak_power_wasserstein_kw": 0.20335999545175587,
+        "ramp_wasserstein_kw": 0.009838953969607985,
+        "diversity_ratio": 1.40015585677357
+      },
+      "14": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.036435416690207306,
+        "daily_energy_wasserstein_kwh": 1.3636400023137687,
+        "peak_power_wasserstein_kw": 0.12435999998357147,
+        "ramp_wasserstein_kw": 0.018403368760243424,
+        "diversity_ratio": 1.5379760228274424
+      },
+      "15": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.0292516667234789,
+        "daily_energy_wasserstein_kwh": 1.7516510471492075,
+        "peak_power_wasserstein_kw": 0.1598000101326034,
+        "ramp_wasserstein_kw": 0.013078504770503927,
+        "diversity_ratio": 1.490132083808876
+      },
+      "16": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05376760448700226,
+        "daily_energy_wasserstein_kwh": 4.009930015893188,
+        "peak_power_wasserstein_kw": 0.5666399738192558,
+        "ramp_wasserstein_kw": 0.02843157850725491,
+        "diversity_ratio": 0.5866951921672836
+      },
+      "17": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05133791672399337,
+        "daily_energy_wasserstein_kwh": 3.8314800129795916,
+        "peak_power_wasserstein_kw": 0.7190400113165378,
+        "ramp_wasserstein_kw": 0.038258946964860374,
+        "diversity_ratio": 0.5171011604957416
+      },
+      "18": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04332739592362487,
+        "daily_energy_wasserstein_kwh": 3.5129300128179604,
+        "peak_power_wasserstein_kw": 0.6021600130200385,
+        "ramp_wasserstein_kw": 0.00872463197167964,
+        "diversity_ratio": 1.3477697105101873
+      },
+      "19": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.06040281260863898,
+        "daily_energy_wasserstein_kwh": 5.471810024306179,
+        "peak_power_wasserstein_kw": 0.49175999894738187,
+        "ramp_wasserstein_kw": 0.022177263775742275,
+        "diversity_ratio": 0.4648450688717562
+      },
+      "20": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.08070645813294203,
+        "daily_energy_wasserstein_kwh": 7.002939987943975,
+        "peak_power_wasserstein_kw": 0.8822399981319904,
+        "ramp_wasserstein_kw": 0.05776084129865246,
+        "diversity_ratio": 0.45779850509975145
+      },
+      "21": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05408072928660357,
+        "daily_energy_wasserstein_kwh": 2.611190013187005,
+        "peak_power_wasserstein_kw": 0.5585999904572964,
+        "ramp_wasserstein_kw": 0.04150989460258889,
+        "diversity_ratio": 0.558316814763511
+      },
+      "22": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.037190520766331864,
+        "daily_energy_wasserstein_kwh": 1.4127100067632277,
+        "peak_power_wasserstein_kw": 0.34335999444127085,
+        "ramp_wasserstein_kw": 0.03055157863662436,
+        "diversity_ratio": 1.0786040427608574
+      },
+      "23": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.07047416666837915,
+        "daily_energy_wasserstein_kwh": 2.521900007273071,
+        "peak_power_wasserstein_kw": 0.31152002707123755,
+        "ramp_wasserstein_kw": 0.018325894173038638,
+        "diversity_ratio": 0.9415385858670223
+      },
+      "24": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.047458854146182915,
+        "daily_energy_wasserstein_kwh": 2.8008500029903374,
+        "peak_power_wasserstein_kw": 0.6700399977760391,
+        "ramp_wasserstein_kw": 0.034826104920259504,
+        "diversity_ratio": 1.6907631900657207
+      },
+      "25": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.048173854254200704,
+        "daily_energy_wasserstein_kwh": 2.6487300140107983,
+        "peak_power_wasserstein_kw": 0.7581200036220253,
+        "ramp_wasserstein_kw": 0.04309263076647922,
+        "diversity_ratio": 1.3388601129184599
+      },
+      "26": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04836270845010101,
+        "daily_energy_wasserstein_kwh": 2.0752000044612218,
+        "peak_power_wasserstein_kw": 0.2625999937951565,
+        "ramp_wasserstein_kw": 0.02405684190959117,
+        "diversity_ratio": 1.047206722032671
+      },
+      "27": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05938124997584965,
+        "daily_energy_wasserstein_kwh": 2.2867600024282004,
+        "peak_power_wasserstein_kw": 0.800599994622171,
+        "ramp_wasserstein_kw": 0.0601376840360952,
+        "diversity_ratio": 1.359580234547974
+      },
+      "28": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04941624998647363,
+        "daily_energy_wasserstein_kwh": 3.4622000015329113,
+        "peak_power_wasserstein_kw": 0.8309999810159204,
+        "ramp_wasserstein_kw": 0.028118736836912198,
+        "diversity_ratio": 1.8499884545939551
+      },
+      "29": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.051291041659048166,
+        "daily_energy_wasserstein_kwh": 2.113779995163205,
+        "peak_power_wasserstein_kw": 0.3112800115533173,
+        "ramp_wasserstein_kw": 0.031226525905738024,
+        "diversity_ratio": 1.2848367196680486
+      },
+      "30": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.07737645839394343,
+        "daily_energy_wasserstein_kwh": 4.380319997116458,
+        "peak_power_wasserstein_kw": 0.6217599799949675,
+        "ramp_wasserstein_kw": 0.04371200001303506,
+        "diversity_ratio": 1.6092490238070927
+      },
+      "31": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.0551806250529262,
+        "daily_energy_wasserstein_kwh": 2.991720020010835,
+        "peak_power_wasserstein_kw": 0.34592000510543586,
+        "ramp_wasserstein_kw": 0.01758189545557097,
+        "diversity_ratio": 1.2357304438607222
+      },
+      "32": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.0782008204896071,
+        "daily_energy_wasserstein_kwh": 4.160538759061601,
+        "peak_power_wasserstein_kw": 0.6987200252804904,
+        "ramp_wasserstein_kw": 0.041479685292677315,
+        "diversity_ratio": 0.7118271690964918
+      },
+      "33": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.0646379166566597,
+        "daily_energy_wasserstein_kwh": 2.938059999711113,
+        "peak_power_wasserstein_kw": 0.6617599979043007,
+        "ramp_wasserstein_kw": 0.02825515864328721,
+        "diversity_ratio": 0.6055549713579704
+      },
+      "34": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.02799900764621271,
+        "daily_energy_wasserstein_kwh": 1.4118290847004393,
+        "peak_power_wasserstein_kw": 0.2719999818503856,
+        "ramp_wasserstein_kw": 0.02367536678184809,
+        "diversity_ratio": 1.346563925910016
+      },
+      "35": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05136947926715949,
+        "daily_energy_wasserstein_kwh": 1.4486500010546297,
+        "peak_power_wasserstein_kw": 0.6723199820518494,
+        "ramp_wasserstein_kw": 0.04002820960559726,
+        "diversity_ratio": 1.3954911225169324
+      },
+      "36": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.07725885453259253,
+        "daily_energy_wasserstein_kwh": 6.807609977888644,
+        "peak_power_wasserstein_kw": 0.7731600075960158,
+        "ramp_wasserstein_kw": 0.038185683620701794,
+        "diversity_ratio": 1.1547644419065237
+      },
+      "37": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.056278907166803664,
+        "daily_energy_wasserstein_kwh": 2.244272228912451,
+        "peak_power_wasserstein_kw": 0.3367199967801573,
+        "ramp_wasserstein_kw": 0.016515612456359255,
+        "diversity_ratio": 1.2740626731120939
+      },
+      "38": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.028573373460203586,
+        "daily_energy_wasserstein_kwh": 1.6427438511804209,
+        "peak_power_wasserstein_kw": 0.2818799882382155,
+        "ramp_wasserstein_kw": 0.010576328619873477,
+        "diversity_ratio": 1.0832714457777897
+      },
+      "39": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.06524625141624711,
+        "daily_energy_wasserstein_kwh": 4.493760317261331,
+        "peak_power_wasserstein_kw": 0.5831199857592585,
+        "ramp_wasserstein_kw": 0.014821243594351656,
+        "diversity_ratio": 0.779821168456184
+      },
+      "40": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05825541656767504,
+        "daily_energy_wasserstein_kwh": 1.7392800173489378,
+        "peak_power_wasserstein_kw": 0.7944800075888634,
+        "ramp_wasserstein_kw": 0.04400378822525468,
+        "diversity_ratio": 1.8487220998784903
+      },
+      "41": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05781462505899981,
+        "daily_energy_wasserstein_kwh": 1.3300880058750046,
+        "peak_power_wasserstein_kw": 0.5174399818852546,
+        "ramp_wasserstein_kw": 0.06839604068611196,
+        "diversity_ratio": 1.6021963202768577
+      },
+      "42": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04084416673680001,
+        "daily_energy_wasserstein_kwh": 1.5693000121216762,
+        "peak_power_wasserstein_kw": 0.19683999275788674,
+        "ramp_wasserstein_kw": 0.04400842142614882,
+        "diversity_ratio": 1.1969831775495152
+      },
+      "43": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.053498437283269605,
+        "daily_energy_wasserstein_kwh": 2.8687699946924115,
+        "peak_power_wasserstein_kw": 0.6979599999263884,
+        "ramp_wasserstein_kw": 0.04348926259949798,
+        "diversity_ratio": 1.7812302086211274
+      },
+      "44": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.058166562736114445,
+        "daily_energy_wasserstein_kwh": 2.6995499870541977,
+        "peak_power_wasserstein_kw": 0.47475999534130103,
+        "ramp_wasserstein_kw": 0.05411705178277256,
+        "diversity_ratio": 1.3537492427199493
+      },
+      "45": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.046026673539405843,
+        "daily_energy_wasserstein_kwh": 3.037782118665054,
+        "peak_power_wasserstein_kw": 0.5840400014072658,
+        "ramp_wasserstein_kw": 0.03760413007080353,
+        "diversity_ratio": 1.267493212495749
+      },
+      "46": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04687270839366344,
+        "daily_energy_wasserstein_kwh": 2.7338600024534396,
+        "peak_power_wasserstein_kw": 0.47527999910060315,
+        "ramp_wasserstein_kw": 0.07958273719059986,
+        "diversity_ratio": 1.2580138116431951
+      },
+      "47": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05589593730448542,
+        "daily_energy_wasserstein_kwh": 3.372909977826058,
+        "peak_power_wasserstein_kw": 0.3422800286300482,
+        "ramp_wasserstein_kw": 0.01800421130029781,
+        "diversity_ratio": 1.281032894678613
+      },
+      "48": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.09138327020592746,
+        "daily_energy_wasserstein_kwh": 7.568213906824823,
+        "peak_power_wasserstein_kw": 0.752440002830699,
+        "ramp_wasserstein_kw": 0.050905650743969535,
+        "diversity_ratio": 1.3296974281177656
+      },
+      "49": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.060828621599054424,
+        "daily_energy_wasserstein_kwh": 1.9478523043578024,
+        "peak_power_wasserstein_kw": 0.5150799733400344,
+        "ramp_wasserstein_kw": 0.055468486718049104,
+        "diversity_ratio": 1.0702260422530416
+      },
+      "50": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04273166661392073,
+        "daily_energy_wasserstein_kwh": 3.4513799933122935,
+        "peak_power_wasserstein_kw": 0.5767999763041733,
+        "ramp_wasserstein_kw": 0.029372630452345,
+        "diversity_ratio": 2.4391848428795835
+      },
+      "51": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.06487562504235637,
+        "daily_energy_wasserstein_kwh": 2.3791669927514163,
+        "peak_power_wasserstein_kw": 0.37951998079195626,
+        "ramp_wasserstein_kw": 0.0360328416691995,
+        "diversity_ratio": 1.0905356987220094
+      },
+      "52": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1255037592315906,
+        "daily_energy_wasserstein_kwh": 10.427800892876697,
+        "peak_power_wasserstein_kw": 2.0892399789392946,
+        "ramp_wasserstein_kw": 0.06443457223582809,
+        "diversity_ratio": 1.7750192990295575
+      },
+      "53": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.05815854159021305,
+        "daily_energy_wasserstein_kwh": 2.4668600378348495,
+        "peak_power_wasserstein_kw": 0.7302000019699334,
+        "ramp_wasserstein_kw": 0.020568420704208695,
+        "diversity_ratio": 1.2987974300913585
+      },
+      "54": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.04556614581289372,
+        "daily_energy_wasserstein_kwh": 3.1718900116975424,
+        "peak_power_wasserstein_kw": 0.4787199962884188,
+        "ramp_wasserstein_kw": 0.02442021158082708,
+        "diversity_ratio": 1.4350184403459703
+      },
+      "55": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.06777833358891562,
+        "daily_energy_wasserstein_kwh": 4.886359998183325,
+        "peak_power_wasserstein_kw": 0.5792000272497535,
+        "ramp_wasserstein_kw": 0.02508336831776324,
+        "diversity_ratio": 1.3023870295417297
+      },
+      "56": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.08835187476007074,
+        "daily_energy_wasserstein_kwh": 5.928839975788724,
+        "peak_power_wasserstein_kw": 0.38912001520395295,
+        "ramp_wasserstein_kw": 0.061159157403401686,
+        "diversity_ratio": 0.9786509487004356
+      },
+      "57": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.10200927107603397,
+        "daily_energy_wasserstein_kwh": 5.205990019856253,
+        "peak_power_wasserstein_kw": 0.39107999357394874,
+        "ramp_wasserstein_kw": 0.015447158624908306,
+        "diversity_ratio": 1.074959724341712
+      },
+      "58": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.06788104159277282,
+        "daily_energy_wasserstein_kwh": 3.5588800307945347,
+        "peak_power_wasserstein_kw": 0.27471999245230105,
+        "ramp_wasserstein_kw": 0.03616715671622037,
+        "diversity_ratio": 1.0615457754842539
+      },
+      "59": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.07276062527816976,
+        "daily_energy_wasserstein_kwh": 2.8628200031491002,
+        "peak_power_wasserstein_kw": 0.22948001169133933,
+        "ramp_wasserstein_kw": 0.03736084238748618,
+        "diversity_ratio": 1.0940860779197827
+      },
+      "60": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.08726343728440648,
+        "daily_energy_wasserstein_kwh": 2.7364699921419393,
+        "peak_power_wasserstein_kw": 0.6024400076270103,
+        "ramp_wasserstein_kw": 0.130260633021397,
+        "diversity_ratio": 0.9836220873464325
+      },
+      "61": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.10599656238972482,
+        "daily_energy_wasserstein_kwh": 5.4114900113758635,
+        "peak_power_wasserstein_kw": 0.7226399856805802,
+        "ramp_wasserstein_kw": 0.035554527441676725,
+        "diversity_ratio": 1.2443807587928384
+      },
+      "62": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.09468458303689357,
+        "daily_energy_wasserstein_kwh": 4.788179979480337,
+        "peak_power_wasserstein_kw": 0.8751599864847959,
+        "ramp_wasserstein_kw": 0.048929683418356205,
+        "diversity_ratio": 0.8218948672155962
+      },
+      "63": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.10607989577957296,
+        "daily_energy_wasserstein_kwh": 4.865669981164393,
+        "peak_power_wasserstein_kw": 0.7197600084636362,
+        "ramp_wasserstein_kw": 0.028753263366065533,
+        "diversity_ratio": 1.5148428076728608
+      }
+    },
+    "conditional_mean": {
+      "0": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.07847892277507452,
+        "daily_energy_wasserstein_kwh": 5.145194777558752,
+        "peak_power_wasserstein_kw": 1.4370547598263177,
+        "ramp_wasserstein_kw": 0.11738854872983621,
+        "diversity_ratio": 5.931906656975867e-31
+      },
+      "1": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.06923361939069636,
+        "daily_energy_wasserstein_kwh": 4.290888642933244,
+        "peak_power_wasserstein_kw": 1.5759477597154938,
+        "ramp_wasserstein_kw": 0.12323825845616618,
+        "diversity_ratio": 3.6472500623594683e-31
+      },
+      "2": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.049715423555889704,
+        "daily_energy_wasserstein_kwh": 2.954171583246151,
+        "peak_power_wasserstein_kw": 1.2303953158108512,
+        "ramp_wasserstein_kw": 0.10020479692679746,
+        "diversity_ratio": 1.3724933703435703e-30
+      },
+      "3": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.062037541142022735,
+        "daily_energy_wasserstein_kwh": 3.5280666342982405,
+        "peak_power_wasserstein_kw": 1.4013890561861384,
+        "ramp_wasserstein_kw": 0.1223713923260702,
+        "diversity_ratio": 7.216969459579766e-31
+      },
+      "4": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.08907219886322515,
+        "daily_energy_wasserstein_kwh": 5.65240872633199,
+        "peak_power_wasserstein_kw": 1.7535681487442518,
+        "ramp_wasserstein_kw": 0.149701558638341,
+        "diversity_ratio": 5.257822891757949e-31
+      },
+      "5": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.07936189913821619,
+        "daily_energy_wasserstein_kwh": 4.9292496884674515,
+        "peak_power_wasserstein_kw": 1.8521808895813674,
+        "ramp_wasserstein_kw": 0.13665433053783269,
+        "diversity_ratio": 3.7813205810009654e-31
+      },
+      "6": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.055796689782010744,
+        "daily_energy_wasserstein_kwh": 3.2480629198798363,
+        "peak_power_wasserstein_kw": 1.489929983496012,
+        "ramp_wasserstein_kw": 0.11255587409843221,
+        "diversity_ratio": 9.128658562922644e-31
+      },
+      "7": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.0739992014456823,
+        "daily_energy_wasserstein_kwh": 5.025910237493404,
+        "peak_power_wasserstein_kw": 1.5167720128141875,
+        "ramp_wasserstein_kw": 0.12031688178832042,
+        "diversity_ratio": 4.6678685569147015e-31
+      },
+      "8": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.10279964686222436,
+        "daily_energy_wasserstein_kwh": 5.935699100348932,
+        "peak_power_wasserstein_kw": 1.886670911966509,
+        "ramp_wasserstein_kw": 0.17638095373421672,
+        "diversity_ratio": 2.138482699696924e-31
+      },
+      "9": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1004889675485942,
+        "daily_energy_wasserstein_kwh": 5.3939794606365306,
+        "peak_power_wasserstein_kw": 1.0095790908612152,
+        "ramp_wasserstein_kw": 0.15199630627337996,
+        "diversity_ratio": 1.4077503941395228e-30
+      },
+      "10": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.11500825027277127,
+        "daily_energy_wasserstein_kwh": 6.637349466865604,
+        "peak_power_wasserstein_kw": 1.0739005259422834,
+        "ramp_wasserstein_kw": 0.17497547080526107,
+        "diversity_ratio": 9.497577910748682e-31
+      },
+      "11": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.08931265060519296,
+        "daily_energy_wasserstein_kwh": 5.435305101213217,
+        "peak_power_wasserstein_kw": 1.4821429776541934,
+        "ramp_wasserstein_kw": 0.15477018201830461,
+        "diversity_ratio": 4.2244714006943645e-31
+      },
+      "12": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.09387713042587183,
+        "daily_energy_wasserstein_kwh": 5.25299703253595,
+        "peak_power_wasserstein_kw": 1.8037917814658617,
+        "ramp_wasserstein_kw": 0.16833076912834405,
+        "diversity_ratio": 3.3655074700468966e-31
+      },
+      "13": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.10672246705974715,
+        "daily_energy_wasserstein_kwh": 5.93840935718272,
+        "peak_power_wasserstein_kw": 1.1583613965322483,
+        "ramp_wasserstein_kw": 0.17849189396904352,
+        "diversity_ratio": 1.1250567126715727e-30
+      },
+      "14": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.11107518201800126,
+        "daily_energy_wasserstein_kwh": 6.218039877216015,
+        "peak_power_wasserstein_kw": 0.9187536375428774,
+        "ramp_wasserstein_kw": 0.17571070212877965,
+        "diversity_ratio": 2.3298312696140104e-30
+      },
+      "15": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.092559351125856,
+        "daily_energy_wasserstein_kwh": 5.446700599408934,
+        "peak_power_wasserstein_kw": 1.3302678858544943,
+        "ramp_wasserstein_kw": 0.13899065953367326,
+        "diversity_ratio": 5.681168147877467e-31
+      },
+      "16": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.20626982322843632,
+        "daily_energy_wasserstein_kwh": 13.1959070582343,
+        "peak_power_wasserstein_kw": 2.773315219621352,
+        "ramp_wasserstein_kw": 0.2031558692848318,
+        "diversity_ratio": 3.449188088956357e-31
+      },
+      "17": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1673724932146801,
+        "daily_energy_wasserstein_kwh": 9.592803566750735,
+        "peak_power_wasserstein_kw": 2.7923374999416786,
+        "ramp_wasserstein_kw": 0.20022609720338785,
+        "diversity_ratio": 3.4294895193319223e-31
+      },
+      "18": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.09830199102606278,
+        "daily_energy_wasserstein_kwh": 5.6706911159984275,
+        "peak_power_wasserstein_kw": 1.6227651056880452,
+        "ramp_wasserstein_kw": 0.1479553487236562,
+        "diversity_ratio": 7.448066462193763e-31
+      },
+      "19": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.17611037927288212,
+        "daily_energy_wasserstein_kwh": 11.887738512179338,
+        "peak_power_wasserstein_kw": 2.5287143116723745,
+        "ramp_wasserstein_kw": 0.1799686205265314,
+        "diversity_ratio": 1.6348393601096939e-31
+      },
+      "20": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.24348539622258833,
+        "daily_energy_wasserstein_kwh": 14.630761130545107,
+        "peak_power_wasserstein_kw": 3.3659636911925572,
+        "ramp_wasserstein_kw": 0.25790765558955836,
+        "diversity_ratio": 3.2793280612850308e-31
+      },
+      "21": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.17426789966417436,
+        "daily_energy_wasserstein_kwh": 9.833837762044075,
+        "peak_power_wasserstein_kw": 2.836428387261871,
+        "ramp_wasserstein_kw": 0.21605404153437358,
+        "diversity_ratio": 3.9794093528166705e-31
+      },
+      "22": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.11305981557674982,
+        "daily_energy_wasserstein_kwh": 6.2964599930029665,
+        "peak_power_wasserstein_kw": 2.168114064589695,
+        "ramp_wasserstein_kw": 0.16629307486910022,
+        "diversity_ratio": 9.553555566672677e-31
+      },
+      "23": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.16826849325969065,
+        "daily_energy_wasserstein_kwh": 9.795878445105757,
+        "peak_power_wasserstein_kw": 2.832859862937406,
+        "ramp_wasserstein_kw": 0.22058262369670115,
+        "diversity_ratio": 3.8185129418784444e-31
+      },
+      "24": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1316995038867341,
+        "daily_energy_wasserstein_kwh": 7.9711782767325605,
+        "peak_power_wasserstein_kw": 1.9726402429974557,
+        "ramp_wasserstein_kw": 0.17401941093882975,
+        "diversity_ratio": 7.298136486013598e-31
+      },
+      "25": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.14341565941507484,
+        "daily_energy_wasserstein_kwh": 7.880958109386223,
+        "peak_power_wasserstein_kw": 1.425077745376604,
+        "ramp_wasserstein_kw": 0.18490428390467972,
+        "diversity_ratio": 5.159276744291255e-31
+      },
+      "26": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1717628308883222,
+        "daily_energy_wasserstein_kwh": 10.068758559956805,
+        "peak_power_wasserstein_kw": 1.4340367206692735,
+        "ramp_wasserstein_kw": 0.18781024469306423,
+        "diversity_ratio": 9.441273318179876e-31
+      },
+      "27": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1300983370897066,
+        "daily_energy_wasserstein_kwh": 6.99417877487176,
+        "peak_power_wasserstein_kw": 1.4929356475015123,
+        "ramp_wasserstein_kw": 0.14268685178695,
+        "diversity_ratio": 3.129620508743853e-31
+      },
+      "28": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.15051505293947398,
+        "daily_energy_wasserstein_kwh": 8.901743506309709,
+        "peak_power_wasserstein_kw": 1.9230235329722398,
+        "ramp_wasserstein_kw": 0.18989564525332764,
+        "diversity_ratio": 5.698839119371399e-31
+      },
+      "29": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.16907526933146577,
+        "daily_energy_wasserstein_kwh": 10.275377811648436,
+        "peak_power_wasserstein_kw": 1.5670643195028975,
+        "ramp_wasserstein_kw": 0.20380274703681955,
+        "diversity_ratio": 3.5772859433320432e-31
+      },
+      "30": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1606911561608809,
+        "daily_energy_wasserstein_kwh": 9.210728677285955,
+        "peak_power_wasserstein_kw": 1.4709790776515173,
+        "ramp_wasserstein_kw": 0.2063313221986949,
+        "diversity_ratio": 5.198165417940119e-31
+      },
+      "31": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.15475893868020937,
+        "daily_energy_wasserstein_kwh": 9.442810009078823,
+        "peak_power_wasserstein_kw": 1.9130154507330857,
+        "ramp_wasserstein_kw": 0.2020322728165465,
+        "diversity_ratio": 3.014728381003677e-31
+      },
+      "32": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.278624070537215,
+        "daily_energy_wasserstein_kwh": 17.712094876853435,
+        "peak_power_wasserstein_kw": 3.3370793641179946,
+        "ramp_wasserstein_kw": 0.3910017361796654,
+        "diversity_ratio": 8.505604992935509e-31
+      },
+      "33": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.18957223836702844,
+        "daily_energy_wasserstein_kwh": 10.612273731899826,
+        "peak_power_wasserstein_kw": 2.6215936055657982,
+        "ramp_wasserstein_kw": 0.2760760881336214,
+        "diversity_ratio": 6.01057255001187e-31
+      },
+      "34": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.09113769049574433,
+        "daily_energy_wasserstein_kwh": 4.490377324988072,
+        "peak_power_wasserstein_kw": 1.769841068026251,
+        "ramp_wasserstein_kw": 0.16498277932608804,
+        "diversity_ratio": 1.349949456543011e-30
+      },
+      "35": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.17649964849131283,
+        "daily_energy_wasserstein_kwh": 9.988597155368028,
+        "peak_power_wasserstein_kw": 2.3937288801119565,
+        "ramp_wasserstein_kw": 0.2873377338851459,
+        "diversity_ratio": 7.654624250955507e-31
+      },
+      "36": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.30214396624734774,
+        "daily_energy_wasserstein_kwh": 17.25962999351672,
+        "peak_power_wasserstein_kw": 4.1144126019139335,
+        "ramp_wasserstein_kw": 0.4303378007928256,
+        "diversity_ratio": 7.043106772497033e-31
+      },
+      "37": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.19133203975880253,
+        "daily_energy_wasserstein_kwh": 10.792821945111642,
+        "peak_power_wasserstein_kw": 2.8135351335752583,
+        "ramp_wasserstein_kw": 0.30019648500091883,
+        "diversity_ratio": 7.773593777398698e-31
+      },
+      "38": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.10790445894203866,
+        "daily_energy_wasserstein_kwh": 5.9978633136357375,
+        "peak_power_wasserstein_kw": 1.897158672405722,
+        "ramp_wasserstein_kw": 0.1872433645353596,
+        "diversity_ratio": 1.5067770882104632e-30
+      },
+      "39": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.20775742653956467,
+        "daily_energy_wasserstein_kwh": 12.664437719155798,
+        "peak_power_wasserstein_kw": 3.034784916550826,
+        "ramp_wasserstein_kw": 0.2880612959996007,
+        "diversity_ratio": 4.784827633845933e-31
+      },
+      "40": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.18817102637497682,
+        "daily_energy_wasserstein_kwh": 10.389436129565627,
+        "peak_power_wasserstein_kw": 2.1988077199128773,
+        "ramp_wasserstein_kw": 0.3359623704185209,
+        "diversity_ratio": 2.074325212949486e-30
+      },
+      "41": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.17100510458252507,
+        "daily_energy_wasserstein_kwh": 8.554592428661891,
+        "peak_power_wasserstein_kw": 1.6013627241932225,
+        "ramp_wasserstein_kw": 0.2490040052590971,
+        "diversity_ratio": 9.788329010822893e-31
+      },
+      "42": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.16881334963218067,
+        "daily_energy_wasserstein_kwh": 10.492882629903683,
+        "peak_power_wasserstein_kw": 1.4332457477213956,
+        "ramp_wasserstein_kw": 0.22336054498682784,
+        "diversity_ratio": 1.1126943223710142e-30
+      },
+      "43": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.15658545563164408,
+        "daily_energy_wasserstein_kwh": 9.118228382139343,
+        "peak_power_wasserstein_kw": 1.9742271460069876,
+        "ramp_wasserstein_kw": 0.25284737907783805,
+        "diversity_ratio": 7.064045421668917e-31
+      },
+      "44": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.21114227964474952,
+        "daily_energy_wasserstein_kwh": 11.73441484005944,
+        "peak_power_wasserstein_kw": 2.6332788630835218,
+        "ramp_wasserstein_kw": 0.3398641371081459,
+        "diversity_ratio": 1.7918221815377323e-30
+      },
+      "45": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.18521508402960296,
+        "daily_energy_wasserstein_kwh": 10.789424907728923,
+        "peak_power_wasserstein_kw": 1.7483466657676425,
+        "ramp_wasserstein_kw": 0.28353202622789025,
+        "diversity_ratio": 7.774349275285944e-31
+      },
+      "46": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.1597026693905449,
+        "daily_energy_wasserstein_kwh": 8.646756379851691,
+        "peak_power_wasserstein_kw": 1.3112307635331526,
+        "ramp_wasserstein_kw": 0.21987145274578168,
+        "diversity_ratio": 9.769792206315213e-31
+      },
+      "47": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.18485013031572914,
+        "daily_energy_wasserstein_kwh": 12.56461262070898,
+        "peak_power_wasserstein_kw": 2.088711673826128,
+        "ramp_wasserstein_kw": 0.26581575502734434,
+        "diversity_ratio": 4.292662045247372e-31
+      },
+      "48": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.3544607704504467,
+        "daily_energy_wasserstein_kwh": 19.239260999317697,
+        "peak_power_wasserstein_kw": 3.1123170196897045,
+        "ramp_wasserstein_kw": 0.4127032350820843,
+        "diversity_ratio": 2.1630913030286633e-30
+      },
+      "49": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.24851578082507006,
+        "daily_energy_wasserstein_kwh": 14.112669548351349,
+        "peak_power_wasserstein_kw": 3.084986048571545,
+        "ramp_wasserstein_kw": 0.33725545962384396,
+        "diversity_ratio": 8.410688140583447e-31
+      },
+      "50": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.12111094565371354,
+        "daily_energy_wasserstein_kwh": 6.4136023451578685,
+        "peak_power_wasserstein_kw": 1.8154511954032788,
+        "ramp_wasserstein_kw": 0.17343349945745085,
+        "diversity_ratio": 1.4215155630402423e-30
+      },
+      "51": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.23669597444792057,
+        "daily_energy_wasserstein_kwh": 13.68694953993969,
+        "peak_power_wasserstein_kw": 2.8500697475571712,
+        "ramp_wasserstein_kw": 0.2845539505967999,
+        "diversity_ratio": 1.2167563683562053e-30
+      },
+      "52": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.3776283378649717,
+        "daily_energy_wasserstein_kwh": 21.652430340305447,
+        "peak_power_wasserstein_kw": 3.0721029153561163,
+        "ramp_wasserstein_kw": 0.4988173490165752,
+        "diversity_ratio": 1.708202872740044e-30
+      },
+      "53": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.24206338420274218,
+        "daily_energy_wasserstein_kwh": 13.449804210730298,
+        "peak_power_wasserstein_kw": 2.432862003935661,
+        "ramp_wasserstein_kw": 0.2961020840260895,
+        "diversity_ratio": 1.3202572330580209e-30
+      },
+      "54": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.13942391287320313,
+        "daily_energy_wasserstein_kwh": 7.299676553073355,
+        "peak_power_wasserstein_kw": 2.3756710662298866,
+        "ramp_wasserstein_kw": 0.1932643996188524,
+        "diversity_ratio": 1.0166494327567526e-30
+      },
+      "55": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.26786274995403625,
+        "daily_energy_wasserstein_kwh": 17.346757817857487,
+        "peak_power_wasserstein_kw": 2.896309302911968,
+        "ramp_wasserstein_kw": 0.3178770071132413,
+        "diversity_ratio": 1.0449382361106074e-30
+      },
+      "56": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.3649207293993355,
+        "daily_energy_wasserstein_kwh": 17.440241064676602,
+        "peak_power_wasserstein_kw": 4.019372947267626,
+        "ramp_wasserstein_kw": 0.3986524935468255,
+        "diversity_ratio": 7.286301428861824e-31
+      },
+      "57": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.30449267077588593,
+        "daily_energy_wasserstein_kwh": 16.354317161533633,
+        "peak_power_wasserstein_kw": 3.2519117116925513,
+        "ramp_wasserstein_kw": 0.3763994244508222,
+        "diversity_ratio": 4.0378388723834675e-31
+      },
+      "58": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.2469117169819723,
+        "daily_energy_wasserstein_kwh": 15.254064569523234,
+        "peak_power_wasserstein_kw": 2.3629591491935145,
+        "ramp_wasserstein_kw": 0.3070213564384332,
+        "diversity_ratio": 5.620315658363151e-31
+      },
+      "59": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.26986254281519395,
+        "daily_energy_wasserstein_kwh": 14.701245609350327,
+        "peak_power_wasserstein_kw": 3.2214749627418913,
+        "ramp_wasserstein_kw": 0.3261188924869475,
+        "diversity_ratio": 5.248869572479258e-31
+      },
+      "60": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.38137755376321186,
+        "daily_energy_wasserstein_kwh": 20.359104257366763,
+        "peak_power_wasserstein_kw": 4.007654216958986,
+        "ramp_wasserstein_kw": 0.42040014302331713,
+        "diversity_ratio": 8.569682811914826e-31
+      },
+      "61": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.3127832761227614,
+        "daily_energy_wasserstein_kwh": 17.982677058715847,
+        "peak_power_wasserstein_kw": 3.707877073521876,
+        "ramp_wasserstein_kw": 0.39094557276617914,
+        "diversity_ratio": 3.9414236848906535e-31
+      },
+      "62": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.2783583613008204,
+        "daily_energy_wasserstein_kwh": 16.544943249162113,
+        "peak_power_wasserstein_kw": 3.295697394685554,
+        "ramp_wasserstein_kw": 0.3704687139796268,
+        "diversity_ratio": 3.2434152546047677e-31
+      },
+      "63": {
+        "n_real": 100,
+        "n_generated": 100,
+        "pointwise_wasserstein_kwh": 0.2676576436545221,
+        "daily_energy_wasserstein_kwh": 15.815475055820315,
+        "peak_power_wasserstein_kw": 3.1422750520279896,
+        "ramp_wasserstein_kw": 0.33568437534418494,
+        "diversity_ratio": 6.944950641982366e-31
+      }
+    }
+  },
+  "history": [
+    {
+      "elapsed_seconds": 13.678607510009897,
+      "epoch": 1,
+      "loss_d": 0.2197498122102487,
+      "loss_g": 2.75794972030983,
+      "validation_score": 0.17898346459214146
+    },
+    {
+      "elapsed_seconds": 14.966812491999008,
+      "epoch": 2,
+      "loss_d": 0.18328889522921785,
+      "loss_g": 3.3172145516382097,
+      "validation_score": 0.11077034890088082
+    },
+    {
+      "elapsed_seconds": 15.439834944001632,
+      "epoch": 3,
+      "loss_d": 0.1272507188365074,
+      "loss_g": 3.793660930711396,
+      "validation_score": 0.0713291095112633
+    },
+    {
+      "elapsed_seconds": 15.264909143006662,
+      "epoch": 4,
+      "loss_d": 0.13747587528670413,
+      "loss_g": 4.0309472429384305,
+      "validation_score": 0.08164813916924156
+    },
+    {
+      "elapsed_seconds": 16.056750871008262,
+      "epoch": 5,
+      "loss_d": 0.20788205706093837,
+      "loss_g": 3.6226035046989167,
+      "validation_score": 0.07059102510472333
+    },
+    {
+      "elapsed_seconds": 15.21541807000176,
+      "epoch": 6,
+      "loss_d": 0.20819115120350284,
+      "loss_g": 3.4822768776033763,
+      "validation_score": 0.0645118193250293
+    },
+    {
+      "elapsed_seconds": 13.924210514000151,
+      "epoch": 7,
+      "loss_d": 0.2270869715465793,
+      "loss_g": 3.175736490286563,
+      "validation_score": 0.05737245023292795
+    },
+    {
+      "elapsed_seconds": 15.399834007999743,
+      "epoch": 8,
+      "loss_d": 0.31127901091618043,
+      "loss_g": 3.1032801888364574,
+      "validation_score": 0.056451501503014846
+    },
+    {
+      "elapsed_seconds": 15.393450094008585,
+      "epoch": 9,
+      "loss_d": 0.36923935506931466,
+      "loss_g": 2.338518912651226,
+      "validation_score": 0.052306071421052515
+    },
+    {
+      "elapsed_seconds": 15.016814189002616,
+      "epoch": 10,
+      "loss_d": 0.32686150891502636,
+      "loss_g": 2.583552360310098,
+      "validation_score": 0.07546698283209707
+    }
+  ],
+  "prepared_dataset": {
+    "source_sha256": "934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8",
+    "resolution": 96,
+    "target": "net",
+    "units": "kWh/interval",
+    "counts": {
+      "rows_read": 84326400,
+      "rows_processed": 84326400,
+      "meters_seen": 2400,
+      "meters_kept": 2400,
+      "days_seen": 878400,
+      "days_excluded": 4800,
+      "profiles_kept": 873600,
+      "meters_without_valid_days": 0,
+      "nonresidential_meters": 0,
+      "sampled_out_meters": 0
+    },
+    "exclusions": {
+      "dst_transition_day": 4800,
+      "incomplete_day": 4800,
+      "duplicate_slots": 2400,
+      "off_grid": 0,
+      "nonfinite_energy": 0,
+      "negative_source_energy": 0
+    }
+  },
+  "split_integrity": {
+    "train": {
+      "profiles": 611520,
+      "meters": 1680,
+      "sha256": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff"
+    },
+    "val": {
+      "profiles": 131040,
+      "meters": 360,
+      "sha256": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d"
+    },
+    "test": {
+      "profiles": 131040,
+      "meters": 360,
+      "sha256": "ef3d37e59054e065c2779bf6eb5430e309718f97e924daa7580df3e00e2705b0"
+    }
+  },
+  "test_evaluation_performed": false
+}

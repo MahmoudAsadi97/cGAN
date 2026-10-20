@@ -75,7 +75,7 @@ cell references and limitations. Meters are split within equipment groups:
 
 The split seed defaults to 42. No EAN ID appears in more than one split. All scaler
 statistics come from train. Prepared NPZ files contain `x`, `y`, `meter_id`, `date`;
-`x` remains in original units. `metadata.json` records source hash, IDs, counts,
+`x` remains in original units. `metadata.json` records source and split checksums, IDs, counts,
 exclusions, resolution, target, timezone policy and labels. `scaler.json` records
 training min/max. Metadata and data fingerprints bind checkpoints to evaluation.
 
@@ -115,7 +115,7 @@ explicitly use the untouched test split for each final model:
 fluvius-cgan evaluate --prepared data/prepared96 --checkpoint runs/cgan96/seed_11/best.pt --split test --output runs/cgan96/seed_11/final_test.json
 ```
 
-Every evaluation compares generated profiles with training-only conditional resampling
+Every evaluation compares generated profiles with conditional resampling from the model’s actual training subset
 and conditional means. It reports per-condition and overall energy, peak, ramp,
 diversity, mean-profile and autocorrelation diagnostics. Negative outputs remain
 visible; there is no hidden clipping. Nearest-neighbor diagnostics are bounded and
@@ -124,7 +124,8 @@ meter-cluster bootstrap with its uncertainty scope documented in its docstring.
 
 Read [RESEARCH_PROTOCOL.md](docs/RESEARCH_PROTOCOL.md) for mandatory experiments,
 uncertainty, leakage controls, final-test rules and manuscript completion criteria.
-Read [VALIDATION.md](docs/VALIDATION.md) for what was actually executed in this revision.
+The ten-epoch full-data CPU pilot underperformed the empirical baselines. Read
+[VALIDATION.md](docs/VALIDATION.md) for the actual results and remaining experiments.
 
 ## Attribution
 

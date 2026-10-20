@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# V2 research data and run artifacts
+/data/
+/runs/
+*.npz
+*.pt
+*.zip
+*.egg-info/
+.pytest_cache/

@@ -1,0 +1,28 @@
+name: Audit released dataset
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/fluvius-cgan]
+    paths: [scripts/audit_release.py, .github/workflows/data-audit.yml]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch the pinned research dataset
+        run: |
+          curl --fail --location --retry 3 --output raw.zip https://github.com/MahmoudAsadi97/cGAN/releases/download/data/raw.zip
+          echo '934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8  raw.zip' | sha256sum --check
+      - name: Inspect actual release schema
+        run: python scripts/audit_release.py raw.zip --output dataset_audit.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dataset-audit
+          path: dataset_audit.json
+          retention-days: 30

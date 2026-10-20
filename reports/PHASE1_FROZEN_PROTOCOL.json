@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "frozen": true,
+  "frozen_at_utc": "2026-10-20T15:02:56.304215+00:00",
+  "data_hashes": {
+    "train.npz": "60cfe95529fc0d0d6c4c0ecd2076c77508f0358245a63a9cd2e7a61355ce32ae",
+    "val.npz": "ae1886812e3f943c24b4857faace034be4e4e9a235200c1bec977d7f98afe128",
+    "test.npz": "de9946fd43adea65ffcd14ddd026b367b128a4ef3b74b259c157559e6e910cec",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "3f7324dc92e414aaed3d63a9d4aa522cff09eba201eccc231fe31acaf1aee5e0"
+  },
+  "training_config": {
+    "epochs": 100,
+    "batch_size": 2000,
+    "latent_dim": 24,
+    "seed": 11,
+    "num_threads": 1,
+    "unconditional": false,
+    "device": "cpu",
+    "validation_per_condition": 1024,
+    "validation_every": 5,
+    "max_train_samples": null
+  },
+  "training_seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "generation_seeds": [
+    31001,
+    31002,
+    31003
+  ],
+  "methods": [
+    "conditional",
+    "unconditional",
+    "mean",
+    "resample",
+    "copula"
+  ],
+  "primary_endpoint": "condition-macro normalized profile sliced Wasserstein-1",
+  "projection_count": 128,
+  "projection_seed": 2026,
+  "uncertainty": {
+    "bootstrap_replicates": 499,
+    "bootstrap_seed": 20261020,
+    "exemplar_training_seed": 11,
+    "exemplar_generation_seed": 31001,
+    "comparators": [
+      "resample",
+      "copula"
+    ],
+    "metrics": [
+      "normalized_profile_sw1",
+      "daily_energy_w1_kwh"
+    ],
+    "interval": "paired technology-stratified whole-real-meter percentile 95%",
+    "scope": "fixed fitted models and synthetic draws; shared 2024 calendar",
+    "nearest_neighbor_query_cap_per_condition": 256,
+    "nearest_neighbor_seed": 41001
+  },
+  "prior_access": "V2 documents validation exploration and deterministic test identity access. Its inspected records state final test performance was unseen; this study cannot independently establish every prior user's access. V3 preserves the original retained test membership and logs its own performance accesses."
+}

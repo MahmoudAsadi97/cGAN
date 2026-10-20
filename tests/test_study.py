@@ -38,6 +38,10 @@ def test_baseline_evaluation_records_equal_counts_and_seed_replicates(tmp_path):
     for rep in result["replicates"]:
         for value in rep["metrics"]["per_condition"].values():
             assert value["n_real"] == value["n_fake"] == 4
+        for curve in rep["curves"].values():
+            assert len(curve["slot_w1_kwh"]) == 24
+            assert np.asarray(curve["real_quantiles_kwh"]).shape == (5, 24)
+            assert len(curve["fake_mean_kwh"]) == 24
     assert json.loads(out.read_text()) == result
     with pytest.raises(FileExistsError):
         evaluate_run(data, "mean", "val", [31], out)
@@ -80,3 +84,23 @@ def test_protocol_cannot_be_silently_replaced(tmp_path):
     freeze_protocol(data, protocol, training_config={"epochs": 5})
     with pytest.raises(FileExistsError):
         freeze_protocol(data, protocol, training_config={"epochs": 6})
+
+
+def test_resumed_selected_checkpoint_uses_completed_run_budget(tmp_path):
+    from fluvius_cgan.training import train
+
+    data = fixture_data(tmp_path)
+    run = tmp_path / "run"
+    config = {"epochs": 1, "batch_size": 4, "seed": 11, "validation_every": 5}
+    train(data, run, config)
+    train(data, run, {**config, "epochs": 2}, resume=True)
+    protocol = tmp_path / "protocol.json"
+    freeze_protocol(data, protocol, training_config={"epochs": 2, "batch_size": 4},
+                    generation_seeds=[31])
+    result = evaluate_run(data, run / "best.pt", "test", [31],
+                          tmp_path / "best.json", protocol=protocol)
+    assert result["model"]["epoch"] == 1
+    assert result["model"]["completed_run_epochs"] == 2
+    with pytest.raises(ValueError, match="validation-selected"):
+        evaluate_run(data, run / "last.pt", "test", [31],
+                     tmp_path / "last.json", protocol=protocol)

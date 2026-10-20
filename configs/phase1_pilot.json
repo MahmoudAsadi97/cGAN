@@ -1,0 +1,12 @@
+{
+  "epochs": 20,
+  "batch_size": 2000,
+  "latent_dim": 24,
+  "seed": 101,
+  "num_threads": 1,
+  "unconditional": false,
+  "device": "cpu",
+  "validation_per_condition": 1024,
+  "validation_every": 5,
+  "max_train_samples": null
+}

@@ -250,11 +250,17 @@ def train(data_dir, run_dir, config, resume=False):
                     optimizer_d.step()
                     optimizer_g.zero_grad(set_to_none=True)
                     latent = torch.randn(len(real), 24, generator=noise_rng).to(device)
-                    loss_g = loss_fn(discriminator(generator(latent, labels), labels), ones)
-                    if not torch.isfinite(loss_g):
-                        raise FloatingPointError("Nonfinite generator loss")
-                    loss_g.backward()
-                    optimizer_g.step()
+                    # D stays in training mode: retain the reference dropout
+                    # draws while avoiding unused D parameter gradients.
+                    discriminator.requires_grad_(False)
+                    try:
+                        loss_g = loss_fn(discriminator(generator(latent, labels), labels), ones)
+                        if not torch.isfinite(loss_g):
+                            raise FloatingPointError("Nonfinite generator loss")
+                        loss_g.backward()
+                        optimizer_g.step()
+                    finally:
+                        discriminator.requires_grad_(True)
                     loss_g_sum += loss_g.item()
                     loss_d_sum += loss_d.item()
                     batches += 1
@@ -286,6 +292,9 @@ def train(data_dir, run_dir, config, resume=False):
                 _json(output / "manifest.json", manifest)
                 if score is not None:
                     print(f"Epoch {epoch}: G={loss_g_sum / batches:.6f} D={loss_d_sum / batches:.6f} validation_SW1={score:.6f}", flush=True)
+        manifest["artifact_hashes"] = {
+            name: _sha256(output / name) for name in ("best.pt", "last.pt", "history.json")
+        }
         manifest["status"] = "completed"
         _json(output / "manifest.json", manifest)
         return manifest

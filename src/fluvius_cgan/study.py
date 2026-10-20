@@ -46,16 +46,28 @@ def freeze_protocol(data_dir, output, training_config, generation_seeds=None):
     if Path(output).exists():
         raise FileExistsError(output)
     root = Path(data_dir)
+    reporting_seeds = _seeds(GENERATION_SEEDS if generation_seeds is None else generation_seeds)
     value = {
         "schema_version": 1, "phase": 1, "frozen": True,
         "frozen_at_utc": datetime.now(timezone.utc).isoformat(),
         "data_hashes": {name: sha256(root / name) for name in DATA_FILES},
         "training_config": training_config,
         "training_seeds": TRAINING_SEEDS,
-        "generation_seeds": _seeds(GENERATION_SEEDS if generation_seeds is None else generation_seeds),
+        "generation_seeds": reporting_seeds,
         "methods": ["conditional", "unconditional", "mean", "resample", "copula"],
         "primary_endpoint": "condition-macro normalized profile sliced Wasserstein-1",
         "projection_count": 128, "projection_seed": 2026,
+        "uncertainty": {
+            "bootstrap_replicates": 499, "bootstrap_seed": 20261020,
+            "exemplar_training_seed": TRAINING_SEEDS[0],
+            "exemplar_generation_seed": reporting_seeds[0],
+            "comparators": ["resample", "copula"],
+            "metrics": ["normalized_profile_sw1", "daily_energy_w1_kwh"],
+            "interval": "paired technology-stratified whole-real-meter percentile 95%",
+            "scope": "fixed fitted models and synthetic draws; shared 2024 calendar",
+            "nearest_neighbor_query_cap_per_condition": 256,
+            "nearest_neighbor_seed": 41001,
+        },
         "prior_access": (
             "V2 documents validation exploration and deterministic test identity access. "
             "Its inspected records state final test performance was unseen; this study "
@@ -121,6 +133,38 @@ def _profile_curves(real, fake, labels):
     return curves
 
 
+def _selected_final_checkpoint(checkpoint, payload, frozen):
+    """Bind final performance to a completed run's validation-selected artifact."""
+    directory = checkpoint.parent
+    manifest = json.loads((directory / "manifest.json").read_text())
+    if manifest.get("status") != "completed":
+        raise ValueError("final evaluation requires a completed training run")
+    if sha256(checkpoint) != manifest.get("artifact_hashes", {}).get("best.pt"):
+        raise ValueError("final evaluation requires the validation-selected checkpoint")
+    for name in ("best.pt", "last.pt", "history.json"):
+        if sha256(directory / name) != manifest.get("artifact_hashes", {}).get(name):
+            raise ValueError(f"completed training artifact hash mismatch: {name}")
+    completed = manifest.get("completed_epochs")
+    if completed != manifest["config"]["epochs"]:
+        raise ValueError("training did not complete its declared budget")
+    for key, value in frozen["training_config"].items():
+        if key not in {"seed", "unconditional"} and manifest["config"].get(key) != value:
+            raise ValueError(f"completed run differs from frozen protocol: {key}")
+    for key, value in payload["config"].items():
+        if key != "epochs" and manifest["config"].get(key) != value:
+            raise ValueError(f"selected checkpoint differs from completed run: {key}")
+    if payload["data_hashes"] != manifest["data_hashes"]:
+        raise ValueError("selected checkpoint dataset differs from completed run")
+    history = json.loads((directory / "history.json").read_text())
+    if [row["epoch"] for row in history] != list(range(1, completed + 1)):
+        raise ValueError("completed training history is incomplete")
+    scored = [row for row in history if row["validation_sw1"] is not None]
+    best = min(scored, key=lambda row: row["validation_sw1"])
+    if payload["epoch"] != best["epoch"] or manifest["best_epoch"] != best["epoch"]:
+        raise ValueError("checkpoint is not the validation-selected best epoch")
+    return completed
+
+
 def evaluate_run(data_dir, checkpoint_or_baseline, split, seeds, output, *, protocol=None):
     """Evaluate matched samples; default callers should explicitly use ``val``.
 
@@ -171,9 +215,8 @@ def evaluate_run(data_dir, checkpoint_or_baseline, split, seeds, output, *, prot
             if frozen is not None:
                 if config["seed"] not in frozen["training_seeds"]:
                     raise ValueError("checkpoint seed is not in frozen protocol")
-                for key, value in frozen["training_config"].items():
-                    if key not in {"seed", "unconditional"} and config.get(key) != value:
-                        raise ValueError(f"checkpoint config differs from frozen protocol: {key}")
+                model_metadata["completed_run_epochs"] = _selected_final_checkpoint(
+                    checkpoint, payload, frozen)
             sample = lambda seed: generate(checkpoint, real["y"], seed)
         if frozen is not None and method not in frozen["methods"]:
             raise ValueError("method is not in frozen protocol")
@@ -202,7 +245,7 @@ def evaluate_run(data_dir, checkpoint_or_baseline, split, seeds, output, *, prot
             "protocol_sha256": protocol_hash, "data_hashes": hashes,
             "source_sha256": metadata.get("source_sha256"),
             "checkpoint_sha256": checkpoint_hash, "model": model_metadata,
-            "generation_seeds": seeds, "profile_units": "kWh/hour",
+            "generation_seeds": seeds, "profile_units": "kWh per hourly interval",
             "sample_policy": "all eligible real rows; equal generated count within every condition",
             "directions_sha256": hashlib.sha256(directions.astype("<f8").tobytes()).hexdigest(),
             "normalization": {"minimum": scaler["minimum"], "maximum": scaler["maximum"],

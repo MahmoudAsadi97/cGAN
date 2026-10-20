@@ -1,0 +1,28 @@
+name: CPU tests
+
+on:
+  push:
+    branches: [V3]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.23'
+          enable-cache: false
+      - name: Install pinned CPU dependencies and editable package
+        run: bash scripts/setup_environment.sh
+      - name: Run synthetic tests with warnings treated as errors
+        run: .venv/bin/python -m pytest -W error

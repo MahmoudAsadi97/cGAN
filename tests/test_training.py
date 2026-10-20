@@ -55,6 +55,11 @@ def test_reference_optimizers_artifacts_fixed_selection_and_no_test_access(tmp_p
     assert manifest['selection']['noise_seed'] != 11
     assert manifest['nondefault_parameters']['batch_size'] == 7
     assert (run / 'best.pt').exists()
+    assert manifest['status'] == 'completed'
+    assert manifest['artifact_hashes'] == {
+        name: hashlib.sha256((run / name).read_bytes()).hexdigest()
+        for name in ('best.pt', 'last.pt', 'history.json')
+    }
 
 
 def test_cpu_epoch_boundary_resume_matches_uninterrupted(tmp_path):
@@ -205,3 +210,87 @@ def test_selection_is_shared_across_training_seeds_and_comparator_arms(tmp_path)
     assert first == second
     assert first['index_seed'] == 2027 and first['noise_seed'] == 2028
     assert first['directions_sha256'] == hashlib.sha256(projection_directions(24).astype('<f8').tobytes()).hexdigest()
+
+
+def test_generator_step_freezes_discriminator_gradients_without_changing_updates(tmp_path, monkeypatch):
+    """Freezing saves D backward work while retaining dropout and exact updates."""
+    import fluvius_cgan.training as training_module
+    from fluvius_cgan.models import Discriminator
+
+    instances, forwards, discriminator_gradients = [], [], []
+
+    class ObservedDiscriminator(Discriminator):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            instances.append(self)
+
+        def forward(self, profiles, labels=None):
+            forwards.append((all(p.requires_grad for p in self.parameters()),
+                             self.training, self.model[-2].training))
+            return super().forward(profiles, labels)
+
+    original_step = torch.optim.Adam.step
+
+    def observed_step(optimizer, *args, **kwargs):
+        discriminator = instances[-1]
+        parameters = list(discriminator.parameters())
+        is_discriminator = optimizer.param_groups[0]['params'][0] is parameters[0]
+        if is_discriminator:
+            assert all(p.requires_grad for p in parameters)
+            result = original_step(optimizer, *args, **kwargs)
+            discriminator_gradients[:] = [p.grad.clone() for p in parameters]
+            return result
+        assert all(not p.requires_grad for p in parameters), 'D must be frozen for the G step'
+        for parameter, before in zip(parameters, discriminator_gradients):
+            assert torch.equal(parameter.grad, before), 'G backward changed a D gradient'
+        return original_step(optimizer, *args, **kwargs)
+
+    data = prepared(tmp_path)
+    monkeypatch.setattr(training_module, 'Discriminator', ObservedDiscriminator)
+    monkeypatch.setattr(torch.optim.Adam, 'step', observed_step)
+    train(data, tmp_path / 'frozen', config(2))
+    assert forwards == [(True, True, True), (True, True, True), (False, True, True)] * 6
+    assert all(p.requires_grad for p in instances[-1].parameters())
+    optimized = checkpoint(tmp_path / 'frozen/last.pt')
+
+    class UnfrozenDiscriminator(Discriminator):
+        def requires_grad_(self, requires_grad=True):
+            # Reproduce the previous trainer, retaining otherwise identical
+            # network initialization, dropout randomness and optimizer calls.
+            return super().requires_grad_(True)
+
+    monkeypatch.setattr(training_module, 'Discriminator', UnfrozenDiscriminator)
+    monkeypatch.setattr(torch.optim.Adam, 'step', original_step)
+    train(data, tmp_path / 'unfrozen', config(2))
+    reference = checkpoint(tmp_path / 'unfrozen/last.pt')
+    for network in ('generator', 'discriminator'):
+        for name in reference[network]:
+            assert torch.equal(optimized[network][name], reference[network][name]), (network, name)
+    for optimizer in ('optimizer_g', 'optimizer_d'):
+        for index, state in reference[optimizer]['state'].items():
+            for name, value in state.items():
+                assert torch.equal(optimized[optimizer]['state'][index][name], value)
+    for actual, expected in zip(optimized['history'], reference['history']):
+        for field in ('loss_g', 'loss_d', 'validation_sw1'):
+            assert actual[field] == expected[field]
+    assert torch.equal(optimized['model_rng_state'], reference['model_rng_state'])
+
+
+def test_resumed_manifest_binds_historical_best_checkpoint_and_completed_budget(tmp_path, monkeypatch):
+    import fluvius_cgan.training as training_module
+    scores = iter([.1, .2, .3])
+    monkeypatch.setattr(training_module, '_validation', lambda *args: next(scores))
+    data, run = prepared(tmp_path), tmp_path / 'run'
+    train(data, run, config(1))
+    best_hash = hashlib.sha256((run / 'best.pt').read_bytes()).hexdigest()
+    train(data, run, config(3), resume=True)
+    manifest = json.loads((run / 'manifest.json').read_text())
+    assert manifest['status'] == 'completed'
+    assert manifest['completed_epochs'] == manifest['config']['epochs'] == 3
+    assert manifest['best_epoch'] == 1
+    assert checkpoint(run / 'best.pt')['config']['epochs'] == 1
+    assert manifest['artifact_hashes']['best.pt'] == best_hash
+    assert manifest['artifact_hashes'] == {
+        name: hashlib.sha256((run / name).read_bytes()).hexdigest()
+        for name in ('best.pt', 'last.pt', 'history.json')
+    }

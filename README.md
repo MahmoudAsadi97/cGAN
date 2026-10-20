@@ -19,6 +19,13 @@ splits, train-only normalization, seeded training, validation-selected checkpoin
 physical-unit evaluation, empirical baselines, and provenance. Exact differences:
 [UPSTREAM_ADAPTATION.md](docs/UPSTREAM_ADAPTATION.md).
 
+Controlled improvements are being evaluated in
+[IMPROVEMENT_STUDY.md](docs/IMPROVEMENT_STUDY.md). The first equal-budget screen
+reduced macro interval W1 from 0.377 to 0.109 kWh using train-only standardization,
+but diversity remained deficient. These are exploratory validation results, not
+a final test or publication claim. Reproducible measurements are in
+[normalization_screen.json](reports/normalization_screen.json).
+
 ## Install and run
 
 Python 3.10 or later. Install a suitable PyTorch build for your CPU/GPU first if needed.

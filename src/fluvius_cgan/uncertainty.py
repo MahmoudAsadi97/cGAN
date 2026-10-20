@@ -58,6 +58,29 @@ def _meter_groups(real_meter_ids, count):
     return meters, inverse
 
 
+def _stratified_meter_groups(real_meter_strata, real_meters, n_meters):
+    """Validate row-level strata and return distinct-meter groups to resample."""
+    if real_meter_strata is None:
+        return [np.arange(n_meters)], {"all": n_meters}
+    values = np.asarray(real_meter_strata)
+    if values.ndim != 1 or len(values) != len(real_meters) or values.dtype.kind not in "iuSU":
+        raise ValueError("real_meter_strata must be a rank-1 string/integer array matching real rows")
+    if values.dtype.kind in "SU" and (np.char.str_len(np.char.strip(values.astype(str))) == 0).any():
+        raise ValueError("real_meter_strata cannot contain empty strata")
+    strata, row_strata = np.unique(values, return_inverse=True)
+    meter_strata = np.empty(n_meters, dtype=np.int64)
+    for meter in range(n_meters):
+        observed = np.unique(row_strata[real_meters == meter])
+        if len(observed) != 1:
+            raise ValueError("each real meter must belong to exactly one stratum")
+        meter_strata[meter] = observed[0]
+    groups = [np.flatnonzero(meter_strata == stratum) for stratum in range(len(strata))]
+    counts = {str(stratum): len(group) for stratum, group in zip(strata, groups)}
+    if any(count < 2 for count in counts.values()):
+        raise ValueError("stratified meter bootstrap requires at least two distinct meters per stratum")
+    return groups, counts
+
+
 def paired_condition_macro_meter_bootstrap(
     real,
     real_labels,
@@ -71,6 +94,7 @@ def paired_condition_macro_meter_bootstrap(
     n_bootstrap: int = 200,
     confidence: float = .95,
     seed: int = 42,
+    real_meter_strata=None,
 ) -> dict:
     """Compare fixed generated and comparator samples with paired percentile CIs.
 
@@ -89,6 +113,12 @@ def paired_condition_macro_meter_bootstrap(
     differ from one another and from real data. There is no synthetic-to-real day
     pairing, synthetic meter assignment, or separate resampling by condition.
 
+    Optional ``real_meter_strata`` assigns one string/integer stratum to each real
+    row, with one consistent stratum per meter and at least two distinct meters
+    per stratum. The original meter count is then sampled with replacement within
+    each stratum, retaining the sample's stratum allocation. Without strata, meters
+    are sampled globally. Meter multiplicities remain paired across both methods.
+
     Condition supports must match exactly. A draw missing any original condition
     is undefined, never averaged over fewer conditions. All draws are attempted
     and missing-condition counts are reported. If even one draw is undefined,
@@ -97,9 +127,12 @@ def paired_condition_macro_meter_bootstrap(
     Point estimates remain available. A new explicitly justified sampling design
     or estimand is needed when rare conditions make this bootstrap unsuitable.
 
-    These are marginal percentile intervals, not simultaneous or bias-corrected
-    intervals. They assume real meters are the independent sampling units; all
-    within-meter dependence is retained. They describe real-meter sampling only,
+    These are descriptive marginal percentile intervals, not simultaneous or
+    bias-corrected intervals. Their nominal coverage is not guaranteed: in
+    particular W1 is nonsmooth at coincident CDFs, where ordinary bootstrap
+    inference can be nonregular. They do not establish statistical significance.
+    They assume meters are independent sampling units (within each specified
+    stratum); all within-meter dependence is retained. They describe real-meter sampling only,
     conditional on these frozen models, generated arrays, comparator arrays, and
     observed condition support. They exclude training-seed, synthetic Monte Carlo,
     preprocessing-fit, model-selection, and future-period uncertainty. More draws
@@ -126,6 +159,7 @@ def paired_condition_macro_meter_bootstrap(
             )
     meters, real_meters = _meter_groups(real_meter_ids, len(real))
     n_meters = len(meters)
+    sampling_groups, stratum_counts = _stratified_meter_groups(real_meter_strata, real_meters, n_meters)
     if (isinstance(n_bootstrap, (bool, np.bool_))
             or not isinstance(n_bootstrap, (int, np.integer)) or n_bootstrap < 2):
         raise ValueError("n_bootstrap must be an integer of at least two")
@@ -190,7 +224,9 @@ def paired_condition_macro_meter_bootstrap(
     missing_counts = np.zeros(len(support), dtype=np.int64)
     n_invalid = 0
     for _ in range(n_bootstrap):
-        selected = rng.integers(0, n_meters, size=n_meters)
+        selected = np.concatenate([
+            group[rng.integers(0, len(group), size=len(group))] for group in sampling_groups
+        ])
         multiplicities = np.bincount(selected, minlength=n_meters)
         real_counts = condition_meter_counts @ multiplicities
         missing = real_counts == 0
@@ -205,6 +241,12 @@ def paired_condition_macro_meter_bootstrap(
     return {
         "method": "paired_percentile_cluster_bootstrap",
         "resampling_unit": "real_meter",
+        "resampling_scheme": "global_real_meter" if real_meter_strata is None else "within_stratum_real_meter",
+        "stratum_meter_counts": stratum_counts,
+        "coverage_interpretation": (
+            "Descriptive marginal percentile intervals; nominal coverage is not guaranteed, "
+            "particularly near coincident CDFs where W1 is nonsmooth. Not a significance claim."
+        ),
         "condition_weighting": "equal_over_original_observed_support",
         "generated_sample_policy": "fixed_condition_reference",
         "comparator_sample_policy": "fixed_condition_reference",

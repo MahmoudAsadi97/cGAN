@@ -85,6 +85,46 @@ def test_is_deterministic_and_does_not_mutate_inputs():
         np.testing.assert_array_equal(data[key], original[key])
 
 
+def test_stratified_bootstrap_matches_manual_fixed_meter_counts_per_stratum():
+    data = example()
+    data["real_meter_ids"] = np.repeat(["a", "b", "c", "d"], 2)
+    strata = np.repeat(["north", "south"], 4)
+    n_bootstrap, seed = 19, 31
+    result = paired_condition_macro_meter_bootstrap(
+        **data, n_bootstrap=n_bootstrap, seed=seed, real_meter_strata=strata,
+    )
+    meters = np.unique(data["real_meter_ids"])
+    groups = [np.flatnonzero(data["real_meter_ids"] == meter) for meter in meters]
+    rng = np.random.default_rng(seed)
+    draws = []
+    for _ in range(n_bootstrap):
+        # Preserve two sampled meters from each stratum, including repetitions.
+        selected = np.concatenate((rng.integers(0, 2, size=2), rng.integers(2, 4, size=2)))
+        indices = np.concatenate([groups[meter] for meter in selected])
+        generated = conditional_errors(data, indices, "generated", .25)
+        comparator = conditional_errors(data, indices, "comparator", .25)
+        draws.append([generated[metric] - comparator[metric] for metric in METRICS])
+    bounds = np.quantile(draws, [.025, .975], axis=0)
+    for i, metric in enumerate(METRICS):
+        assert result["intervals"][metric]["lower"] == pytest.approx(bounds[0, i])
+        assert result["intervals"][metric]["upper"] == pytest.approx(bounds[1, i])
+    assert result["resampling_scheme"] == "within_stratum_real_meter"
+    assert result["stratum_meter_counts"] == {"north": 2, "south": 2}
+    assert "nominal coverage is not guaranteed" in result["coverage_interpretation"]
+
+
+@pytest.mark.parametrize("strata,match", [
+    ([0, 1, 0, 0, 0, 0, 0, 0], "exactly one stratum"),
+    ([0, 0, 1, 1, 1, 1, 1, 1], "at least two distinct meters per stratum"),
+    ([0] * 7, "matching real rows"),
+    ([0.] * 8, "string/integer"),
+    ([""] * 8, "empty strata"),
+])
+def test_strata_require_consistent_meter_assignment_and_replicated_meters(strata, match):
+    with pytest.raises(ValueError, match=match):
+        paired_condition_macro_meter_bootstrap(**example(), real_meter_strata=strata, n_bootstrap=2)
+
+
 def test_reference_order_and_duplicate_frequency_preserve_distribution_not_row_pairing():
     data = example()
     original = paired_condition_macro_meter_bootstrap(**data, n_bootstrap=7)

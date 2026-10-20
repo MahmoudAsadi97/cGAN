@@ -1,0 +1,20 @@
+{
+  "recorded_utc": "2026-10-20T15:39:00Z",
+  "kind": "synthetic_software_verification_resource_failure",
+  "observed_exit_code": 137,
+  "test_file": "tests/test_frozen_reference_study.py",
+  "completed_small_cases_before_exit": 4,
+  "full_fixture_completed": false,
+  "previous_memory_events": {
+    "oom": 8,
+    "oom_kill": 1
+  },
+  "observed_memory_events": {
+    "oom": 10,
+    "oom_kill": 2
+  },
+  "interpretation": "The synthetic fixture exited137 while the shared cgroup recorded another OOM kill. No pytest assertion traceback or completed bundle result was produced.",
+  "actual_training_status_at_observation": "Capacity and reference training logs continued progressing; no interrupted research training observed. Completion receipts remain required.",
+  "recovery": "Retain failed verification; fit synthetic calibration templates one condition at a time; rerun only after capacity training frees memory. Shared heavy-evaluation lock continues to serialize heavy jobs. Numerical experiment settings and seeds are unchanged.",
+  "test_performance_accessed": false
+}

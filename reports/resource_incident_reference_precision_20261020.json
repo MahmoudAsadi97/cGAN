@@ -1,0 +1,76 @@
+{
+  "recorded_utc": "2026-10-20T15:46:00Z",
+  "kind": "native_reference_precision_resource_failure",
+  "failed_attempt": {
+    "completed_utc": "2026-10-20T15:42:28.975667+00:00",
+    "arm": "curated_reference_bce96",
+    "seed": 11,
+    "source_commit": "1ca62d0fbe1d77f916f8904e812db7d720f8cf53",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "/workspace/scratch/bd8d9697d969/cGAN-temporal/scripts/evaluate_calibration.py",
+      "--prepared",
+      "/workspace/scratch/bd8d9697d969/cGAN/data/curated96",
+      "--checkpoint",
+      "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/best.pt",
+      "--output",
+      "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration_precision.json",
+      "--samples-per-condition",
+      "1000",
+      "--seed",
+      "2026",
+      "--calibration-samples-per-condition",
+      "4096",
+      "--calibration-seed",
+      "7301",
+      "--quantile-knots",
+      "1025"
+    ],
+    "output": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration_precision.json",
+    "returncode": -9,
+    "seconds": 326.12819914300053,
+    "largest_child_rss_kib_so_far": 2877308
+  },
+  "failed_output_exists": false,
+  "memory_events": {
+    "oom": 11,
+    "oom_kill": 3
+  },
+  "capacity_training_completion": {
+    "11": {
+      "seed": 11,
+      "completed_utc": "2026-10-20T15:44:00.273474+00:00",
+      "seconds": 4840.85100606,
+      "peak_rss_kib": 1832272,
+      "epochs": 26,
+      "best_epoch": 26,
+      "generator_updates": 30784,
+      "discriminator_updates": 30784,
+      "raw_validation_complete": true
+    },
+    "22": {
+      "seed": 22,
+      "completed_utc": "2026-10-20T15:42:43.324292+00:00",
+      "seconds": 4764.5852903350005,
+      "peak_rss_kib": 1833104,
+      "epochs": 26,
+      "best_epoch": 26,
+      "generator_updates": 30784,
+      "discriminator_updates": 30784,
+      "raw_validation_complete": true
+    },
+    "33": {
+      "seed": 33,
+      "completed_utc": "2026-10-20T15:42:41.992850+00:00",
+      "seconds": 4762.837450185001,
+      "peak_rss_kib": 1832992,
+      "epochs": 26,
+      "best_epoch": 25,
+      "generator_updates": 30784,
+      "discriminator_updates": 30784,
+      "raw_validation_complete": true
+    }
+  },
+  "recovery": "Same selected checkpoint, source, command, seeds and sample cap. Completed outputs are retained and skipped. Cap1000 native jobs now wait for an explicit all-training-complete resource release before a fresh attempt; primary jobs remain serialized. No partial output is accepted.",
+  "test_used": false
+}

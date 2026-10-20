@@ -1,0 +1,373 @@
+{
+  "arm": "bce96",
+  "artifacts": {
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/derivation_manifest.json": {
+      "bytes": 2092,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/derivation_manifest.json",
+      "sha256": "8bf2b6922d4b2537a08650c3dec35fb01c3e37f3e58abcb96aa38041f9f8864c"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/metadata.json": {
+      "bytes": 46237,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/metadata.json",
+      "sha256": "50138ba86dd441a1b8cdad09cec7098e97bbc3d0a19cc27e18afe8fb02bc3a3c"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/scaler.json": {
+      "bytes": 237,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/scaler.json",
+      "sha256": "a7019afb1e3ca1bbcc7b830a98dc00fcce077aa248445147f3b3bf2bf41d1092"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/curation_manifest.json": {
+      "bytes": 6820,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/curation_manifest.json",
+      "sha256": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/metadata.json": {
+      "bytes": 1194775,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/metadata.json",
+      "sha256": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/scaler.json": {
+      "bytes": 235,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/scaler.json",
+      "sha256": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/best.pt": {
+      "bytes": 1675555,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/best.pt",
+      "sha256": "268bd42322078aaa2230ebfd83ab3a5f909d174be8afc9bfc9d3b49d313373e9"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration.npz": {
+      "bytes": 47916354,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration.npz",
+      "sha256": "ce8bed53f968329623a2da63b29fc76874ff9b86f67db96c5b027596af08dfbb"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration_validation.json": {
+      "bytes": 3559610,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration_validation.json",
+      "sha256": "602b9214eeca5aedde6453a9e0e8957ece1794dd6c706ec6b0e492a3e2859832"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/config.json": {
+      "bytes": 669,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/config.json",
+      "sha256": "d22e723b9cd46c2f995750d4e210f2019af29e2a0daa69b83a57fe0d78d33423"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/history.json": {
+      "bytes": 40826,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/history.json",
+      "sha256": "17f2f2f1c76631c014aa6ebb6bd764f55d7e5e22ccb1fccae7de7c8972d2363c"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/last.pt": {
+      "bytes": 1675555,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/last.pt",
+      "sha256": "18b2bdadcf73a8d395a6c5e00fa6da2e11fa4a0b13c74309285691289137849e"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/summary.json": {
+      "bytes": 63928,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/summary.json",
+      "sha256": "7dee133fa3fb48743776a08b4e7c2ff41ff875f5606fc474278387044bd6ee71"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/utility_validation.json": {
+      "bytes": 102003,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/utility_validation.json",
+      "sha256": "3f733b87431fe2d43eeff5d034f563be2683bd979cffdc9e8c5376b91d86e531"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/validation_report.json": {
+      "bytes": 405856,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/validation_report.json",
+      "sha256": "2d124316c447f59ee3f1b9b7cfe2b3995f1c9da3fefad7f3d959d414664b5514"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/collect_calibrated_study.py": {
+      "bytes": 49573,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/scripts/collect_calibrated_study.py",
+      "sha256": "980606d2b6f31d80dd4a25df05deef73f0fd7d8677de3c11b5ab09efafe83425"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/collect_reference_study.py": {
+      "bytes": 79702,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/scripts/collect_reference_study.py",
+      "sha256": "b912a04b7365a0e8359d72d8910183078078d184ec4d59e7239da6d300746a72"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/compare_reference_uncertainty.py": {
+      "bytes": 21523,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/scripts/compare_reference_uncertainty.py",
+      "sha256": "c0b044e1d7612973224843a0a645c4958c36f379425c0ada727bd2a94b868731"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/compare_resolutions.py": {
+      "bytes": 19264,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/scripts/compare_resolutions.py",
+      "sha256": "a4408f7fb966da802fe6bc014c9568b9144dfee57cd651abfc3c1b332fefb113"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/evaluate_unconditional_reference.py": {
+      "bytes": 28112,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/scripts/evaluate_unconditional_reference.py",
+      "sha256": "baf96b904ba9ade1c2b248ffbb7e2e142ec4ac87054cdb16e92c92d64af816ad"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/__init__.py": {
+      "bytes": 71,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/__init__.py",
+      "sha256": "6492d4cfc58c39594f849ec7274ca0d995d12b15fd0108006f27f87e490df548"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/__main__.py": {
+      "bytes": 30,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/__main__.py",
+      "sha256": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/battery.py": {
+      "bytes": 7750,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/battery.py",
+      "sha256": "f7c7437de23c5b3a9dbc266bd25f1345731ec0fb2112aeaf830332cef730c8e3"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/calibration.py": {
+      "bytes": 24634,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/calibration.py",
+      "sha256": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/cli.py": {
+      "bytes": 13245,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/cli.py",
+      "sha256": "0dafaa0bfcfc6a1f6e92f9a41b0152142c596e6ff28a9d80f5a7b2af45195387"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/copula.py": {
+      "bytes": 15483,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/copula.py",
+      "sha256": "f692737d98c4452eeec92a07777386c848648f3345477b561e4457b83304624c"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/curation.py": {
+      "bytes": 17710,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/curation.py",
+      "sha256": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/data.py": {
+      "bytes": 20457,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/data.py",
+      "sha256": "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/derived.py": {
+      "bytes": 25781,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/derived.py",
+      "sha256": "680cfcec2e2922202f08393e88cc94eb9587f73c0e513f0d988fe38f98c1055c"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/distribution_loss.py": {
+      "bytes": 8201,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/distribution_loss.py",
+      "sha256": "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/evaluation.py": {
+      "bytes": 17538,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/evaluation.py",
+      "sha256": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/frozen_reference_study.py": {
+      "bytes": 66738,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/frozen_reference_study.py",
+      "sha256": "52be6e04a28905aa5353c97c2e15227d958779df7905891984f68cc360661c3f"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/frozen_test.py": {
+      "bytes": 51725,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/frozen_test.py",
+      "sha256": "9b026f494f51acf64bb491fbf92c218fdedcd97ca746abdb6f219ed14a16c64e"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/joint.py": {
+      "bytes": 5060,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/joint.py",
+      "sha256": "1c81d551acf1a627cf46659530c07ddb211d036f3df73eaf2d635ee799944941"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/models.py": {
+      "bytes": 3467,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/models.py",
+      "sha256": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/release.py": {
+      "bytes": 3133,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/release.py",
+      "sha256": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/residual.py": {
+      "bytes": 5938,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/residual.py",
+      "sha256": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/temporal_loss.py": {
+      "bytes": 8583,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/temporal_loss.py",
+      "sha256": "498d817001dd009caae0924682a7e0549bfc39897e3592d0fcd90bac3f80207a"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/training.py": {
+      "bytes": 48647,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/training.py",
+      "sha256": "8548b5decf26b26add75887caab2af6022e61eb7c60bcb56b3dce3c55b9a8651"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/uncertainty.py": {
+      "bytes": 17526,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/uncertainty.py",
+      "sha256": "468c8abcb3ad85c4b03d7508b13a41a9adaa289fbba1a66c5a3257eea5b3e214"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/utility.py": {
+      "bytes": 14597,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/utility.py",
+      "sha256": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133"
+    },
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/utility_uncertainty.py": {
+      "bytes": 8533,
+      "path": "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/utility_uncertainty.py",
+      "sha256": "32315e109cdd03a5ab9a55dd3d5edcfa0e3a5ac5ab8dc4ec9ffbaf84fc05fbf1"
+    }
+  },
+  "checkpoint_sha256": "268bd42322078aaa2230ebfd83ab3a5f909d174be8afc9bfc9d3b49d313373e9",
+  "checks_passed": [
+    "prepared metadata/manifests bind native and derived lineage",
+    "complete26epochs30784updates, config/history/best/last/source/scaler/data consistent",
+    "saved map metadata binds exact checkpoint and full TRAIN protocol",
+    "original raw primary binds checkpoint, data, cap100 and all64 conditions",
+    "native primary physical/joint/battery/map/source and original raw agreement",
+    "native primary utility full TRAIN fits/labels/coefficients, fixed rows/map/task/source",
+    "all bound input/source fingerprints unchanged at completion"
+  ],
+  "collector_sources_sha256": {
+    "scripts/collect_calibrated_study.py": "980606d2b6f31d80dd4a25df05deef73f0fd7d8677de3c11b5ab09efafe83425",
+    "scripts/collect_reference_study.py": "b912a04b7365a0e8359d72d8910183078078d184ec4d59e7239da6d300746a72",
+    "scripts/compare_reference_uncertainty.py": "c0b044e1d7612973224843a0a645c4958c36f379425c0ada727bd2a94b868731",
+    "scripts/compare_resolutions.py": "a4408f7fb966da802fe6bc014c9568b9144dfee57cd651abfc3c1b332fefb113",
+    "scripts/evaluate_unconditional_reference.py": "baf96b904ba9ade1c2b248ffbb7e2e142ec4ac87054cdb16e92c92d64af816ad",
+    "src/fluvius_cgan/__init__.py": "6492d4cfc58c39594f849ec7274ca0d995d12b15fd0108006f27f87e490df548",
+    "src/fluvius_cgan/__main__.py": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+    "src/fluvius_cgan/battery.py": "f7c7437de23c5b3a9dbc266bd25f1345731ec0fb2112aeaf830332cef730c8e3",
+    "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+    "src/fluvius_cgan/cli.py": "0dafaa0bfcfc6a1f6e92f9a41b0152142c596e6ff28a9d80f5a7b2af45195387",
+    "src/fluvius_cgan/copula.py": "f692737d98c4452eeec92a07777386c848648f3345477b561e4457b83304624c",
+    "src/fluvius_cgan/curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+    "src/fluvius_cgan/data.py": "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5",
+    "src/fluvius_cgan/derived.py": "680cfcec2e2922202f08393e88cc94eb9587f73c0e513f0d988fe38f98c1055c",
+    "src/fluvius_cgan/distribution_loss.py": "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a",
+    "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+    "src/fluvius_cgan/frozen_reference_study.py": "52be6e04a28905aa5353c97c2e15227d958779df7905891984f68cc360661c3f",
+    "src/fluvius_cgan/frozen_test.py": "9b026f494f51acf64bb491fbf92c218fdedcd97ca746abdb6f219ed14a16c64e",
+    "src/fluvius_cgan/joint.py": "1c81d551acf1a627cf46659530c07ddb211d036f3df73eaf2d635ee799944941",
+    "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+    "src/fluvius_cgan/release.py": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe",
+    "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+    "src/fluvius_cgan/temporal_loss.py": "498d817001dd009caae0924682a7e0549bfc39897e3592d0fcd90bac3f80207a",
+    "src/fluvius_cgan/training.py": "8548b5decf26b26add75887caab2af6022e61eb7c60bcb56b3dce3c55b9a8651",
+    "src/fluvius_cgan/uncertainty.py": "468c8abcb3ad85c4b03d7508b13a41a9adaa289fbba1a66c5a3257eea5b3e214",
+    "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133",
+    "src/fluvius_cgan/utility_uncertainty.py": "32315e109cdd03a5ab9a55dd3d5edcfa0e3a5ac5ab8dc4ec9ffbaf84fc05fbf1"
+  },
+  "complete_study": false,
+  "covered": [
+    "prepared JSON lineage",
+    "completed BCE96 training run",
+    "saved-map scalar metadata",
+    "original raw primary",
+    "native primary calibration",
+    "native primary utility"
+  ],
+  "evaluator_source_groups": {
+    "native_physical96": {
+      "numerical": {
+        "src/fluvius_cgan/battery.py": "f7c7437de23c5b3a9dbc266bd25f1345731ec0fb2112aeaf830332cef730c8e3",
+        "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+        "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+        "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+        "src/fluvius_cgan/joint.py": "1c81d551acf1a627cf46659530c07ddb211d036f3df73eaf2d635ee799944941",
+        "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+        "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80"
+      },
+      "runner_helpers": {
+        "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+        "evaluation_script_sha256": "21e99c6806ea94e5b8e08f67d89aa0cc17bea0f962750f37874d34628471d90e"
+      }
+    },
+    "native_utility96": {
+      "numerical": {
+        "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+        "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+        "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+        "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+        "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+        "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133"
+      },
+      "runner_helpers": {
+        "scripts/compare_checkpoints.py": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
+        "scripts/evaluate_utility.py": "a78e6b89d31237657e0cc7fc288c109b1bc52ba5ad5108118ac139e36880c9e3",
+        "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+        "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+        "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+        "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+        "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+        "src/fluvius_cgan/training.py": "1eabd6ee18c381ba16a2af659247400d0d08557c8fcf7a66dcd3c6fc16b5236a",
+        "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133"
+      }
+    }
+  },
+  "inspection_script": {
+    "sha256": "bea1c436ee2adb36b28bfa86bfe7d7f982c0164083ef557c94a53c0f4c19d377",
+    "source": "\"\"\"One saved BCE96 seed: artifact compatibility, not model evaluation.\"\"\"\nimport builtins\nimport io\nimport json\nfrom pathlib import Path\nimport sys\nimport traceback\n\nROOT = Path(__file__).resolve().parents[1]\nsys.path.insert(0, str(ROOT / \"scripts\"))\nimport collect_reference_study as c\n\noutput = ROOT / \"reports/reference_collector_actual_binding_check.json\"\nif output.exists():\n    raise FileExistsError(\"retain prior receipts; do not overwrite\")\nprepared96, prepared24 = ROOT / \"data/curated96\", ROOT / \"data/curated24\"\ndirectory = ROOT / \"runs/curated_reference_bce96/seed_11\"\ninputs = c.Inputs(ROOT, prepared96, prepared24)\nallowed_map = (directory / \"calibration.npz\").resolve()\nforbidden = {str((parent / name).resolve()) for parent in (prepared96, prepared24)\n             for name in (\"train.npz\", \"val.npz\", \"test.npz\")}\nattempted_profile_opens = []\nopened_paths = set()\noriginal_open, original_io_open = builtins.open, io.open\n\n\ndef guard(function):\n    def opened(file, *args, **kwargs):\n        if isinstance(file, (str, bytes, Path)):\n            path = Path(file).resolve()\n            if str(path) in forbidden or (path.suffix == \".npz\" and path != allowed_map):\n                attempted_profile_opens.append(str(path))\n                raise AssertionError(\"profile/TEST archive opening forbidden\")\n            opened_paths.add(str(path))\n        return function(file, *args, **kwargs)\n    return opened\n\n\nreceipt = {\n    \"schema_version\": 1, \"kind\": \"reference_collector_saved_artifact_compatibility_check\",\n    \"status\": \"running\", \"split\": \"val\", \"test_used\": False,\n    \"arm\": \"bce96\", \"training_seed\": 11, \"complete_study\": False,\n    \"scope\": \"Partial single-seed saved-artifact consistency only; no profile arrays, inference, fitting, metric rerun, capacity endpoint inspection or TEST access.\",\n    \"covered\": [\"prepared JSON lineage\", \"completed BCE96 training run\", \"saved-map scalar metadata\",\n                \"original raw primary\", \"native primary calibration\", \"native primary utility\"],\n    \"not_covered\": [\"other seeds and arms\", \"precision-cap reports\", \"common-hourly reports\", \"paired reports\", \"complete-study collection\"],\n    \"checks_passed\": [],\n}\nsources = [ROOT / \"scripts/collect_reference_study.py\", ROOT / \"scripts/collect_calibrated_study.py\",\n           ROOT / \"scripts/compare_reference_uncertainty.py\", ROOT / \"scripts/compare_resolutions.py\",\n           ROOT / \"scripts/evaluate_unconditional_reference.py\", *sorted((ROOT / \"src/fluvius_cgan\").glob(\"*.py\"))]\ntry:\n    builtins.open, io.open = guard(original_open), guard(original_io_open)\n    receipt[\"collector_sources_sha256\"] = {str(path.relative_to(ROOT)): inputs.record(path)[\"sha256\"] for path in sources}\n    receipt[\"inspection_script\"] = {\"sha256\": c.sha256_file(__file__), \"source\": Path(__file__).read_text()}\n    prep = c.preparation(inputs)\n    receipt[\"checks_passed\"].append(\"prepared metadata/manifests bind native and derived lineage\")\n    run = c.training_run(inputs, directory, \"bce96\", 11, \"swd10\", prep)\n    receipt[\"checks_passed\"].append(\"complete26epochs30784updates, config/history/best/last/source/scaler/data consistent\")\n    saved_map = c.map_metadata(inputs, run)\n    receipt[\"checks_passed\"].append(\"saved map metadata binds exact checkpoint and full TRAIN protocol\")\n    raw = inputs.json(directory / \"validation_report.json\")\n    c.raw_primary(raw, run)\n    receipt[\"checks_passed\"].append(\"original raw primary binds checkpoint, data, cap100 and all64 conditions\")\n    primary = inputs.json(directory / \"calibration_validation.json\")\n    groups = {}\n    c.bind_evaluator(groups, primary, \"native_physical96\")\n    frozen = c.native_physical(primary, run, 100, saved_map)\n    c.check(c._same(raw[\"methods\"][\"cgan\"], primary[\"methods\"][\"raw_cgan\"]) and\n            c._same(raw[\"methods\"][\"conditional_resampling\"], primary[\"methods\"][\"conditional_resampling\"]),\n            \"original and calibrated-report raw endpoints differ\")\n    receipt[\"checks_passed\"].append(\"native primary physical/joint/battery/map/source and original raw agreement\")\n    utility = inputs.json(directory / \"utility_validation.json\")\n    c.bind_evaluator(groups, utility, \"native_utility96\")\n    disclosure = c.native_utility(utility, run, 100, frozen, saved_map)\n    for method in utility[\"training\"]:\n        c.fit_signature(utility, method)\n    receipt[\"checks_passed\"].append(\"native primary utility full TRAIN fits/labels/coefficients, fixed rows/map/task/source\")\n    inputs.finish()\n    receipt[\"checks_passed\"].append(\"all bound input/source fingerprints unchanged at completion\")\n    receipt[\"checkpoint_sha256\"] = run[\"checkpoint_sha256\"]\n    receipt[\"saved_map_sha256\"] = saved_map[\"sha256\"]\n    receipt[\"training_source_commit\"] = run[\"provenance\"][\"git_commit\"]\n    receipt[\"evaluator_source_groups\"] = groups\n    receipt[\"utility_reference_disclosure\"] = disclosure\n    receipt[\"status\"] = \"passed_partial_compatibility\"\nexcept Exception as error:\n    receipt[\"status\"] = \"failed_partial_compatibility\"\n    receipt[\"failure\"] = {\"type\": type(error).__name__, \"message\": str(error), \"traceback\": traceback.format_exc()}\nfinally:\n    builtins.open, io.open = original_open, original_io_open\n    receipt[\"artifacts\"] = inputs.records\n    receipt[\"profile_or_test_open_attempts\"] = attempted_profile_opens\n    receipt[\"opened_paths\"] = sorted(opened_paths)\n    output.parent.mkdir(parents=True, exist_ok=True)\n    with output.open(\"x\", encoding=\"utf-8\") as stream:\n        json.dump(receipt, stream, indent=2, sort_keys=True, allow_nan=False)\n        stream.write(\"\\n\")\nprint(receipt[\"status\"], output)\nif \"failure\" in receipt:\n    print(receipt[\"failure\"][\"message\"])\n    raise SystemExit(1)\n"
+  },
+  "kind": "reference_collector_saved_artifact_compatibility_check",
+  "not_covered": [
+    "other seeds and arms",
+    "precision-cap reports",
+    "common-hourly reports",
+    "paired reports",
+    "complete-study collection"
+  ],
+  "opened_paths": [
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/derivation_manifest.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/metadata.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated24/scaler.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/curation_manifest.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/metadata.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/data/curated96/scaler.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/best.pt",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration.npz",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/calibration_validation.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/config.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/history.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/last.pt",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/summary.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/utility_validation.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_reference_bce96/seed_11/validation_report.json",
+    "/workspace/scratch/bd8d9697d969/cGAN/runs/reference_collector_actual_binding_check.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/collect_calibrated_study.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/collect_reference_study.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/compare_reference_uncertainty.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/compare_resolutions.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/scripts/evaluate_unconditional_reference.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/__init__.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/__main__.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/battery.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/calibration.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/cli.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/copula.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/curation.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/data.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/derived.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/distribution_loss.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/evaluation.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/frozen_reference_study.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/frozen_test.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/joint.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/models.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/release.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/residual.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/temporal_loss.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/training.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/uncertainty.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/utility.py",
+    "/workspace/scratch/bd8d9697d969/cGAN/src/fluvius_cgan/utility_uncertainty.py"
+  ],
+  "profile_or_test_open_attempts": [],
+  "saved_map_sha256": "ce8bed53f968329623a2da63b29fc76874ff9b86f67db96c5b027596af08dfbb",
+  "schema_version": 1,
+  "scope": "Partial single-seed saved-artifact consistency only; no profile arrays, inference, fitting, metric rerun, capacity endpoint inspection or TEST access.",
+  "split": "val",
+  "status": "passed_partial_compatibility",
+  "test_used": false,
+  "training_seed": 11,
+  "training_source_commit": "1ca62d0fbe1d77f916f8904e812db7d720f8cf53",
+  "utility_reference_disclosure": {
+    "copula_source_sha256": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+    "gaussian_quantile_knots": 1025,
+    "scope": "Unconditional native utility uses every sorted TRAIN observation; calibrated arms use 1025 knots. Keep separately labeled.",
+    "shared_gaussian_across_arms": false
+  }
+}

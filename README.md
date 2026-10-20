@@ -15,8 +15,10 @@ see [the robustness report](docs/CURATED_CALIBRATION_ROBUSTNESS.md). All five
 observed-history utility checks meet the declared tolerance, and the
 [completed validation report](docs/CURATED_COMPLETED_VALIDATION.md) retains each
 seed's paired uncertainty and the stronger resampling results. This is
-validation evidence, not a completed publication result. A fixed three-seed
-[temporal-loss refinement](docs/TEMPORAL_REFINEMENT.md) is now being tested;
+validation evidence, not a completed publication result. The fixed three-seed
+[temporal-loss refinement](docs/CURATED_DERIVATIVE_PILOT.md) failed its promotion
+rules. The separately declared [capacity pilot](docs/CAPACITY_REFINEMENT.md)
+and [BCE reference experiments](docs/REFERENCE_COMPLETION.md) are in progress;
 final test performance remains unseen. Earlier reference-architecture runs and
 normalization screens are historical exploratory evidence, not results for this candidate.
 
@@ -144,9 +146,11 @@ python scripts/run_experiments.py --prepared data/curated96 \
 ```
 
 Schedule heavy calibration, utility, uncertainty and plotting stages sequentially
-on an 8 GiB machine. Running several of them concurrently caused a recorded
-resource interruption in this study. Training and evaluation budgets do not
-change when scheduling changes.
+on an 8 GiB machine. Heavy evaluations can also exceed the limit when several
+training jobs are active. Native 96-slot cap-1,000 evaluations now wait until
+training finishes; the final freeze and TEST assessment require dedicated
+resources. Retain every interrupted attempt and rerun unchanged numerical
+settings. Training and evaluation budgets do not change with scheduling.
 
 The runner writes a **raw-generator** `validation_report.json` for each completed
 seed. It does not fit or evaluate a calibrator. Retain all attempted seeds and
@@ -328,26 +332,27 @@ utility, including separate primary and precision reports.
 
 Output dimension comes from prepared metadata. The experiment runner and all
 calibration/comparison/utility/plotting scripts above evaluate validation only.
-The following command is an explicit **raw reference-model final-test example**,
-to be used only after all model and evaluation decisions are frozen:
+The [reference collector](docs/REFERENCE_REPORTS.md) verifies all twenty full-budget
+runs and the complete native, common-hourly and paired validation evidence. It
+selects no method and adds no performance gate.
+The [training-history supplement](docs/TRAINING_HISTORY_FIGURE.md) retains every
+epoch and seed, with selected checkpoints marked and normalization/resolution
+differences kept explicit.
 
-```bash
-# RAW REFERENCE ONLY: this CLI has no calibrator argument.
-fluvius-cgan evaluate --prepared data/curated96 \
-  --checkpoint runs/reference_cgan96/seed_11/best.pt --split test \
-  --output runs/reference_cgan96/seed_11/final_test_raw.json
-```
+The [unified frozen study](docs/FROZEN_REFERENCE_STUDY.md) seals the selected
+five-seed candidate and all fifteen reference models, their fifteen native maps,
+source, protocols, development evidence, generated arrays and fitted utility
+predictors. `scripts/freeze_reference_study.py` performs this work before TEST
+access. `scripts/evaluate_reference_study.py` requires the retained seal SHA-256
+and uses one shared verified TEST96 cohort, deriving its hourly view only inside
+the scoring process. No fitting, generation or selection occurs during scoring.
+Every declared seed and failed attempt remains in the study. Final-test
+performance is unseen; synthetic harness tests are software checks only.
 
-`fluvius-cgan evaluate` evaluates raw checkpoint outputs against raw empirical
-baselines. It does **not** evaluate the calibrated pipeline, even if given a
-candidate checkpoint. Use the separate
-[frozen calibrated test workflow](docs/FROZEN_TEST.md) for the current pipeline:
-`scripts/freeze_test_manifest.py` seals all five checkpoint/map pairs, source,
-protocol, development evidence, generated references and fitted utility models
-before TEST access. `scripts/evaluate_frozen_test.py` requires the manifest's
-SHA-256, verifies the complete retained TEST identity, and evaluates without
-fitting or generation. Keep every seed and attempt. Final-test performance remains
-unseen; the workflow's synthetic tests are software checks only.
+The earlier [candidate-only frozen workflow](docs/FROZEN_TEST.md) remains
+available as a separate schema. The generic `fluvius-cgan evaluate` CLI evaluates
+raw checkpoint outputs; it does not apply a saved calibrator or implement the
+unified study's freezing and evidence contracts.
 
 Validation reuse means the curated study remains exploratory. Bounded
 nearest-neighbor diagnostics do not establish privacy or absence of memorization.
@@ -358,7 +363,7 @@ Read [RESEARCH_PROTOCOL.md](docs/RESEARCH_PROTOCOL.md) for mandatory experiments
 uncertainty, leakage controls, final-test rules and manuscript completion criteria.
 Historical pilot and original-split screens are recorded in
 [VALIDATION.md](docs/VALIDATION.md) and [IMPROVEMENT_STUDY.md](docs/IMPROVEMENT_STUDY.md).
-They do not substitute for pending curated calibration results.
+They do not substitute for the current reference study or reserved holdout assessment.
 
 ## Attribution
 

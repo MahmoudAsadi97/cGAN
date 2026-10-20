@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-20T16:20:33.524633+00:00",
+  "source_parent_commit": "9d233043601b737982a5eabc5fe685d243e9258e",
+  "working_tree_verification": true,
+  "python": "3.12.14",
+  "result": "passed_focused_additions",
+  "total_distinct_focused_checks": 161,
+  "checks": [
+    {
+      "name": "unified_frozen_reference_harness",
+      "tests": 38,
+      "seconds": 391.83,
+      "paths": [
+        "tests/test_frozen_reference_study.py",
+        "tests/test_frozen_reference_study_contracts.py"
+      ],
+      "log": "runs/frozen_reference_focused_test.log",
+      "exit_code": 0,
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 flock runs/heavy_evaluation.lock python -m pytest -q tests/test_frozen_reference_study.py tests/test_frozen_reference_study_contracts.py",
+      "log_sha256": "e7a14d68b2510e97db4c56f673c76b8feabfdc71d4a091a8bb16ee0ba36110bd",
+      "retained_stdout": "......................................                                   [100%]\n38 passed in 391.83s (0:06:31)\n"
+    },
+    {
+      "name": "reference_collector_report_contracts",
+      "tests": 76,
+      "seconds": 12.59,
+      "paths": [
+        "tests/test_collect_reference_study.py"
+      ],
+      "log": "runs/reference_collector_validator_retry.log",
+      "exit_code": 0,
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 flock runs/heavy_evaluation.lock python -m pytest -q tests/test_collect_reference_study.py",
+      "log_sha256": "cf3a771316fcb6486c7fd219432db21acad10b7a640932ba82afc38e5de9c6fe",
+      "retained_stdout": "........................................................................ [ 94%]\n....                                                                     [100%]\n76 passed in 12.59s\n"
+    },
+    {
+      "name": "reference_collector_training_contracts",
+      "tests": 34,
+      "seconds": 10.87,
+      "paths": [
+        "tests/test_collect_reference_training.py"
+      ],
+      "log": null,
+      "receipt": "Completed tool session 92824; durable stdout log was not retained.",
+      "exit_code": 0,
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 flock runs/heavy_evaluation.lock python -m pytest -q tests/test_collect_reference_training.py"
+    },
+    {
+      "name": "training_history_contracts",
+      "tests": 13,
+      "seconds": 0.32,
+      "paths": [
+        "tests/test_training_history_figure.py"
+      ],
+      "log": "runs/training_history_figure_tests.log",
+      "exit_code": 0,
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 flock runs/heavy_evaluation.lock python -m pytest -q tests/test_training_history_figure.py",
+      "log_sha256": "7306c451bb513ed5c35eb40b157366cc9a9a182e30217ba341db4d06d3380787",
+      "retained_stdout": ".............                                                            [100%]\n13 passed in 0.32s\n"
+    }
+  ],
+  "files_sha256": {
+    "src/fluvius_cgan/frozen_reference_study.py": "52be6e04a28905aa5353c97c2e15227d958779df7905891984f68cc360661c3f",
+    "scripts/freeze_reference_study.py": "05847e947999105e2f19bf03976039aa2ecf038525f5da2ca8d68f702b351e92",
+    "scripts/evaluate_reference_study.py": "a532455368d502abc3a1523e7ca0e3a2635bbb36cc47fd88cb681382265bd45b",
+    "scripts/collect_reference_study.py": "b912a04b7365a0e8359d72d8910183078078d184ec4d59e7239da6d300746a72",
+    "scripts/plot_training_histories.py": "1dce7c4ec7d03a0de836bba4fc30c8cf2503cd0d182cc8632dd8b442791cac97",
+    "tests/test_frozen_reference_study.py": "396309cc1028be3cb5e0d23d1ca8fb1c120c9597204000eeb715811bbe19432d",
+    "tests/test_frozen_reference_study_contracts.py": "98e0c659865850564b420c27ca6a06040b6d44f24a2409ec4c5c948178ebc644",
+    "tests/test_collect_reference_study.py": "4a5645ae8545be2212469e0e2371a36431672ae7cd063da547f8582f5ceb0362",
+    "tests/test_collect_reference_training.py": "4822bd6efb1ce7c26dbf545a0c9f5c0f30804ad6fbfe6c27c47406fad54ba099",
+    "tests/test_training_history_figure.py": "829febdd6f4609eaaaa70c041f6bebca5129499c1c0b2cbfef1443eb593971f0",
+    "docs/FROZEN_REFERENCE_STUDY.md": "9c51c0ecf492dae38e73e17288c1997a10d72f7be3bc40a611e1faf68e6f1d3e",
+    "docs/REFERENCE_REPORTS.md": "2ee16c2aeb487a786815cd2203ae79f364ea3125fc2c73a1ec9e1f5ab8fb896c",
+    "docs/TRAINING_HISTORY_FIGURE.md": "90abfc9807e6738e392cf987d953952a4fb5719ae56b700628cd71a114264790"
+  },
+  "actual_partial_compatibility": {
+    "report": "reports/reference_collector_actual_binding_check.json",
+    "sha256": "8ce85212bfd8def3f58cbc6b0dfe2959d82dee0ec07ea16561e0bbe5b859e915",
+    "scope": "BCE96 seed 11 saved-artifact binding only; not full study collection or performance evaluation."
+  },
+  "previous_integrated_suite": {
+    "report": "reports/hourly_software_verification_20261020.json",
+    "tests": 982,
+    "scope": "Earlier integrated source snapshot, separately recorded; not rerun or claimed for these additions."
+  },
+  "retained_failed_attempts": [
+    "reports/resource_incident_synthetic_20261020.json",
+    "docs/REFERENCE_REPORTS.md"
+  ],
+  "scope": "Synthetic correctness checks plus one existing saved-artifact compatibility inspection. No model-quality claim, actual TEST performance, new training, or additional data evaluation."
+}

@@ -53,11 +53,19 @@ calibration is a separate TRAIN-target fitting stage with a generated reference.
 | Larger generator, profile weight 10 | 11, 22, 33 | Activated after the complete derivative failure; fixed width 128 and latent dimension 96 under `docs/CAPACITY_REFINEMENT.md`. Extend to 44/55 only if every pilot gate passes. |
 | Reference conditional BCE96 | 11, 22, 33, 44, 55 | Declared under `docs/REFERENCE_COMPLETION.md`; complete package comparison with the candidate |
 | Reference unconditional BCE96 | 11, 22, 33, 44, 55 | Declared matched network-conditioning comparison within the BCE reference method |
-| Reference conditional BCE24 | 11, 22, 33, 44, 55 | Hourly TRAIN/VAL derivation verified at clean source ec10d83; fixed training queue waits for capacity training to free resource slots |
+| Reference conditional BCE24 | 11, 22, 33, 44, 55 | Hourly TRAIN/VAL derivation verified at clean source ec10d83; training began after all three capacity training runs completed; evaluations are serialized |
 
 Completed controls 22/33 restart from initialization with the same seeds and full
 budget. The interruption is documented in `reports/resource_incident.json` and
 was unrelated to a performance-based stopping or seed-replacement decision.
+A later synthetic frozen-study verification was killed under memory pressure;
+`reports/resource_incident_synthetic_20261020.json` records the incomplete
+software check and resource-aware retry. Actual research training continued.
+The native BCE96 seed11 cap-1,000 calibration evaluation later exited with
+signal9 and no saved report while training remained active. Its failed receipt
+is retained in `reports/resource_incident_reference_precision_20261020.json`.
+The same evaluation is deferred until training completion; completed primary
+reports, model checkpoints, sample counts and random seeds are unchanged.
 Completed artifacts are never overwritten to hide failed evaluations; for example,
 the partial first plotting directory remains separate from any finished rerun.
 

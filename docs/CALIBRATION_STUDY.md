@@ -178,3 +178,15 @@ battery performance or optimal sizing. The original net records may already
 include unobserved storage; the scenario is an additional hypothetical device.
 Terminal stored energy is reported rather than credited to an unseen next day.
 Power is represented as an interval average, so sub-interval effects are absent.
+
+## Resource interruption and recovery
+
+Concurrent validation jobs exceeded the 8 GiB runtime memory limit after all five
+candidate runs and control seed11 had completed training. Candidate checkpoints
+and the first three calibration reports were preserved. Control seeds22 and33
+were interrupted after6 and5 epochs; their incomplete directories and logs remain
+in the attempt ledger (`reports/resource_incident.json`). Both controls restart
+from initialization with their original seeds, configs and full26-epoch budgets;
+no seed or checkpoint is replaced based on its performance. Heavy evaluations are
+subsequently serialized. Incomplete evaluations produce no accepted result, and
+completed reports are preserved without overwriting.

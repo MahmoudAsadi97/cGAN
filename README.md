@@ -6,6 +6,12 @@ for the Fluvius residential electricity dataset in this repository's
 All development is on **V2**; `main` is unchanged. This is a research baseline;
 passing tests or a short training run does not establish publication readiness.
 
+**Current study:** the identity-curated, fixed-calibration candidate is defined in
+[CALIBRATION_STUDY.md](docs/CALIBRATION_STUDY.md). Curated training and evaluation
+remain pending; the workflow below describes the declared experiments, not
+successful results. Earlier reference-architecture runs and normalization screens
+are historical exploratory evidence, not results for this candidate.
+
 **Data-audit update:** different meter IDs were found to share exact full-year
 traces across the original train/validation split. Earlier reported scores are
 exploratory and do not establish independent-trace validation. A deterministic
@@ -16,21 +22,20 @@ removing aliases; see [DUPLICATE_REMEDIATION.md](docs/DUPLICATE_REMEDIATION.md).
 
 Daily **net grid import** (`import − injection`) in kWh per interval, conditioned on
 reported heat pump, EV and PV indicators, weekend and season. Negative net values
-mean grid export. Choose 96 quarter-hour values (default) or 24 hourly energy sums.
+mean grid export. The current study generates **96 quarter-hour energy values per
+day**. Divide each value by 0.25 hours to obtain interval-average kW; summing the
+96 values gives daily net energy in kWh. The general preparation code also supports
+24 hourly energy sums.
 Import-only and injection-only targets are also supported. This data does not reveal
 gross household load, PV generation, or separate EV charging demand.
 
-The MLP architecture and BCE objective follow the reference. V2 adds meter-disjoint
-splits, train-only normalization, seeded training, validation-selected checkpoints,
-physical-unit evaluation, empirical baselines, and provenance. Exact differences:
-[UPSTREAM_ADAPTATION.md](docs/UPSTREAM_ADAPTATION.md).
-
-Controlled improvements are being evaluated in
-[IMPROVEMENT_STUDY.md](docs/IMPROVEMENT_STUDY.md). The first equal-budget screen
-reduced macro interval W1 from 0.377 to 0.109 kWh using train-only standardization,
-but diversity remained deficient. These are exploratory validation results, not
-a final test or publication claim. Reproducible measurements are in
-[normalization_screen.json](reports/normalization_screen.json).
+The original MLP/BCE adaptation is retained for attribution experiments; see
+[UPSTREAM_ADAPTATION.md](docs/UPSTREAM_ADAPTATION.md). The current candidate uses
+train-only standard normalization, a spectral-normalized hinge discriminator,
+conditional sliced-Wasserstein training loss, and a saved conditional marginal
+map applied after generation. The map approximately moves margins toward the
+training distribution. It does not independently establish learned temporal
+dependence, and its interpolation can create ties and endpoint saturation.
 
 ## Install and run
 
@@ -41,7 +46,7 @@ From the repository directory:
 git switch V2
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,plots]'
 python -m pytest -q
 
 # Download about 395 MB and verify the pinned SHA-256; no 6.4 GB extraction needed.
@@ -54,13 +59,9 @@ fluvius-cgan prepare --archive data/raw.zip --output data/prepared96 --resolutio
 # Remove exact complete-trace aliases while preserving original held-out membership.
 python scripts/curate_prepared.py --prepared data/prepared96 --output data/curated96
 
-# First verify the entire training/generation/evaluation path with a small run.
+# Smoke-check raw training and validation before the full study.
 fluvius-cgan train --prepared data/curated96 --config configs/smoke.json --output runs/smoke
 fluvius-cgan evaluate --prepared data/curated96 --checkpoint runs/smoke/best.pt --output runs/smoke/validation.json
-
-# Then run the declared full-data experiment budget; GPU is used when available.
-fluvius-cgan train --prepared data/curated96 --config configs/cgan96.json --output runs/cgan96_seed42
-fluvius-cgan generate --checkpoint runs/cgan96_seed42/best.pt --labels 0 8 56 --samples-per-label 100 --output runs/generated.npz
 ```
 
 Use `python -m fluvius_cgan` instead of the installed command if preferred.
@@ -73,6 +74,125 @@ For a faster ingestion check, use `--max-meters-per-group 3 --output data/prepar
 That selects the earliest meters and is intentionally biased; it is only a software
 smoke check. The training smoke config separately samples at most 4,096 training days
 and runs 3 epochs. Neither shortcut is suitable for a manuscript's main results.
+The observed research environment is recorded in
+[requirements-research.txt](requirements-research.txt).
+
+## Current curated calibration study
+
+The fixed configurations and training seeds are:
+
+| Role | Config | Seeds | Budget and device |
+|---|---|---|---|
+| Current candidate, SWD weight 10 | [curated_swd10.json](configs/curated_swd10.json) | 11, 22, 33, 44, 55 | 26 epochs, batch 512, CPU, one thread |
+| Attribution control, SWD weight 0 | [curated_swd0.json](configs/curated_swd0.json) | 11, 22, 33 | Same update budget and CPU settings |
+
+Both use the full curated training pool, generator width 64, discriminator width
+128, and balanced batches of four conditions with 128 profiles each. Checkpoints
+are selected by raw conditional validation W1. There is no early stopping or
+resume. With 606,060 training profiles, the declared budget is 1,184 updates per
+epoch and 30,784 updates per adversary. Replacement sampling means an epoch is an
+update budget, not a traversal of every unique profile.
+
+**These candidate configs explicitly set `device="cpu"`.** The older general
+`cgan96.json` and `unconditional96.json` configs use `device="auto"`, which selects
+GPU when available. Those configs are reference/attribution experiments, not the
+current candidate or an interchangeable execution setting.
+
+```bash
+python scripts/run_experiments.py --prepared data/curated96 \
+  --config configs/curated_swd10.json --output runs/curated_swd10 \
+  --seeds 11 22 33 44 55 --samples-per-condition 100
+python scripts/run_experiments.py --prepared data/curated96 \
+  --config configs/curated_swd0.json --output runs/curated_swd0 \
+  --seeds 11 22 33 --samples-per-condition 100
+```
+
+The runner writes a **raw-generator** `validation_report.json` for each completed
+seed. It does not fit or evaluate a calibrator. Retain all attempted seeds and
+failures; do not select a favorable seed or silently replace an unsuccessful run.
+
+After a checkpoint is frozen, run the following block for each declared candidate
+and attribution seed, changing `run_dir` accordingly. Keep the primary settings
+fixed: 4,096 calibration draws per condition with seed **7301**, **1,025 quantile
+knots**, and up to **100 validation/generation profiles per condition** with seed
+**2026**. The saved map is fit from the checkpoint's actual training rows and an
+independent generated reference; validation rows do not fit it.
+
+```bash
+run_dir=runs/curated_swd10/seed_11
+
+# Fit the frozen map and evaluate raw/calibrated cGAN and all declared controls.
+python scripts/evaluate_calibration.py --prepared data/curated96 \
+  --checkpoint "$run_dir/best.pt" --calibration-output "$run_dir/calibration.npz" \
+  --calibration-samples-per-condition 4096 --calibration-seed 7301 \
+  --quantile-knots 1025 --samples-per-condition 100 --seed 2026 \
+  --output "$run_dir/calibration_validation.json"
+
+# Paired real-meter bootstrap against the matched-knot Gaussian copula.
+python scripts/compare_calibrated.py --prepared data/curated96 \
+  --checkpoint "$run_dir/best.pt" --calibrator "$run_dir/calibration.npz" \
+  --baseline gaussian_copula --samples-per-condition 100 --seed 2026 \
+  --replicates 500 --output "$run_dir/comparison_gaussian_copula.json"
+
+# Within-day, observed-history next-interval ridge utility on real validation days.
+# No training-profile cap: all methods use the actual full training pool.
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  python scripts/evaluate_utility.py --prepared data/curated96 \
+  --checkpoint "$run_dir/best.pt" --calibrator "$run_dir/calibration.npz" --copula \
+  --samples-per-condition 100 --seed 2026 --output "$run_dir/utility_validation.json"
+
+# Calibrated bands and unpaired examples; common-scale raw/calibrated heatmaps.
+python scripts/plot_checkpoint.py --prepared data/curated96 \
+  --checkpoint "$run_dir/best.pt" --calibrator "$run_dir/calibration.npz" \
+  --samples-per-condition 100 --seed 2026 --output-dir "$run_dir/figures_calibrated"
+
+# New calibrated profiles in kWh/interval, without reading validation or test data.
+python scripts/generate_calibrated.py --checkpoint "$run_dir/best.pt" \
+  --calibrator "$run_dir/calibration.npz" --labels 0 8 56 \
+  --samples-per-label 100 --seed 9001 --output "$run_dir/example_calibrated.npz"
+```
+
+Keep the checkpoint **and** its bound map: a raw checkpoint alone is a different
+generator. Saved-map evaluation, utility and plotting verify checkpoint, prepared
+data and training-subset bindings. Generation verifies checkpoint/map binding and
+uses a seed distinct from the calibration reference. These workflows do not
+rank the current output batch or refit a map during inference. Figures are
+written as SVG and PNG with a provenance manifest; pointwise bands are empirical
+ranges, not confidence intervals.
+
+Calibration evaluation includes raw cGAN, calibrated cGAN, a Gaussian copula and
+independent margins with the same 1,025 target knots, conditional resampling, and
+a secondary copula using all training order statistics with linear interpolation.
+The protocol's primary physical comparison is condition-macro ramp W1 against the
+matched-knot Gaussian copula. Marginal W1 or diversity improvements alone are not
+joint-model evidence. See [CALIBRATION_STUDY.md](docs/CALIBRATION_STUDY.md) for
+physical gates, utility scope, calibration sensitivity, the separate precision
+check, secondary joint/battery diagnostics, and uncertainty limitations.
+
+After the required artifacts exist for every completed run, collect them without
+refitting, generating, or selecting a winning seed:
+
+```bash
+python scripts/collect_calibrated_study.py \
+  --run swd10_seed11=runs/curated_swd10/seed_11 \
+  --run swd10_seed22=runs/curated_swd10/seed_22 \
+  --run swd10_seed33=runs/curated_swd10/seed_33 \
+  --run swd10_seed44=runs/curated_swd10/seed_44 \
+  --run swd10_seed55=runs/curated_swd10/seed_55 \
+  --run swd0_seed11=runs/curated_swd0/seed_11 \
+  --run swd0_seed22=runs/curated_swd0/seed_22 \
+  --run swd0_seed33=runs/curated_swd0/seed_33 \
+  --output reports/curated_calibrated_study.json \
+  --markdown reports/curated_calibrated_study.md
+```
+
+This calibrated collector requires each run's training files, `best.pt`,
+`validation_report.json`, `calibration_validation.json`, and `calibration.npz`.
+It binds and includes `utility_validation.json` and
+`uncertainty*.json`/`comparison*.json` when present, and reports missing optional
+evidence explicitly. Use new output paths. The older `collect_study.py` collects
+raw reports only. A completed-run summary does not replace the full attempted-run
+ledger or justify omitting failures.
 
 ## Dataset handling
 
@@ -113,38 +233,48 @@ winter weekday; 56 is HP1/EV1/PV1, winter weekday. V2's IDs do not mean the same
 as upstream IDs. Equipment flags are reported/detected proxies, not perfect ground
 truth. EV zero does not prove absence; small exports also occur in some PV 0 records.
 
-## Research experiments
+## Reference experiments and final-test scope
 
-Run separate full-data conditional and unconditional experiments with five seeds:
+The original conditional and unconditional architecture configs remain separate
+reference/attribution experiments. They do not represent the current calibrated
+candidate and do not share its training budget:
 
 ```bash
-python scripts/run_experiments.py --prepared data/curated96 --config configs/cgan96.json --output runs/cgan96 --seeds 11 22 33 44 55
-python scripts/run_experiments.py --prepared data/curated96 --config configs/unconditional96.json --output runs/unconditional96 --seeds 11 22 33 44 55
+python scripts/run_experiments.py --prepared data/curated96 --config configs/cgan96.json --output runs/reference_cgan96 --seeds 11 22 33 44 55
+python scripts/run_experiments.py --prepared data/curated96 --config configs/unconditional96.json --output runs/reference_unconditional96 --seeds 11 22 33 44 55
 
 # Hourly sensitivity must aggregate curated quarter-hour profiles, preserving
 # their canonical meter membership. Do not independently re-split the raw archive.
 ```
 
-The config filename describes the recommended primary experiment; output dimension
-is read from the prepared metadata, so the same architecture settings also work at 24.
-The experiment runner evaluates validation only. After freezing all decisions,
-explicitly evaluate the identity-audited, performance-unseen test subset for each final model:
+Output dimension comes from prepared metadata. The experiment runner and all
+calibration/comparison/utility/plotting scripts above evaluate validation only.
+The following command is an explicit **raw reference-model final-test example**,
+to be used only after all model and evaluation decisions are frozen:
 
 ```bash
-fluvius-cgan evaluate --prepared data/curated96 --checkpoint runs/cgan96/seed_11/best.pt --split test --output runs/cgan96/seed_11/final_test.json
+# RAW REFERENCE ONLY: this CLI has no calibrator argument.
+fluvius-cgan evaluate --prepared data/curated96 \
+  --checkpoint runs/reference_cgan96/seed_11/best.pt --split test \
+  --output runs/reference_cgan96/seed_11/final_test_raw.json
 ```
 
-Every evaluation compares generated profiles with conditional resampling from the model’s actual training subset
-and conditional means. It reports per-condition and overall energy, peak, ramp,
-diversity, mean-profile and autocorrelation diagnostics. Negative outputs remain
-visible; there is no hidden clipping. Nearest-neighbor diagnostics are bounded and
-do not provide a privacy guarantee. The Python evaluation module also provides a
-meter-cluster bootstrap with its uncertainty scope documented in its docstring.
+`fluvius-cgan evaluate` evaluates raw checkpoint outputs against raw empirical
+baselines. It does **not** evaluate the calibrated pipeline, even if given a
+candidate checkpoint. The calibrated scripts currently have no final-test option;
+the eventual calibrated final evaluation must apply the frozen checkpoint and map
+together under the frozen protocol. Final-test performance remains unseen.
+
+Validation reuse means the curated study remains exploratory. Bounded
+nearest-neighbor diagnostics do not establish privacy or absence of memorization.
+Meter-bootstrap intervals condition on frozen models, maps and generated samples;
+they do not include all training, calibration or selection uncertainty.
 
 Read [RESEARCH_PROTOCOL.md](docs/RESEARCH_PROTOCOL.md) for mandatory experiments,
 uncertainty, leakage controls, final-test rules and manuscript completion criteria.
-The ten-epoch full-data CPU pilot underperformed the empirical baselines. Read
-[VALIDATION.md](docs/VALIDATION.md) for the actual results and remaining experiments.
+Historical pilot and original-split screens are recorded in
+[VALIDATION.md](docs/VALIDATION.md) and [IMPROVEMENT_STUDY.md](docs/IMPROVEMENT_STUDY.md).
+They do not substitute for pending curated calibration results.
 
 ## Attribution
 

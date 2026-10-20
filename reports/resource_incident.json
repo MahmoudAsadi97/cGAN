@@ -1,0 +1,39 @@
+{
+  "recorded_utc": "2026-10-20T12:29:18Z",
+  "event": "Concurrent validation exceeded 8GiB memory limit; runtime stopped active sessions.",
+  "memory_events": "low 0\nhigh 0\nmax 10069\noom 8\noom_kill 1\noom_group_kill 0\n",
+  "completed_candidate_seeds_preserved": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "completed_primary_calibration_seeds_preserved": [
+    11,
+    22,
+    33
+  ],
+  "completed_swd0_seeds_preserved": [
+    11
+  ],
+  "interrupted_training": [
+    {
+      "arm": "curated_swd0",
+      "seed": 22,
+      "epochs_completed": 6,
+      "interrupted_directory": "runs/interrupted_oom_20261020/curated_swd0_seed_22",
+      "history_sha256": "e465bf4a10311776b0b49b96834a76fb50760bef0a0ea6b1191b0b0d83a2ec5c",
+      "reason": "Shared CPU environment memory limit exceeded during concurrent validation jobs; fixed-seed training interrupted before budget completion. Restart from initialization with identical config/seed; no checkpoint or seed selection based on outcome."
+    },
+    {
+      "arm": "curated_swd0",
+      "seed": 33,
+      "epochs_completed": 5,
+      "interrupted_directory": "runs/interrupted_oom_20261020/curated_swd0_seed_33",
+      "history_sha256": "663509c3a7d913d074781e01ee965ad711a839c7aa29daed8ff81fe9eb008f8a",
+      "reason": "Shared CPU environment memory limit exceeded during concurrent validation jobs; fixed-seed training interrupted before budget completion. Restart from initialization with identical config/seed; no checkpoint or seed selection based on outcome."
+    }
+  ],
+  "recovery": "Serial heavy evaluation; same-seed full-budget control restarts; retain interrupted attempts. Test performance remains unseen."
+}

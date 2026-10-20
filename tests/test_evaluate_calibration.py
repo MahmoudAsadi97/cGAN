@@ -12,11 +12,14 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from scipy.stats import wasserstein_distance
 import torch
 
+from fluvius_cgan.battery import simulate_battery
 from fluvius_cgan.calibration import ConditionalMarginalCalibrator, fit
 from fluvius_cgan.copula import fit_conditional_copula
 from fluvius_cgan.evaluation import evaluate_conditional, nearest_neighbor_diagnostics, resample_baseline
+from fluvius_cgan.joint import conditional_projected_wasserstein
 from fluvius_cgan.training import CHECKPOINT_FORMAT, _config
 
 
@@ -170,6 +173,31 @@ def test_train_only_selection_independent_draws_and_all_methods_match_manual_met
     for method, values in generated.items():
         assert report["methods"][method] == evaluate_conditional(vx, vy, values, vy, interval_hours=1.)
         assert report["frozen_samples"]["profiles_sha256"][method] == digest(values, "<f8")
+        assert report["joint_diagnostics"][method] == conditional_projected_wasserstein(vx, vy, values, vy)
+        battery = report["battery_diagnostics"][method]
+        real_dispatch = simulate_battery(vx, 1.)
+        generated_dispatch = simulate_battery(values, 1.)
+        assert battery["scenario"] == real_dispatch["scenario"] == generated_dispatch["scenario"]
+        assert battery["scenario_sha256"] == hashlib.sha256(json.dumps(
+            battery["scenario"], sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+        for label in np.unique(vy):
+            selected = vy == label
+            condition = battery["per_condition"][str(label)]
+            assert condition["n_real"] == condition["n_generated"] == int(selected.sum())
+            for quantity in evaluation.BATTERY_QUANTITIES:
+                r = real_dispatch["per_profile"][quantity][selected]
+                g = generated_dispatch["per_profile"][quantity][selected]
+                stem, unit = quantity.rsplit("_", 1)
+                assert condition[f"{stem}_wasserstein_{unit}"] == pytest.approx(wasserstein_distance(r, g))
+                assert condition[f"real_mean_{quantity}"] == pytest.approx(r.mean())
+                assert condition[f"generated_mean_{quantity}"] == pytest.approx(g.mean())
+        for key, value in battery["macro"].items():
+            assert value == pytest.approx(np.mean([row[key] for row in battery["per_condition"].values()]))
+    assert len({row["scenario_sha256"] for row in report["battery_diagnostics"].values()}) == 1
+    assert report["battery_diagnostics_status"] == "computed_on_same_frozen_signed_net_profiles"
+    directions = [entry["directions"] for entry in report["joint_diagnostics"].values()]
+    assert len({entry["sha256"] for entry in directions}) == 1
+    assert all(entry["seed"] == 9182 and entry["count"] == 128 for entry in directions)
     assert report["nearest_neighbors"] == nearest_neighbor_diagnostics(tx, generated["calibrated_cgan"], vx, seed=seed)
     assert report["training_profiles"] == {"prepared": 16, "model": 12, "baseline": 12}
     assert report["checkpoint"]["training_selection"]["train_indices_sha256"] == digest(selected_train, "<i8")
@@ -216,6 +244,25 @@ def test_train_only_selection_independent_draws_and_all_methods_match_manual_met
     assert report["split"] == "val" and report["test_used"] is False
     assert "test.npz" not in report["prepared_data_hashes"]
     json.dumps(report, allow_nan=False)
+
+
+def test_battery_diagnostic_is_condition_macro_and_detects_order_with_same_marginals():
+    # Unequal condition counts cannot change the equal-condition macro weight.
+    real = np.zeros((4, 24))
+    real[:, :2] = [-1., 1.]
+    generated = real.copy()
+    generated[0, :2] = [1., -1.]
+    labels = np.array([0, 4, 4, 4])
+    result = evaluation._battery_diagnostics(simulate_battery(real, 1.), generated, labels, 1.)
+    key = "grid_import_reduction_wasserstein_kwh"
+    assert result["per_condition"]["0"][key] == pytest.approx(.9)
+    assert result["per_condition"]["4"][key] == 0
+    assert result["macro"][key] == pytest.approx(.45)
+    assert result["macro"][key] != pytest.approx(.225)  # pooled sample weighting
+    assert result["n_conditions"] == 2
+    assert result["condition_weighting"] == "equal_over_observed_support"
+    assert result["per_condition"]["0"]["end_soc_wasserstein_kwh"] == pytest.approx(np.sqrt(.9))
+    json.dumps(result, allow_nan=False)
 
 
 def test_equal_calibration_and_evaluation_seeds_fail_before_data_access(generation_calls):

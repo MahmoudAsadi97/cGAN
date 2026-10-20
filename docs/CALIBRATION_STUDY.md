@@ -160,3 +160,21 @@ with (4,096 draws/condition, seed7302) and (8,192 draws/condition, seed7301), ke
 checkpoint, target knots and evaluation draws fixed. These checks quantify
 reference-estimation stability, not additional GAN-training repetitions. Any
 resulting method change requires a new exploratory entry before final testing.
+
+## Secondary battery-operation diagnostic
+
+Before curated endpoint evaluation, add one fixed hypothetical additional-battery
+scenario: 10 kWh capacity, 4 kW input/output power limits, charge/discharge
+efficiencies each sqrt(0.9), and zero initial stored energy for each independent
+day. Charge only from observed net export; discharge against net import. Report
+post-battery import/export, import reduction, post-battery peak and terminal
+stored energy distributions and their errors against the same real validation
+profiles. Preserve energy conservation and interval-duration units.
+
+This probes chronological nonlinear dependence with a transparent engineering
+rule. It is a secondary diagnostic, not a tuned policy or an additional primary
+success criterion. It does not estimate gross PV self-consumption, costs, annual
+battery performance or optimal sizing. The original net records may already
+include unobserved storage; the scenario is an additional hypothetical device.
+Terminal stored energy is reported rather than credited to an unseen next day.
+Power is represented as an interval average, so sub-interval effects are absent.

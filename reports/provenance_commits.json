@@ -1,0 +1,16 @@
+{
+  "scope": "Content-equivalent publication mapping for curated-study training provenance",
+  "explanation": "Local commits are published using GitHub Git-data APIs; remote commit identities differ because author/committer metadata differ. Trees were verified equal before moving V2. Training artifacts remain unmodified. For dirty workspaces, also use their captured source-file hashes; a base-tree mapping alone does not assert that all working files were committed.",
+  "mappings": [
+    {
+      "local_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+      "published_commit": "199d1ee1717537f152c73a8b0dddce0b46a72f8c",
+      "tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6"
+    },
+    {
+      "local_commit": "3b46678819a1a35a3e306a3af2025bb5dd307b37",
+      "published_commit": "d50dec16a6d0f48a3a3aec7236f5a95a4a3d3a2c",
+      "tree": "859c78ca2d5441df7602feaddec622b09061f04e"
+    }
+  ]
+}

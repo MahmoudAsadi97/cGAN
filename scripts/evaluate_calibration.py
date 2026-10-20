@@ -17,15 +17,18 @@ import time
 
 import numpy as np
 import scipy
+from scipy.stats import wasserstein_distance
 import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from compare_checkpoints import _checkpoint, _digest, _validate_manifest
+from fluvius_cgan.battery import simulate_battery
 from fluvius_cgan.calibration import fit
 from fluvius_cgan.copula import fit_conditional_copula
 from fluvius_cgan.evaluation import evaluate_conditional, nearest_neighbor_diagnostics, resample_baseline
+from fluvius_cgan.joint import conditional_projected_wasserstein
 from fluvius_cgan.release import sha256_file
 from fluvius_cgan.training import _load_prepared, _provenance, generate
 
@@ -34,6 +37,8 @@ EVENTS = ("source_below", "source_above", "cdf_zero", "cdf_one",
           "target_lower_endpoint", "target_upper_endpoint")
 METHODS = ("raw_cgan", "calibrated_cgan", "gaussian_copula", "independent_marginals",
            "exact_marginal_copula", "conditional_resampling")
+BATTERY_QUANTITIES = ("post_grid_import_kwh", "post_grid_export_kwh",
+                      "grid_import_reduction_kwh", "post_peak_import_power_kw", "end_soc_kwh")
 
 
 def _profile_digest(values):
@@ -103,6 +108,41 @@ def _generate_verified(checkpoint, details, labels, seed):
     if sha256_file(checkpoint) != details["sha256"]:
         raise ValueError("checkpoint changed between verification and generation")
     return output
+
+
+def _battery_diagnostics(real_battery, generated, labels, interval_hours):
+    """Compare daily application outputs; real dispatch is cached across methods."""
+    generated_battery = simulate_battery(generated, interval_hours)
+    if real_battery["scenario"] != generated_battery["scenario"]:
+        raise ValueError("battery diagnostics require the same real/generated scenario")
+    scenario = generated_battery["scenario"]
+    per_condition = {}
+    for label in np.unique(labels):
+        selected = labels == label
+        result = {"n_real": int(selected.sum()), "n_generated": int(selected.sum())}
+        for quantity in BATTERY_QUANTITIES:
+            real_values = real_battery["per_profile"][quantity][selected]
+            generated_values = generated_battery["per_profile"][quantity][selected]
+            stem, unit = quantity.rsplit("_", 1)
+            result[f"{stem}_wasserstein_{unit}"] = float(wasserstein_distance(real_values, generated_values))
+            result[f"real_mean_{quantity}"] = float(real_values.mean())
+            result[f"generated_mean_{quantity}"] = float(generated_values.mean())
+        per_condition[str(label)] = result
+    # Only scalar summaries leave this function; dispatch and SOC arrays are
+    # released for each generated method rather than retained in the report.
+    metric_keys = [key for key in next(iter(per_condition.values())) if key not in ("n_real", "n_generated")]
+    return {
+        "scenario": scenario,
+        "scenario_sha256": hashlib.sha256(json.dumps(scenario, sort_keys=True, separators=(",", ":"),
+                                                     allow_nan=False).encode("utf-8")).hexdigest(),
+        "scenario_hash_encoding": "UTF-8 JSON with sorted keys, compact separators and no NaN",
+        "role": "secondary_application_fidelity_diagnostic",
+        "n_conditions": len(per_condition),
+        "condition_weighting": "equal_over_observed_support",
+        "per_condition": per_condition,
+        "macro": {key: float(np.mean([row[key] for row in per_condition.values()])) for key in metric_keys},
+        "interpretation": "Descriptive fidelity of a fixed hypothetical additional export-charged battery; no annual, cost, PV-attribution or hardware claim. Peak is nonnegative grid-import power, not signed net peak. Compare only identical scenarios at the same interval resolution.",
+    }
 
 
 def evaluate(prepared, checkpoint, *, calibration_samples_per_condition=4096,
@@ -191,6 +231,19 @@ def evaluate(prepared, checkpoint, *, calibration_samples_per_condition=4096,
     metrics = {name: evaluate_conditional(real, labels, values, labels, interval_hours=24 / metadata["resolution"])
                for name, values in arrays.items()}
     evaluated_at = time.perf_counter()
+    # Frozen secondary diagnostic: independent of the stochastic training SWD
+    # directions. Every method sees the same complete-profile unit projections.
+    with threadpool_limits(limits=1, user_api="blas") if thread_limit else nullcontext():
+        joint_diagnostics = {name: conditional_projected_wasserstein(real, labels, values, labels)
+                             for name, values in arrays.items()}
+    joint_at = time.perf_counter()
+    battery_diagnostics = {}
+    if metadata["target"] == "net":
+        real_battery = simulate_battery(real, 24 / metadata["resolution"])
+        battery_diagnostics = {name: _battery_diagnostics(real_battery, values, labels, 24 / metadata["resolution"])
+                               for name, values in arrays.items()}
+        del real_battery
+    battery_at = time.perf_counter()
     neighbors = nearest_neighbor_diagnostics(tx, calibrated, real, seed=seed)
     neighbors_at = time.perf_counter()
     if sha256_file(checkpoint) != details["sha256"]:
@@ -263,14 +316,18 @@ def evaluate(prepared, checkpoint, *, calibration_samples_per_condition=4096,
             "profiles_sha256": {name: _profile_digest(values) for name, values in arrays.items()},
             "postprocessing": "Only calibrated_cgan applies the disclosed fixed maps; no additional clipping or scaling.",
         },
-        "methods": metrics, "nearest_neighbors": neighbors, "nearest_neighbor_method": "calibrated_cgan",
+        "methods": metrics, "joint_diagnostics": joint_diagnostics,
+        "battery_diagnostics": battery_diagnostics,
+        "battery_diagnostics_status": ("computed_on_same_frozen_signed_net_profiles" if battery_diagnostics
+                                       else "unavailable_requires_signed_net_target"),
+        "nearest_neighbors": neighbors, "nearest_neighbor_method": "calibrated_cgan",
         "metric_interpretation": {
             "mechanically_imposed_marginal_or_diversity_diagnostics": [
                 "pointwise_wasserstein_kwh", "mean_profile_rmse_kwh", "pointwise_variance_rmse_kwh2",
                 "diversity_ratio", "generated_mean_pointwise_variance_kwh2", "generated_mean_daily_energy_kwh"],
             "joint_diagnostics_to_inspect": ["daily_energy_wasserstein_kwh", "peak_power_wasserstein_kw",
                                              "ramp_wasserstein_kw", "autocorrelation"],
-            "warning": "Calibration imposes marginal distributions and marginal diversity; their improvements are not independent joint-model evidence. Joint diagnostics also change with marginals and require comparison to independent_marginals and other baselines.",
+            "warning": "Calibration approximately moves outputs toward training marginals; marginal and diversity improvements are partly supplied by calibration and are not independent joint-model evidence. Joint diagnostics also change with marginals and require comparison to independent_marginals and other baselines.",
         },
         "timings_seconds": {
             "load_and_verify": loaded_at - started, "generate_calibration_reference": source_at - loaded_at,
@@ -281,7 +338,9 @@ def evaluate(prepared, checkpoint, *, calibration_samples_per_condition=4096,
             "fit_and_generate_independent_marginals": independent_at - gaussian_at,
             "fit_and_generate_exact_marginal_copula": exact_at - independent_at,
             "resample_and_evaluate_all_methods": evaluated_at - exact_at,
-            "nearest_neighbors": neighbors_at - evaluated_at,
+            "fixed_joint_projection_diagnostics": joint_at - evaluated_at,
+            "fixed_battery_application_diagnostics": battery_at - joint_at,
+            "nearest_neighbors": neighbors_at - battery_at,
             "provenance_and_optional_save": saved_at - neighbors_at,
             "total_before_report_serialization": time.perf_counter() - started,
         },

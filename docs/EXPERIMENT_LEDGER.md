@@ -49,7 +49,8 @@ calibration is a separate TRAIN-target fitting stage with a generated reference.
 | Profile SWD weight 10 | 11, 22, 33, 44, 55 | All training, primary calibration, precision and declared calibration-sensitivity reports complete; utility/uncertainty completion is recorded by the collector |
 | Profile SWD weight 0 | 11, 22, 33 | All full-budget training and primary calibration reports complete; matched three-seed attribution is preliminary |
 | Interrupted weight-zero attempts | 22, 33 | Interrupted after 6 and 5 epochs by resource failure; retained under `runs/interrupted_oom_20261020/`; not accepted as completed runs |
-| Derivative-distribution weight 1, profile weight 10 | 11, 22, 33 | Fixed pilot in progress; extension to 44/55 requires all declared promotion criteria |
+| Derivative-distribution weight 1, profile weight 10 | 11, 22, 33 | Complete; promotion failed. Ramp error improved 8.79% (required 10%); ACF error worsened 15.56% (allowed 10%). No seeds 44/55 are authorized for this arm. |
+| Larger generator, profile weight 10 | 11, 22, 33 | Activated after the complete derivative failure; fixed width 128 and latent dimension 96 under `docs/CAPACITY_REFINEMENT.md`. Extend to 44/55 only if every pilot gate passes. |
 
 Completed controls 22/33 restart from initialization with the same seeds and full
 budget. The interruption is documented in `reports/resource_incident.json` and
@@ -65,6 +66,13 @@ replace the primary evaluation. The derivative pilot was declared after these
 observations in `docs/TEMPORAL_REFINEMENT.md`, before its training, with fixed
 seeds, budget, weight and promotion criteria. It is exploratory refinement, not
 an independent confirmation of the original hypothesis.
+
+The complete derivative assessment is retained in
+`docs/CURATED_DERIVATIVE_PILOT.md`; its two failed gates were independently
+recomputed from the source reports. The capacity package was prepared as a
+contingency before that endpoint decision and activated afterward. It tests a
+different structural hypothesis against the original SWD10 comparator. These
+sequential validation decisions remain part of the reported selection history.
 
 ## Evidence needed before a manuscript claim
 

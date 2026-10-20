@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "scope": "Independent JSON-only audit of completed derivative pilot before capacity activation; no arrays/checkpoints/calibration archives or TEST opened.",
+  "split": "val",
+  "test_used": false,
+  "assessment": {
+    "path": "runs/temporal_pilot.json",
+    "sha256": "1b7748e5f3c7f78ad2a7b3b27e91f3b8539229994fb9d48ca2ec7ac7d27b1a9c",
+    "bytes": 22574906
+  },
+  "protocol_sha256": "125b3434d76822004dc13f479c33aea3465aa62feea6a8a2a288c5733101976f",
+  "comparisons_checked": 150,
+  "complete": true,
+  "promotion_eligible": false,
+  "failed_gates": [
+    "mean_ramp_wasserstein_kw",
+    "mean_lag_one_acf_wasserstein"
+  ],
+  "mean_gate_recomputation": {
+    "ramp_wasserstein_kw": {
+      "candidate_mean": 0.08947579044546178,
+      "baseline_mean": 0.09810222822812308,
+      "candidate_values": [
+        0.09230928796575914,
+        0.08673348236311684,
+        0.08938460100750935
+      ],
+      "baseline_values": [
+        0.10226174681737112,
+        0.0907247080811097,
+        0.1013202297858884
+      ],
+      "ratio": 0.912066851706959,
+      "relative_change": -0.087933148293041,
+      "limit": 0.08829200540531076,
+      "pass": false
+    },
+    "daily_energy_wasserstein_kwh": {
+      "candidate_mean": 3.2919100856043557,
+      "baseline_mean": 3.248540261804211,
+      "candidate_values": [
+        3.2572250876795326,
+        3.382799799953924,
+        3.2357053691796107
+      ],
+      "baseline_values": [
+        3.165317400565605,
+        3.3589236080923883,
+        3.221379776754639
+      ],
+      "ratio": 1.0133505575750683,
+      "relative_change": 0.013350557575068311,
+      "limit": 3.5733942879846325,
+      "pass": true
+    },
+    "peak_power_wasserstein_kw": {
+      "candidate_mean": 0.7843504749239513,
+      "baseline_mean": 0.7864468230385813,
+      "candidate_values": [
+        0.7765437745153216,
+        0.80411686755511,
+        0.7723907827014223
+      ],
+      "baseline_values": [
+        0.7765825149167422,
+        0.7942376059888471,
+        0.7885203482101544
+      ],
+      "ratio": 0.9973344057688092,
+      "relative_change": -0.0026655942311908376,
+      "limit": 0.8650915053424395,
+      "pass": true
+    },
+    "lag_one_acf_wasserstein": {
+      "candidate_mean": 0.10036237647146432,
+      "baseline_mean": 0.08685197540766335,
+      "candidate_values": [
+        0.10062752021912444,
+        0.10204089449961254,
+        0.09841871469565597
+      ],
+      "baseline_values": [
+        0.0815189474512369,
+        0.09242641043980945,
+        0.0866105683319437
+      ],
+      "ratio": 1.155556635302608,
+      "relative_change": 0.1555566353026081,
+      "limit": 0.09553717294842969,
+      "pass": false
+    },
+    "projected_profile_wasserstein_kwh": {
+      "candidate_mean": 0.06553391040575693,
+      "baseline_mean": 0.06544658708941224,
+      "candidate_values": [
+        0.0657487881953311,
+        0.06569705202468826,
+        0.06515589099725144
+      ],
+      "baseline_values": [
+        0.0650436532192013,
+        0.06564590182277076,
+        0.06565020622626468
+      ],
+      "ratio": 1.0013342684504754,
+      "relative_change": 0.001334268450475351,
+      "limit": 0.07199124579835348,
+      "pass": true
+    }
+  },
+  "ramp_lower_in_all_three_seeds": true,
+  "utility_ratio_recomputation": {
+    "11": {
+      "training_real": 1.0012584948216512,
+      "training_resampling": 1.0012682356691862
+    },
+    "22": {
+      "training_real": 1.0010720348803297,
+      "training_resampling": 1.0010817739138698
+    },
+    "33": {
+      "training_real": 1.0025638075838958,
+      "training_resampling": 1.0025735611303022
+    }
+  },
+  "utility_each_seed_within_both_references": true,
+  "bound_json_inputs": [
+    {
+      "arm": "baseline",
+      "seed": 11,
+      "directory": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_swd10/seed_11",
+      "json_sha256": {
+        "config.json": "22b27b295beff5e77f05e1fc28563d78f8062adc4c6092d6bbc2ab691f97cefb",
+        "summary.json": "b8c0df0b92012dd74f7c4112503566ddeaa4a8d4f7c9f0ec750b8664a01a5378",
+        "history.json": "c38ac8750f9bda8fcb6c35562a6faf6f3cbba9a32118ef4fa9a53ab8f65f46dc",
+        "validation_report.json": "81cf4924a7672dd4a1b31383bf759dc978172acd831492f8bd1ad07c070d6679",
+        "calibration_validation.json": "4e6903f67d346fb67df7a7394ef46d166cd709836309f2c849d7ec7dc33056ec",
+        "utility_validation.json": "cc500f622c4afc9c0690ab4984b7cf86602e9b94af911cc56ca683002f9fe5c5",
+        "uncertainty_conditional_resampling.json": "5de7163ad294d6a7c044f0ab7de60dfa983b9afe9d06341b65b35ede53425f67",
+        "uncertainty_gaussian_copula.json": "5f5c2ac45cafc1a9ceba9dd41cd0b9edc84dbc9d1502b8d76ffe2800734ad2fd"
+      }
+    },
+    {
+      "arm": "baseline",
+      "seed": 22,
+      "directory": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_swd10/seed_22",
+      "json_sha256": {
+        "config.json": "d43faf2d6315fdb0f3321642f558dc3680aee16042e00ff157f27bbd46c84e44",
+        "summary.json": "73ad91f1873fa83f830df33a71b8f572e6e91f5bd31d6abd6bdddca8a0a84ba8",
+        "history.json": "df5b2aac10e53274d2ab0d8c297d94381eb1ab79c3327d308364a6f1d7dcb5c2",
+        "validation_report.json": "3d33d55198ea728ca15a0e78a3daec64955d448b613551d6adf3d459c1a8d312",
+        "calibration_validation.json": "da4e9457d5d91e21d394b49bd58a3c2c18ef6a8fff49f76d341878064c389665",
+        "utility_validation.json": "34ed240db6309b4e76725d71cbe978ff51f57e930de5e3c5c1c4964465627fd4",
+        "uncertainty_conditional_resampling.json": "65e94ebceefa88e77338ed3a66fac79a3d2b55745bec2700fafacf21179f5bfb",
+        "uncertainty_gaussian_copula.json": "5096478c54f38d6d046444c70d27740ae3633f530d63e58cf7ed62a74e6d4d2e"
+      }
+    },
+    {
+      "arm": "baseline",
+      "seed": 33,
+      "directory": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_swd10/seed_33",
+      "json_sha256": {
+        "config.json": "320cf4d49f864d105c94702a4580ba1c9e7d96574e7913ea0b668d755c5b4655",
+        "summary.json": "eab79bc3a80725a19db2861f42d513ca0e65fcd1c72ef5c2a2171072fac17020",
+        "history.json": "11f969353f6882137cff67c2f9f825ebc528dd83325a17f0eba90635e227754b",
+        "validation_report.json": "20c45c2c87432b6d6fdba4c1c66126dc731366f4c466628d792f3eff65fc51fd",
+        "calibration_validation.json": "8daf1b0970f78c9f52c0b2cf7c40235c53886677b93eebc29d5b9ab6b6800091",
+        "utility_validation.json": "93f8de3a916a8c4789166f2902a3b73bf6c081e9880a8ed8bad3822cc35eb12e",
+        "uncertainty_conditional_resampling.json": "58c48594fab25655a79497c10ba1b8f8ccb5229f0bf63380ead881cf32544fcc",
+        "uncertainty_gaussian_copula.json": "e16be6fb2d1794a49df8b95fe62fa6ed57c2ea652ded553464777808bc262e6f"
+      }
+    },
+    {
+      "arm": "candidate",
+      "seed": 11,
+      "directory": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_derivative1/seed_11",
+      "json_sha256": {
+        "config.json": "63e5a634b70b2339895ef9e00829c0fa652093abd624e52b0cebd103c3c71d30",
+        "summary.json": "648b52383980b5f74a179704b9ebaea1f60fcc4849a94f0d5f3184c7962595cd",
+        "history.json": "eb850dc5143aa3422e622897650fc214118134516b54dad39174aafe69a883a6",
+        "validation_report.json": "a673f118f2c1afc0b6d272525d62abc95820bdc484f22fdfb173ca852babae79",
+        "calibration_validation.json": "f2206f9cb44a79f56c3e639c3fd4c02a3edc02297fa8fce19d2813ba25e18c8d",
+        "utility_validation.json": "2def609855f12400b588e6c562843e80f52c1d4eeac036a3fdfa9d8393d54990"
+      }
+    },
+    {
+      "arm": "candidate",
+      "seed": 22,
+      "directory": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_derivative1/seed_22",
+      "json_sha256": {
+        "config.json": "0b2d45413d486ab75528d2c9d51d9478c29aaff98ca1b79a9e8075d1e136b245",
+        "summary.json": "46f23213a388f69a644a49f5c4c0881eba0a83e96085addc7b25eba1f9821c41",
+        "history.json": "b179a9c84a7d2516e8c544cec22521d2d6640b4df2cd2bc054901cac26e26bfa",
+        "validation_report.json": "dd575316b4f11f008f439b736efd392a565ae2cd71f3dc8ab5abae8720afd4d9",
+        "calibration_validation.json": "256b5c38cd82162b659fbe3d2e27b2385b66ea9fad6321b98301f0dcaafc1712",
+        "utility_validation.json": "552a579cc421b4b8d5f8976ee757375bf0248a5b090343adbb6a968005961010"
+      }
+    },
+    {
+      "arm": "candidate",
+      "seed": 33,
+      "directory": "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_derivative1/seed_33",
+      "json_sha256": {
+        "config.json": "b924dc4956c2a7697a66ea0875b4b004f97102ff5c9284204d59878b0a8810e9",
+        "summary.json": "ca8a6ea8dcdb2843ff682ae653fb84366f3fb3e82813bb48ab5ab915e50c5e53",
+        "history.json": "72bca40334c034eb8eb8590d85cf032fafac4bd1b622bbec15bc735b1eb331c6",
+        "validation_report.json": "e6337e15bbb01873ebdd1d7bc597db849cb6c0d5b1871490c711cbb80ada6e5d",
+        "calibration_validation.json": "60dc4a754e60746e3dc112531e87859653c7d9ebe7b2a90b584b19d1af645891",
+        "utility_validation.json": "3d1f4d93932eb7b0cfa828a1037f7e64ca4ff30c17588eef9959fb5650462409"
+      }
+    }
+  ],
+  "limitations": [
+    "Checkpoint/map/prepared-array identity is inherited from the assessment and its previously verified bindings; this independent review reread JSON only.",
+    "Descriptive development validation, not statistical significance, formal noninferiority, or unseen-test confirmation."
+  ]
+}

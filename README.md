@@ -100,10 +100,12 @@ The fixed configurations and training seeds are:
 |---|---|---|---|
 | Current candidate, SWD weight 10 | [curated_swd10.json](configs/curated_swd10.json) | 11, 22, 33, 44, 55 | 26 epochs, batch 512, CPU, one thread |
 | Attribution control, SWD weight 0 | [curated_swd0.json](configs/curated_swd0.json) | 11, 22, 33 | Same update budget and CPU settings |
-| Temporal refinement pilot | [curated_derivative1.json](configs/curated_derivative1.json) | 11, 22, 33; extend only if declared gates pass | Same budget; add derivative SWD weight 1 |
+| Temporal refinement pilot (failed promotion) | [curated_derivative1.json](configs/curated_derivative1.json) | 11, 22, 33; complete | Same budget; add derivative SWD weight 1 |
+| Capacity refinement pilot | [curated_capacity.json](configs/curated_capacity.json) | 11, 22, 33; extend only if declared gates pass | Same budget; generator width 128 and latent dimension 96 |
 
-All use the full curated training pool, generator width 64, discriminator width
-128, and balanced batches of four conditions with 128 profiles each. Checkpoints
+All use the full curated training pool and discriminator width
+128, and balanced batches of four conditions with 128 profiles each. The original
+and derivative arms use generator width 64 and latent dimension 24. Checkpoints
 are selected by raw conditional validation W1. There is no early stopping or
 resume. With 606,060 training profiles, the declared budget is 1,184 updates per
 epoch and 30,784 updates per adversary. Replacement sampling means an epoch is an
@@ -117,8 +119,11 @@ current candidate or an interchangeable execution setting.
 The temporal refinement retains profile SWD weight 10 and adds distribution
 matching on 95 adjacent standardized differences, with a single TRAIN-fitted
 scale. Its three-seed promotion criteria are fixed in
-[TEMPORAL_REFINEMENT.md](docs/TEMPORAL_REFINEMENT.md). No improved result is assumed
-from the added loss. Keep each arm, failed gates and interrupted attempts.
+[TEMPORAL_REFINEMENT.md](docs/TEMPORAL_REFINEMENT.md). The
+[completed pilot](docs/CURATED_DERIVATIVE_PILOT.md) failed two promotion gates.
+The next [capacity protocol](docs/CAPACITY_REFINEMENT.md) fixes a larger generator
+package before its training and retains the original model as comparator.
+Keep each arm, failed gates and interrupted attempts.
 The completed three-seed [SWD attribution comparison](docs/CURATED_SWD_ATTRIBUTION.md)
 finds lower calibrated peak/ramp errors with weight 10, alongside ACF and battery
 tradeoffs. Its [matched utility comparison](docs/CURATED_SWD_UTILITY_ATTRIBUTION.md)

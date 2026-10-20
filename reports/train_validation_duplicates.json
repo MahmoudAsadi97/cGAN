@@ -1,0 +1,758 @@
+{
+  "schema_version": 1,
+  "scope": "Only the explicit training and validation NPZ inputs were opened; no test data were opened",
+  "inputs": {
+    "train": {
+      "basename": "train.npz",
+      "sha256": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+      "shape": [
+        611520,
+        96
+      ],
+      "dtype": "float32",
+      "meters": 1680,
+      "date_min": "2024-01-01",
+      "date_max": "2024-12-31"
+    },
+    "validation": {
+      "basename": "val.npz",
+      "sha256": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d",
+      "shape": [
+        131040,
+        96
+      ],
+      "dtype": "float32",
+      "meters": 360,
+      "date_min": "2024-01-01",
+      "date_max": "2024-12-31"
+    }
+  },
+  "overlapping_ean_ids": [],
+  "fingerprint_algorithm": {
+    "daily": "SHA256 of one 96-slot row's exact C-order little-endian float32 bytes; date, ID and condition excluded",
+    "yearly": "Sort each meter by ISOdate; SHA256(dates.astype('S10').tobytes(order='C') + ascontiguousarray(x,dtype='<f4').tobytes(order='C')); no header, separators, IDs or conditions",
+    "verification": "Every repeated daily hash is verified against actual uint32 words; every repeated yearly hash is verified against full date+value bytes; collisions fail the audit",
+    "classification": "Constant zero: all samples numerically zero. Other constant: every sample equals the first, excluding zero. Nonconstant: otherwise. Exact identity preserves signed-zero bits",
+    "technology": "condition // 8 = HP*4 + EV*2 + PV",
+    "pair_count_definition": "Within-split unordered row/meter pairs use n*(n-1)//2; cross-split pairs use n_train*n_validation"
+  },
+  "yearly_traces": {
+    "expected_retained_dates": 364,
+    "excluded_dst_dates": [
+      "2024-03-31",
+      "2024-10-27"
+    ],
+    "meters_with_exact_expected_date_set": {
+      "train": 1680,
+      "validation": 360
+    },
+    "distinct_date_aligned_traces": 2018,
+    "duplicate_groups": 22,
+    "by_kind": {
+      "constant_zero": {
+        "train_meters": 0,
+        "validation_meters": 0,
+        "within_train_duplicate_groups": 0,
+        "within_train_duplicate_pairs": 0,
+        "within_validation_duplicate_groups": 0,
+        "within_validation_duplicate_pairs": 0,
+        "cross_split_duplicate_groups": 0,
+        "cross_split_duplicate_pairs": 0,
+        "train_meters_matching_validation": 0,
+        "validation_meters_matching_train": 0
+      },
+      "other_constant": {
+        "train_meters": 0,
+        "validation_meters": 0,
+        "within_train_duplicate_groups": 0,
+        "within_train_duplicate_pairs": 0,
+        "within_validation_duplicate_groups": 0,
+        "within_validation_duplicate_pairs": 0,
+        "cross_split_duplicate_groups": 0,
+        "cross_split_duplicate_pairs": 0,
+        "train_meters_matching_validation": 0,
+        "validation_meters_matching_train": 0
+      },
+      "nonconstant": {
+        "train_meters": 1680,
+        "validation_meters": 360,
+        "within_train_duplicate_groups": 15,
+        "within_train_duplicate_pairs": 15,
+        "within_validation_duplicate_groups": 2,
+        "within_validation_duplicate_pairs": 2,
+        "cross_split_duplicate_groups": 5,
+        "cross_split_duplicate_pairs": 5,
+        "train_meters_matching_validation": 5,
+        "validation_meters_matching_train": 5
+      }
+    },
+    "groups": [
+      {
+        "sha256": "01ada64976c65e717744f56779ec08879096b1a29dfa328e72b382037039136a",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "1553",
+          "1794"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          2
+        ],
+        "technology_flags": [
+          {
+            "code": 2,
+            "HP": 0,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "167e59792e154788cb0542476a201c429e51dcf53cd4944731a0d27b108a3e82",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2107",
+          "2150"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "1a530d3ff132ef384db20d4e8bf3285d08116333ba139122ab7f520e13fb122f",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2239",
+          "2352"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "1ec28e37fc862ad9a6d28aec72d43739b325c778fb3abced285610a00919ef18",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2396"
+        ],
+        "validation_meters": [
+          "2128"
+        ],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "22d4a63bf6646a3c0ec5671b3831febd73d61bdf4f110202d9e0acfd5db22089",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [],
+        "validation_meters": [
+          "2129",
+          "2307"
+        ],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "25df662196bd62a7510664343f6917b9533b1fbc46cbf97181cfa66f33f221af",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2263",
+          "2383"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "2ea663e63fa9bb6b1fbeebda5cc283109d2c83aa429077adaeb8455a2e1fe6bf",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2329",
+          "2395"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "577a5de704ffa0b1c6a459ad82754c906b16f79e9184d7d874294d6df895cf80",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "1595",
+          "1659"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          2
+        ],
+        "technology_flags": [
+          {
+            "code": 2,
+            "HP": 0,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "5e93c7cb81a6925e44a9ef6af1abef3de249e675a91b058e5ec0e344948e7e3e",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "1001"
+        ],
+        "validation_meters": [
+          "995"
+        ],
+        "technology_consistent": true,
+        "technology_codes": [
+          4
+        ],
+        "technology_flags": [
+          {
+            "code": 4,
+            "HP": 1,
+            "EV": 0,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "672024036a93529f0ca53ce1bb578c993e78ace2c44cbe2c3254d75c1b41b237",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "903",
+          "933"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          4
+        ],
+        "technology_flags": [
+          {
+            "code": 4,
+            "HP": 1,
+            "EV": 0,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "77949dbe6fb4f9261b352341b332fdc10d37ffb73d43480c9e0c1af926a0a4cf",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "1185"
+        ],
+        "validation_meters": [
+          "983"
+        ],
+        "technology_consistent": true,
+        "technology_codes": [
+          4
+        ],
+        "technology_flags": [
+          {
+            "code": 4,
+            "HP": 1,
+            "EV": 0,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "8cb50e57129921426bb897f2d4368d0111e093660789a9228c4a960f873f974b",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [],
+        "validation_meters": [
+          "1505",
+          "1785"
+        ],
+        "technology_consistent": true,
+        "technology_codes": [
+          2
+        ],
+        "technology_flags": [
+          {
+            "code": 2,
+            "HP": 0,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "985116f02bebd4e4cb2850a76b5ee18c8845216586cfd7c60f3140353537a711",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2298",
+          "2382"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "9e255e37aee1ec363c437b980029a425b39615d300a1ddc7c6b4dce83eb33081",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2367"
+        ],
+        "validation_meters": [
+          "2278"
+        ],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "a0f7b7a36b7035d2eedd3818f4267ddbf26b0298eb577fbde6b0222cb042b0af",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2258"
+        ],
+        "validation_meters": [
+          "2348"
+        ],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "c148824c747d6ba92cdf01876fb1b7df6c3ed3f257b2ba3149af18cc2cface13",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2193",
+          "2394"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "d18468098cdf9c17754d18ae17948bbda0b2c006e0bddaad70c0da20ed97212b",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2229",
+          "2355"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "d6dabeacd2fc773147f7c7eea4b4fee2761dff5ea0879c553b6e20d940bb1674",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "1006",
+          "1179"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          4
+        ],
+        "technology_flags": [
+          {
+            "code": 4,
+            "HP": 1,
+            "EV": 0,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "e1eafe31e45cea97438fb179c0264283e5fe8c81928363f6b4d90d5498eb5efa",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2125",
+          "2371"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "fc88bab60b49a2c8841fa0658b04cdb135b04dbbb585017a462bb05529f6cce8",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "2151",
+          "2400"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          6
+        ],
+        "technology_flags": [
+          {
+            "code": 6,
+            "HP": 1,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "fdbe571cc8e2f81c158a1891eafcc7f98facf4ad5681cf5829da5433657a6627",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "1081",
+          "964"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          4
+        ],
+        "technology_flags": [
+          {
+            "code": 4,
+            "HP": 1,
+            "EV": 0,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      },
+      {
+        "sha256": "fdcab659e60a8b46fe191e20299d92efa97bee230778082e436f58547d2212b4",
+        "kind": "nonconstant",
+        "retained_days": 364,
+        "slots_per_day": 96,
+        "train_meters": [
+          "1633",
+          "1687"
+        ],
+        "validation_meters": [],
+        "technology_consistent": true,
+        "technology_codes": [
+          2
+        ],
+        "technology_flags": [
+          {
+            "code": 2,
+            "HP": 0,
+            "EV": 1,
+            "PV": 0
+          }
+        ],
+        "condition_sequences_identical": true
+      }
+    ]
+  },
+  "daily_profiles": {
+    "total_profiles": 742560,
+    "unique_exact_profiles_in_union": 733716,
+    "rows_in_repeated_hash_groups_confirmed_by_byte_comparison": 16856,
+    "by_kind": {
+      "constant_zero": {
+        "profile_rows": {
+          "train": 523,
+          "validation": 310
+        },
+        "distinct_profiles": {
+          "union": 1,
+          "train": 1,
+          "validation": 1
+        },
+        "within_train": {
+          "duplicate_groups": 1,
+          "rows_in_duplicate_groups": 523,
+          "redundant_rows": 522,
+          "duplicate_pairs": 136503,
+          "same_meter_pairs": 25436,
+          "different_meter_pairs": 111067,
+          "groups_spanning_distinct_meters": 1,
+          "rows_in_groups_spanning_distinct_meters": 523
+        },
+        "within_validation": {
+          "duplicate_groups": 1,
+          "rows_in_duplicate_groups": 310,
+          "redundant_rows": 309,
+          "duplicate_pairs": 47895,
+          "same_meter_pairs": 38695,
+          "different_meter_pairs": 9200,
+          "groups_spanning_distinct_meters": 1,
+          "rows_in_groups_spanning_distinct_meters": 310
+        },
+        "cross_split": {
+          "duplicate_groups": 1,
+          "train_rows_matching_validation": 523,
+          "validation_rows_matching_train": 310,
+          "duplicate_pairs": 162130,
+          "same_date_pairs": 504,
+          "same_condition_pairs": 7237,
+          "same_technology_pairs": 43286
+        }
+      },
+      "other_constant": {
+        "profile_rows": {
+          "train": 3,
+          "validation": 1
+        },
+        "distinct_profiles": {
+          "union": 2,
+          "train": 1,
+          "validation": 1
+        },
+        "within_train": {
+          "duplicate_groups": 1,
+          "rows_in_duplicate_groups": 3,
+          "redundant_rows": 2,
+          "duplicate_pairs": 3,
+          "same_meter_pairs": 3,
+          "different_meter_pairs": 0,
+          "groups_spanning_distinct_meters": 0,
+          "rows_in_groups_spanning_distinct_meters": 0
+        },
+        "within_validation": {
+          "duplicate_groups": 0,
+          "rows_in_duplicate_groups": 0,
+          "redundant_rows": 0,
+          "duplicate_pairs": 0,
+          "same_meter_pairs": 0,
+          "different_meter_pairs": 0,
+          "groups_spanning_distinct_meters": 0,
+          "rows_in_groups_spanning_distinct_meters": 0
+        },
+        "cross_split": {
+          "duplicate_groups": 0,
+          "train_rows_matching_validation": 0,
+          "validation_rows_matching_train": 0,
+          "duplicate_pairs": 0,
+          "same_date_pairs": 0,
+          "same_condition_pairs": 0,
+          "same_technology_pairs": 0
+        }
+      },
+      "nonconstant": {
+        "profile_rows": {
+          "train": 610994,
+          "validation": 130729
+        },
+        "distinct_profiles": {
+          "union": 733713,
+          "train": 605532,
+          "validation": 130001
+        },
+        "within_train": {
+          "duplicate_groups": 5462,
+          "rows_in_duplicate_groups": 10924,
+          "redundant_rows": 5462,
+          "duplicate_pairs": 5462,
+          "same_meter_pairs": 2,
+          "different_meter_pairs": 5460,
+          "groups_spanning_distinct_meters": 5460,
+          "rows_in_groups_spanning_distinct_meters": 10920
+        },
+        "within_validation": {
+          "duplicate_groups": 728,
+          "rows_in_duplicate_groups": 1456,
+          "redundant_rows": 728,
+          "duplicate_pairs": 728,
+          "same_meter_pairs": 0,
+          "different_meter_pairs": 728,
+          "groups_spanning_distinct_meters": 728,
+          "rows_in_groups_spanning_distinct_meters": 1456
+        },
+        "cross_split": {
+          "duplicate_groups": 1820,
+          "train_rows_matching_validation": 1820,
+          "validation_rows_matching_train": 1820,
+          "duplicate_pairs": 1820,
+          "same_date_pairs": 1820,
+          "same_condition_pairs": 1820,
+          "same_technology_pairs": 1820
+        }
+      }
+    }
+  },
+  "interpretation": [
+    "Identical daily profiles can occur naturally, especially zero or other constant profiles; duplicate days alone do not establish leakage.",
+    "Duplicated nonconstant date-aligned whole retained-year traces across train and validation are a serious independence failure despite disjoint EAN IDs.",
+    "These checks establish identity of prepared float32 net-energy inputs, not separate raw import/export channel identity or the reason for duplication.",
+    "Prior validation results using trace-duplicated splits should be treated as exploratory; this report does not inspect or characterize the held-out test set."
+  ]
+}

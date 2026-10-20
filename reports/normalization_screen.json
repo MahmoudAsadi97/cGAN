@@ -2935,5 +2935,6 @@
         }
       ]
     }
-  ]
+  ],
+  "source_trace_independence": "Original prepared split has detected exact full-year train/validation aliases. Exploratory diagnostics only; see docs/DUPLICATE_REMEDIATION.md. Numerical results preserved."
 }

@@ -3697,5 +3697,6 @@
     "comparison_helper_sha256": "c4d60a82374b1635573834784455a1e32ed6cf87e23bf9000316dde3a781c5c7",
     "blas_thread_limit": 1
   },
-  "interpretation": "Fresh joint draws from a statistical comparator, not row resampling or evidence of GAN novelty. Linear empirical inverse quantiles smooth atoms; midrank Gaussian scores approximate tied/discrete margins. Compressed quantile knots can additionally distort sparse tails. Gaussian dependence cannot capture arbitrary joint multimodality or tail dependence, and empirical tails do not extrapolate. Metrics are descriptive validation diagnostics; nearest-neighbor checks provide no privacy guarantee. Repeated screening on validation precludes a confirmatory significance claim."
+  "interpretation": "Fresh joint draws from a statistical comparator, not row resampling or evidence of GAN novelty. Linear empirical inverse quantiles smooth atoms; midrank Gaussian scores approximate tied/discrete margins. Compressed quantile knots can additionally distort sparse tails. Gaussian dependence cannot capture arbitrary joint multimodality or tail dependence, and empirical tails do not extrapolate. Metrics are descriptive validation diagnostics; nearest-neighbor checks provide no privacy guarantee. Repeated screening on validation precludes a confirmatory significance claim.",
+  "source_trace_independence": "Original prepared split has detected exact full-year train/validation aliases. Exploratory diagnostics only; see docs/DUPLICATE_REMEDIATION.md. Numerical results preserved."
 }

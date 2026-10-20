@@ -6,6 +6,12 @@ for the Fluvius residential electricity dataset in this repository's
 All development is on **V2**; `main` is unchanged. This is a research baseline;
 passing tests or a short training run does not establish publication readiness.
 
+**Data-audit update:** different meter IDs were found to share exact full-year
+traces across the original train/validation split. Earlier reported scores are
+exploratory and do not establish independent-trace validation. A deterministic
+deduplication procedure preserves the original held-out test membership while
+removing aliases; see [DUPLICATE_REMEDIATION.md](docs/DUPLICATE_REMEDIATION.md).
+
 ## What it generates
 
 Daily **net grid import** (`import − injection`) in kWh per interval, conditioned on

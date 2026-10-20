@@ -821,5 +821,6 @@
       }
     }
   },
-  "interpretation": "Differences are candidate minus comparator; negative values favor the candidate. Descriptive marginal percentile intervals are conditional on frozen reference arrays and the selected real rows. Nominal coverage is not guaranteed, especially near coincident CDFs where W1 is nonsmooth. They exclude model-selection, training-seed, generated-sample, comparator-sample, validation-subsampling, and future-period uncertainty. Validation reuse and repeated candidate screening preclude a confirmatory significance claim."
+  "interpretation": "Differences are candidate minus comparator; negative values favor the candidate. Descriptive marginal percentile intervals are conditional on frozen reference arrays and the selected real rows. Nominal coverage is not guaranteed, especially near coincident CDFs where W1 is nonsmooth. They exclude model-selection, training-seed, generated-sample, comparator-sample, validation-subsampling, and future-period uncertainty. Validation reuse and repeated candidate screening preclude a confirmatory significance claim.",
+  "source_trace_independence": "Original prepared split has detected exact full-year train/validation aliases. Exploratory diagnostics only; see docs/DUPLICATE_REMEDIATION.md. Numerical results preserved."
 }

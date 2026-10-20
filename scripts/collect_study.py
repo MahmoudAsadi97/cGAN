@@ -63,6 +63,8 @@ def main():
         parser.error('Run names must be unique')
     report = {
         'schema_version': 1, 'split': 'val', 'test_used': False,
+        'source_trace_independence': 'See docs/DUPLICATE_REMEDIATION.md: original-split screens '
+                                    'contain detected exact full-trace train/validation aliases.',
         'interpretation': 'Exploratory method-screening evidence, including unsuccessful arms. '
                           'Compare only arms with matched declared budgets, samplers and selection criteria. '
                           'Not a final test, significance claim, or publication-readiness certificate.',

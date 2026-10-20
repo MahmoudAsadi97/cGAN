@@ -2712,5 +2712,6 @@
       "sha256": "ef3d37e59054e065c2779bf6eb5430e309718f97e924daa7580df3e00e2705b0"
     }
   },
-  "test_evaluation_performed": false
+  "test_evaluation_performed": false,
+  "source_trace_independence": "Original prepared split has detected exact full-year train/validation aliases. Exploratory diagnostics only; see docs/DUPLICATE_REMEDIATION.md. Numerical results preserved."
 }

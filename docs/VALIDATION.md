@@ -1,5 +1,10 @@
 # Executed validation — 20 October 2026
 
+**Subsequent audit qualification:** exact full-year traces were later found under
+different IDs across the original train/validation split. The historical model
+results below are exploratory and do not establish independent-trace validation.
+See [DUPLICATE_REMEDIATION.md](DUPLICATE_REMEDIATION.md) for the correction protocol.
+
 All source changes are on V2. Main remains
 `af20fdc02f95f64d8b098d4271bafe12b6e0a314`. This document separates execution evidence
 from planned research. The implementation source used for the pilot corresponds to

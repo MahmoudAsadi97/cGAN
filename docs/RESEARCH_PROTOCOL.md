@@ -16,6 +16,11 @@ The equal sampling of 300 meters per technology group is not population prevalen
 
 ## Frozen data protocol
 
+Apply [DUPLICATE_REMEDIATION.md](DUPLICATE_REMEDIATION.md) before confirmatory runs.
+Meter-ID disjointness alone is insufficient: exact full-trace aliases must be
+removed across all splits while preserving the original held-out membership.
+All earlier original-split scores are exploratory and qualified by this finding.
+
 Use the pinned release digest and metadata.json. Exclude the two DST transition
 calendar days, preserve negative net export, and do not clip outliers. Keep all days
 of each meter in one of the 70/15/15 partitions, stratified by technology, seed42.

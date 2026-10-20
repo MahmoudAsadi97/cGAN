@@ -1,5 +1,10 @@
 # Prospective improvement study
 
+**Audit update:** the original prepared split used by these initial screens has
+exact cross-split full-year trace duplicates. Retain results as exploratory
+diagnostics only. Follow [DUPLICATE_REMEDIATION.md](DUPLICATE_REMEDIATION.md) and
+retrain on curated data before making independent-household performance claims.
+
 This exploratory study follows the unsuccessful ten-epoch full-data pilot. It is
 not a confirmatory publication result. The real test split remains sealed until
 the method, budgets, metrics and seed list are frozen.

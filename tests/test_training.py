@@ -217,3 +217,18 @@ def test_run_directory_is_reserved_before_data_loading(tmp_path, monkeypatch):
     train(data, output, settings(epochs=1))
     assert nested_attempted
     assert not (output / ".training.lock").exists()
+
+
+def test_constant_scaler_inverse_preserves_raw_model_output(tmp_path):
+    data = prepared(tmp_path)
+    out = tmp_path/'run'
+    train(data, out, settings(epochs=1))
+    saved = torch.load(out/'best.pt', weights_only=True)
+    saved['scaler'] = {'minimum': 2., 'maximum': 2.}
+    for key, value in saved['generator_state_dict'].items():
+        saved['generator_state_dict'][key] = torch.zeros_like(value)
+    final_bias = [k for k in saved['generator_state_dict'] if k.endswith('bias')][-1]
+    saved['generator_state_dict'][final_bias].fill_(1.)
+    torch.save(saved, out/'constant.pt')
+    # Forward normalization uses denominator1 if span0, so its inverse is y+min.
+    np.testing.assert_array_equal(generate(out/'constant.pt', np.array([0])), np.full((1,24), 3.))

@@ -351,6 +351,7 @@ def prepare_archive(archive_path, output_dir, *, resolution: int = 96,
             np.savez_compressed(stage / f"{name}.npz", **arrays)
             summary["splits"][name] = {
                 "profiles": len(arrays["x"]), "meters": len(records),
+                "sha256": _sha256(stage / f"{name}.npz"),
                 "meter_ids": [record.meter_id for record in records],
                 "technology_meter_counts": dict(sorted(Counter(str(m.technology) for m in records).items())),
                 "condition_counts": dict(sorted(Counter(str(int(y)) for y in arrays["y"]).items(), key=lambda p: int(p[0]))),

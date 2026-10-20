@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import numpy as np
@@ -79,6 +80,8 @@ def evaluate_checkpoint(prepared, checkpoint, *, split='val', samples_per_condit
     if split == 'val' and hashes.get('val.npz') != heldout_digest:
         raise ValueError('Checkpoint validation data fingerprint does not match')
     recorded = metadata['splits'][split]
+    if recorded.get('sha256') != heldout_digest:
+        raise ValueError('Evaluation data fingerprint differs from the prepared manifest; reprepare legacy data')
     if recorded['profiles'] != len(real_x) or recorded['meters'] != len(np.unique(real_ids)):
         raise ValueError('Evaluation counts disagree with prepared metadata')
     if 'meter_ids' in recorded and set(recorded['meter_ids']) != set(real_ids):
@@ -93,6 +96,15 @@ def evaluate_checkpoint(prepared, checkpoint, *, split='val', samples_per_condit
     ])
     real_x, real_y, real_ids = real_x[selected], real_y[selected], real_ids[selected]
     fake = generate(checkpoint, real_y, seed=seed)
+    prepared_train_count = len(train_x)
+    model_train_count = state['selection']['train_profiles_used']
+    train_indices = np.arange(prepared_train_count, dtype=np.int64)
+    if model_train_count < prepared_train_count:
+        train_indices = np.sort(np.random.default_rng(state['config']['seed']).choice(
+            prepared_train_count, model_train_count, replace=False))
+    if hashlib.sha256(train_indices.astype('<i8').tobytes()).hexdigest() != state['selection']['train_indices_sha256']:
+        raise ValueError('Cannot reconstruct the checkpoint training subset for fair baselines')
+    train_x, train_y = train_x[train_indices], train_y[train_indices]
     alternatives = {
         'cgan': fake,
         'conditional_resampling': resample_baseline(train_x, train_y, real_y, seed=seed),
@@ -105,6 +117,7 @@ def evaluate_checkpoint(prepared, checkpoint, *, split='val', samples_per_condit
         'checkpoint_sha256': sha256_file(checkpoint), 'train_sha256': digest,
         'evaluation_sha256': heldout_digest,
         'profile_count': len(real_x), 'meter_count': len(np.unique(real_ids)),
+        'training_profiles': {'prepared': prepared_train_count, 'model': model_train_count, 'baselines': len(train_x)},
         'sampling': 'Uniform without replacement within each observed condition; macro averages weight conditions equally.',
         'methods': {name: evaluate_conditional(real_x, real_y, values, real_y, interval_hours=interval)
                     for name, values in alternatives.items()},
@@ -147,17 +160,40 @@ def main(argv=None):
             raise ValueError('samples-per-label must be positive')
         from .training import generate
         destination = Path(args.output)
-        if destination.exists():
-            raise FileExistsError(destination)
+        if destination.suffix.lower() != '.npz':
+            raise ValueError('Generated profile output must have a .npz extension')
+        sidecar = destination.with_suffix('.json')
+        for path in (destination, sidecar):
+            if path.exists():
+                raise FileExistsError(path)
         labels = np.repeat(np.asarray(args.labels, dtype=np.int64), args.samples_per_label)
         profiles = generate(args.checkpoint, labels, seed=args.seed)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        with destination.open('xb') as stream:
-            np.savez_compressed(stream, x=profiles, y=labels)
-        write_json(destination.with_suffix('.json'), {
+        import torch
+        saved = torch.load(args.checkpoint, map_location='cpu', weights_only=True)
+        metadata = saved['metadata']
+        details = {
             'checkpoint_sha256': sha256_file(args.checkpoint), 'seed': args.seed,
             'units': 'kWh/interval', 'resolution': profiles.shape[1], 'labels': args.labels,
-            'profiles': len(profiles), 'postprocessing': 'none; raw model output'})
+            'profiles': len(profiles), 'postprocessing': 'none; raw model output',
+            'target': metadata['target'], 'interval_hours': 24 / profiles.shape[1],
+            'source_sha256': metadata['source_sha256'],
+            'target_definition': metadata.get('target_definition'),
+            'label_formula': metadata.get('label_formula'),
+            'timezone_policy': metadata.get('timezone_policy'),
+        }
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        created = []
+        try:
+            with sidecar.open('x', encoding='utf-8') as stream:
+                created.append(sidecar)
+                stream.write(json.dumps(details, indent=2, allow_nan=False) + '\n')
+            with destination.open('xb') as stream:
+                created.append(destination)
+                np.savez_compressed(stream, x=profiles, y=labels)
+        except Exception:
+            for path in created:
+                path.unlink(missing_ok=True)
+            raise
         print(destination)
     elif args.command == 'evaluate':
         if Path(args.output).exists():

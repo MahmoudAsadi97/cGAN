@@ -237,3 +237,12 @@ def test_nonresidential_excluded_and_off_grid_day_counted(tmp_path):
     assert result["counts"]["nonresidential_meters"] == 1
     assert result["counts"]["profiles_kept"] == 3
     assert result["exclusions"]["off_grid"] == 1
+
+
+def test_manifest_binds_all_split_bytes_including_untouched_test(tmp_path):
+    import hashlib
+    source = archive(tmp_path)
+    output = tmp_path / 'bound'
+    metadata = prepare_archive(source, output)
+    for split in ('train', 'val', 'test'):
+        assert metadata['splits'][split]['sha256'] == hashlib.sha256((output / f'{split}.npz').read_bytes()).hexdigest()

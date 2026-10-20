@@ -35,7 +35,8 @@ def _prepared_for_cli(tmp_path):
         ids = np.array([split+'0', split+'0', split+'1', split+'1'])
         np.savez(prepared / f'{split}.npz', x=values, y=labels,
                  meter_id=ids, date=np.array(['2024-01-01', '2024-01-02']*2))
-        counts[split] = {'profiles': 4, 'meters': 2, 'meter_ids': sorted(set(ids))}
+        counts[split] = {'profiles': 4, 'meters': 2, 'meter_ids': sorted(set(ids)),
+                         'sha256': __import__('hashlib').sha256((prepared/f'{split}.npz').read_bytes()).hexdigest()}
     (prepared / 'scaler.json').write_text(json.dumps({'minimum': 0., 'maximum': float(values.max())}))
     (prepared / 'metadata.json').write_text(json.dumps({
         'resolution': 24, 'target': 'net', 'units': 'kWh/interval',
@@ -70,3 +71,46 @@ def test_train_generate_evaluate_cli_and_fingerprint_guard(tmp_path):
     with pytest.raises(ValueError, match='fingerprint'):
         main(['evaluate', '--prepared', str(prepared), '--checkpoint', str(run/'best.pt'),
               '--output', str(tmp_path/'invalid.json')])
+
+
+@pytest.mark.parametrize('name', ['generated.json', 'generated.txt'])
+def test_generate_requires_npz_extension_before_writing(tmp_path, name):
+    with pytest.raises(ValueError, match='npz'):
+        main(['generate', '--checkpoint', 'missing.pt', '--labels', '0',
+              '--output', str(tmp_path/name)])
+    assert not (tmp_path/name).exists()
+
+
+def test_generate_preserves_existing_sidecar(tmp_path):
+    sidecar = tmp_path / 'generated.json'
+    sidecar.write_text('previous experiment')
+    with pytest.raises(FileExistsError):
+        main(['generate', '--checkpoint', 'missing.pt', '--labels', '0',
+              '--output', str(tmp_path/'generated.npz')])
+    assert sidecar.read_text() == 'previous experiment'
+
+
+def test_evaluate_rejects_changed_test_values_with_same_ids(tmp_path):
+    import numpy as np
+    from fluvius_cgan.training import train
+    from fluvius_cgan.cli import evaluate_checkpoint
+    prepared = _prepared_for_cli(tmp_path)
+    run = tmp_path/'run'
+    train(prepared, run, {'epochs': 1, 'hidden_dim': 4, 'latent_dim': 4, 'batch_size': 4})
+    with np.load(prepared/'test.npz') as source:
+        arrays = dict(source)
+    arrays['x'] += 1
+    np.savez(prepared/'test.npz', **arrays)
+    with pytest.raises(ValueError, match='fingerprint|digest'):
+        evaluate_checkpoint(prepared, run/'best.pt', split='test')
+
+
+def test_smoke_evaluation_baselines_use_actual_training_subset(tmp_path):
+    from fluvius_cgan.training import train
+    from fluvius_cgan.cli import evaluate_checkpoint
+    prepared = _prepared_for_cli(tmp_path)
+    run = tmp_path/'run'
+    train(prepared, run, {'epochs': 1, 'hidden_dim': 4, 'latent_dim': 4,
+                         'batch_size': 4, 'max_train_samples': 3})
+    report = evaluate_checkpoint(prepared, run/'best.pt')
+    assert report['training_profiles'] == {'prepared': 4, 'model': 3, 'baselines': 3}

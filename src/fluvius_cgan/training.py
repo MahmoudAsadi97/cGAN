@@ -507,7 +507,8 @@ def generate(checkpoint, labels: np.ndarray, seed=42, batch_size=1024) -> np.nda
                 stop = start + batch_size
                 conditions = _conditions(labels[start:stop], condition_dim, torch.device("cpu"))
                 result[start:stop] = generator(noise[start:stop], conditions).numpy()
-    result = (result.astype(np.float64) * (maximum - minimum) + minimum).astype(np.float32)
+    span = maximum - minimum
+    result = (result.astype(np.float64) * (span if span else 1.0) + minimum).astype(np.float32)
     if not np.isfinite(result).all():
         raise ValueError("generator produced nonfinite profiles")
     return result

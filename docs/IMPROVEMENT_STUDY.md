@@ -6,8 +6,9 @@ diagnostics only. Follow [DUPLICATE_REMEDIATION.md](DUPLICATE_REMEDIATION.md) an
 retrain on curated data before making independent-household performance claims.
 
 This exploratory study follows the unsuccessful ten-epoch full-data pilot. It is
-not a confirmatory publication result. The real test split remains sealed until
-the method, budgets, metrics and seed list are frozen.
+not a confirmatory publication result. Final test performance remains unseen until the method, budgets, metrics and
+seed list are frozen. Curation reads test values only for deterministic identity
+auditing and retained-row preparation.
 
 ## Diagnosis and hypotheses
 

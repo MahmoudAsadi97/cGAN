@@ -1,0 +1,2073 @@
+{
+  "after": {
+    "test": {
+      "meters": 349,
+      "profiles": 127036,
+      "technology_meter_counts": {
+        "0": 45,
+        "1": 45,
+        "2": 41,
+        "3": 45,
+        "4": 41,
+        "5": 45,
+        "6": 42,
+        "7": 45
+      }
+    },
+    "train": {
+      "meters": 1665,
+      "profiles": 606060,
+      "technology_meter_counts": {
+        "0": 210,
+        "1": 210,
+        "2": 207,
+        "3": 210,
+        "4": 207,
+        "5": 210,
+        "6": 201,
+        "7": 210
+      }
+    },
+    "val": {
+      "meters": 353,
+      "profiles": 128492,
+      "technology_meter_counts": {
+        "0": 45,
+        "1": 45,
+        "2": 44,
+        "3": 45,
+        "4": 43,
+        "5": 45,
+        "6": 41,
+        "7": 45
+      }
+    }
+  },
+  "aliases_excluded": [
+    {
+      "canonical_meter_id": "1553",
+      "canonical_split": "train",
+      "fingerprint_sha256": "01ada64976c65e717744f56779ec08879096b1a29dfa328e72b382037039136a",
+      "meter_id": "1794",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 2
+    },
+    {
+      "canonical_meter_id": "1125",
+      "canonical_split": "train",
+      "fingerprint_sha256": "0eb5878c5b8b1533655ee2876049ce36b657f8b0bf7b0a9988cb22a001586748",
+      "meter_id": "1168",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "2107",
+      "canonical_split": "train",
+      "fingerprint_sha256": "167e59792e154788cb0542476a201c429e51dcf53cd4944731a0d27b108a3e82",
+      "meter_id": "2150",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2239",
+      "canonical_split": "train",
+      "fingerprint_sha256": "1a530d3ff132ef384db20d4e8bf3285d08116333ba139122ab7f520e13fb122f",
+      "meter_id": "2352",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2396",
+      "canonical_split": "train",
+      "fingerprint_sha256": "1ec28e37fc862ad9a6d28aec72d43739b325c778fb3abced285610a00919ef18",
+      "meter_id": "2128",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "val",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2129",
+      "canonical_split": "val",
+      "fingerprint_sha256": "22d4a63bf6646a3c0ec5671b3831febd73d61bdf4f110202d9e0acfd5db22089",
+      "meter_id": "2307",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "val",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2263",
+      "canonical_split": "train",
+      "fingerprint_sha256": "25df662196bd62a7510664343f6917b9533b1fbc46cbf97181cfa66f33f221af",
+      "meter_id": "2383",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2329",
+      "canonical_split": "train",
+      "fingerprint_sha256": "2ea663e63fa9bb6b1fbeebda5cc283109d2c83aa429077adaeb8455a2e1fe6bf",
+      "meter_id": "2395",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "1769",
+      "canonical_split": "train",
+      "fingerprint_sha256": "4a457d3fae04ea7d58c6a2ce9fd72d47546006b4d11817727515a5da425d3a5b",
+      "meter_id": "1683",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 2
+    },
+    {
+      "canonical_meter_id": "1629",
+      "canonical_split": "train",
+      "fingerprint_sha256": "4d5b37dc94f21e2bf9634df904383a9ecfee2c7c7a7a4cf52e5122cdb8090d66",
+      "meter_id": "1579",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 2
+    },
+    {
+      "canonical_meter_id": "1595",
+      "canonical_split": "train",
+      "fingerprint_sha256": "577a5de704ffa0b1c6a459ad82754c906b16f79e9184d7d874294d6df895cf80",
+      "meter_id": "1659",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 2
+    },
+    {
+      "canonical_meter_id": "1001",
+      "canonical_split": "train",
+      "fingerprint_sha256": "5e93c7cb81a6925e44a9ef6af1abef3de249e675a91b058e5ec0e344948e7e3e",
+      "meter_id": "995",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "val",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "928",
+      "canonical_split": "train",
+      "fingerprint_sha256": "621a40fc30a4fe23de54c79b152255ea32d2f83050f346b4260e724586149567",
+      "meter_id": "1148",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "903",
+      "canonical_split": "train",
+      "fingerprint_sha256": "672024036a93529f0ca53ce1bb578c993e78ace2c44cbe2c3254d75c1b41b237",
+      "meter_id": "933",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "1059",
+      "canonical_split": "test",
+      "fingerprint_sha256": "7645111cfcf114d81f07e968b2b894b46a11e878b243299fc362d7422ce24415",
+      "meter_id": "920",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "1185",
+      "canonical_split": "train",
+      "fingerprint_sha256": "77949dbe6fb4f9261b352341b332fdc10d37ffb73d43480c9e0c1af926a0a4cf",
+      "meter_id": "983",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "val",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "1505",
+      "canonical_split": "val",
+      "fingerprint_sha256": "8cb50e57129921426bb897f2d4368d0111e093660789a9228c4a960f873f974b",
+      "meter_id": "1785",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "val",
+      "technology": 2
+    },
+    {
+      "canonical_meter_id": "2298",
+      "canonical_split": "train",
+      "fingerprint_sha256": "985116f02bebd4e4cb2850a76b5ee18c8845216586cfd7c60f3140353537a711",
+      "meter_id": "2382",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2201",
+      "canonical_split": "train",
+      "fingerprint_sha256": "99227f25a802dac0a1d7256492b88ceb073fdfe0e572d8af8f3c42cee0590673",
+      "meter_id": "2199",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2367",
+      "canonical_split": "train",
+      "fingerprint_sha256": "9e255e37aee1ec363c437b980029a425b39615d300a1ddc7c6b4dce83eb33081",
+      "meter_id": "2278",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "val",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "1109",
+      "canonical_split": "train",
+      "fingerprint_sha256": "9ff1419ac1e725c41ee524769b2e2988013943bc949c030812c834c3b0abdfad",
+      "meter_id": "972",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "2258",
+      "canonical_split": "train",
+      "fingerprint_sha256": "a0f7b7a36b7035d2eedd3818f4267ddbf26b0298eb577fbde6b0222cb042b0af",
+      "meter_id": "2348",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "val",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2284",
+      "canonical_split": "train",
+      "fingerprint_sha256": "bae610f8e73068b4bf7087fbfb0d5af9253168873585e3c7cc4a9569443f3a52",
+      "meter_id": "2275",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2193",
+      "canonical_split": "train",
+      "fingerprint_sha256": "c148824c747d6ba92cdf01876fb1b7df6c3ed3f257b2ba3149af18cc2cface13",
+      "meter_id": "2394",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "1721",
+      "canonical_split": "val",
+      "fingerprint_sha256": "c6e44a20b4b4b7fe03dd2a5adc3303aec53270ed0adef1a48c3db2a2f2a24b16",
+      "meter_id": "1654",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 2
+    },
+    {
+      "canonical_meter_id": "2293",
+      "canonical_split": "train",
+      "fingerprint_sha256": "cd43c91f11a973878d7f07484c0148eb9d7fb9bb5bdaa6b85f6f82890909cea6",
+      "meter_id": "2319",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "2229",
+      "canonical_split": "train",
+      "fingerprint_sha256": "d18468098cdf9c17754d18ae17948bbda0b2c006e0bddaad70c0da20ed97212b",
+      "meter_id": "2355",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "1006",
+      "canonical_split": "train",
+      "fingerprint_sha256": "d6dabeacd2fc773147f7c7eea4b4fee2761dff5ea0879c553b6e20d940bb1674",
+      "meter_id": "1179",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "2125",
+      "canonical_split": "train",
+      "fingerprint_sha256": "e1eafe31e45cea97438fb179c0264283e5fe8c81928363f6b4d90d5498eb5efa",
+      "meter_id": "2371",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "1696",
+      "canonical_split": "train",
+      "fingerprint_sha256": "e691043855c9289ab637b5b506312046b5a3262ad5f761fe739ac52e772bce4e",
+      "meter_id": "1615",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "test",
+      "technology": 2
+    },
+    {
+      "canonical_meter_id": "2151",
+      "canonical_split": "train",
+      "fingerprint_sha256": "fc88bab60b49a2c8841fa0658b04cdb135b04dbbb585017a462bb05529f6cce8",
+      "meter_id": "2400",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 6
+    },
+    {
+      "canonical_meter_id": "1081",
+      "canonical_split": "train",
+      "fingerprint_sha256": "fdbe571cc8e2f81c158a1891eafcc7f98facf4ad5681cf5829da5433657a6627",
+      "meter_id": "964",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 4
+    },
+    {
+      "canonical_meter_id": "1633",
+      "canonical_split": "train",
+      "fingerprint_sha256": "fdcab659e60a8b46fe191e20299d92efa97bee230778082e436f58547d2212b4",
+      "meter_id": "1687",
+      "profiles": 364,
+      "reason": "exact_complete_trace_alias",
+      "split": "train",
+      "technology": 2
+    }
+  ],
+  "before": {
+    "test": {
+      "meters": 360,
+      "profiles": 131040,
+      "technology_meter_counts": {
+        "0": 45,
+        "1": 45,
+        "2": 45,
+        "3": 45,
+        "4": 45,
+        "5": 45,
+        "6": 45,
+        "7": 45
+      }
+    },
+    "train": {
+      "meters": 1680,
+      "profiles": 611520,
+      "technology_meter_counts": {
+        "0": 210,
+        "1": 210,
+        "2": 210,
+        "3": 210,
+        "4": 210,
+        "5": 210,
+        "6": 210,
+        "7": 210
+      }
+    },
+    "val": {
+      "meters": 360,
+      "profiles": 131040,
+      "technology_meter_counts": {
+        "0": 45,
+        "1": 45,
+        "2": 45,
+        "3": 45,
+        "4": 45,
+        "5": 45,
+        "6": 45,
+        "7": 45
+      }
+    }
+  },
+  "canonical_id_order": "lexicographic within the earliest original split",
+  "curated_prepared_directory": "data/curated96",
+  "curation_manifest_sha256": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3",
+  "duplicate_group_count": 33,
+  "duplicate_group_split_patterns": {
+    "test": 1,
+    "train": 15,
+    "train+test": 9,
+    "train+val": 5,
+    "val": 2,
+    "val+test": 1
+  },
+  "duplicates_removed": {
+    "meters": 33,
+    "profiles": 12012
+  },
+  "exact_duplicate_groups": [
+    {
+      "canonical": {
+        "meter_id": "1553",
+        "profiles": 364,
+        "split": "train",
+        "technology": 2
+      },
+      "fingerprint_sha256": "01ada64976c65e717744f56779ec08879096b1a29dfa328e72b382037039136a",
+      "members": [
+        {
+          "meter_id": "1553",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        },
+        {
+          "meter_id": "1794",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1125",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "0eb5878c5b8b1533655ee2876049ce36b657f8b0bf7b0a9988cb22a001586748",
+      "members": [
+        {
+          "meter_id": "1125",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "1168",
+          "profiles": 364,
+          "split": "test",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2107",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "167e59792e154788cb0542476a201c429e51dcf53cd4944731a0d27b108a3e82",
+      "members": [
+        {
+          "meter_id": "2107",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2150",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2239",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "1a530d3ff132ef384db20d4e8bf3285d08116333ba139122ab7f520e13fb122f",
+      "members": [
+        {
+          "meter_id": "2239",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2352",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2396",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "1ec28e37fc862ad9a6d28aec72d43739b325c778fb3abced285610a00919ef18",
+      "members": [
+        {
+          "meter_id": "2396",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2128",
+          "profiles": 364,
+          "split": "val",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2129",
+        "profiles": 364,
+        "split": "val",
+        "technology": 6
+      },
+      "fingerprint_sha256": "22d4a63bf6646a3c0ec5671b3831febd73d61bdf4f110202d9e0acfd5db22089",
+      "members": [
+        {
+          "meter_id": "2129",
+          "profiles": 364,
+          "split": "val",
+          "technology": 6
+        },
+        {
+          "meter_id": "2307",
+          "profiles": 364,
+          "split": "val",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2263",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "25df662196bd62a7510664343f6917b9533b1fbc46cbf97181cfa66f33f221af",
+      "members": [
+        {
+          "meter_id": "2263",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2383",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2329",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "2ea663e63fa9bb6b1fbeebda5cc283109d2c83aa429077adaeb8455a2e1fe6bf",
+      "members": [
+        {
+          "meter_id": "2329",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2395",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1769",
+        "profiles": 364,
+        "split": "train",
+        "technology": 2
+      },
+      "fingerprint_sha256": "4a457d3fae04ea7d58c6a2ce9fd72d47546006b4d11817727515a5da425d3a5b",
+      "members": [
+        {
+          "meter_id": "1769",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        },
+        {
+          "meter_id": "1683",
+          "profiles": 364,
+          "split": "test",
+          "technology": 2
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1629",
+        "profiles": 364,
+        "split": "train",
+        "technology": 2
+      },
+      "fingerprint_sha256": "4d5b37dc94f21e2bf9634df904383a9ecfee2c7c7a7a4cf52e5122cdb8090d66",
+      "members": [
+        {
+          "meter_id": "1629",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        },
+        {
+          "meter_id": "1579",
+          "profiles": 364,
+          "split": "test",
+          "technology": 2
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1595",
+        "profiles": 364,
+        "split": "train",
+        "technology": 2
+      },
+      "fingerprint_sha256": "577a5de704ffa0b1c6a459ad82754c906b16f79e9184d7d874294d6df895cf80",
+      "members": [
+        {
+          "meter_id": "1595",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        },
+        {
+          "meter_id": "1659",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1001",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "5e93c7cb81a6925e44a9ef6af1abef3de249e675a91b058e5ec0e344948e7e3e",
+      "members": [
+        {
+          "meter_id": "1001",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "995",
+          "profiles": 364,
+          "split": "val",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "928",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "621a40fc30a4fe23de54c79b152255ea32d2f83050f346b4260e724586149567",
+      "members": [
+        {
+          "meter_id": "928",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "1148",
+          "profiles": 364,
+          "split": "test",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "903",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "672024036a93529f0ca53ce1bb578c993e78ace2c44cbe2c3254d75c1b41b237",
+      "members": [
+        {
+          "meter_id": "903",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "933",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1059",
+        "profiles": 364,
+        "split": "test",
+        "technology": 4
+      },
+      "fingerprint_sha256": "7645111cfcf114d81f07e968b2b894b46a11e878b243299fc362d7422ce24415",
+      "members": [
+        {
+          "meter_id": "1059",
+          "profiles": 364,
+          "split": "test",
+          "technology": 4
+        },
+        {
+          "meter_id": "920",
+          "profiles": 364,
+          "split": "test",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1185",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "77949dbe6fb4f9261b352341b332fdc10d37ffb73d43480c9e0c1af926a0a4cf",
+      "members": [
+        {
+          "meter_id": "1185",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "983",
+          "profiles": 364,
+          "split": "val",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1505",
+        "profiles": 364,
+        "split": "val",
+        "technology": 2
+      },
+      "fingerprint_sha256": "8cb50e57129921426bb897f2d4368d0111e093660789a9228c4a960f873f974b",
+      "members": [
+        {
+          "meter_id": "1505",
+          "profiles": 364,
+          "split": "val",
+          "technology": 2
+        },
+        {
+          "meter_id": "1785",
+          "profiles": 364,
+          "split": "val",
+          "technology": 2
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2298",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "985116f02bebd4e4cb2850a76b5ee18c8845216586cfd7c60f3140353537a711",
+      "members": [
+        {
+          "meter_id": "2298",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2382",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2201",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "99227f25a802dac0a1d7256492b88ceb073fdfe0e572d8af8f3c42cee0590673",
+      "members": [
+        {
+          "meter_id": "2201",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2199",
+          "profiles": 364,
+          "split": "test",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2367",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "9e255e37aee1ec363c437b980029a425b39615d300a1ddc7c6b4dce83eb33081",
+      "members": [
+        {
+          "meter_id": "2367",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2278",
+          "profiles": 364,
+          "split": "val",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1109",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "9ff1419ac1e725c41ee524769b2e2988013943bc949c030812c834c3b0abdfad",
+      "members": [
+        {
+          "meter_id": "1109",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "972",
+          "profiles": 364,
+          "split": "test",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2258",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "a0f7b7a36b7035d2eedd3818f4267ddbf26b0298eb577fbde6b0222cb042b0af",
+      "members": [
+        {
+          "meter_id": "2258",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2348",
+          "profiles": 364,
+          "split": "val",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2284",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "bae610f8e73068b4bf7087fbfb0d5af9253168873585e3c7cc4a9569443f3a52",
+      "members": [
+        {
+          "meter_id": "2284",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2275",
+          "profiles": 364,
+          "split": "test",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2193",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "c148824c747d6ba92cdf01876fb1b7df6c3ed3f257b2ba3149af18cc2cface13",
+      "members": [
+        {
+          "meter_id": "2193",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2394",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1721",
+        "profiles": 364,
+        "split": "val",
+        "technology": 2
+      },
+      "fingerprint_sha256": "c6e44a20b4b4b7fe03dd2a5adc3303aec53270ed0adef1a48c3db2a2f2a24b16",
+      "members": [
+        {
+          "meter_id": "1721",
+          "profiles": 364,
+          "split": "val",
+          "technology": 2
+        },
+        {
+          "meter_id": "1654",
+          "profiles": 364,
+          "split": "test",
+          "technology": 2
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2293",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "cd43c91f11a973878d7f07484c0148eb9d7fb9bb5bdaa6b85f6f82890909cea6",
+      "members": [
+        {
+          "meter_id": "2293",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2319",
+          "profiles": 364,
+          "split": "test",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2229",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "d18468098cdf9c17754d18ae17948bbda0b2c006e0bddaad70c0da20ed97212b",
+      "members": [
+        {
+          "meter_id": "2229",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2355",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1006",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "d6dabeacd2fc773147f7c7eea4b4fee2761dff5ea0879c553b6e20d940bb1674",
+      "members": [
+        {
+          "meter_id": "1006",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "1179",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2125",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "e1eafe31e45cea97438fb179c0264283e5fe8c81928363f6b4d90d5498eb5efa",
+      "members": [
+        {
+          "meter_id": "2125",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2371",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1696",
+        "profiles": 364,
+        "split": "train",
+        "technology": 2
+      },
+      "fingerprint_sha256": "e691043855c9289ab637b5b506312046b5a3262ad5f761fe739ac52e772bce4e",
+      "members": [
+        {
+          "meter_id": "1696",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        },
+        {
+          "meter_id": "1615",
+          "profiles": 364,
+          "split": "test",
+          "technology": 2
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "2151",
+        "profiles": 364,
+        "split": "train",
+        "technology": 6
+      },
+      "fingerprint_sha256": "fc88bab60b49a2c8841fa0658b04cdb135b04dbbb585017a462bb05529f6cce8",
+      "members": [
+        {
+          "meter_id": "2151",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        },
+        {
+          "meter_id": "2400",
+          "profiles": 364,
+          "split": "train",
+          "technology": 6
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1081",
+        "profiles": 364,
+        "split": "train",
+        "technology": 4
+      },
+      "fingerprint_sha256": "fdbe571cc8e2f81c158a1891eafcc7f98facf4ad5681cf5829da5433657a6627",
+      "members": [
+        {
+          "meter_id": "1081",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        },
+        {
+          "meter_id": "964",
+          "profiles": 364,
+          "split": "train",
+          "technology": 4
+        }
+      ]
+    },
+    {
+      "canonical": {
+        "meter_id": "1633",
+        "profiles": 364,
+        "split": "train",
+        "technology": 2
+      },
+      "fingerprint_sha256": "fdcab659e60a8b46fe191e20299d92efa97bee230778082e436f58547d2212b4",
+      "members": [
+        {
+          "meter_id": "1633",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        },
+        {
+          "meter_id": "1687",
+          "profiles": 364,
+          "split": "train",
+          "technology": 2
+        }
+      ]
+    }
+  ],
+  "fingerprint_algorithm": "Sort each complete meter trace by ISO date; copy profiles as contiguous '<f4'; replace numerical zeros with +0.0 in the identity copy only; SHA256 of dates.astype('S10').tobytes(order='C') + profiles.tobytes(order='C'). No headers, separators, meter IDs or conditions enter the key. Repeated hashes are confirmed by direct comparison of the complete canonicalized bytes.",
+  "fingerprint_version": 2,
+  "hash_manifest": {
+    "canonical_id_order": "lexicographic within the earliest original split",
+    "fingerprint_version": 2,
+    "holdout": {
+      "description": "Identity-curated subset of the original TEST split, not a new random test split",
+      "excluded_original_test_meter_ids": [
+        "1148",
+        "1168",
+        "1579",
+        "1615",
+        "1654",
+        "1683",
+        "2199",
+        "2275",
+        "2319",
+        "920",
+        "972"
+      ],
+      "performance_evaluated_by_curation": false,
+      "prior_performance_access_history": "not inferred by this operation; retain the original experiment access history",
+      "retained_original_test_meter_ids": [
+        "1002",
+        "1003",
+        "101",
+        "1016",
+        "1018",
+        "1027",
+        "1033",
+        "1037",
+        "1039",
+        "1055",
+        "1056",
+        "1057",
+        "1059",
+        "106",
+        "1061",
+        "1064",
+        "1066",
+        "1077",
+        "1088",
+        "1089",
+        "109",
+        "1093",
+        "1095",
+        "1100",
+        "113",
+        "1135",
+        "114",
+        "1145",
+        "1157",
+        "116",
+        "1160",
+        "1177",
+        "118",
+        "1182",
+        "1197",
+        "1199",
+        "120",
+        "1208",
+        "1213",
+        "1223",
+        "1225",
+        "1227",
+        "1235",
+        "1236",
+        "1240",
+        "1247",
+        "1253",
+        "1256",
+        "1259",
+        "1263",
+        "127",
+        "1277",
+        "1292",
+        "1294",
+        "1299",
+        "1300",
+        "1318",
+        "1322",
+        "1327",
+        "1338",
+        "1342",
+        "1360",
+        "1362",
+        "1367",
+        "1378",
+        "1387",
+        "1389",
+        "1392",
+        "1396",
+        "1398",
+        "1415",
+        "1418",
+        "1420",
+        "1425",
+        "1426",
+        "1445",
+        "1451",
+        "1454",
+        "1455",
+        "1456",
+        "1458",
+        "146",
+        "1463",
+        "1466",
+        "15",
+        "1513",
+        "1515",
+        "1541",
+        "1545",
+        "1549",
+        "1557",
+        "1568",
+        "1577",
+        "158",
+        "1586",
+        "1591",
+        "1609",
+        "1610",
+        "1612",
+        "1634",
+        "165",
+        "1660",
+        "1664",
+        "167",
+        "1671",
+        "1674",
+        "1677",
+        "1686",
+        "1689",
+        "1695",
+        "1703",
+        "1705",
+        "1714",
+        "1718",
+        "1720",
+        "1726",
+        "173",
+        "1736",
+        "1743",
+        "1756",
+        "1758",
+        "176",
+        "1763",
+        "1772",
+        "1776",
+        "1777",
+        "1778",
+        "1782",
+        "179",
+        "1790",
+        "1793",
+        "1800",
+        "1801",
+        "1823",
+        "1834",
+        "1835",
+        "1838",
+        "1842",
+        "1847",
+        "1852",
+        "1855",
+        "1858",
+        "1863",
+        "1870",
+        "1872",
+        "1875",
+        "1887",
+        "1903",
+        "1904",
+        "192",
+        "1923",
+        "193",
+        "1939",
+        "194",
+        "1940",
+        "1955",
+        "1962",
+        "1970",
+        "1980",
+        "1989",
+        "1996",
+        "1997",
+        "2000",
+        "2006",
+        "2012",
+        "2016",
+        "2018",
+        "2023",
+        "2025",
+        "2031",
+        "2045",
+        "2048",
+        "2052",
+        "2061",
+        "2063",
+        "2067",
+        "2077",
+        "2093",
+        "2095",
+        "2096",
+        "2101",
+        "2117",
+        "2124",
+        "2126",
+        "2134",
+        "2136",
+        "2137",
+        "2143",
+        "2147",
+        "2154",
+        "2164",
+        "2165",
+        "2167",
+        "2168",
+        "2188",
+        "219",
+        "2190",
+        "2192",
+        "2204",
+        "2206",
+        "2211",
+        "2212",
+        "2216",
+        "2235",
+        "2237",
+        "2244",
+        "2246",
+        "2248",
+        "2250",
+        "2251",
+        "2268",
+        "2291",
+        "2306",
+        "2318",
+        "2335",
+        "2344",
+        "2350",
+        "2354",
+        "2356",
+        "2370",
+        "2374",
+        "2376",
+        "2385",
+        "245",
+        "251",
+        "264",
+        "277",
+        "278",
+        "285",
+        "289",
+        "299",
+        "302",
+        "307",
+        "315",
+        "316",
+        "317",
+        "318",
+        "323",
+        "324",
+        "33",
+        "332",
+        "335",
+        "336",
+        "337",
+        "34",
+        "342",
+        "343",
+        "344",
+        "350",
+        "358",
+        "377",
+        "398",
+        "403",
+        "406",
+        "410",
+        "411",
+        "414",
+        "423",
+        "430",
+        "437",
+        "438",
+        "44",
+        "440",
+        "442",
+        "461",
+        "464",
+        "468",
+        "47",
+        "476",
+        "483",
+        "491",
+        "495",
+        "496",
+        "509",
+        "513",
+        "538",
+        "541",
+        "576",
+        "58",
+        "580",
+        "589",
+        "601",
+        "607",
+        "609",
+        "610",
+        "611",
+        "612",
+        "616",
+        "618",
+        "632",
+        "646",
+        "650",
+        "655",
+        "656",
+        "66",
+        "664",
+        "672",
+        "679",
+        "685",
+        "69",
+        "691",
+        "695",
+        "707",
+        "717",
+        "72",
+        "730",
+        "733",
+        "738",
+        "739",
+        "74",
+        "752",
+        "754",
+        "762",
+        "772",
+        "777",
+        "778",
+        "78",
+        "782",
+        "783",
+        "79",
+        "793",
+        "829",
+        "832",
+        "84",
+        "847",
+        "848",
+        "855",
+        "863",
+        "868",
+        "87",
+        "872",
+        "889",
+        "895",
+        "897",
+        "907",
+        "913",
+        "916",
+        "919",
+        "923",
+        "93",
+        "95",
+        "955",
+        "96",
+        "974",
+        "975",
+        "979",
+        "980",
+        "981",
+        "998"
+      ]
+    },
+    "identity_claim": "No exact full-trace overlap under the declared fingerprint; this does not prove independent households or exclude near-duplicates",
+    "input_files_sha256": {
+      "metadata.json": "ce5cd5281192d21a1fa1972c517e2a43d73caed762dfec24df3654d1effcf2fa",
+      "scaler.json": "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb",
+      "test.npz": "ef3d37e59054e065c2779bf6eb5430e309718f97e924daa7580df3e00e2705b0",
+      "train.npz": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+      "val.npz": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d"
+    },
+    "output_files_sha256": {
+      "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+      "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+      "test.npz": "4338fccc8cb9d9b5ef553c13f59f2137d04739725a522b20ea61d08f4cc453d2",
+      "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+      "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8"
+    },
+    "requires_new_training_artifacts": true,
+    "schema_version": 1,
+    "split_priority": [
+      "train",
+      "val",
+      "test"
+    ],
+    "test_access_scope": "Original TEST profiles are read only for deterministic complete-trace identity fingerprinting, structural/condition validation, and copying retained original-TEST rows. No performance or energy-distribution metrics are computed."
+  },
+  "holdout": {
+    "description": "Identity-curated subset of the original TEST split, not a new random test split",
+    "excluded_original_test_meter_ids": [
+      "1148",
+      "1168",
+      "1579",
+      "1615",
+      "1654",
+      "1683",
+      "2199",
+      "2275",
+      "2319",
+      "920",
+      "972"
+    ],
+    "performance_evaluated_by_curation": false,
+    "prior_performance_access_history": "not inferred by this operation; retain the original experiment access history",
+    "retained_original_test_meter_ids": [
+      "1002",
+      "1003",
+      "101",
+      "1016",
+      "1018",
+      "1027",
+      "1033",
+      "1037",
+      "1039",
+      "1055",
+      "1056",
+      "1057",
+      "1059",
+      "106",
+      "1061",
+      "1064",
+      "1066",
+      "1077",
+      "1088",
+      "1089",
+      "109",
+      "1093",
+      "1095",
+      "1100",
+      "113",
+      "1135",
+      "114",
+      "1145",
+      "1157",
+      "116",
+      "1160",
+      "1177",
+      "118",
+      "1182",
+      "1197",
+      "1199",
+      "120",
+      "1208",
+      "1213",
+      "1223",
+      "1225",
+      "1227",
+      "1235",
+      "1236",
+      "1240",
+      "1247",
+      "1253",
+      "1256",
+      "1259",
+      "1263",
+      "127",
+      "1277",
+      "1292",
+      "1294",
+      "1299",
+      "1300",
+      "1318",
+      "1322",
+      "1327",
+      "1338",
+      "1342",
+      "1360",
+      "1362",
+      "1367",
+      "1378",
+      "1387",
+      "1389",
+      "1392",
+      "1396",
+      "1398",
+      "1415",
+      "1418",
+      "1420",
+      "1425",
+      "1426",
+      "1445",
+      "1451",
+      "1454",
+      "1455",
+      "1456",
+      "1458",
+      "146",
+      "1463",
+      "1466",
+      "15",
+      "1513",
+      "1515",
+      "1541",
+      "1545",
+      "1549",
+      "1557",
+      "1568",
+      "1577",
+      "158",
+      "1586",
+      "1591",
+      "1609",
+      "1610",
+      "1612",
+      "1634",
+      "165",
+      "1660",
+      "1664",
+      "167",
+      "1671",
+      "1674",
+      "1677",
+      "1686",
+      "1689",
+      "1695",
+      "1703",
+      "1705",
+      "1714",
+      "1718",
+      "1720",
+      "1726",
+      "173",
+      "1736",
+      "1743",
+      "1756",
+      "1758",
+      "176",
+      "1763",
+      "1772",
+      "1776",
+      "1777",
+      "1778",
+      "1782",
+      "179",
+      "1790",
+      "1793",
+      "1800",
+      "1801",
+      "1823",
+      "1834",
+      "1835",
+      "1838",
+      "1842",
+      "1847",
+      "1852",
+      "1855",
+      "1858",
+      "1863",
+      "1870",
+      "1872",
+      "1875",
+      "1887",
+      "1903",
+      "1904",
+      "192",
+      "1923",
+      "193",
+      "1939",
+      "194",
+      "1940",
+      "1955",
+      "1962",
+      "1970",
+      "1980",
+      "1989",
+      "1996",
+      "1997",
+      "2000",
+      "2006",
+      "2012",
+      "2016",
+      "2018",
+      "2023",
+      "2025",
+      "2031",
+      "2045",
+      "2048",
+      "2052",
+      "2061",
+      "2063",
+      "2067",
+      "2077",
+      "2093",
+      "2095",
+      "2096",
+      "2101",
+      "2117",
+      "2124",
+      "2126",
+      "2134",
+      "2136",
+      "2137",
+      "2143",
+      "2147",
+      "2154",
+      "2164",
+      "2165",
+      "2167",
+      "2168",
+      "2188",
+      "219",
+      "2190",
+      "2192",
+      "2204",
+      "2206",
+      "2211",
+      "2212",
+      "2216",
+      "2235",
+      "2237",
+      "2244",
+      "2246",
+      "2248",
+      "2250",
+      "2251",
+      "2268",
+      "2291",
+      "2306",
+      "2318",
+      "2335",
+      "2344",
+      "2350",
+      "2354",
+      "2356",
+      "2370",
+      "2374",
+      "2376",
+      "2385",
+      "245",
+      "251",
+      "264",
+      "277",
+      "278",
+      "285",
+      "289",
+      "299",
+      "302",
+      "307",
+      "315",
+      "316",
+      "317",
+      "318",
+      "323",
+      "324",
+      "33",
+      "332",
+      "335",
+      "336",
+      "337",
+      "34",
+      "342",
+      "343",
+      "344",
+      "350",
+      "358",
+      "377",
+      "398",
+      "403",
+      "406",
+      "410",
+      "411",
+      "414",
+      "423",
+      "430",
+      "437",
+      "438",
+      "44",
+      "440",
+      "442",
+      "461",
+      "464",
+      "468",
+      "47",
+      "476",
+      "483",
+      "491",
+      "495",
+      "496",
+      "509",
+      "513",
+      "538",
+      "541",
+      "576",
+      "58",
+      "580",
+      "589",
+      "601",
+      "607",
+      "609",
+      "610",
+      "611",
+      "612",
+      "616",
+      "618",
+      "632",
+      "646",
+      "650",
+      "655",
+      "656",
+      "66",
+      "664",
+      "672",
+      "679",
+      "685",
+      "69",
+      "691",
+      "695",
+      "707",
+      "717",
+      "72",
+      "730",
+      "733",
+      "738",
+      "739",
+      "74",
+      "752",
+      "754",
+      "762",
+      "772",
+      "777",
+      "778",
+      "78",
+      "782",
+      "783",
+      "79",
+      "793",
+      "829",
+      "832",
+      "84",
+      "847",
+      "848",
+      "855",
+      "863",
+      "868",
+      "87",
+      "872",
+      "889",
+      "895",
+      "897",
+      "907",
+      "913",
+      "916",
+      "919",
+      "923",
+      "93",
+      "95",
+      "955",
+      "96",
+      "974",
+      "975",
+      "979",
+      "980",
+      "981",
+      "998"
+    ]
+  },
+  "identity_claim": "No exact full-trace overlap under the declared fingerprint; this does not prove independent households or exclude near-duplicates",
+  "implementation_files_sha256": {
+    "curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+    "data.py": "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5"
+  },
+  "independent_verification": {
+    "actual_retained_counts": {
+      "test": {
+        "meters": 349,
+        "profiles": 127036,
+        "technology_meter_counts": {
+          "0": 45,
+          "1": 45,
+          "2": 41,
+          "3": 45,
+          "4": 41,
+          "5": 45,
+          "6": 42,
+          "7": 45
+        }
+      },
+      "train": {
+        "meters": 1665,
+        "profiles": 606060,
+        "technology_meter_counts": {
+          "0": 210,
+          "1": 210,
+          "2": 207,
+          "3": 210,
+          "4": 207,
+          "5": 210,
+          "6": 201,
+          "7": 210
+        }
+      },
+      "val": {
+        "meters": 353,
+        "profiles": 128492,
+        "technology_meter_counts": {
+          "0": 45,
+          "1": 45,
+          "2": 44,
+          "3": 45,
+          "4": 43,
+          "5": 45,
+          "6": 41,
+          "7": 45
+        }
+      }
+    },
+    "complete_calendar_days": 364,
+    "implementation": "Independent NumPy sorting and hashlib fingerprint calculation; no curation helper functions used",
+    "original_input_files_unchanged": true,
+    "output_file_hashes_match_manifest": true,
+    "repeated_retained_fingerprints_within_or_across_splits": 0,
+    "retained_fingerprints_match_audited_canonical_representatives": true,
+    "retained_ids_are_subsets_of_the_same_original_split": true,
+    "test_access_scope": "Curated TEST arrays read only for independent deterministic identity fingerprints, finite/shape/date/condition and retained-count checks. Original TEST bytes rehashed only; no model or energy-distribution summary.",
+    "test_performance_or_energy_distribution_metrics_computed": false,
+    "unique_retained_fingerprints": 2367
+  },
+  "original_preparation_reproduction": {
+    "all_available_published_hashes_match": false,
+    "files": {
+      "metadata.json": {
+        "matches": false,
+        "published_sha256": "36b40313730d206ba3195c228807e184044aa98f35c21a05a4b4fa144539fc63",
+        "regenerated_sha256": "ce5cd5281192d21a1fa1972c517e2a43d73caed762dfec24df3654d1effcf2fa"
+      },
+      "scaler.json": {
+        "matches": true,
+        "published_sha256": "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb",
+        "regenerated_sha256": "465bc1792ccdd4d24c1d81dbea665bd52e028c1c556c0815f6a9b857f5b980eb"
+      },
+      "train.npz": {
+        "matches": true,
+        "published_sha256": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff",
+        "regenerated_sha256": "609b3acbef6dceff51d69368f57ba5679da739829958cff501d2df32d3b723ff"
+      },
+      "val.npz": {
+        "matches": true,
+        "published_sha256": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d",
+        "regenerated_sha256": "23d958bdc5b070bbc1cb237c3e5a8f27db5e7a08466b30f8dfc6de92533ad66d"
+      }
+    },
+    "metadata_order_only_replay": {
+      "interpretation": "Regenerated metadata differs in JSON key order only; exact prior metadata bytes are reproduced by the declared order adjustment.",
+      "matches_published_metadata_sha256": true,
+      "operation": "Move each splits[*].sha256 key to the end of its existing split object without changing any JSON values; serialize with json.dumps(indent=2) plus newline",
+      "original_files_modified": false,
+      "reordered_sha256": "36b40313730d206ba3195c228807e184044aa98f35c21a05a4b4fa144539fc63",
+      "semantic_values_unchanged": true
+    },
+    "original_metadata_split_hashes_match_actual": true,
+    "published_reference": "reports/copula_screen.json",
+    "test_file_sha256_scope": "Original TEST file hash matches its metadata split manifest. The published metadata SHA256 is reproduced exactly by JSON key-order adjustment with no value changes, binding the same TEST hash."
+  },
+  "original_prepared_directory": "data/prepared96",
+  "prior_validation_status": "exploratory; previous validation results used the original preparation",
+  "requires_new_training_artifacts": true,
+  "schema_version": 1,
+  "split_priority": [
+    "train",
+    "val",
+    "test"
+  ],
+  "test_access_scope": "Original TEST profiles are read only for deterministic complete-trace identity fingerprinting, structural/condition validation, and copying retained original-TEST rows. No performance or energy-distribution metrics are computed."
+}

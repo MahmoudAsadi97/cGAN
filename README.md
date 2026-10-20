@@ -51,12 +51,15 @@ fluvius-cgan audit --archive data/raw.zip --output reports/archive_audit.json
 # Full dataset, all 8 equipment groups, all complete non-DST days.
 fluvius-cgan prepare --archive data/raw.zip --output data/prepared96 --resolution 96
 
+# Remove exact complete-trace aliases while preserving original held-out membership.
+python scripts/curate_prepared.py --prepared data/prepared96 --output data/curated96
+
 # First verify the entire training/generation/evaluation path with a small run.
-fluvius-cgan train --prepared data/prepared96 --config configs/smoke.json --output runs/smoke
-fluvius-cgan evaluate --prepared data/prepared96 --checkpoint runs/smoke/best.pt --output runs/smoke/validation.json
+fluvius-cgan train --prepared data/curated96 --config configs/smoke.json --output runs/smoke
+fluvius-cgan evaluate --prepared data/curated96 --checkpoint runs/smoke/best.pt --output runs/smoke/validation.json
 
 # Then run the declared full-data experiment budget; GPU is used when available.
-fluvius-cgan train --prepared data/prepared96 --config configs/cgan96.json --output runs/cgan96_seed42
+fluvius-cgan train --prepared data/curated96 --config configs/cgan96.json --output runs/cgan96_seed42
 fluvius-cgan generate --checkpoint runs/cgan96_seed42/best.pt --labels 0 8 56 --samples-per-label 100 --output runs/generated.npz
 ```
 
@@ -78,15 +81,19 @@ records for 2024. The legend says Belgian local CET/CEST even though strings end
 `Z`. Source-local days are preserved; the two DST transition days are excluded,
 leaving 873,600 daily profiles. Do not parse these timestamps as ordinary UTC.
 See [DATASET_AUDIT.md](docs/DATASET_AUDIT.md) for full-source checks, original legend
-cell references and limitations. Meters are split within equipment groups:
+cell references and limitations. The original equipment-stratified split was then
+curated by complete-trace identity, retaining one representative per trace:
 
 | Split | Meters | Daily profiles |
 |---|---:|---:|
-| Train | 1,680 | 611,520 |
-| Validation | 360 | 131,040 |
-| Test | 360 | 131,040 |
+| Train | 1,665 | 606,060 |
+| Validation | 353 | 128,492 |
+| Test | 349 | 127,036 |
 
-The split seed defaults to 42. No EAN ID appears in more than one split. All scaler
+The original split seed defaults to 42. Curation removes 33 aliases without moving
+traces between splits. Exact trace uniqueness does not prove household independence.
+Test values are accessed only for identity auditing and retained-row preparation
+before the final performance evaluation. No EAN ID appears in more than one split. All scaler
 statistics come from train. Prepared NPZ files contain `x`, `y`, `meter_id`, `date`;
 `x` remains in original units. `metadata.json` records source and split checksums, IDs, counts,
 exclusions, resolution, target, timezone policy and labels. `scaler.json` records
@@ -111,21 +118,20 @@ truth. EV zero does not prove absence; small exports also occur in some PV 0 rec
 Run separate full-data conditional and unconditional experiments with five seeds:
 
 ```bash
-python scripts/run_experiments.py --prepared data/prepared96 --config configs/cgan96.json --output runs/cgan96 --seeds 11 22 33 44 55
-python scripts/run_experiments.py --prepared data/prepared96 --config configs/unconditional96.json --output runs/unconditional96 --seeds 11 22 33 44 55
+python scripts/run_experiments.py --prepared data/curated96 --config configs/cgan96.json --output runs/cgan96 --seeds 11 22 33 44 55
+python scripts/run_experiments.py --prepared data/curated96 --config configs/unconditional96.json --output runs/unconditional96 --seeds 11 22 33 44 55
 
-# Hourly sensitivity: fit a new scaler and model after summing quarters.
-fluvius-cgan prepare --archive data/raw.zip --output data/prepared24 --resolution 24
-python scripts/run_experiments.py --prepared data/prepared24 --config configs/cgan96.json --output runs/cgan24 --seeds 11 22 33 44 55
+# Hourly sensitivity must aggregate curated quarter-hour profiles, preserving
+# their canonical meter membership. Do not independently re-split the raw archive.
 ```
 
 The config filename describes the recommended primary experiment; output dimension
 is read from the prepared metadata, so the same architecture settings also work at 24.
 The experiment runner evaluates validation only. After freezing all decisions,
-explicitly use the untouched test split for each final model:
+explicitly evaluate the identity-audited, performance-unseen test subset for each final model:
 
 ```bash
-fluvius-cgan evaluate --prepared data/prepared96 --checkpoint runs/cgan96/seed_11/best.pt --split test --output runs/cgan96/seed_11/final_test.json
+fluvius-cgan evaluate --prepared data/curated96 --checkpoint runs/cgan96/seed_11/best.pt --split test --output runs/cgan96/seed_11/final_test.json
 ```
 
 Every evaluation compares generated profiles with conditional resampling from the model’s actual training subset

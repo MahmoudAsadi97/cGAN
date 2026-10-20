@@ -27,6 +27,7 @@ from torch.nn import functional as F
 from .models import Discriminator, Generator
 from .residual import ResidualGenerator, fit_mean_profiles
 from .distribution_loss import conditional_sliced_wasserstein_loss
+from .temporal_loss import derivative_sliced_wasserstein_loss, fit_derivative_scale
 from .release import RELEASE_SHA256
 
 
@@ -39,6 +40,7 @@ DEFAULT_CONFIG = {
     "discriminator_hidden_dim": None, "conditional_mean_residual": False,
     "batch_sampling": "shuffle", "conditions_per_batch": 4,
     "swd_weight": 0.0, "swd_projections": 128,
+    "derivative_swd_weight": 0.0,
     "validation_selection": "pooled_w1",
     "allow_uncurated_data": False,
 }
@@ -90,17 +92,21 @@ def _config(config):
         raise ValueError("batch_sampling must be shuffle or balanced_conditions")
     if result["validation_selection"] not in ("pooled_w1", "conditional_w1"):
         raise ValueError("validation_selection must be pooled_w1 or conditional_w1")
-    weight = result["swd_weight"]
-    if isinstance(weight, bool) or not isinstance(weight, Real) or not math.isfinite(weight) or weight < 0:
-        raise ValueError("swd_weight must be nonnegative and finite")
-    result["swd_weight"] = float(weight)
+    for name in ("swd_weight", "derivative_swd_weight"):
+        weight = result[name]
+        if isinstance(weight, bool) or not isinstance(weight, Real) or not math.isfinite(weight) or weight < 0:
+            raise ValueError(f"{name} must be nonnegative and finite")
+        result[name] = float(weight)
+    auxiliary_enabled = result["swd_weight"] or result["derivative_swd_weight"]
+    if result["derivative_swd_weight"] and result["normalization"] != "standard":
+        raise ValueError("positive derivative_swd_weight requires standard normalization")
     if result["batch_sampling"] == "balanced_conditions":
         if result["batch_size"] % result["conditions_per_batch"]:
             raise ValueError("balanced batch_size must be divisible by conditions_per_batch")
-        if weight and result["batch_size"] // result["conditions_per_batch"] < 32:
+        if auxiliary_enabled and result["batch_size"] // result["conditions_per_batch"] < 32:
             raise ValueError("SWD needs at least 32 samples per sampled condition")
-    elif weight:
-        raise ValueError("positive swd_weight requires balanced_conditions sampling")
+    elif auxiliary_enabled:
+        raise ValueError("positive SWD weights require balanced_conditions sampling")
     if result["device"] == "auto":
         result["device"] = "cuda" if torch.cuda.is_available() else "cpu"
     if not isinstance(result["device"], str) or not re.fullmatch(r"cpu|cuda(?::\d+)?", result["device"]):
@@ -588,6 +594,24 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
         "batch_sampling": config["batch_sampling"],
         "swd_conditioning": "pooled" if config["unconditional"] else "conditional",
     }
+    derivative_scale = None
+    if config["derivative_swd_weight"]:
+        derivative_scale = {
+            **fit_derivative_scale(train_x, labels),
+            "fitting_scope": "actual_gradient_training_subset_only",
+            "train_indices_sha256": selection["train_indices_sha256"],
+            "train_npz_sha256": hashes["train.npz"],
+            "normalization": {"kind": "standard", "mean": scaler["mean"], "std": scaler["std"],
+                              "fitting_scope": "full_prepared_train_before_subset_selection"},
+        }
+    provenance["derivative_swd"] = {
+        "enabled": bool(config["derivative_swd_weight"]), "weight": config["derivative_swd_weight"],
+        "scale": derivative_scale,
+        "projection_seed": config["seed"] + 5 if config["derivative_swd_weight"] else None,
+        "num_projections": config["swd_projections"] if config["derivative_swd_weight"] else None,
+        "conditioning": "pooled" if config["unconditional"] else "equal_observed_condition_macro",
+        "difference_policy": "signed adjacent within-day differences; no midnight wrap or centering",
+    }
     output_dir.mkdir(parents=True, exist_ok=True)
     _atomic_json(output_dir / "config.json", config)
     history = []
@@ -609,11 +633,14 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
         shuffle_rng = torch.Generator().manual_seed(config["seed"] + 3)
         swd_rng = (torch.Generator(device=device).manual_seed(config["seed"] + 4)
                    if config["swd_weight"] else None)
+        derivative_rng = (torch.Generator(device=device).manual_seed(config["seed"] + 5)
+                          if config["derivative_swd_weight"] else None)
         for epoch in range(1, config["epochs"] + 1):
             epoch_started = time.perf_counter()
             generator.train()
             discriminator.train()
             total_g = total_d = total_adversarial = total_swd = 0.0
+            total_derivative_swd = 0.0
             epoch_samples_seen = 0
             epoch_class_exposure_counts = {str(label): 0 for label in supported_labels}
             epoch_generator_updates = epoch_discriminator_updates = 0
@@ -642,6 +669,7 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
                     loss_adversarial = _generator_loss(discriminator(fake, c), config["objective"])
                     loss_g = loss_adversarial
                     swd_value = 0.0
+                    derivative_swd_value = 0.0
                     if config["swd_weight"]:
                         swd_labels = torch.as_tensor(batch_labels, dtype=torch.int64, device=device)
                         if config["unconditional"]:
@@ -652,6 +680,16 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
                             generator=swd_rng)
                         loss_g = loss_adversarial + config["swd_weight"] * loss_swd
                         swd_value = float(loss_swd.detach())
+                    if config["derivative_swd_weight"]:
+                        derivative_labels = torch.as_tensor(batch_labels, dtype=torch.int64, device=device)
+                        if config["unconditional"]:
+                            derivative_labels = torch.zeros_like(derivative_labels)
+                        loss_derivative_swd = derivative_sliced_wasserstein_loss(
+                            real, fake, derivative_labels, derivative_labels, derivative_scale["used_float32"],
+                            num_projections=config["swd_projections"], min_samples_per_condition=32,
+                            generator=derivative_rng)
+                        loss_g = loss_g + config["derivative_swd_weight"] * loss_derivative_swd
+                        derivative_swd_value = float(loss_derivative_swd.detach())
                     if not torch.isfinite(loss_g):
                         raise ValueError("nonfinite generator loss")
                     loss_g.backward()
@@ -662,6 +700,7 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
                 total_d += float(loss_d.detach()) * len(real)
                 total_adversarial += float(loss_adversarial.detach()) * len(real)
                 total_swd += swd_value * len(real)
+                total_derivative_swd += derivative_swd_value * len(real)
                 samples_seen += len(real)
                 epoch_samples_seen += len(real)
                 for label, exposure in zip(*np.unique(batch_labels, return_counts=True)):
@@ -676,6 +715,7 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
                             "loss_d": total_d / epoch_samples_seen, "validation_score": score,
                             "loss_g_adversarial": total_adversarial / epoch_samples_seen,
                             "loss_swd": total_swd / epoch_samples_seen,
+                            "loss_derivative_swd": total_derivative_swd / epoch_samples_seen,
                             "samples_seen": epoch_samples_seen,
                             "class_exposure_counts": epoch_class_exposure_counts,
                             "generator_updates": epoch_generator_updates,
@@ -692,6 +732,7 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
                 "output_dim": metadata["resolution"], "scaler": scaler,
                 "metadata": metadata, "data_hashes": hashes,
                 "data_curation": curation_status,
+                "derivative_swd_scale": derivative_scale,
                 "supported_labels": supported_labels, "selection": selection,
                 "provenance": provenance, "validation_metric": validation_metric,
                 "validation_score": score, "best_epoch": best_epoch,
@@ -725,6 +766,7 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
         "units": metadata["units"], "selection": selection,
         "data_hashes": hashes, "source_sha256": metadata["source_sha256"],
         "data_curation": curation_status,
+        "derivative_swd_scale": derivative_scale,
         "provenance": provenance, "scaler": scaler,
         "elapsed_seconds": time.perf_counter() - started,
         "best_checkpoint": "best.pt", "last_checkpoint": "last.pt",

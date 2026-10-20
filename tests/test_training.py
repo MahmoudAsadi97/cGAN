@@ -193,6 +193,8 @@ def test_provenance_and_input_mismatches_fail_closed(tmp_path, violation):
     ("conditional_mean_residual", None), ("batch_sampling", "weighted"),
     ("conditions_per_batch", 0), ("conditions_per_batch", True),
     ("swd_weight", -1), ("swd_weight", float("nan")), ("swd_weight", True),
+    ("derivative_swd_weight", -1), ("derivative_swd_weight", float("nan")),
+    ("derivative_swd_weight", float("inf")), ("derivative_swd_weight", True),
     ("swd_projections", 0), ("swd_projections", True), ("validation_selection", "unknown"),
     ("allow_uncurated_data", "true"), ("allow_uncurated_data", 1)])
 def test_invalid_config_rejected(tmp_path, key, value):
@@ -210,7 +212,7 @@ def test_inverse_scaling_is_used_for_generation(tmp_path):
     for name in ("objective", "normalization", "adam_beta1", "adam_beta2",
                  "discriminator_hidden_dim", "conditional_mean_residual", "batch_sampling",
                  "conditions_per_batch", "swd_weight", "swd_projections", "validation_selection",
-                 "allow_uncurated_data"):
+                 "allow_uncurated_data", "derivative_swd_weight"):
         checkpoint["config"].pop(name, None)
     for key, value in checkpoint["generator_state_dict"].items():
         checkpoint["generator_state_dict"][key] = torch.zeros_like(value)
@@ -687,3 +689,158 @@ def test_claimed_curation_fails_closed_for_malformed_fields_or_changed_hashes(tm
     with pytest.raises(ValueError, match="curation|manifest"):
         # An override never bypasses malformed claimed-curation validation.
         train(data, tmp_path / "run", settings(epochs=1, allow_uncurated_data=True))
+
+
+def test_zero_derivative_weight_does_not_fit_or_evaluate_and_replays(tmp_path, monkeypatch):
+    import fluvius_cgan.training as training
+    data = prepared(tmp_path)
+    monkeypatch.setattr(training, 'fit_derivative_scale', lambda *a, **k: pytest.fail('zero derivative weight must not fit'))
+    monkeypatch.setattr(training, 'derivative_sliced_wasserstein_loss', lambda *a, **k: pytest.fail('zero derivative weight must not run'))
+    options = settings(normalization='standard', batch_sampling='balanced_conditions',
+                       conditions_per_batch=2, batch_size=64, swd_weight=10., swd_projections=4)
+    train(data, tmp_path / 'implicit_zero', options)
+    train(data, tmp_path / 'explicit_zero', {**options, 'derivative_swd_weight': 0.})
+    before, after = (torch.load(tmp_path / name / 'last.pt', weights_only=True)
+                     for name in ('implicit_zero', 'explicit_zero'))
+    for key in ('generator_state_dict', 'discriminator_state_dict'):
+        assert all(torch.equal(before[key][name], after[key][name]) for name in before[key])
+    hb, ha = (json.loads((tmp_path / name / 'history.json').read_text())
+              for name in ('implicit_zero', 'explicit_zero'))
+    assert [{k: v for k, v in row.items() if k != 'elapsed_seconds'} for row in hb] == [
+        {k: v for k, v in row.items() if k != 'elapsed_seconds'} for row in ha]
+    assert before['derivative_swd_scale'] is None
+    assert before['provenance']['derivative_swd']['projection_seed'] is None
+    assert all(row['loss_derivative_swd'] == 0 for row in ha)
+
+
+def test_derivative_scale_uses_exact_selected_train_rows_and_combined_loss_replays(tmp_path, monkeypatch):
+    import fluvius_cgan.training as training
+    data = prepared(tmp_path)
+    options = settings(normalization='standard', batch_sampling='balanced_conditions', batch_size=64,
+                       conditions_per_batch=2, max_train_samples=3, swd_weight=10., swd_projections=5,
+                       derivative_swd_weight=1.)
+    with np.load(data / 'train.npz', allow_pickle=False) as arrays:
+        raw, labels = arrays['x'].astype(np.float64), arrays['y']
+    selected = np.sort(np.random.default_rng(options['seed']).choice(len(raw), 3, replace=False))
+    normalized = ((raw - raw.mean()) / raw.std()).astype(np.float32)[selected]
+    selected_labels = labels[selected]
+    differences = np.diff(normalized.astype(np.float64), axis=1)
+    expected = np.sqrt(np.mean([np.mean(differences[selected_labels == label] ** 2)
+                               for label in np.unique(selected_labels)]))
+    original_fit, original_loss = training.fit_derivative_scale, training.derivative_sliced_wasserstein_loss
+    fitting_calls, loss_calls = [], []
+
+    def observe_fit(profiles, fit_labels, **kwargs):
+        np.testing.assert_array_equal(profiles.numpy(), normalized)
+        np.testing.assert_array_equal(fit_labels, selected_labels)
+        fitting_calls.append(len(profiles))
+        return original_fit(profiles, fit_labels, **kwargs)
+
+    def observe_loss(real, fake, real_labels, generated_labels, scale, **kwargs):
+        assert scale == float(np.float32(expected))
+        assert kwargs['generator'].initial_seed() == options['seed'] + 5
+        assert kwargs['num_projections'] == options['swd_projections']
+        assert kwargs['min_samples_per_condition'] == 32
+        assert torch.equal(real_labels, generated_labels)
+        assert real_labels.unique(return_counts=True)[1].tolist() == [32, 32]
+        result = original_loss(real, fake, real_labels, generated_labels, scale, **kwargs)
+        gradient = torch.autograd.grad(result, fake, retain_graph=True)[0]
+        assert torch.isfinite(gradient).all() and torch.any(gradient != 0)
+        loss_calls.append(float(result.detach()))
+        return result
+
+    monkeypatch.setattr(training, 'fit_derivative_scale', observe_fit)
+    monkeypatch.setattr(training, 'derivative_sliced_wasserstein_loss', observe_loss)
+    first = train(data, tmp_path / 'derivative', options)
+    second = train(data, tmp_path / 'replay', options)
+    assert fitting_calls == [3, 3]
+    assert first['best_validation_score'] == second['best_validation_score']
+    checkpoint = torch.load(tmp_path / 'derivative' / 'last.pt', weights_only=True)
+    scale = checkpoint['derivative_swd_scale']
+    assert scale['estimate_float64'] == pytest.approx(expected, rel=1e-15)
+    assert scale['used_float32'] == float(np.float32(expected))
+    assert scale['train_indices_sha256'] == checkpoint['selection']['train_indices_sha256']
+    assert scale['train_npz_sha256'] == checkpoint['data_hashes']['train.npz']
+    assert scale['fitting_scope'] == 'actual_gradient_training_subset_only'
+    assert scale == first['derivative_swd_scale'] == checkpoint['provenance']['derivative_swd']['scale']
+    assert scale['condition_counts'] == {str(label): int(np.sum(selected_labels == label)) for label in np.unique(selected_labels)}
+    assert scale['normalization']['fitting_scope'] == 'full_prepared_train_before_subset_selection'
+    for row in json.loads((tmp_path / 'derivative' / 'history.json').read_text()):
+        assert row['loss_derivative_swd'] > 0
+        assert row['loss_g'] == pytest.approx(row['loss_g_adversarial'] + 10 * row['loss_swd'] + row['loss_derivative_swd'], rel=1e-6)
+    assert loss_calls[:2] == loss_calls[2:]
+    np.testing.assert_array_equal(generate(tmp_path / 'derivative' / 'best.pt', np.array([0, 8])),
+                                  generate(tmp_path / 'replay' / 'best.pt', np.array([0, 8])))
+
+
+def test_derivative_rng_does_not_consume_latent_sampler_or_profile_projection_streams(tmp_path, monkeypatch):
+    import fluvius_cgan.training as training
+    data = prepared(tmp_path)
+    options = settings(normalization='standard', batch_sampling='balanced_conditions', conditions_per_batch=2,
+                       batch_size=64, swd_weight=10., swd_projections=5)
+    observed, phase = {0: {'noise': [], 'profile': []}, 1: {'noise': [], 'profile': []}}, [0]
+    original_forward = Generator.forward
+    original_profile = training.conditional_sliced_wasserstein_loss
+
+    def forward(self, noise, condition):
+        observed[phase[0]]['noise'].append(noise.detach().clone())
+        return original_forward(self, noise, condition)
+
+    def profile(real, generated, real_labels, generated_labels, **kwargs):
+        observed[phase[0]]['profile'].append((real.detach().clone(), real_labels.clone(), kwargs['generator'].get_state().clone()))
+        return original_profile(real, generated, real_labels, generated_labels, **kwargs)
+
+    monkeypatch.setattr(Generator, 'forward', forward)
+    monkeypatch.setattr(training, 'conditional_sliced_wasserstein_loss', profile)
+    train(data, tmp_path / 'profile_only', options)
+    phase[0] = 1
+    train(data, tmp_path / 'profile_and_derivative', {**options, 'derivative_swd_weight': 1.})
+    assert len(observed[0]['noise']) == len(observed[1]['noise'])
+    assert all(torch.equal(a, b) for a, b in zip(observed[0]['noise'], observed[1]['noise']))
+    assert len(observed[0]['profile']) == len(observed[1]['profile']) == options['epochs']
+    assert all(all(torch.equal(a, b) for a, b in zip(left, right))
+               for left, right in zip(observed[0]['profile'], observed[1]['profile']))
+
+
+@pytest.mark.parametrize('overrides', [
+    {'normalization': 'minmax', 'batch_sampling': 'balanced_conditions', 'batch_size': 64, 'conditions_per_batch': 2},
+    {'normalization': 'standard', 'batch_sampling': 'shuffle'},
+    {'normalization': 'standard', 'batch_sampling': 'balanced_conditions', 'batch_size': 32, 'conditions_per_batch': 2},
+])
+def test_derivative_training_scope_guards_precede_data_access(monkeypatch, overrides):
+    import fluvius_cgan.training as training
+    monkeypatch.setattr(training, '_load_prepared', lambda *a, **k: pytest.fail('invalid derivative config must fail before loading'))
+    with pytest.raises(ValueError, match='standard normalization|balanced_conditions|32 samples'):
+        train('unused', 'unused', settings(derivative_swd_weight=1., **overrides))
+
+
+def test_zero_derivative_scale_fails_only_when_auxiliary_enabled(tmp_path):
+    data = prepared(tmp_path)
+    rows = np.repeat(np.arange(8, dtype=np.float32)[:, None], 24, axis=1)
+    change_npz(data / 'train.npz', x=rows)
+    (data / 'scaler.json').write_text(json.dumps({'minimum': 0., 'maximum': 7.}))
+    options = settings(epochs=1, normalization='standard', batch_sampling='balanced_conditions',
+                       batch_size=64, conditions_per_batch=2)
+    train(data, tmp_path / 'zero_disabled', options)
+    with pytest.raises(ValueError, match='positive'):
+        train(data, tmp_path / 'zero_enabled', {**options, 'derivative_swd_weight': 1.})
+    assert not (tmp_path / 'zero_enabled' / 'best.pt').exists()
+
+
+def test_unconditional_derivative_matches_existing_pooled_loss_scope(tmp_path, monkeypatch):
+    import fluvius_cgan.training as training
+    original = training.derivative_sliced_wasserstein_loss
+    observed = []
+
+    def observe(real, generated, real_labels, generated_labels, scale, **kwargs):
+        assert not real_labels.any() and not generated_labels.any()
+        observed.append(len(real))
+        return original(real, generated, real_labels, generated_labels, scale, **kwargs)
+
+    monkeypatch.setattr(training, 'derivative_sliced_wasserstein_loss', observe)
+    summary = train(prepared(tmp_path), tmp_path / 'run', settings(
+        epochs=1, normalization='standard', unconditional=True, batch_sampling='balanced_conditions',
+        batch_size=64, conditions_per_batch=2, derivative_swd_weight=1., swd_projections=4))
+    assert observed == [64]
+    assert summary['derivative_swd_scale']['condition_counts'] == {'0': 4, '8': 4}
+    assert summary['provenance']['derivative_swd']['conditioning'] == 'pooled'

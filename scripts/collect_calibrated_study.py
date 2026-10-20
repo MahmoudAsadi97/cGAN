@@ -35,7 +35,8 @@ REQUIRED_FILES = ("config.json", "summary.json", "history.json", "best.pt",
                   "validation_report.json", "calibration_validation.json", "calibration.npz")
 PREPARED_FILES = ("train.npz", "val.npz", "metadata.json", "scaler.json")
 TRAINING_CORE_FILES = ("src/fluvius_cgan/training.py", "src/fluvius_cgan/models.py",
-                       "src/fluvius_cgan/residual.py", "src/fluvius_cgan/distribution_loss.py")
+                       "src/fluvius_cgan/residual.py", "src/fluvius_cgan/distribution_loss.py",
+                       "src/fluvius_cgan/temporal_loss.py")
 EVALUATION_CORE_FILES = ("src/fluvius_cgan/evaluation.py", "src/fluvius_cgan/copula.py", "src/fluvius_cgan/calibration.py")
 
 

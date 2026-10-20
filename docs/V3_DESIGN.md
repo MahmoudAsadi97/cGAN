@@ -31,6 +31,11 @@ main commit `af20fdc02f95f64d8b098d4271bafe12b6e0a314`. Do not modify or merge
   Its legend explicitly defines local CET/CEST timestamps and interval energy
   in kWh. The literal `Z` in CSV timestamp strings must not override that
   definition.
+- An independent raw-data scan verified 2,400 meters, 84,326,400 source rows,
+  complete 364-by-96 retained calendars and 33 duplicate trace pairs under the
+  declared float32 identity representation. See
+  `reports/V3_SOURCE_IDENTITY_AUDIT.json` for the measured structural evidence.
+  This scan did not train a model, select a split or compute model performance.
 - Existing V2 work was inspected at
   `1ca62d0fbe1d77f916f8904e812db7d720f8cf53`. It documents exact annual trace
   aliases and a corrected split. Its numerical experiment claims are historical
@@ -98,7 +103,8 @@ set from previously exposed development traces. Fingerprint date-aligned
 complete retained float32 net traces, canonicalizing signed zero only for
 identity comparison. Confirm matching hashes by direct equality and require
 matching condition metadata. Keep one canonical representative using original
-split priority train, validation, test and V2's within-split representative rule.
+split priority train, validation, test; within that earliest split choose the
+lexicographically smallest string meter identifier, matching V2.
 
 V2 reports 33 aliases removed, leaving 1,665 training, 353 validation and
 349 test meters. These are expected reproduction counts, not grounds to force
@@ -157,11 +163,31 @@ Required comparisons:
 - Unconditional GAN: matched architecture and budget without conditioning.
 - Conditional reference GAN at quarter-hour and hourly resolutions.
 
+For the copula, fit separate empirical marginals by condition and slot using
+training observations only. Map average ranks to probabilities `(rank-0.5)/n`
+and then to normal scores. Preserve tied observations and genuine zeros without
+jitter. Keep constant slots fixed. For nonconstant slots, estimate correlation,
+apply fixed shrinkage `0.99*R + 0.01*I`, and handle numerical negative eigenvalues
+with a declared floor of `1e-8` followed by diagonal renormalization. Invert
+generated normal probabilities using the empirical step quantile, selecting
+sorted observation `ceil(n*u)-1`, clipped to valid indices. Record these rules
+and test singular and tied-data cases; do not tune them on test data.
+
 Use the same curated membership for all methods. Define the primary selection
 metric before confirmatory runs: equally weighted conditional sliced
 Wasserstein-1 distance on complete normalized profiles, using a fixed set of
 128 unit projection directions. Report the exact estimator, sampling counts,
 seed and projection checksum. Fit normalization on train only.
+
+Checkpoint selection uses at most 1,024 real validation profiles per condition,
+sampled once without replacement, and the same number of generated profiles.
+Use the identical real subset, generated counts, projection set and estimator
+settings across methods. Reported validation fidelity uses fresh generation
+seeds, separate from the checkpoint-selection stream. Final evaluation uses all
+eligible real test profiles and an equal generated count in each condition,
+with three declared independent generation replicates per trained model.
+These replicates estimate sampling variability; they are not additional training
+seeds. Fix their seed lists and real-data membership in the experiment manifest.
 
 Evaluate fidelity in physical units: per-slot Wasserstein distances,
 daily net-energy distributions, maximum interval-average power, signed
@@ -169,6 +195,9 @@ within-day power differences, autocorrelation distributions, mean and quantile
 profiles, and diversity. Report condition-level sample counts and both
 condition-macro and sample-weighted summaries. Compare resolutions on a common
 hourly representation as well as at their native resolutions.
+Fit one separate hourly evaluation transform on the common curated hourly
+training profiles and apply it to both arms after aggregation. Never directly
+rank native 24-dimensional and 96-dimensional normalized distances.
 
 Do not pair independent generated and real days and interpret their pointwise
 RMSE as forecasting error. Do not port the reference's invalid raw-value
@@ -180,6 +209,10 @@ Separate training-seed variability from uncertainty over real meter traces.
 Use stratified meter-cluster resampling for uncertainty, preserving all sampled
 days within each selected meter. Synthetic sampling variability must also be
 reported. Daily rows are not independent confidence-interval units.
+Both aggregation schemes describe the curated, deliberately stratified sample;
+they do not estimate equipment prevalence in the wider Fluvius population.
+Meter-cluster intervals condition on the observed shared 2024 calendar and
+weather. They do not measure future-year or future-weather uncertainty.
 
 Check memorization by comparing generated-to-training proximity with
 held-out-real-to-training proximity under the same metric and conditioning.

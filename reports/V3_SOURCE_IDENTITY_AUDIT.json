@@ -1,0 +1,510 @@
+{
+  "archive": {
+    "path": "/workspace/cGAN/.cache/data/raw.zip",
+    "bytes": 395085174,
+    "sha256_computed": "934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8",
+    "sha256_expected": "934cc871e9fe18dbe30530472816d711ece878ec7cd8725d9d8417bbdb389bd8"
+  },
+  "scope": "Read-only structural and exact identity audit; no model metrics and no train/validation/test distributions inspected.",
+  "method": {
+    "reader": "pandas.read_csv, one zip member at a time, 350000-row chunks; stitch complete consecutive EAN blocks",
+    "order_validation": "Compare retained date and local timestamp label arrays to the complete chronological 364 x 96 grid; no timezone conversion",
+    "net": "Read import and export float64, subtract, cast to float32, normalize signed zero to positive zero",
+    "identity": "SHA256 of full retained net byte array identifies candidates; every duplicate is confirmed by full byte equality against temporary binary spool",
+    "metadata": "Compare the complete set of four-field metadata profiles over all rows for each duplicate group",
+    "excluded_dates": [
+      "2024-03-31",
+      "2024-10-27"
+    ],
+    "parser_versions": {
+      "pandas": "2.2.3",
+      "numpy": "2.3.5"
+    },
+    "raw_daily_counts": "Separate streaming EAN_ID/Datum pass counts every meter/date: 92 intervals on 2024-03-31, 100 on 2024-10-27, and 96 on all other dates.",
+    "diagnostic_correction": "The date-count pass supersedes the identity-pass diagnostic that incorrectly expected 96 raw intervals on excluded DST dates; those diagnostic records are omitted from discrepancies.",
+    "identity_limit": "Equality refers to the full retained signed-net float32 representation; this does not establish physical household identity."
+  },
+  "software": {
+    "python": "3.12.14",
+    "pandas": "2.2.3",
+    "numpy": "2.3.5"
+  },
+  "audit_scripts": [
+    {
+      "path": "/tmp/cgan-v3-independent-identity-audit.py",
+      "sha256": "391fe4e5ddff7fca40b20d6f4015d5cd0b500a6862efedf41cae851c8efc2f05"
+    },
+    {
+      "path": "/tmp/cgan-v3-independent-raw-date-audit.py",
+      "sha256": "f143c31070f1848b337afd6fdde35bcaf3b5cdb93fd049f2e8a70d5b62f1c162"
+    },
+    {
+      "path": "/tmp/cgan-v3-independent-audit-finalize.py",
+      "sha256": "6b6f705a869f9dc6ddf08ce1c042f66788e0402416bb5745b4053c2f2039539a"
+    }
+  ],
+  "durations_seconds": {
+    "identity_scan": 125.438,
+    "raw_date_scan_and_archive_digest": 37.235,
+    "combined_scan_time": 162.673
+  },
+  "counts": {
+    "csv_members": 8,
+    "meter_blocks": 2400,
+    "unique_meter_ids": 2400,
+    "raw_rows_total": 84326400,
+    "retained_rows_total": 83865600,
+    "raw_rows_per_meter_histogram": {
+      "35136": 2400
+    },
+    "retained_rows_per_meter_histogram": {
+      "34944": 2400
+    },
+    "raw_unique_dates_per_meter_histogram": {
+      "366": 2400
+    },
+    "retained_unique_dates_per_meter_histogram": {
+      "364": 2400
+    },
+    "raw_date_bounds": [
+      "2024-01-01",
+      "2024-12-31"
+    ],
+    "metadata_profile_counts_per_meter_histogram": {
+      "1": 2400
+    },
+    "nonfinite_retained_net_values": 0,
+    "unique_complete_retained_net_traces": 2367,
+    "duplicate_groups": 33,
+    "duplicate_group_size_histogram": {
+      "2": 33
+    },
+    "duplicate_extra_meters": 33,
+    "exact_byte_comparisons": 33,
+    "duplicate_groups_metadata_agree": 33
+  },
+  "raw_date_structure": {
+    "non_dst_dates": 364,
+    "non_dst_rows_per_meter_per_date": 96,
+    "non_dst_meter_date_records": 873600,
+    "excluded_date_row_count_histograms": {
+      "2024-03-31": {
+        "92": 2400
+      },
+      "2024-10-27": {
+        "100": 2400
+      }
+    }
+  },
+  "source_summaries": [
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_enkel_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 15.241
+    },
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_geen_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 16.015
+    },
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 16.284
+    },
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_met_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 16.667
+    },
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 14.892
+    },
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_met_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 15.122
+    },
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 15.75
+    },
+    {
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_met_ZP.csv",
+      "rows": 10540800,
+      "unique_meters": 300,
+      "meter_blocks": 300,
+      "duration_seconds": 15.42
+    }
+  ],
+  "checks": {
+    "archive_sha256_matches_expected": true,
+    "csv_members_equal_8": true,
+    "unique_meters_equal_2400": true,
+    "each_meter_has_35136_raw_rows": true,
+    "each_meter_has_34944_retained_rows": true,
+    "each_meter_has_all_366_raw_dates": true,
+    "raw_daily_counts_match_dst_aware_grid": true,
+    "each_meter_has_complete_ordered_364_by_96_retained_local_grid": true,
+    "no_nonfinite_retained_net_values": true,
+    "unique_complete_retained_net_traces_equal_2367": true,
+    "duplicate_groups_are_exactly_33_pairs": true,
+    "all_duplicate_pairs_confirmed_by_full_byte_equality": true,
+    "all_duplicate_pair_metadata_agree": true,
+    "metadata_constant_within_each_meter": true
+  },
+  "matches_expected_claim": true,
+  "duplicate_pair_ledger": [
+    {
+      "meter_ids": [
+        903,
+        933
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "6c2b2b63ba94abf73cdb6ecf810b208bb5b546eb45c44aa400081dfbc8ca0cc5",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        920,
+        1059
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "2be0249b081b0e6bcd94b67036b90f0120c6fcdb4227dfdce2ad0a45f17a9c8f",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        928,
+        1148
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "9dca3969bfcf8ef98511a2f9b91d188ebc21933cfc3c02dfd9ff5d10ede6f8d2",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        964,
+        1081
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "688ae1ba7b1e88bff08482e9acfabef2f5d4391cb24f809e617fc13e02b6d90d",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        972,
+        1109
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "e93e218ac5ca12a95da17ba9aede425a9d5d413ac55a304214cc3bde942948b0",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        983,
+        1185
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "ea8790b56e077a024eb318227892da56f4377312fda90ea176d4da8b11d182ba",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        995,
+        1001
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "777b28d91d519ccfab890bd6dfc71d86442740263076d5086f96fc5c2bcca631",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1006,
+        1179
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "7aaf691a9800b09e7cb69bada2843aebe4351acd56331925b5c9dbb8bb4ba850",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1125,
+        1168
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "retained_net_sha256": "ceb13955c53c969220918e6f419b42a451a2d7941e54f1bd0a8784ebe9e43c79",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1505,
+        1785
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "a9c7a587f69d0d55674e6156ff60d4c52e2bc0c729322a0ffbcdf1eb1525d917",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1553,
+        1794
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "9b71e663b66040efb4808ae13f5826defa4992af3977b3b02483aa6b956aa7f7",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1579,
+        1629
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "8751e9e1c60760d50606c000b4d224b352fd64651aa3de26933f9967321050cd",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1595,
+        1659
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "6aa1892214d3f1778dc99ede3b9518c278abe2f62e8da5ea5c11f2b1a5382513",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1615,
+        1696
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "e8f697aafdf164c70b53f353ccce772daac1d3cee12ab7af0d67b60a88ef4644",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1633,
+        1687
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "bb8134b840f4c1bf8a632a51f277b11efd4553f925c5458c5df00ee56fdf41a7",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1654,
+        1721
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "4d19960aae927bae5a35b8252e8b8fecf448e39236b684d285e8dbd2e07c002c",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        1683,
+        1769
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "retained_net_sha256": "a15b0d3f0226c147616db4fb7195cd6dbaded75d1568fac8bdb7ae7c998ad225",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2107,
+        2150
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "5d03809ce24e85c142cfd22938cc0501f532ca5981ad8ceb4df4ee5a54c2c637",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2125,
+        2371
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "1d25e5e26103923f066d75a96a55a0eed2407e29107b9fff6ecaade204946139",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2128,
+        2396
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "652774fb2a730465194fe42f124d958f1cd20d2981d226ea34ee8d17a80c3283",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2129,
+        2307
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "12989f07a9cf57e25bf80db4fb45fea4d7bf2907a66e9a5406690f736f82956a",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2151,
+        2400
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "223b702657e873eb8b9385b9c0ce67b495404acc9e92b52ccf103ba02edcf1b1",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2193,
+        2394
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "c3985e87ee3b3321c19a22c83d2a5b9b197f393d900975bf5c6b0c05927e7644",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2199,
+        2201
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "e042537c46d972db20cd23b18e5db9404840301032ddc4babaf0c3b3aa07bd70",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2229,
+        2355
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "121926dd51c2c3feb8017574c0fa9d32961749aae60b5f24df725e3c1022b5ac",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2239,
+        2352
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "db03c3753961558d0e2a6f6ffc036a79ddfac6cb8856674da5fc8c75fbf450e7",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2258,
+        2348
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "0bdcac03c34aacb8740ed2ca30c09b5540517570f5c4c0d99484409ed59f87a2",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2263,
+        2383
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "f2e69ec577336237dd960dc7ffd5e39c7a3bc4f1bd859b43f7d59c9e1ab2fe19",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2275,
+        2284
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "a46837a8163a6b1f7e945ade687f2cc00ce4c99cbb5f6fa894e22219d1fe9e76",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2278,
+        2367
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "d453c5ba3766eb649ad3302becaa40254d3489bfd1724db7568f848a4347a41b",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2293,
+        2319
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "768dc5c5fe5ad15ef255da1397af4d1f1151c1afd4baa245f5b03bbdaca8b5c0",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2298,
+        2382
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "eff2174bc2a9abf50c1fd11e2c8993767c02dbd172286ad4c49fb544d23c8574",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    },
+    {
+      "meter_ids": [
+        2329,
+        2395
+      ],
+      "source": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "retained_net_sha256": "4039c3135f36b5e99030c8c0dda9fef3f84968d62947ae0428ff3ae8ea3bc65d",
+      "full_byte_equality_confirmed": true,
+      "metadata_agree": true
+    }
+  ],
+  "discrepancies": [],
+  "repository_tests_run": false,
+  "model_metrics_computed": false,
+  "split_distributions_inspected": false
+}

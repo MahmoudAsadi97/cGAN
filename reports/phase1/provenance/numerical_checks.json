@@ -1,0 +1,32 @@
+{
+  "checked_at_utc": "2026-10-20T16:49:47.316775+00:00",
+  "status": "passed",
+  "scope": "Saved artifacts, arithmetic, protocol bindings and exact compact extracts; implementation statistics separately checked with synthetic fixtures.",
+  "checks": {
+    "completed_neural_runs": 10,
+    "epochs_each": 100,
+    "training_rows_each_epoch": 606060,
+    "validation_selected_earliest_minimum_checks": 10,
+    "evaluation_reports": 13,
+    "generation_draws_per_report": 3,
+    "test_profiles_per_draw": 127036,
+    "conditions_per_draw": 64,
+    "all_macro_and_weighted_scalars_recomputed": true,
+    "generation_and_training_seed_summaries_recomputed": true,
+    "paired_training_seed_differences_recomputed": true,
+    "fixed_exemplar_observed_differences_match_generation_31001": true,
+    "physical_to_normalized_interval_scaling_checked": true,
+    "complete_bootstrap_draws_each_comparator": 499,
+    "evaluation_started_completed_event_pairs": 13,
+    "inference_started_completed_event_pairs": 1,
+    "missing_or_failed_evaluation_events": 0,
+    "compact_report_extracts_match_source": 13,
+    "compact_run_extracts_match_source": 10,
+    "full_archive_file_hash_checks": 133
+  },
+  "limits": [
+    "The audit did not rerun final-test bootstrap draws; arithmetic checks used saved reports.",
+    "Percentile interval nominal coverage is not established; displaced primary intervals are disclosed.",
+    "The negative benchmark does not establish convergence or competitive fidelity."
+  ]
+}

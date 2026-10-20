@@ -1,0 +1,30 @@
+{
+  "name": "summarize",
+  "command": [
+    "/workspace/cGAN/.venv/bin/python",
+    "-m",
+    "fluvius_cgan",
+    "summarize",
+    "--reports",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/conditional_seed_11.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/conditional_seed_22.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/conditional_seed_33.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/conditional_seed_44.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/conditional_seed_55.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/unconditional_seed_11.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/unconditional_seed_22.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/unconditional_seed_33.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/unconditional_seed_44.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/unconditional_seed_55.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/mean.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/resample.json",
+    "/workspace/cGAN/artifacts/phase1-evaluation/reports/copula.json",
+    "--output",
+    "/workspace/cGAN/artifacts/phase1-evaluation/summary.json"
+  ],
+  "started_at_utc": "2026-10-20T16:31:57.712482+00:00",
+  "stdout": "/workspace/cGAN/artifacts/phase1-evaluation/logs/summarize.stdout.log",
+  "stderr": "/workspace/cGAN/artifacts/phase1-evaluation/logs/summarize.stderr.log",
+  "returncode": 0,
+  "finished_at_utc": "2026-10-20T16:31:58.888266+00:00"
+}

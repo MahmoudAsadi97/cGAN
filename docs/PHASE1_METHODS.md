@@ -196,7 +196,8 @@ their fitted models and generated arrays remain fixed. Percentile 95% intervals
 describe the conditional-minus-comparator difference in primary profile SW1
 and daily-energy W1. Positive differences mean the cGAN has greater error.
 Physical profile intervals are divided by the same training range as the
-primary endpoint.
+primary endpoint. Intervals are marginal for each declared comparison, not
+simultaneous intervals for the whole set of comparisons.
 
 These intervals describe uncertainty under real-meter resampling for one
 specified fitted model and synthetic draw. They are not intervals for the

@@ -1,0 +1,6 @@
+method,mean_normalized_profile_sw1,n_training_seeds,training_seed_sd,sampling_sd,n_generation_draws_per_model,uncertainty
+conditional,0.033563264435225504,5,0.00468694274277886,,3,SD across five training-seed means
+unconditional,0.03630416816549707,5,0.0026526860290525976,,3,SD across five training-seed means
+mean,0.02167546661991075,,,0.0,3,SD across three generation draws
+resample,0.0037812650940215013,,,2.4904886739442566e-05,3,SD across three generation draws
+copula,0.004032455024268316,,,1.4019119279298404e-05,3,SD across three generation draws

@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-10-20T16:30:07.700279+00:00",
+  "workers": 4,
+  "provenance": {
+    "protocol": {
+      "path": "/workspace/cGAN/reports/PHASE1_FROZEN_PROTOCOL.json",
+      "sha256": "31787e71636602adc52c0eee88628c3ed674b776365e2419549814e01e835753"
+    },
+    "data_hashes": {
+      "train.npz": "60cfe95529fc0d0d6c4c0ecd2076c77508f0358245a63a9cd2e7a61355ce32ae",
+      "val.npz": "ae1886812e3f943c24b4857faace034be4e4e9a235200c1bec977d7f98afe128",
+      "test.npz": "de9946fd43adea65ffcd14ddd026b367b128a4ef3b74b259c157559e6e910cec",
+      "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+      "metadata.json": "3f7324dc92e414aaed3d63a9d4aa522cff09eba201eccc231fe31acaf1aee5e0"
+    },
+    "checkpoints": {
+      "conditional_seed_11": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_11/best.pt",
+        "sha256": "d22fff08f7a62b8f4ddebbdadb769bdcb7b0c0e5b3b39e654339c04a6bb91fd6"
+      },
+      "conditional_seed_22": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_22/best.pt",
+        "sha256": "8e66623ff5422f74a98d55b28208a3be019682b22197d7ab32141fbecfcedada"
+      },
+      "conditional_seed_33": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_33/best.pt",
+        "sha256": "89fe08d4a3814e1b722cc976a8459d4e0110c2beb8e8d512ef3b8321f803dca6"
+      },
+      "conditional_seed_44": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_44/best.pt",
+        "sha256": "74a77b7732471fb8f406755dae0f3887f4c9e6857132aeeb3f49b4516263c023"
+      },
+      "conditional_seed_55": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_55/best.pt",
+        "sha256": "ab512da3fbd320b8cffec28ee3bdb68e8c430ae51379c6601dcfa3c957f8d912"
+      },
+      "unconditional_seed_11": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_11/best.pt",
+        "sha256": "fe4a356c7f2ac072d280bc1970133bac3ea80b4a14ca9c95fc97d7ad09814b6f"
+      },
+      "unconditional_seed_22": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_22/best.pt",
+        "sha256": "0512fd48eec585da8836be220cdf5d720cdb18121ea8d180269bbcdf8f754a4a"
+      },
+      "unconditional_seed_33": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_33/best.pt",
+        "sha256": "5707354bb4ce7910ca614291f6e55ae25c8864ffa83719cde09c98f093e44235"
+      },
+      "unconditional_seed_44": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_44/best.pt",
+        "sha256": "9efc3f1cb57dbfeccfe90f6e2bca50408b89b1b2838ede24f4bea055032c4788"
+      },
+      "unconditional_seed_55": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_55/best.pt",
+        "sha256": "b065a0d527d4140bf4207479bd983924b29ce2fffbf36f2a5ad01de67e5a7a3a"
+      }
+    },
+    "run_manifests": {
+      "conditional_seed_11": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_11/manifest.json",
+        "sha256": "ae17de1de2142c9ad2259cf2d7c813f8b88acfd491f0858ee596352ee7383986"
+      },
+      "conditional_seed_22": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_22/manifest.json",
+        "sha256": "bd4785e2627c57a8ac30db1d81fde5d2ef8ad8d5932be46dbbc8fcb9e577ceed"
+      },
+      "conditional_seed_33": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_33/manifest.json",
+        "sha256": "61ccc49642efba3b8970153c8b548ee64a3ca2aaa93996683e5cc80d2fdf7b3e"
+      },
+      "conditional_seed_44": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_44/manifest.json",
+        "sha256": "aab017d21a81a7b71a56c28ee7c4f7de717f3dda47fb29df34098c6727818a1a"
+      },
+      "conditional_seed_55": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/conditional/seed_55/manifest.json",
+        "sha256": "f593b8145edbb539e1e9085e72277d9d87aee5e5ec8a40723ecb99ac72fbb2a5"
+      },
+      "unconditional_seed_11": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_11/manifest.json",
+        "sha256": "2f289c6a1f85afab7fe91364d23eade26b6b51d0614b1b35a06ee5b5e72f9b30"
+      },
+      "unconditional_seed_22": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_22/manifest.json",
+        "sha256": "db9d13215eee213dd0b3f7b531cefeeb3966da658dc3f034cc5352b652ea6f02"
+      },
+      "unconditional_seed_33": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_33/manifest.json",
+        "sha256": "7d46dcf3b38076cc473c9e4c424a7b71603cf595cede4018b052afe1195a5a38"
+      },
+      "unconditional_seed_44": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_44/manifest.json",
+        "sha256": "b8eab88575007449f98de14f26841ca22b83f8f742b98ec4a2d55dc3e9496756"
+      },
+      "unconditional_seed_55": {
+        "path": "/workspace/cGAN/runs/phase1/confirmatory/unconditional/seed_55/manifest.json",
+        "sha256": "ff31c601f04333c92a8f614b5f715efc8356e693461aabd6b55e85f70d8913a8"
+      }
+    },
+    "source_hashes": {
+      "scripts/evaluate_phase1.py": "5184785f9af20f0fb3619f988c2fad64ea1ccd02ccc7b5cb20de6b36a3f9c9b3",
+      "src/fluvius_cgan/__init__.py": "63e40efb33c5d02f4c55bf43dd7dde603ad5a3f3c7df5a630dd82d68096cc98b",
+      "src/fluvius_cgan/__main__.py": "bea84777f707c344d07dc0f14c736716fb8375811acd5d4feabd317ba8781e52",
+      "src/fluvius_cgan/baselines.py": "f9530164f0f4af0c8fabb800e4c9f8d1f61bf3d00cc3616274ca8a6fb21e2d38",
+      "src/fluvius_cgan/cli.py": "6fd7ab2821ecf33202315d460e1dde47f755c04eb1270cf0fdfa7760709f941a",
+      "src/fluvius_cgan/curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+      "src/fluvius_cgan/data.py": "6f91986cf3a2772b52173e527d908fabffd50dd47f18e8b23c182b92183582dd",
+      "src/fluvius_cgan/evaluation.py": "818c2e55df829441de2169254860037d8bc9a9fe2fd1d245e2f404a11290a0ca",
+      "src/fluvius_cgan/inference.py": "e9538154aefba7ac9cb98adaf8a853a7b13076ddf86691b85045e0df5d54bd80",
+      "src/fluvius_cgan/models.py": "057e9b1f9573855b1f9727b141d4d8e8f004daaf457adaa57a7fbf2d0d5e393a",
+      "src/fluvius_cgan/prepared.py": "7a49fa7801c23624b112a2029c4e879796325f9ff85d79ed9c9c444ce34d57ea",
+      "src/fluvius_cgan/release.py": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe",
+      "src/fluvius_cgan/study.py": "9d5cd0130e755086082417851c36c97fe78b74611371b7d5dd2b7c0c516ca6e0",
+      "src/fluvius_cgan/training.py": "e9884410621028309b9af357d52b7a200718fd5bd0a1307db9c0689e6cef400b",
+      "src/fluvius_cgan/uncertainty.py": "e7acadd76b140d451ff7c29257da8b0aa9f0c76f1ef9f1d6242ec03dc2845291"
+    }
+  },
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  }
+}

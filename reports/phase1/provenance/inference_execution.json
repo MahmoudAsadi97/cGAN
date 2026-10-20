@@ -1,0 +1,21 @@
+{
+  "name": "inference",
+  "command": [
+    "/workspace/cGAN/.venv/bin/python",
+    "/workspace/cGAN/scripts/evaluate_phase1.py",
+    "--data",
+    "/workspace/cGAN/.cache/phase1/data/hourly24",
+    "--protocol",
+    "/workspace/cGAN/reports/PHASE1_FROZEN_PROTOCOL.json",
+    "--runs",
+    "/workspace/cGAN/runs/phase1/confirmatory",
+    "--output",
+    "/workspace/cGAN/artifacts/phase1-evaluation",
+    "--inference-only"
+  ],
+  "started_at_utc": "2026-10-20T16:31:58.888898+00:00",
+  "stdout": "/workspace/cGAN/artifacts/phase1-evaluation/logs/inference.stdout.log",
+  "stderr": "/workspace/cGAN/artifacts/phase1-evaluation/logs/inference.stderr.log",
+  "returncode": 0,
+  "finished_at_utc": "2026-10-20T16:38:56.494855+00:00"
+}

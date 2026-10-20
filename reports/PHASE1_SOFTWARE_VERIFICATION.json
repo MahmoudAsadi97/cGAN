@@ -62,8 +62,57 @@
     "tests/test_uncertainty.py": "1f0fdbf278cb63269ad212ab7af0a496f43e03003eb0b8bdf73b5302719b8ba2"
   },
   "limits": [
-    "Local checks are not a claim about remote CI execution.",
+    "Remote CI status was verified from GitHub workflow-run metadata; fresh cloud snapshot restoration remains unverified.",
     "Software checks do not establish empirical fidelity or publication readiness.",
     "CUDA execution was not tested."
-  ]
+  ],
+  "remote_ci": {
+    "checked_at_utc": "2026-10-20T16:03:07.269642+00:00",
+    "evidence": "GitHub Actions workflow-run metadata from the repository actions page",
+    "runs": [
+      {
+        "url": "https://github.com/MahmoudAsadi97/cGAN/actions/runs/39447449057",
+        "commit": "48475e0770d8078ae03fed29091fe585238a9e4b",
+        "branch": "refs/heads/V3",
+        "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+        "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS",
+        "created_at": "2026-10-20T15:20:14Z"
+      },
+      {
+        "url": "https://github.com/MahmoudAsadi97/cGAN/actions/runs/39444829570",
+        "commit": "67911e40c827c91dd540559f3a4680ec1c2c2816",
+        "branch": "refs/heads/V3",
+        "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+        "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS",
+        "created_at": "2026-10-20T15:03:00Z"
+      }
+    ]
+  },
+  "source_hash_scope": "source_sha256 records the 220-test pre-experiment verification; the later renderer-only correction is separately verified below",
+  "post_experiment_render_verification": {
+    "verified_at_utc": "2026-10-20T16:49:47.316775+00:00",
+    "commit": "ccda7e2e44a5170939ee1e80da0a5c15231775de",
+    "reason": "Actual figure review found shared-axis clipping of later panels; apply bounds after all data are plotted.",
+    "command": ".venv/bin/python -m pytest -q -W error tests/test_render.py tests/test_archive.py",
+    "passed": 22,
+    "seconds": 5.74,
+    "added_regressions": [
+      "Later-arm learning-curve maximum remains visible",
+      "Last technology group points and mean-plus-SD remain visible on every shared axis"
+    ],
+    "source_sha256": {
+      "scripts/render_phase1.py": "6e9ee5ca8318c214fbede31e374e5aa336e432b9cf5eb83c7a395ee8831fbe34",
+      "tests/test_render.py": "152e2d0d252f1cdac32259fe13b98ad521e20c1c63019710fab1e56e2c91e075"
+    },
+    "actual_output_checks": {
+      "visually_reviewed_figures": 5,
+      "corrected_png_figures": [
+        "learning_curves.png",
+        "technology_errors.png"
+      ],
+      "unchanged_csv_exports": 8,
+      "full_archive_members_hash_verified": 133
+    },
+    "scientific_scope": "Saved JSON rendering only; no training, final evaluation, inference or endpoint change."
+  }
 }

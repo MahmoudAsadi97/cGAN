@@ -5,13 +5,31 @@ values per day** from Fluvius 2024. The five comparison methods are the
 conditional GAN, a matched unconditional GAN, conditional mean, complete-day
 training resampling, and a conditional empirical Gaussian copula.
 
-**Status:** confirmatory experiments are running; final comparisons, uncertainty
-estimates, and the scientific assessment are pending. Software checks and a
-resource pilot do not establish publication readiness. Development belongs to
+**Status:** the frozen Phase 1 benchmark is complete. The reference cGAN
+underperformed resampling and the Gaussian copula in all 64 conditions for
+each of five training seeds on the primary profile-distribution metric.
+Competitive fidelity, convergence and publication readiness are not established.
+Read the [results and scientific assessment](docs/PHASE1_RESULTS.md) and
+[complete review record](reports/phase1/README.md).
+Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
 preserve `main`, `V1`, and `V2`. Architecture
 improvements, auxiliary losses, calibration, and federated learning require the
 user's separate approval after the Phase 1 review.
+
+| Method | Primary normalized profile SW1; lower is better |
+| --- | ---: |
+| Reference conditional GAN, five-seed mean | 0.033563 |
+| Matched unconditional GAN, five-seed mean | 0.036304 |
+| Conditional mean | 0.021675 |
+| Conditional training-day resampling | 0.003781 |
+| Conditional empirical Gaussian copula | 0.004032 |
+
+Each fitted model was evaluated with three generation draws. Neural training
+used a frozen **100-epoch CPU budget**, rather than the upstream 10,000 epochs.
+All ten runs and thirteen evaluations completed; all seeds and uncertainty
+limitations are reported. The code's 220 pre-experiment software tests passed.
+Phase 2 has not started.
 
 ## Method and provenance
 

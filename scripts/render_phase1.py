@@ -254,7 +254,9 @@ def _learning(output, histories):
         ax.set(title=NAMES[method], xlabel='Training epoch')
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.grid(axis='y', color='#E5E5E5', linewidth=.6)
-        ax.set_ylim(bottom=0)
+    # Set shared bounds only after every panel has contributed its data.
+    # Setting one bound disables autoscaling on all axes in the shared group.
+    axes[0].set_ylim(bottom=0)
     axes[0].set_ylabel('Normalized conditional SW1 (dimensionless)')
     axes[1].legend(loc='best', frameon=False, fontsize=8)
     fig.suptitle('Validation checkpoint selection: all ten training runs', y=.98)
@@ -305,10 +307,10 @@ def _technology(output, technologies):
         ax.set(title=f'HP={group // 4}, EV={(group // 2) % 2}, PV={group % 2}')
         ax.set_yticks(range(5), [NAMES[m] for m in METHODS], fontsize=8)
         ax.set_ylim(4.5, -.5)
-        ax.set_xlim(left=0)
         ax.grid(axis='x', color='#E5E5E5', linewidth=.6)
         if group >= 4:
             ax.set_xlabel('Normalized SW1', fontsize=9)
+    axes.flat[0].set_xlim(left=0)
     fig.suptitle('Technology groups: equal weight across eight calendar conditions', y=.98)
     fig.subplots_adjust(left=.14, bottom=.2, top=.88, hspace=.28, wspace=.18)
     _save(fig, output, 'technology_errors',

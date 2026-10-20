@@ -157,3 +157,44 @@ def test_unrelated_inference_protocol_is_rejected_before_output(tmp_path):
     with pytest.raises(ValueError, match='protocol'):
         renderer.render(runs, evaluations, output)
     assert not output.exists()
+
+
+def test_learning_shared_scale_contains_later_arm_extreme(tmp_path, monkeypatch):
+    histories = {
+        (method, seed): (
+            [{'epoch': 1, 'validation_sw1': 2.5 if method == 'unconditional' else .2},
+             {'epoch': 5, 'validation_sw1': .1}], 5)
+        for method in renderer.METHODS[:2] for seed in renderer.SEEDS
+    }
+    def inspect(fig, *args):
+        try:
+            bounds = [ax.get_ylim() for ax in fig.axes]
+            assert bounds[0] == bounds[1]
+            assert bounds[0][0] == 0
+            assert bounds[0][1] > 2.5
+        finally:
+            renderer.plt.close(fig)
+    monkeypatch.setattr(renderer, '_save', inspect)
+    renderer._learning(tmp_path, histories)
+
+
+def test_technology_shared_scale_contains_last_group_points_and_sd(tmp_path, monkeypatch):
+    rows = []
+    for group in range(8):
+        for method in renderer.METHODS:
+            values = [4., 5., 5., 5., 5.] if group == 7 else [.1] * 5
+            if method not in renderer.METHODS[:2]:
+                values = [.05]
+            rows.extend({'technology': group, 'method': method, renderer.PRIMARY: value}
+                        for value in values)
+    upper_interval = np.mean([4., 5., 5., 5., 5.]) + np.std([4., 5., 5., 5., 5.], ddof=1)
+    def inspect(fig, *args):
+        try:
+            bounds = [ax.get_xlim() for ax in fig.axes]
+            assert all(value == bounds[0] for value in bounds)
+            assert bounds[0][0] == 0
+            assert bounds[0][1] > upper_interval > 5.
+        finally:
+            renderer.plt.close(fig)
+    monkeypatch.setattr(renderer, '_save', inspect)
+    renderer._technology(tmp_path, rows)

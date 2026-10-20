@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-20T17:19:36.678503+00:00",
+  "status": "first_declared_training_child_started",
+  "source_commit": "4e8f4202792889afb0e821a9a90e5d1bbf026d03",
+  "source_tree": "0798ad4bf2872aa7f1af93bea90feed90b169b1d",
+  "execution_declaration": "reports/quantile_decoder_execution_declaration.json",
+  "execution_declaration_sha256": "d98b5a7e345f0bf7c28f2e7530770769131c3d73bb351b2437249e60fa49dc35",
+  "source_protocol_and_config_published_before_launch": true,
+  "execution_declaration_written_before_fit": true,
+  "execution_declaration_github_publication": "This receipt and declaration are published after the recorded child launch; no external preregistration is claimed.",
+  "training_child_started_utc": "2026-10-20T17:17:55.878346+00:00",
+  "test_used": false,
+  "completed_model_or_metric_claimed": false,
+  "records": {
+    "runs/quantile_decoder_execution/prelaunch.json": {
+      "sha256": "23c33ebee8aa2c2a8d85e28b49b4a708ab08d4fdf3b055113a90833c91fe0323",
+      "record": {
+        "schema_version": 1,
+        "created_utc": "2026-10-20T17:17:26.328872+00:00",
+        "source_commit": "4e8f4202792889afb0e821a9a90e5d1bbf026d03",
+        "source_tree": "0798ad4bf2872aa7f1af93bea90feed90b169b1d",
+        "source": "/workspace/scratch/bd8d9697d969/cGAN-decoder",
+        "local_equivalent_commit": "320c7cf7b0d29cc3a19959961a7813ef4d34f3ad",
+        "published_branch": "V2",
+        "execution_declaration": "/workspace/scratch/bd8d9697d969/cGAN/reports/quantile_decoder_execution_declaration.json",
+        "execution_declaration_sha256": "d98b5a7e345f0bf7c28f2e7530770769131c3d73bb351b2437249e60fa49dc35",
+        "resource_gate": "/workspace/scratch/bd8d9697d969/cGAN/runs/reference_execution/heavy_precision_training_complete.json",
+        "resource_gate_sha256": "d14f20267da33e60e2745dc90e0bb970c99c00d8f12914f2c233d1c1434adbd6",
+        "software_verification_sha256": "9d387e93d39ef3ea58e3c9abafae226da323ff6f30263fbb077a192f4e55296b",
+        "configuration": "/workspace/scratch/bd8d9697d969/cGAN-decoder/configs/curated_quantile_decoder.json",
+        "configuration_sha256": "c58b3a8c557ed56465f0f378bb00ff0f07bfc8de78cf10890147cee08e579b4b",
+        "protocol_sha256": "7312dd7f207ec1caead057816ef19361bad821a4b8f91c1091cd3e1e122cc3a6",
+        "source_clean": true,
+        "assessor_declaration_validation": "passed",
+        "actual_decoder_fit_started": false,
+        "test_used": false
+      }
+    },
+    "runs/quantile_decoder_execution/launch.json": {
+      "sha256": "c072a3eb2176facce642217a8f9c88b98587ed2b790f93c188008a7f588054bf",
+      "record": {
+        "started_utc": "2026-10-20T17:17:50.377874+00:00",
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "-u",
+          "/workspace/scratch/bd8d9697d969/cGAN-decoder/scripts/run_quantile_decoder_pilot.py",
+          "--source",
+          "/workspace/scratch/bd8d9697d969/cGAN-decoder",
+          "--declaration",
+          "/workspace/scratch/bd8d9697d969/cGAN/reports/quantile_decoder_execution_declaration.json",
+          "--expected-declaration-sha256",
+          "d98b5a7e345f0bf7c28f2e7530770769131c3d73bb351b2437249e60fa49dc35",
+          "--prepared",
+          "/workspace/scratch/bd8d9697d969/cGAN/data/curated96",
+          "--config",
+          "/workspace/scratch/bd8d9697d969/cGAN-decoder/configs/curated_quantile_decoder.json",
+          "--output",
+          "/workspace/scratch/bd8d9697d969/cGAN/runs/curated_quantile_decoder",
+          "--resource-gate",
+          "/workspace/scratch/bd8d9697d969/cGAN/runs/reference_execution/heavy_precision_training_complete.json",
+          "--expected-resource-gate-sha256",
+          "d14f20267da33e60e2745dc90e0bb970c99c00d8f12914f2c233d1c1434adbd6",
+          "--lock",
+          "/workspace/scratch/bd8d9697d969/cGAN/runs/heavy_evaluation.lock"
+        ],
+        "log": "/workspace/scratch/bd8d9697d969/cGAN/runs/quantile_decoder_training_queue.log",
+        "test_used": false
+      }
+    },
+    "runs/curated_quantile_decoder/phase_started.json": {
+      "sha256": "f8699741bced251a3cfc2df5a2a26a1a3a61be1b9eae1b3107db51c7ca4b1db8",
+      "record": {
+        "started_utc": "2026-10-20T17:17:51.243465+00:00",
+        "input_sha256": {
+          "curation_manifest.json": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3",
+          "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+          "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+          "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+          "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8"
+        },
+        "resource_gate_sha256": "d14f20267da33e60e2745dc90e0bb970c99c00d8f12914f2c233d1c1434adbd6",
+        "source_commit": "4e8f4202792889afb0e821a9a90e5d1bbf026d03",
+        "source_tree": "0798ad4bf2872aa7f1af93bea90feed90b169b1d",
+        "lock": "/workspace/scratch/bd8d9697d969/cGAN/runs/heavy_evaluation.lock",
+        "memory_events": "low 0\nhigh 0\nmax 38556\noom 11\noom_kill 3\noom_group_kill 0\n"
+      }
+    },
+    "runs/curated_quantile_decoder/seed_11_started.json": {
+      "sha256": "d3e7f72666c3129c3bc31fe0e43da514be80294626bd1208227fe9f65b934955",
+      "record": {
+        "seed": 11,
+        "started_utc": "2026-10-20T17:17:51.376565+00:00",
+        "input_sha256": {
+          "curation_manifest.json": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3",
+          "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+          "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+          "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+          "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8"
+        },
+        "config_sha256": "c58b3a8c557ed56465f0f378bb00ff0f07bfc8de78cf10890147cee08e579b4b",
+        "test_used": false
+      }
+    },
+    "runs/curated_quantile_decoder/schedule.json": {
+      "sha256": "151a7e223966dfd5612fcaeaceef2bdbbb262230a3410c77face5d04d69c35c8",
+      "record": {
+        "created_utc": "2026-10-20T17:17:50.964271+00:00",
+        "declaration_sha256": "d98b5a7e345f0bf7c28f2e7530770769131c3d73bb351b2437249e60fa49dc35",
+        "queue_script_sha256": "9f12f706b0402638afc0ac4a822318207ca49002bf6ca0619bb90464f8db0384",
+        "resource_gate_sha256": "d14f20267da33e60e2745dc90e0bb970c99c00d8f12914f2c233d1c1434adbd6",
+        "resource_policy": "Seed11 alone; then two measured child peaks plus1.5GiB must fit8GiB and cgroup bound. Whole phase holds inherited exclusive heavy lock.",
+        "test_used": false,
+        "declared_seed_config_sha256": {
+          "11": "c58b3a8c557ed56465f0f378bb00ff0f07bfc8de78cf10890147cee08e579b4b",
+          "22": "44e4bd9b7573164cff2edc5d70260bb9cc745d430262d08ef78659ab3219fa61",
+          "33": "66fe6814f804a0c395a093376be98daca9688c95d4fb4b8aa4477a3517469897"
+        }
+      }
+    }
+  }
+}

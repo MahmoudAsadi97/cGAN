@@ -51,7 +51,7 @@ calibration is a separate TRAIN-target fitting stage with a generated reference.
 | Interrupted weight-zero attempts | 22, 33 | Interrupted after 6 and 5 epochs by resource failure; retained under `runs/interrupted_oom_20261020/`; not accepted as completed runs |
 | Derivative-distribution weight 1, profile weight 10 | 11, 22, 33 | Complete; promotion failed. Ramp error improved 8.79% (required 10%); ACF error worsened 15.56% (allowed 10%). No seeds 44/55 are authorized for this arm. |
 | Larger generator, profile weight 10 | 11, 22, 33 | Complete; promotion failed. Mean ramp error increased 32.34% and every paired ramp error worsened. Other mean gates and utility tolerances pass. No seeds 44/55; see `docs/CURATED_CAPACITY_PILOT.md`. |
-| Fixed conditional TRAIN quantile decoder, profile weight 10 | 11, 22, 33 | Activated after complete capacity failure; implementation and synthetic verification before any fit. Same fixed gates; no generated-CDF posthoc map. See `docs/QUANTILE_DECODER_REFINEMENT.md`. |
+| Fixed conditional TRAIN quantile decoder, profile weight 10 | 11, 22, 33 | Training phase started from clean published source 4e8f420 after 1,434 integrated checks. First seed 11 runs alone; no completed-model claim. Same fixed gates; no generated-CDF posthoc map. See `docs/QUANTILE_DECODER_REFINEMENT.md`. |
 | Reference conditional BCE96 | 11, 22, 33, 44, 55 | All five full-budget fits complete; validation reports are being completed under `docs/REFERENCE_COMPLETION.md` |
 | Reference unconditional BCE96 | 11, 22, 33, 44, 55 | All five full-budget fits complete; matched network-conditioning validation remains in progress |
 | Reference conditional BCE24 | 11, 22, 33, 44, 55 | All five full-budget fits complete; hourly TRAIN/VAL derivation verified at clean source ec10d83. Evaluations are serialized |
@@ -59,6 +59,14 @@ calibration is a separate TRAIN-target fitting stage with a generated reference.
 The [reference training receipt](../reports/reference_training_completion.json)
 retains all fifteen full budgets, selected epochs, source pins and artifact
 hashes. It does not substitute for the pending complete reference validation.
+
+The decoder [execution declaration](../reports/quantile_decoder_execution_declaration.json)
+binds the clean source, complete development-data hashes, frozen original
+comparators, configuration, seeds and evaluation settings. The
+[start receipt](../reports/quantile_decoder_execution_start.json) records its
+creation before fitting and the inherited exclusive resource lock. Source,
+protocol and configuration were published before launch; the declaration's
+GitHub publication follows launch and is not external preregistration.
 
 Completed controls 22/33 restart from initialization with the same seeds and full
 budget. The interruption is documented in `reports/resource_incident.json` and

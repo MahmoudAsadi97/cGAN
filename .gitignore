@@ -218,3 +218,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Research inputs and generated experiment artifacts
+data/
+runs/
+*.pt
+*.npz
+*.zip
+*.part

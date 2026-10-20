@@ -1,0 +1,13 @@
+{
+  "epochs": 2,
+  "batch_size": 128,
+  "seed": 42,
+  "latent_dim": 24,
+  "hidden_dim": 64,
+  "lr": 0.0001,
+  "device": "cpu",
+  "output_activation": "linear",
+  "validation_every": 1,
+  "patience": 2,
+  "max_validation_samples": 256
+}

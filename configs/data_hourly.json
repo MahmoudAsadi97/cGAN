@@ -1,0 +1,11 @@
+{
+  "target": "import",
+  "resolution_minutes": 60,
+  "conditioning": "equipment_calendar",
+  "timestamp_policy": "source_wall_clock",
+  "timezone": "Europe/Brussels",
+  "chunksize": 100000,
+  "max_meters_per_file": null,
+  "seed": 42,
+  "split_fractions": [0.7, 0.15, 0.15]
+}

@@ -1,0 +1,13 @@
+{
+  "epochs": 10000,
+  "batch_size": 2000,
+  "seed": 42,
+  "latent_dim": 24,
+  "hidden_dim": 64,
+  "lr": 0.0001,
+  "device": "auto",
+  "output_activation": "softplus",
+  "validation_every": 10,
+  "patience": 50,
+  "max_validation_samples": 4096
+}

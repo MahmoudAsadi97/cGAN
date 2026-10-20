@@ -1,0 +1,560 @@
+{
+  "archive": "raw.zip",
+  "members": [
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_enkel_ZP.csv",
+      "bytes": 790497785,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "1",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.04300000",
+          "0E-8",
+          "0",
+          "0",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "1",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.05400000",
+          "0E-8",
+          "0",
+          "0",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "1",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.05600000",
+          "0E-8",
+          "0",
+          "0",
+          "1",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_geen_ZP.csv",
+      "bytes": 790345181,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "301",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.01200000",
+          "0E-8",
+          "0",
+          "0",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "301",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.02300000",
+          "0E-8",
+          "0",
+          "0",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "301",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.01400000",
+          "0E-8",
+          "0",
+          "0",
+          "0",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "bytes": 797294675,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "901",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.10600000",
+          "0E-8",
+          "1",
+          "0",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "901",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.06400000",
+          "0E-8",
+          "1",
+          "0",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "901",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.06500000",
+          "0E-8",
+          "1",
+          "0",
+          "0",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_met_ZP.csv",
+      "bytes": 797786309,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "601",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.15400000",
+          "0E-8",
+          "1",
+          "0",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "601",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.16500000",
+          "0E-8",
+          "1",
+          "0",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "601",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.16500000",
+          "0E-8",
+          "1",
+          "0",
+          "1",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "bytes": 800926499,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "1501",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.04700000",
+          "0E-8",
+          "0",
+          "1",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "1501",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.08100000",
+          "0E-8",
+          "0",
+          "1",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "1501",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.05400000",
+          "0E-8",
+          "0",
+          "1",
+          "0",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_met_ZP.csv",
+      "bytes": 804175121,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "1201",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.16400000",
+          "0E-8",
+          "0",
+          "1",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "1201",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.20300000",
+          "0E-8",
+          "0",
+          "1",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "1201",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.19600000",
+          "0E-8",
+          "0",
+          "1",
+          "1",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "bytes": 800697761,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "2101",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.02600000",
+          "0E-8",
+          "1",
+          "1",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "2101",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.01800000",
+          "0E-8",
+          "1",
+          "1",
+          "0",
+          "Residentieel"
+        ],
+        [
+          "2101",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.02900000",
+          "0E-8",
+          "1",
+          "1",
+          "0",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_met_ZP.csv",
+      "bytes": 808132319,
+      "delimiter": ",",
+      "columns": [
+        "EAN_ID",
+        "Datum",
+        "Datum_Startuur",
+        "Volume_Afname_KWh",
+        "Volume_Injectie_KWh",
+        "Warmtepomp_Indicator",
+        "Elektrisch_Voertuig_Indicator",
+        "PV_Installatie_Indicator",
+        "Contract_Categorie"
+      ],
+      "example_rows": [
+        [
+          "1801",
+          "2024-01-01",
+          "2024-01-01T00:00:00.000Z",
+          "0.06400000",
+          "0E-8",
+          "1",
+          "1",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "1801",
+          "2024-01-01",
+          "2024-01-01T00:15:00.000Z",
+          "0.24000000",
+          "0E-8",
+          "1",
+          "1",
+          "1",
+          "Residentieel"
+        ],
+        [
+          "1801",
+          "2024-01-01",
+          "2024-01-01T00:30:00.000Z",
+          "0.05100000",
+          "0E-8",
+          "1",
+          "1",
+          "1",
+          "Residentieel"
+        ]
+      ]
+    },
+    {
+      "name": "_prepare.log",
+      "bytes": 555,
+      "text": "converting P6269_Open_Data_WP_geen_ZP.csv ...\n{'group': 'WP_geen_ZP', 'rows': 10540800, 'meters': 300, 'steps': 35136, 'unknown_timestamps': 0, 'max_missing_per_meter': 4, 'meters_with_missing': 300, 'seconds': 16.7, 'out': 'data/processed/WP_geen_ZP.npz'}\nconverting P6269_Open_Data_WP_met_ZP.csv ...\n{'group': 'WP_met_ZP', 'rows': 10540800, 'meters': 300, 'steps': 35136, 'unknown_timestamps': 0, 'max_missing_per_meter': 4, 'meters_with_missing': 300, 'seconds': 17.9, 'out': 'data/processed/WP_met_ZP.npz'}\nconverting P6269_Open_Data_enkel_ZP.csv ...\n"
+    },
+    {
+      "name": "1.50 Aanleveirng DMK Elek Fluvius Legende 25200929.xlsx",
+      "bytes": 20436,
+      "sheets": {
+        "xl/worksheets/sheet1.xml": [
+          [
+            "Naam dataset"
+          ],
+          [
+            "Verbruiksprofielen digitale elektriciteitsmeters: kwartierwaarden voor een volledig jaar."
+          ],
+          [
+            ""
+          ],
+          [
+            "Inhoud"
+          ],
+          [
+            "Deze dataset bevat de individuele verbruiksgegevens van 2400 geanonimiseerde digitale elektriciteitsmeters."
+          ],
+          [
+            ""
+          ],
+          [
+            "Basis redenering / scope bepaling"
+          ],
+          [
+            "De digitale elektriciteitsmeter waarvan de netgebruiker gevraagd heeft aan Fluvius om de kwartierwaarden uit te lezen en waarvoor we voor het ganse jaar (geen ongebruikte meters) alle kwartierwaarden ter beschikking hebben.\nDe scope met zonnepanelen wordt bepaald indien in alle 12 maanden een injectievolume geregistreerd werd.\nDe scope zonder zonnepanelen zijn meters waarvoor gedurende het hele jaar geen injectievolume geregistreerd werd.\nIn deze dataset werden enkel EANs weerhouden die gedurende het volledige jaar tot de contract categorie residentieel behoorden.\n\nUit deze scope halen we 2400 elektriciteitsmeters als sample, onderverdeeld in volgende categoriën:\n - Met zonnepanelen (300)\n - Zonder zonnepanelen (300)\n - Met warmtepomp en met zonnepanelen (300) \n - Warmtepomp maar zonder zonnepanelen (300)\n - Met zonnepanelen en een thuis-opladend elektrisch voertuig (300)\n - Zonder zonnepanelen en met een thuis-opladend elektrisch voertuig (300)\n - Met warmtepomp, thuis-opladend elektrisch voertuig en zonnepanelen (300)\n - Met warmtepomp, thuis-opladend elektrisch voertuig maar zonder zonnepanelen (300)"
+          ],
+          [
+            ""
+          ],
+          [
+            "Beschrijving per gegeven"
+          ],
+          [
+            "EAN_ID",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "Geanonimiseerd volgnummer gaande van 1 t.e.m. 2400, wat staat voor één bepaalde EAN."
+          ],
+          [
+            ""
+          ],
+          [
+            "Datum"
+          ],
+          [
+            "Datum van het uitgelezen volume."
+          ],
+          [
+            ""
+          ],
+          [
+            "Datum_Startuur"
+          ],
+          [
+            "Datum en startuur van de uitlezing van het volume. Het gaat hier over tijdszone CET / CEST (Wintertijd / Zomertijd)."
+          ],
+          [
+            ""
+          ],
+          [
+            "Volume_Afname_kWh"
+          ],
+          [
+            "Het totale volume afname in kWh voor het kwartier volgend op Datum_Startuur."
+          ],
+          [
+            ""
+          ],
+          [
+            "Volume_Injectie_kWh"
+          ],
+          [
+            "Het totale volume injectie in kWh voor het kwartier volgend op Datum_Startuur."
+          ],
+          [
+            ""
+          ],
+          [
+            "Warmtepomp_Indicator"
+          ],
+          [
+            "We nemen enkel warmtepompen in beschouwing die als hoofdverwarming gemeld werden.\nDit wordt weergegeven als boolean 0 of 1.\nIndien 1: Laadpaal gemeld door de klant of EV gedetecteerd door het algoritme.\nIndien 0: Laadpaal niet gemeld door de klant en EV niet gedetecteerd door het algoritme."
+          ],
+          [
+            ""
+          ],
+          [
+            "Elektrisch_Voertuig_Indicator"
+          ],
+          [
+            "Zowel Battery Electrical Vehicules (volledig elektrische voertuigen) als Plugin Hybryd Electric Vehicules (plug in hybride elektrische voertuigen) beschouwen we als elektrische voertuigen.\nDit wordt weergegeven als boolean 0 of 1.\nIndien 1: dit betekent dat er een elektrisch voertuig gedetecteerd werd.\nIndien 0: er werd geen elektrisch voertuig gedetecteerd, maar dit betekent niet dat er geen elektrisch voertuig aanwezig kan zijn."
+          ],
+          [
+            ""
+          ],
+          [
+            "PV-Installatie_Indicator"
+          ],
+          [
+            "We nemen enkel fotovoltaïsche installaties in beschouwing, geen zonneboilers.\nDit wordt weergegeven als boolean 0 of 1.\nIndien 1: dit betekent dat er een fotovoltaïsche installatie gemeld werd.\nIndien 0: dit betekent dat er geen fotovoltaïsche installatie gemeld werd (en dat er geen injectievolume geregistreerd werd)"
+          ],
+          [
+            ""
+          ],
+          [
+            "Contract_Categorie"
+          ],
+          [
+            "De contract categorie die bij de EAN_ID hoort.\nIn deze dataset werden enkel EANs weerhouden die gedurende het volledige jaar tot de contract categorie residentieel behoorden."
+          ],
+          [
+            ""
+          ],
+          [
+            "Opmerkingen"
+          ],
+          [
+            "EANs waarvoor we weten dat er opslagsystemen aanwezig zijn, werden gedescoped. Het is dus mogelijk dat er EANs in deze dataset zitten waartoe opslagsystemen behoren waarvan we geen weet hebben.\nGezien de omvang van de dataset is deze opgesplitst in afzonderlijke bestanden per verbruiksprofiel."
+          ],
+          [
+            ""
+          ],
+          [
+            ""
+          ],
+          [
+            ""
+          ],
+          [
+            ""
+          ]
+        ]
+      }
+    }
+  ]
+}

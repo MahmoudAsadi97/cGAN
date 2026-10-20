@@ -1,0 +1,69 @@
+{
+  "verified_at_utc": "2026-10-20T15:17:35.128057+00:00",
+  "automated_tests": {
+    "command": ".venv/bin/pytest -q -W error",
+    "passed": 220,
+    "seconds": 18.8,
+    "fixtures": "synthetic; no real final-test performance evaluated"
+  },
+  "numerical_review": {
+    "training": "exact reference topology, optimizer settings, deterministic resume, bit-exact gradient-freeze equivalence, completed selected-checkpoint gate",
+    "data": "quarter-hour identity curation before hourly aggregation; held-out membership and train-only bounds checked",
+    "statistics": "weighted empirical W1 checked against SciPy; randomized meter multiplicities checked against explicit cluster resampling; nearest distances checked by brute force",
+    "baselines": "rank ties, shrunk correlation, PSD, constant/singleton slots and empirical marginal frequencies independently checked",
+    "orchestration": "ten completed-run gates, thirteen reports, fixed exemplar, paired seed differences, normalized intervals, failure/audit preservation"
+  },
+  "environment": {
+    "setup_command": "bash scripts/setup_environment.sh",
+    "status": "passed",
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "uv": "0.12.23",
+    "hardware": "4 CPU quota, 32 GiB memory, no GPU"
+  },
+  "standalone_wheel": {
+    "sha256": "bc2b4f473d3f314a9a7c7286d5bf578e73216145fb70f3729e561a86411d38f2",
+    "verification": "installed in separate virtual environment; all package modules imported and console entry point checked from /tmp"
+  },
+  "source_sha256": {
+    "scripts/archive_phase1.py": "bde675e9e56a508265f1d898c21e337028a2801f1a353e49fb2a9babf633166b",
+    "scripts/evaluate_phase1.py": "5184785f9af20f0fb3619f988c2fad64ea1ccd02ccc7b5cb20de6b36a3f9c9b3",
+    "scripts/render_phase1.py": "9db283d777acc5ef8390c0e0f19f399ca4d10aebef6967f847d3e3a397506459",
+    "scripts/run_phase1.py": "e671506ee70c66afba7665c24169b231f071d1d6c6a0a599b45e083bcf7653fa",
+    "src/fluvius_cgan/__init__.py": "63e40efb33c5d02f4c55bf43dd7dde603ad5a3f3c7df5a630dd82d68096cc98b",
+    "src/fluvius_cgan/__main__.py": "bea84777f707c344d07dc0f14c736716fb8375811acd5d4feabd317ba8781e52",
+    "src/fluvius_cgan/baselines.py": "f9530164f0f4af0c8fabb800e4c9f8d1f61bf3d00cc3616274ca8a6fb21e2d38",
+    "src/fluvius_cgan/cli.py": "6fd7ab2821ecf33202315d460e1dde47f755c04eb1270cf0fdfa7760709f941a",
+    "src/fluvius_cgan/curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+    "src/fluvius_cgan/data.py": "6f91986cf3a2772b52173e527d908fabffd50dd47f18e8b23c182b92183582dd",
+    "src/fluvius_cgan/evaluation.py": "818c2e55df829441de2169254860037d8bc9a9fe2fd1d245e2f404a11290a0ca",
+    "src/fluvius_cgan/inference.py": "e9538154aefba7ac9cb98adaf8a853a7b13076ddf86691b85045e0df5d54bd80",
+    "src/fluvius_cgan/models.py": "057e9b1f9573855b1f9727b141d4d8e8f004daaf457adaa57a7fbf2d0d5e393a",
+    "src/fluvius_cgan/prepared.py": "7a49fa7801c23624b112a2029c4e879796325f9ff85d79ed9c9c444ce34d57ea",
+    "src/fluvius_cgan/release.py": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe",
+    "src/fluvius_cgan/study.py": "9d5cd0130e755086082417851c36c97fe78b74611371b7d5dd2b7c0c516ca6e0",
+    "src/fluvius_cgan/training.py": "e9884410621028309b9af357d52b7a200718fd5bd0a1307db9c0689e6cef400b",
+    "src/fluvius_cgan/uncertainty.py": "e7acadd76b140d451ff7c29257da8b0aa9f0c76f1ef9f1d6242ec03dc2845291",
+    "tests/test_archive.py": "1e4f45c581bdee6ff43c7832025d47a90244767fae5389d2caae09c418a0b87a",
+    "tests/test_baselines.py": "a8176209dcf5f930d8b0ddd60357a23f8fe93cb44db29c275f6dab936e54013e",
+    "tests/test_cli.py": "ad83ca7763b50bfe7b469821f60827fb889279958e477e658f604cac22551fd0",
+    "tests/test_curation.py": "7dba3a653e2d28ddee18e6365b5e2e4074ee45932279c1d53f1042b7c847ac73",
+    "tests/test_data.py": "4d6fef33822425ef3d053ec88e64e5fbd7b2cbacb415ae0bd5a24eff89d2c142",
+    "tests/test_evaluation.py": "d0e388af523691200952089b1d55b1112b0cd1c3fef0bca92f955805b5685138",
+    "tests/test_final_runner.py": "360abf200b0b607ea4b653a5c92fbfb948977f59ff8add314687e495a7029d9d",
+    "tests/test_inference.py": "83445001be5456f7048614bb160d4284fa6cc0be8aaaa2140a80dfd8c3a2e2ee",
+    "tests/test_models.py": "8133ba5cc90419cf1569cb53a4c47a78e63d6737faf977397e5d3c4295c2f178",
+    "tests/test_prepared.py": "80cf26cfa292a2cf7736867a3e9bba907faf39d5a8088c4ca6b4b7acf9025265",
+    "tests/test_release.py": "2b5fa13b9f90abe22d72e041e717d78b1d0a2679a207ecf55badb4aa53c6bb44",
+    "tests/test_render.py": "b9de0ae855f9d6051304fe00d780f90cce2f84a2fa4b49ce9c81d54b54bf975e",
+    "tests/test_runner.py": "5a4910a622eccc11547839d07499a2f547e109d53d5250fc01c5686339de8b02",
+    "tests/test_study.py": "24d09d360583e3c7bb5ad215cedfa9bd7a6f3197458aa3b7f21d147fb5cc2790",
+    "tests/test_training.py": "08d7f49c741c0b946623a5df540b98bd6e8818359faad416c1a890e2c05c01f8",
+    "tests/test_uncertainty.py": "1f0fdbf278cb63269ad212ab7af0a496f43e03003eb0b8bdf73b5302719b8ba2"
+  },
+  "limits": [
+    "Local checks are not a claim about remote CI execution.",
+    "Software checks do not establish empirical fidelity or publication readiness.",
+    "CUDA execution was not tested."
+  ]
+}

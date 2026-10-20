@@ -34,20 +34,25 @@ ALPHA = 0.5
 # 1-D
 # ---------------------------------------------------------------------------
 def shared_bins(real: np.ndarray, discrete: bool, k: int = 30) -> np.ndarray:
-    """Bin edges fixed from the real sample; synthetic values outside fall in the end bins."""
+    """Bin edges fixed from the real sample, plus two overflow bins (-inf, lo) and (hi, inf).
+
+    Synthetic mass beyond the real range lands in the overflow bins, where the
+    real sample only has the smoothing pseudo-count, so overshoot is penalised.
+    """
     real = np.asarray(real, np.float64)
     if discrete:
-        lo, hi = np.floor(real.min()), np.ceil(real.max())
-        step = np.min(np.diff(np.unique(real))) if len(np.unique(real)) > 1 else 1.0
-        return np.arange(lo - step / 2, hi + step, step)
-    lo, hi = np.quantile(real, [0.0, 1.0])
-    if hi <= lo:
-        hi = lo + 1e-9
-    return np.linspace(lo, hi, k + 1)
+        u = np.unique(real)
+        step = np.min(np.diff(u)) if len(u) > 1 else 1.0
+        edges = np.arange(np.floor(real.min()) - step / 2, np.ceil(real.max()) + step, step)
+    else:
+        lo, hi = np.quantile(real, [0.0, 1.0])
+        if hi <= lo:
+            hi = lo + 1e-9
+        edges = np.linspace(lo, hi, k + 1)
+    return np.r_[-np.inf, edges, np.inf]
 
 
 def _hist(x, edges, alpha=ALPHA):
-    x = np.clip(x, edges[0], edges[-1])
     c, _ = np.histogram(x, edges)
     return (c + alpha) / (c.sum() + alpha * len(c))
 
@@ -249,16 +254,20 @@ def dcr_metrics(syn: np.ndarray, train: np.ndarray, holdout: np.ndarray, device:
     tr = _t(train, device)
     d_syn = _min_dist(_t(syn, device), tr).cpu().numpy()
     d_hold = _min_dist(_t(holdout, device), tr).cpu().numpy()
-    p5 = np.quantile(d_hold, 0.05)
+    exact_hold = d_hold < 1e-6
+    # Percentile of holdout distances over holdout days that are not themselves in Train,
+    # so that ties at zero cannot make a copy model look memorisation-free.
+    p5 = np.quantile(d_hold[~exact_hold], 0.05) if (~exact_hold).any() else np.nan
     return {
         "dcr_q05": float(np.mean(d_syn < p5)),
-        "dcr_ratio_p05": float(np.quantile(d_syn, 0.05) / p5) if p5 > 0 else np.nan,
+        "dcr_ratio_p05": float(np.quantile(d_syn, 0.05) / p5),
         "dcr_ratio_med": float(np.median(d_syn) / np.median(d_hold)),
         "dcr_copies": float(np.mean(d_syn < 1e-6)),
+        "dcr_holdout_in_train": float(np.mean(exact_hold)),
     }
 
 
-def aggregate_metrics(real: np.ndarray, syn: np.ndarray, n_homes: int = 20, reps: int = 2000, seed: int = 0,
+def aggregate_metrics(real: np.ndarray, syn: np.ndarray, n_homes: int = 10, reps: int = 2000, seed: int = 0,
                       groups_real: np.ndarray | None = None, groups_syn: np.ndarray | None = None) -> dict[str, float]:
     """Load of ``n_homes`` days summed, as seen by a feeder.
 
@@ -268,6 +277,9 @@ def aggregate_metrics(real: np.ndarray, syn: np.ndarray, n_homes: int = 20, reps
     coincidence factor CF = max_t(sum_i x_i,t) / sum_i max_t(x_i,t).  Days are
     drawn independently across households, so weather-driven coincidence is not
     represented; values are interpreted relative to the real-data reference.
+    Drawing ``n_homes`` of the ~45 households of a label without replacement
+    shrinks the between-household variance by the finite-population factor
+    (45 - n) / 44 (0.77 for n = 10) relative to i.i.d. synthetic draws.
     """
     rng = np.random.default_rng(seed)
 

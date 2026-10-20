@@ -143,6 +143,8 @@ def evaluate(source, splits, data_cfg: dict, split: str = "test", gen_seed: int 
              c2st: bool = True, n_cap: int = 3000, dcr_cap: int = 1000, cache_dir: Path = Path("runs/_cache"),
              clf_n_per_label: int = 1500, log=print, save_samples: Path | None = None) -> pd.DataFrame:
     device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+    if data_cfg.get("target", "net") == "import_export":
+        raise NotImplementedError("evaluation is defined for single-channel targets (net, import, export)")
     t0 = time.time()
     real = splits[split]
     train = splits["train"]

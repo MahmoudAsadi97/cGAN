@@ -65,6 +65,17 @@ TABLES = {
         ("physical.neg_share", -1), ("physical.above_train_max", -1),
     ],
 }
+# Display names; "cgan_eb" without a checkpoint suffix is the EMA read-out, not the reproduction.
+DISPLAY = {
+    "cgan_eb[best_raw]": "cGAN-EB (reproduction)", "cgan_eb[last_raw]": "cGAN-EB (reproduction, final iterate)",
+    "cgan_eb": "cGAN-EB + EMA read-out", "cwgan_gp": "cWGAN-GP (ours)", "cwgan_gp[best_raw]": "cWGAN-GP, raw weights",
+    "cwgan_gp[last]": "cWGAN-GP, final iterate", "baseline_gaussian": "Gaussian", "baseline_copula": "Gaussian copula",
+    "baseline_gmm": "GMM", "baseline_resample": "Resampled training days (train-empirical reference)",
+    "real_val": "Real validation households (between-household reference)",
+    "abl_onehot": "ablation: one-hot conditioning", "abl_noproj": "ablation: no projection critic",
+    "abl_minmax": "ablation: min-max scaling", "abl_unbounded": "ablation: unbounded output, strong asinh",
+    "abl_refnet_wgan": "ablation: reference networks + WGAN-GP recipe",
+}
 TARGET = {"profile.density": 1.0, "privacy.dcr_q05": 0.05, "privacy.dcr_ratio_med": 1.0}
 SIGNIFICANCE_METRICS = ["profile.rfd", "profile.energy_rel", "profile.mmd2", "profile.c2st_auc", "profile.coverage",
                         "temporal.corr_mad", "temporal.hourly_w1", "kpi.near_peak.w1_std", "kpi.daily_energy.w1_std"]
@@ -233,6 +244,7 @@ def main(argv=None) -> None:
         table = _fmt(mean, std)
         table.columns = [c.split(".", 1)[1] if c.count(".") else c for c in table.columns]
         table.insert(0, "seeds", n.max(axis=1).astype("Int64"))
+        table.insert(0, "name", [DISPLAY.get(m, m) for m in table.index])
         (out / f"summary_{name}.md").write_text(table.to_markdown())
         (out / f"summary_{name}.tex").write_text(table.to_latex(escape=True))
     if args.ours in set(df.model):

@@ -26,13 +26,31 @@ from .utils import load_config  # noqa: E402
 
 REAL_COLOR = "#222222"
 PALETTE = ["#d1495b", "#00798c", "#edae49", "#66a182", "#2e4057", "#8d96a3"]
-LABELS = {"cgan_eb": "cGAN-EB (reproduction)", "cwgan_gp": "cWGAN-GP (ours)", "baseline_copula": "Gaussian copula",
-          "baseline_gaussian": "Gaussian", "baseline_gmm": "GMM", "baseline_resample": "Resample train"}
+LABELS = {
+    "cgan_eb[best_raw]": "cGAN-EB (reproduction)",
+    "cgan_eb[last_raw]": "cGAN-EB (reproduction, final iterate)",
+    "cgan_eb": "cGAN-EB + EMA read-out",
+    "cwgan_gp": "cWGAN-GP (ours)",
+    "baseline_copula": "Gaussian copula",
+    "baseline_gaussian": "Gaussian",
+    "baseline_gmm": "GMM",
+    "baseline_resample": "Resampled training days",
+    "real_val": "Real (validation households)",
+}
 
 
-def _source(runs: Path, model: str, seed: int):
-    d = runs / model / f"seed{seed}"
-    return BaselineSource(d) if model.startswith("baseline_") else GeneratorSource(d, "best")
+def _split_spec(spec: str) -> tuple[str, str]:
+    """'name[ckpt]' -> (name, ckpt); plain names use the 'best' checkpoint."""
+    if spec.endswith("]") and "[" in spec:
+        name, ckpt = spec[:-1].split("[", 1)
+        return name, ckpt
+    return spec, "best"
+
+
+def _source(runs: Path, spec: str, seed: int):
+    name, ckpt = _split_spec(spec)
+    d = runs / name / f"seed{seed}"
+    return BaselineSource(d) if name.startswith("baseline_") else GeneratorSource(d, ckpt)
 
 
 def _hours(T):
@@ -162,12 +180,13 @@ def example_profiles(real, syn: dict, out: Path, label=None, n=6, seed=0):
 
 def training_curves(runs: Path, models, out: Path):
     fig, ax = plt.subplots(figsize=(7, 4))
-    for i, model in enumerate(m for m in models if not m.startswith("baseline_")):
-        for j, f in enumerate(sorted((runs / model).glob("seed*/val.csv"))):
+    for i, spec in enumerate(m for m in models if not m.startswith(("baseline_", "real_"))):
+        name, ckpt = _split_spec(spec)
+        for j, f in enumerate(sorted((runs / name).glob("seed*/val.csv"))):
             v = pd.read_csv(f)
-            col = "val_rfd_ema" if v["val_rfd_ema"].notna().any() else "val_rfd"
-            ax.plot(v.iteration, v[col], color=PALETTE[i % len(PALETTE)], alpha=0.8, lw=1,
-                    label=LABELS.get(model, model) if j == 0 else None)
+            ema = not ckpt.endswith("_raw") and v["val_rfd_ema"].notna().any()
+            ax.plot(v.iteration, v["val_rfd_ema" if ema else "val_rfd"], color=PALETTE[i % len(PALETTE)],
+                    alpha=0.8, lw=1, label=LABELS.get(spec, spec) if j == 0 else None)
     ax.set_yscale("log")
     ax.set_xscale("log")
     ax.set_xlabel("Generator iterations")
@@ -208,7 +227,8 @@ def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--runs", default="runs")
     ap.add_argument("--out", default="results/figures")
-    ap.add_argument("--models", nargs="+", default=["cgan_eb", "cwgan_gp", "baseline_copula"])
+    ap.add_argument("--models", nargs="+", default=["cgan_eb[best_raw]", "cwgan_gp", "baseline_copula"],
+                    help="model specs; GAN checkpoints as name[ckpt], e.g. cgan_eb[best_raw]")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--config", default="configs/base.yaml")
     args = ap.parse_args(argv)

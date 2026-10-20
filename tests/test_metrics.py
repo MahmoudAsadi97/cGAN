@@ -153,3 +153,17 @@ def test_c2st_grouped_folds_ignore_household_fingerprints():
     grouped = c2st_auc(real, syn_new, groups_real=g)
     assert grouped < 0.62
     assert c2st_auc(real, syn) < 0.62
+
+
+def test_overflow_bins_penalise_overshoot():
+    real = rng.normal(size=4000)
+    inside, _ = jsd_kl(real, np.clip(rng.normal(size=4000), real.min(), real.max()))
+    overshoot, _ = jsd_kl(real, np.r_[rng.normal(size=3600), np.full(400, real.max() + 50)])
+    assert overshoot > inside + 0.03
+
+
+def test_dcr_robust_to_holdout_days_in_train():
+    train = rng.normal(size=(2000, 5))
+    hold = np.r_[train[:200], rng.normal(size=(800, 5))]  # 20 % of holdout days also in Train
+    copies = dcr_metrics(train[rng.choice(2000, 500, replace=False)], train, hold)
+    assert copies["dcr_q05"] == 1.0 and copies["dcr_holdout_in_train"] == pytest.approx(0.2)

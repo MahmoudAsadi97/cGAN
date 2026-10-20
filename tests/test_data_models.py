@@ -110,3 +110,20 @@ def test_reference_architecture_parameter_counts():
     G, D = build_nets(load_config(ROOT / "configs" / "cgan_eb.yaml")["model"], 24)
     assert sum(p.numel() for p in G.parameters()) == 88 * 64 + 64 + 64 * 128 + 128 + 128 * 64 + 64 + 64 * 24 + 24
     assert sum(p.numel() for p in D.parameters()) == 88 * 64 + 64 + 64 * 128 + 128 + 128 * 256 + 256 + 256 + 1
+
+
+@pytest.mark.skipif(not (ROOT / "data/processed/fluvius2024_qh.npz").exists(), reason="processed data not available")
+def test_real_splits_disjoint_households_and_days():
+    import os
+
+    from cgan.data.profiles import ProfileConfig, load_profiles
+
+    cwd = os.getcwd()
+    os.chdir(ROOT)
+    try:
+        s = load_profiles(ProfileConfig())  # raises if a val/test day equals a training day
+    finally:
+        os.chdir(cwd)
+    meters = [set(np.unique(s[k].factors["meter"])) for k in ("train", "val", "test")]
+    assert not (meters[0] & meters[1]) and not (meters[0] & meters[2]) and not (meters[1] & meters[2])
+    assert sum(len(m) for m in meters) == 2367

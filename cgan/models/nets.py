@@ -132,30 +132,35 @@ def _mlp(dims, act_slope=0.2, norm: str | None = None):
 class BoundedOutput(nn.Module):
     """Maps a linear output into [lo, hi] with a sigmoid (identity when no range is given).
 
-    With ``lo_nopv`` the lower bound of labels without PV is raised to that
-    value (the scaled 0 kWh): households without PV cannot export, so their
-    net load is non-negative.
+    With ``lo_nopv`` (the scaled 0 kWh) the output of labels without PV is
+    passed through a smooth barrier  y -> lo_nopv + softplus(beta (y - lo_nopv)) / beta,
+    which is close to the identity above zero net load and never below it:
+    households without PV cannot export.  A barrier keeps gradients alive near
+    zero, where most of their load lies (a sigmoid with lower bound 0 would
+    saturate there).
     """
 
-    def __init__(self, out_range=None, lo_nopv=None):
+    def __init__(self, out_range=None, lo_nopv=None, beta: float = 8.0):
         super().__init__()
         self.bounded = out_range is not None
         self.pv_aware = self.bounded and lo_nopv is not None
+        self.beta = beta
         lo, hi = out_range if self.bounded else (0.0, 1.0)
         # Not persistent: the range is part of the saved model config.
         self.register_buffer("lo", torch.tensor(float(lo)), persistent=False)
-        self.register_buffer("hi", torch.tensor(float(hi)), persistent=False)
+        self.register_buffer("span", torch.tensor(float(hi) - float(lo)), persistent=False)
         self.register_buffer("lo_nopv", torch.tensor(float(lo_nopv if lo_nopv is not None else lo)),
                              persistent=False)
 
     def forward(self, h: torch.Tensor, label: torch.Tensor | None = None) -> torch.Tensor:
         if not self.bounded:
             return h
-        lo = self.lo
+        y = self.lo + self.span * torch.sigmoid(h)
         if self.pv_aware:
             _, group, _ = decode_label_t(label)
-            lo = torch.where((group & 1).bool(), self.lo, self.lo_nopv)[:, None]
-        return lo + (self.hi - lo) * torch.sigmoid(h)
+            barrier = self.lo_nopv + nn.functional.softplus(self.beta * (y - self.lo_nopv)) / self.beta
+            y = torch.where((group & 1).bool()[:, None], y, barrier)
+        return y
 
 
 class MLPGenerator(nn.Module):

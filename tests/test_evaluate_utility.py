@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 import torch
 
+from fluvius_cgan.calibration import ConditionalMarginalCalibrator, fit
 from fluvius_cgan.copula import fit_conditional_copula
 from fluvius_cgan.evaluation import resample_baseline
 from fluvius_cgan.models import Generator
@@ -102,6 +103,30 @@ def validation_indices(arrays, seed, cap):
                            for label in np.unique(arrays["val"]["y"])])
 
 
+@pytest.fixture(scope="module")
+def saved_calibrator(experiment, tmp_path_factory):
+    prepared, checkpoint, arrays, actual = experiment
+    source_x, source_y = (arrays["train"][key][actual] for key in ("x", "y"))
+    labels = np.repeat(np.unique(source_y), 8)
+    reference = generate(checkpoint, labels, seed=7301)
+    provenance = {
+        "checkpoint_sha256": hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
+        "train_indices_sha256": digest(actual, "<i8"),
+        "prepared_data_hashes": {
+            name: hashlib.sha256((prepared / name).read_bytes()).hexdigest()
+            for name in ("train.npz", "val.npz", "scaler.json", "metadata.json")},
+        "calibration_seed": 7301, "calibration_samples_per_condition": 8,
+        "calibration_profiles_total": len(labels),
+        "calibration_generated_profiles_sha256": digest(reference, "<f8"),
+        "calibration_labels_sha256": digest(labels, "<i8"),
+        "generator_inference_batch_size": 1024, "quantile_knots": 5,
+    }
+    model = fit(source_x, source_y, reference, labels, quantile_knots=5, provenance=provenance)
+    path = tmp_path_factory.mktemp("utility-calibrator") / "calibration.npz"
+    model.save(path)
+    return path
+
+
 @pytest.mark.parametrize("cap", [None, 8])
 def test_identical_labels_exact_source_subset_and_manual_all_method_scores(
         experiment, forbid_test_access, cap):
@@ -161,6 +186,95 @@ def test_default_omits_copula_and_replays_coefficients(experiment, forbid_test_a
     assert first["training"] == second["training"]
     assert first["copula"] == {"enabled": False}
     assert set(first["methods"]) == {"training_real", "training_cgan", "training_resampling", "persistence"}
+
+
+@pytest.mark.parametrize("cap", [None, 8])
+def test_saved_calibrator_fixed_maps_and_matched_knot_copula(
+        experiment, saved_calibrator, forbid_test_access, cap):
+    prepared, checkpoint, arrays, actual = experiment
+    seed = 23
+    report = evaluation.evaluate(prepared, checkpoint, samples_per_condition=3, seed=seed,
+                                 max_train_profiles=cap, copula=True, calibrator=saved_calibrator)
+    selected = actual if cap is None else np.sort(np.random.default_rng(seed + 100).choice(actual, cap, replace=False))
+    source_x, source_y = (arrays["train"][key][actual] for key in ("x", "y"))
+    labels = arrays["train"]["y"][selected]
+    indices = validation_indices(arrays, seed, 3)
+    vx, vy = (arrays["val"][key][indices] for key in ("x", "y"))
+    model = ConditionalMarginalCalibrator.load(saved_calibrator)
+    raw = generate(checkpoint, labels, seed=seed)
+    sources = {
+        "training_calibrated_cgan": model.transform(raw, labels),
+        "training_copula": fit_conditional_copula(source_x, source_y, quantile_knots=5,
+                                                  shrinkage=.01).generate(labels, seed=seed),
+    }
+    for name, values in sources.items():
+        manual = RidgeProfileForecaster().fit(values, labels).evaluate(vx, vy)
+        manual.pop("persistence")
+        assert report["methods"][name] == manual
+        assert report["training"][name]["profiles_sha256"] == digest(values, "<f8")
+        assert report["training"][name]["labels_sha256"] == digest(labels, "<i8")
+    assert report["calibration"]["sha256"] == hashlib.sha256(saved_calibrator.read_bytes()).hexdigest()
+    assert report["calibration"]["provenance"]["train_indices_sha256"] == digest(actual, "<i8")
+    assert report["copula"]["quantile_knots"] == 5
+    assert report["seeds"]["calibration_reference"] == 7301
+    assert report["seeds"]["cgan_generation"] == seed
+    assert report["invariants"]["calibration_fitted_on_current_generation_batch"] is False
+    assert report["invariants"]["training_condition_counts_match"] is True
+    assert report["invariants"]["training_label_order_matches"] is True
+    json.dumps(report, allow_nan=False)
+
+
+@pytest.mark.parametrize("invalid_field", ["checkpoint_sha256", "train_indices_sha256", "prepared_data_hashes", "seed"])
+def test_invalid_calibration_binding_fails_before_inference_or_downstream_fit(
+        experiment, saved_calibrator, forbid_test_access, tmp_path, monkeypatch, invalid_field):
+    prepared, checkpoint, _, _ = experiment
+    model = ConditionalMarginalCalibrator.load(saved_calibrator)
+    seed = 2026
+    if invalid_field == "seed":
+        seed = model.provenance["calibration_seed"]
+    elif invalid_field == "prepared_data_hashes":
+        model.provenance[invalid_field]["train.npz"] = "0" * 64
+    else:
+        model.provenance[invalid_field] = "0" * 64
+    path = tmp_path / "invalid.npz"
+    model.save(path)
+
+    def forbid(*args, **kwargs):
+        raise AssertionError("invalid calibrator must fail before inference or downstream fitting")
+
+    monkeypatch.setattr(evaluation, "_generate_verified", forbid)
+    monkeypatch.setattr(evaluation.RidgeProfileForecaster, "fit", forbid)
+    with pytest.raises(ValueError, match="calibration"):
+        evaluation.evaluate(prepared, checkpoint, calibrator=path, seed=seed)
+
+
+def test_calibration_archive_changed_during_utility_evaluation_fails(
+        experiment, saved_calibrator, forbid_test_access, tmp_path, monkeypatch):
+    prepared, checkpoint, _, _ = experiment
+    path = tmp_path / "calibration.npz"
+    path.write_bytes(saved_calibrator.read_bytes())
+    original_generate = evaluation._generate_verified
+
+    def mutate_after_load(*args, **kwargs):
+        generated = original_generate(*args, **kwargs)
+        path.write_bytes(path.read_bytes() + b"changed")
+        return generated
+
+    monkeypatch.setattr(evaluation, "_generate_verified", mutate_after_load)
+    with pytest.raises(ValueError, match="calibration archive changed during utility"):
+        evaluation.evaluate(prepared, checkpoint, samples_per_condition=2, calibrator=path)
+
+
+def test_cli_supports_verified_calibrator(experiment, saved_calibrator, forbid_test_access, tmp_path):
+    prepared, checkpoint, _, _ = experiment
+    output = tmp_path / "calibrated_utility.json"
+    evaluation.main(["--prepared", str(prepared), "--checkpoint", str(checkpoint),
+                     "--calibrator", str(saved_calibrator), "--output", str(output),
+                     "--samples-per-condition", "2", "--copula"])
+    report = json.loads(output.read_text())
+    assert "training_calibrated_cgan" in report["methods"]
+    assert report["calibration"]["enabled"] is True
+    assert report["copula"]["quantile_knots"] == 5
 
 
 def test_cli_refuses_overwrite_and_test_split(experiment, forbid_test_access, tmp_path):

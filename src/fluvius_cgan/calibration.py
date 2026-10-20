@@ -408,6 +408,9 @@ def load_verified_calibrator(path, *, checkpoint_sha256, train_indices_sha256,
         value = provenance.get(name)
         if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
             raise ValueError(f"calibration provenance lacks a valid {name}")
+    reference_labels = np.repeat(model.supported_labels, per_condition).astype("<i8")
+    if hashlib.sha256(reference_labels.tobytes(order="C")).hexdigest() != provenance["calibration_labels_sha256"]:
+        raise ValueError("calibration_labels_sha256 disagrees with the fixed per-condition reference labels")
     _positive_integer(provenance.get("generator_inference_batch_size"), "generator_inference_batch_size")
     if "quantile_knots" not in provenance or provenance["quantile_knots"] != model.quantile_knots:
         raise ValueError("calibration quantile_knots provenance disagrees with saved maps")

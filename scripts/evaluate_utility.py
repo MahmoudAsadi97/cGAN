@@ -30,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from compare_checkpoints import _checkpoint, _digest, _generate_verified, _validate_manifest
+from fluvius_cgan.calibration import load_verified_calibrator
 from fluvius_cgan.copula import fit_conditional_copula
 from fluvius_cgan.evaluation import resample_baseline
 from fluvius_cgan.release import sha256_file
@@ -51,7 +52,7 @@ def _counts(labels):
 
 
 def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
-             max_train_profiles=None, copula=False):
+             max_train_profiles=None, copula=False, calibrator=None):
     """Return a provenance-bound, validation-only observed-history TSTR report.
 
     If capped, real downstream training rows are a uniform sample without
@@ -60,6 +61,8 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
     and resampling source pool remains the full actual GAN training subset, so
     baseline fitting rows match GAN gradient-training rows. GAN normalization
     separately uses the full prepared train split. Both distinctions are reported.
+    A saved calibrator adds a fixed-map method after strict checkpoint, prepared
+    data, exact training-subset and independent calibration-seed verification.
     """
     for name, value, minimum in (("samples_per_condition", samples_per_condition, 1),
                                  ("seed", seed, 0), ("max_train_profiles", max_train_profiles, 1)):
@@ -89,6 +92,18 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
     # Avoid copying full prepared arrays when the exact subset is all rows.
     source_x = train["x"] if len(actual_indices) == len(train["x"]) else train["x"][actual_indices]
     source_y = train["y"] if len(actual_indices) == len(train["y"]) else train["y"][actual_indices]
+    calibration_model = None
+    calibration_details = {"enabled": calibrator is not None}
+    if calibrator is not None:
+        calibration_model, verified = load_verified_calibrator(
+            calibrator, checkpoint_sha256=checkpoint_details["sha256"],
+            train_indices_sha256=_digest(actual_indices, "<i8"),
+            prepared_data_hashes=hashes, generation_seed=seed,
+            n_features=metadata["resolution"], train_labels=source_y)
+        calibration_details.update(verified)
+        calibration_details["policy"] = (
+            "Frozen per-condition maps fitted on the exact GAN training subset and a separate fixed generated reference; "
+            "the current downstream training batch never fits or ranks the maps.")
     utility_x = train["x"][utility_indices] if capped else source_x
     utility_y = train["y"][utility_indices] if capped else source_y
     missing = np.setdiff1d(conditions, np.unique(utility_y))
@@ -139,6 +154,15 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
     generated_at = time.perf_counter()
     fit_evaluate("training_cgan", generated)
     timings["training_cgan"]["generation"] = generated_at - generation_started
+    if calibration_model is not None:
+        transform_started = time.perf_counter()
+        calibrated = calibration_model.transform(generated, utility_y)
+        transformed_at = time.perf_counter()
+        fit_evaluate("training_calibrated_cgan", calibrated)
+        timings["training_calibrated_cgan"].update(
+            generation_shared_with_raw_cgan=generated_at - generation_started,
+            fixed_map_transform=transformed_at - transform_started)
+        del calibrated
     del generated
     generation_started = time.perf_counter()
     resampled = resample_baseline(source_x, source_y, utility_y, seed=seed)
@@ -149,7 +173,8 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
     copula_details = {"enabled": bool(copula)}
     if copula:
         fitting_started = time.perf_counter()
-        copula_model = fit_conditional_copula(source_x, source_y, quantile_knots=None, shrinkage=.01)
+        copula_knots = calibration_model.quantile_knots if calibration_model is not None else None
+        copula_model = fit_conditional_copula(source_x, source_y, quantile_knots=copula_knots, shrinkage=.01)
         fitted_at = time.perf_counter()
         generated = copula_model.generate(utility_y, seed=seed, batch_size=4096)
         generated_at = time.perf_counter()
@@ -157,8 +182,9 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
         timings["training_copula"].update(copula_fit=fitted_at - fitting_started,
                                           generation=generated_at - fitted_at)
         copula_details.update(
-            quantile_knots=None, shrinkage=.01,
-            margins="All sorted source-pool observations, with linear inverse quantiles.",
+            quantile_knots=copula_knots, shrinkage=.01,
+            margins=("All sorted source-pool observations, with linear inverse quantiles."
+                     if copula_knots is None else "Uniform linear empirical quantile knots matching the saved calibrator."),
             source_profiles=len(source_x), source_condition_counts=_counts(source_y),
             source_indices_sha256=_digest(actual_indices, "<i8"),
             limitations="Gaussian dependence; interpolated empirical margins do not extrapolate training tails.",
@@ -167,6 +193,8 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
     methods["persistence"] = persistence
     if sha256_file(checkpoint) != checkpoint_details["sha256"]:
         raise ValueError("checkpoint changed during utility evaluation")
+    if calibrator is not None and sha256_file(calibrator) != calibration_details["sha256"]:
+        raise ValueError("calibration archive changed during utility evaluation")
 
     counts = _counts(utility_y)
     matched_counts = all(fit["condition_counts"] == counts for fit in fits.values())
@@ -182,6 +210,7 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
             ROOT / "src" / "fluvius_cgan" / "models.py",
             ROOT / "src" / "fluvius_cgan" / "residual.py",
             ROOT / "src" / "fluvius_cgan" / "copula.py",
+            ROOT / "src" / "fluvius_cgan" / "calibration.py",
             ROOT / "src" / "fluvius_cgan" / "evaluation.py",
         )
     }
@@ -207,10 +236,11 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
         },
         "config": {"samples_per_condition": int(samples_per_condition), "seed": seed,
                    "max_train_profiles": None if max_train_profiles is None else int(max_train_profiles),
-                   "copula": bool(copula)},
+                   "copula": bool(copula), "calibrator": None if calibrator is None else str(calibrator)},
         "seeds": {"validation_selection": seed, "utility_training_cap": seed + 100,
                   "cgan_generation": seed, "conditional_resampling": seed,
-                  "copula_generation": seed if copula else None},
+                  "copula_generation": seed if copula else None,
+                  "calibration_reference": calibration_details.get("calibration_seed")},
         "task": {
             "name": "within_day_observed_history_next_interval_linear_ridge",
             "resolution": metadata["resolution"], "lags": lags,
@@ -258,8 +288,10 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
             "prediction_uses_observed_real_past_lags": True,
             "prediction_uses_its_own_target_or_future_values": False,
             "cross_day_windows": False, "post_generation_clipping_applied": False,
+            "calibration_fitted_on_current_generation_batch": False,
         },
         "training": fits, "methods": methods, "copula": copula_details,
+        "calibration": calibration_details,
         "timings_seconds": {"load_and_verify": loaded_at - started, "methods": timings,
                             "total_before_report_serialization": time.perf_counter() - started},
         "provenance": provenance,
@@ -272,6 +304,7 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
             "Equal synthetic/real counts pair condition exposure only, not individual synthetic profiles with real days.",
             "GAN normalization uses the full prepared train split; matching gradient/profile pools does not imply identical preprocessing exposure.",
             "No privacy, causal or broad application-utility guarantee follows from these scores.",
+            "Fixed marginal calibration imposes marginal distributions and diversity; it does not establish correct joint dependence or application utility.",
         ],
     }
 
@@ -285,7 +318,10 @@ def main(argv=None):
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--max-train-profiles", type=int, default=None,
                         help="Optional uniform downstream-training cap; default uses every actual GAN training row")
-    parser.add_argument("--copula", action="store_true", help="Include exact-empirical-margin conditional Gaussian copula")
+    parser.add_argument("--copula", action="store_true",
+                        help="Include Gaussian copula; match saved calibrator quantile knots if supplied, otherwise exact margins")
+    parser.add_argument("--calibrator", default=None,
+                        help="Saved calibration NPZ bound to this checkpoint and exact training subset")
     args = parser.parse_args(argv)
     output = Path(args.output)
     if output.exists():
@@ -293,7 +329,8 @@ def main(argv=None):
     if output.suffix.lower() != ".json":
         raise ValueError("output must have a .json extension")
     report = evaluate(args.prepared, args.checkpoint, samples_per_condition=args.samples_per_condition,
-                      seed=args.seed, max_train_profiles=args.max_train_profiles, copula=args.copula)
+                      seed=args.seed, max_train_profiles=args.max_train_profiles, copula=args.copula,
+                      calibrator=args.calibrator)
     payload = json.dumps(report, indent=2, allow_nan=False) + "\n"
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("x", encoding="utf-8") as stream:

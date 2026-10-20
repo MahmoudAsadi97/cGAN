@@ -19,13 +19,15 @@ def test_bound_map_generation_and_rejection(tmp_path, monkeypatch):
     labels = np.zeros(8, dtype=np.int64)
     raw = np.arange(8 * 24, dtype=float).reshape(8, 24)
     model = fit(2 * raw + 1, labels, raw, labels, quantile_knots=None,
-                provenance={"checkpoint_sha256": sha256_file(checkpoint)})
+                provenance={"checkpoint_sha256": sha256_file(checkpoint), "calibration_seed": 7301})
     path = tmp_path / "map.npz"
     model.save(path)
     monkeypatch.setattr(module, "generate", lambda *a, **kw: raw.copy())
     result, metadata = module.generate_profiles(checkpoint, path, labels)
     np.testing.assert_allclose(result, 2 * raw + 1)
     assert metadata["calibrator_sha256"] == sha256_file(path)
+    with pytest.raises(ValueError, match="must differ"):
+        module.generate_profiles(checkpoint, path, labels, seed=7301)
     checkpoint.write_bytes(b"different checkpoint")
     with pytest.raises(ValueError, match="does not belong"):
         module.generate_profiles(checkpoint, path, labels)
@@ -37,7 +39,8 @@ def test_changed_artifact_and_output_guard(tmp_path, monkeypatch):
     labels = np.zeros(8, dtype=np.int64)
     raw = np.arange(8 * 24, dtype=float).reshape(8, 24)
     path = tmp_path / "map.npz"
-    fit(raw, labels, raw, labels, provenance={"checkpoint_sha256": sha256_file(checkpoint)}).save(path)
+    fit(raw, labels, raw, labels, provenance={"checkpoint_sha256": sha256_file(checkpoint),
+                                             "calibration_seed": 7301}).save(path)
     def changed(*a, **kw):
         checkpoint.write_bytes(b"modified during generation")
         return raw

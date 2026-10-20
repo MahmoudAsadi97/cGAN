@@ -21,6 +21,12 @@ def generate_profiles(checkpoint, calibrator, labels, *, seed=42, batch_size=102
     model = ConditionalMarginalCalibrator.load(calibrator)
     if model.provenance.get("checkpoint_sha256") != checkpoint_hash:
         raise ValueError("calibrator does not belong to this checkpoint")
+    calibration_seed = model.provenance.get("calibration_seed")
+    if (isinstance(calibration_seed, bool) or not isinstance(calibration_seed, int)
+            or not 0 <= calibration_seed < 2 ** 32):
+        raise ValueError("calibrator must record a valid calibration_seed")
+    if seed == calibration_seed:
+        raise ValueError("generation seed must differ from calibration seed")
     raw = generate(checkpoint, np.asarray(labels), seed=seed, batch_size=batch_size)
     result = model.transform(raw, labels)
     if sha256_file(checkpoint) != checkpoint_hash or sha256_file(calibrator) != map_hash:

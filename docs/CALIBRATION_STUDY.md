@@ -12,7 +12,9 @@ Fit a conditional cGAN with train-only standard normalization, a spectral-normal
 hinge discriminator of width 128, generator width 64, and conditional squared
 sliced-Wasserstein auxiliary weight 10. Use the already implemented balanced
 sampler (four conditions, 128 profiles each) and conditional validation W1 for
-checkpoint selection. No new architecture or hidden clipping is introduced.
+checkpoint selection. Raw marginal W1 is an indirect selector of calibrated
+temporal quality; retain this fixed rule rather than choosing retrospectively
+among calibrated diagnostics. No new architecture or hidden clipping is introduced.
 
 After freezing each checkpoint, estimate its conditional, per-slot generated CDF
 from 4,096 independent draws per condition, seed 7301. Map new samples through that
@@ -26,14 +28,17 @@ values uses the upper edge of the lower plateau and the lower edge of the upper
 plateau. Target quantiles are linearly interpolated, with endpoints held fixed
 outside the source support. Report ties, endpoint saturation and out-of-CDF-support rates.
 
-Calibration supplies marginal information mechanically. Improved marginal W1,
+Calibration approximately aligns generated margins toward training margins. Finite
+reference draws, quantile compression, ties and saturation prevent exact matching.
+It supplies marginal information mechanically; it does not learn new rank
+dependence. Improved marginal W1,
 means, variance and diversity alone are not evidence of learned joint quality.
-Primary evidence concerns daily totals, peaks, ramps, autocorrelations and
+Primary evidence for the calibrated pipeline concerns daily totals, peaks, ramps, autocorrelations and
 train-synthetic/test-real forecasting utility. Compare the same real validation
 sample with raw cGAN, calibrated cGAN, Gaussian copula (shrinkage
 0.01), independent margins (shrinkage 1), and conditional resampling. Both primary
 copula controls use the same 1,025-knot training marginals as calibration. Also
-report an exact empirical-quantile copula as a secondary sensitivity reference.
+report an all-order-statistic, linearly interpolated quantile copula as a secondary sensitivity reference.
 This avoids conflating different marginal approximations with learned dependence. Baselines
 must use the same actual training rows. Bounded nearest-neighbor diagnostics do
 not establish privacy or absence of memorization.

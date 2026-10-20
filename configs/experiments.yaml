@@ -21,4 +21,4 @@ baselines:
 
 real_reference:
   split: val                 # real profiles of unseen (validation) households vs the test households
-  seeds: [0]                 # val and test have identical per-label counts, so seeds only reorder
+  seeds: [0]                 # one draw: every validation day of a label is used (per-label counts differ by <= 18 days)

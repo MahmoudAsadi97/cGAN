@@ -5,11 +5,14 @@
               normal scores, correlation of the scores, sample, map back
               through the empirical quantile function.  Keeps skewed,
               sign-changing marginals exactly.
-``gmm``       full-covariance Gaussian mixture; the number of components is
-              chosen per label by validation log-likelihood.
-``resample``  draws training-set profiles of the same label with replacement.
-              This is a copy baseline: it bounds attainable fidelity and
-              shows what memorisation looks like in the privacy metrics.
+``gmm``       full-covariance Gaussian mixture; the number of components
+              (1-48) is chosen per label by validation log-likelihood, with a
+              covariance floor of 1e-4 kWh^2 so that components cannot collapse
+              onto the 1 Wh quantisation of the meter data.
+``resample``  draws training-set days of the same label without replacement:
+              the train-empirical reference and the positive control of the
+              memorisation test (it copies training days).  It is not a lower
+              bound for the fidelity metrics.
 
 Fitted parameters are stored as plain arrays (``model.npz``).
 
@@ -31,12 +34,14 @@ KINDS = ("gaussian", "copula", "gmm", "resample")
 
 
 class PerLabelBaseline:
-    def __init__(self, kind: str, gmm_components=(1, 2, 4, 8, 16), seed: int = 0):
+    def __init__(self, kind: str, gmm_components=(1, 2, 4, 8, 16, 32, 48), seed: int = 0,
+                 reg_covar: float = 1e-4):
         if kind not in KINDS:
             raise ValueError(f"kind must be one of {KINDS}")
         self.kind = kind
         self.gmm_components = tuple(gmm_components)
         self.seed = seed
+        self.reg_covar = reg_covar
         self.params: dict[int, dict[str, np.ndarray]] = {}
         self.info: dict[int, dict] = {}
 
@@ -99,13 +104,15 @@ class PerLabelBaseline:
         for k in self.gmm_components:
             if k * (x.shape[1] + 1) >= len(x):
                 continue
-            g = GaussianMixture(k, covariance_type="full", reg_covar=1e-6, random_state=self.seed, max_iter=300)
+            g = GaussianMixture(k, covariance_type="full", reg_covar=self.reg_covar, random_state=self.seed,
+                                max_iter=300)
             g.fit(x)
             ll = g.score(xv) if xv is not None and len(xv) else -g.bic(x)
             tried[k] = float(ll)
             if ll > best_ll:
                 best, best_ll = g, ll
-        self.info[lab] = {"components": int(best.n_components), "val_loglik": tried}
+        self.info[lab] = {"components": int(best.n_components), "val_loglik": tried,
+                          "at_grid_edge": int(best.n_components) == max(tried)}
         return {"dim": np.array(x.shape[1]), "weights": best.weights_, "means": best.means_,
                 "covs": best.covariances_}
 

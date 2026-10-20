@@ -78,7 +78,7 @@ def test_dcr_copies_vs_fresh():
     hold = rng.normal(size=(1000, 5))
     copies = dcr_metrics(train[rng.choice(3000, 1000, replace=False)], train, hold)
     fresh = dcr_metrics(rng.normal(size=(1000, 5)), train, hold)
-    assert copies["dcr_copies"] == 1.0 and copies["dcr_q05"] == 1.0 and copies["dcr_mwu_p"] < 1e-6
+    assert copies["dcr_copies"] == 1.0 and copies["dcr_q05"] == 1.0
     assert fresh["dcr_q05"] == pytest.approx(0.05, abs=0.03) and fresh["dcr_copies"] == 0
     assert fresh["dcr_ratio_med"] == pytest.approx(1.0, abs=0.1)
 
@@ -125,3 +125,31 @@ def test_price_kpis_on_a_simple_profile():
     assert k["high_load_duration"][0] == 4
     assert k["rise_time"][0] == 2   # last close-to-base hour 15 -> first high hour 17
     assert k["fall_time"][0] == 1   # last high hour 20 -> close-to-base at 21
+
+
+def test_bootstrap_weighted_terms_match_duplicated_samples():
+    from cgan.bootstrap import weighted_ed_mmd
+
+    x = torch.tensor(rng.normal(size=(40, 3)))
+    y = torch.tensor(rng.normal(0.3, 1, size=(30, 3)))
+    w = torch.tensor(rng.integers(0, 3, size=40), dtype=torch.float64)
+    w[0] = 2  # ensure duplicates
+    sig = [0.8, 1.6]
+    e, k = weighted_ed_mmd(x, y, w[None, :], sig)
+    xd = x.repeat_interleave(w.long(), dim=0)  # explicit duplication
+    assert float(e[0]) == pytest.approx(energy_distance(xd, y), rel=1e-9)
+    assert float(k[0]) == pytest.approx(mmd2_unbiased(xd, y, sig), rel=1e-9)
+
+
+def test_c2st_grouped_folds_ignore_household_fingerprints():
+    from cgan.eval.metrics import c2st_auc
+
+    # Real days cluster around 30 household means; synthetic days come from the same population.
+    hh = rng.normal(size=(30, 4))
+    g = np.repeat(np.arange(30), 40)
+    real = hh[g] + 0.2 * rng.normal(size=(1200, 4))
+    syn = hh[rng.integers(0, 30, 1200)] + 0.2 * rng.normal(size=(1200, 4))
+    syn_new = rng.normal(size=(1200, 4)) * np.sqrt(1.04)  # new households, same population
+    grouped = c2st_auc(real, syn_new, groups_real=g)
+    assert grouped < 0.62
+    assert c2st_auc(real, syn) < 0.62

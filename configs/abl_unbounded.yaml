@@ -8,3 +8,4 @@ scaler:
   asinh_c: null
 model:
   out_bound: null
+  nonneg_without_pv: false

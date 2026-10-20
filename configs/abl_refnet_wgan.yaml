@@ -1,6 +1,8 @@
-# Ablation from the other side: the exact cGAN_EB networks (one-hot, widths 64-128-64 /
-# 64-128-256, min-max scaling) trained with WGAN-GP instead of BCE.  Dropout is removed
-# from the critic because it is incompatible with the gradient penalty.
+# Ablation: the cWGAN-GP training recipe (WGAN-GP loss, 5 critic steps, Adam(0.5, 0.9),
+# lr 1e-4, batch 1,024, 50k generator iterations, EMA, checkpoint on the EMA score) applied to
+# the exact cGAN_EB networks with one-hot conditioning, min-max scaling and linear output.
+# Dropout is removed from the critic.  Compared with cgan_eb this changes the whole recipe,
+# not only the loss; compared with cwgan_gp it isolates the network / conditioning / scaling.
 base: cwgan_gp.yaml
 name: abl_refnet_wgan
 scaler:
@@ -11,3 +13,4 @@ model:
   noise_dim: 24
   hidden: 64
   dropout: 0.0
+  out_bound: null

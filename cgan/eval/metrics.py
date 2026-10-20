@@ -139,34 +139,56 @@ def prdc(real: torch.Tensor, syn: torch.Tensor, k: int = 5) -> dict[str, float]:
             "coverage": float(coverage)}
 
 
-def c2st_auc(real: np.ndarray, syn: np.ndarray, folds: int = 5, seed: int = 0) -> float:
+def c2st_auc(real: np.ndarray, syn: np.ndarray, folds: int = 5, seed: int = 0,
+             groups_real: np.ndarray | None = None, groups_syn: np.ndarray | None = None) -> float:
+    """Classifier two-sample test with household-grouped folds.
+
+    Real days are grouped by household so that no household appears in both
+    the fitting and the held-out folds (otherwise the classifier learns
+    household fingerprints).  Synthetic days are independent draws unless
+    ``groups_syn`` is given (e.g. real reference days of other households).
+    """
     from sklearn.ensemble import HistGradientBoostingClassifier
-    from sklearn.model_selection import StratifiedKFold, cross_val_predict
     from sklearn.metrics import roc_auc_score
+    from sklearn.model_selection import StratifiedGroupKFold, cross_val_predict
 
     X = np.concatenate([real, syn])
     y = np.r_[np.zeros(len(real)), np.ones(len(syn))]
+    gr = np.arange(len(real)) if groups_real is None else np.unique(groups_real, return_inverse=True)[1]
+    gs = np.arange(len(syn)) if groups_syn is None else np.unique(groups_syn, return_inverse=True)[1]
+    groups = np.r_[gr, gs + gr.max() + 1]
     clf = HistGradientBoostingClassifier(max_iter=200, learning_rate=0.1, early_stopping=False, random_state=seed)
-    cv = StratifiedKFold(folds, shuffle=True, random_state=seed)
-    p = cross_val_predict(clf, X, y, cv=cv, method="predict_proba")[:, 1]
+    cv = StratifiedGroupKFold(folds, shuffle=True, random_state=seed)
+    p = cross_val_predict(clf, X, y, groups=groups, cv=cv, method="predict_proba")[:, 1]
     return float(roc_auc_score(y, p))
 
 
 def profile_metrics(real_std: np.ndarray, syn_std: np.ndarray, device: str = "cpu", c2st: bool = True,
-                    k: int = 5, seed: int = 0) -> dict[str, float]:
-    """Metrics on standardised profiles (rows = days)."""
+                    k: int = 5, seed: int = 0, groups_real=None, groups_syn=None) -> dict[str, float]:
+    """Metrics on standardised profiles (rows = days).
+
+    ``rfd`` = FD / tr(S_real) and ``energy_rel`` = energy / E|X - X'|_real are
+    scale-free per label, so label averages are not dominated by the labels
+    with the largest variability.
+    """
     xr, xs = _t(real_std, device), _t(syn_std, device)
     sig = median_bandwidth(xr, seed=seed)
     mu_r, cov_r = gaussian_stats(real_std)
     mu_s, cov_s = gaussian_stats(syn_std)
+    fd = frechet_distance(mu_r, cov_r, mu_s, cov_s)
+    ed = energy_distance(xr, xs)
+    m = xr.shape[0]
+    exx = float(torch.cdist(xr, xr).sum() / (m * (m - 1)))
     out = {
-        "fd": frechet_distance(mu_r, cov_r, mu_s, cov_s),
+        "fd": fd,
+        "rfd": fd / float(np.trace(cov_r)),
         "mmd2": mmd2_unbiased(xr, xs, [0.5 * sig, sig, 2 * sig]),
-        "energy": energy_distance(xr, xs),
+        "energy": ed,
+        "energy_rel": ed / exx,
     }
     out.update(prdc(xr, xs, k))
     if c2st:
-        out["c2st_auc"] = c2st_auc(real_std, syn_std, seed=seed)
+        out["c2st_auc"] = c2st_auc(real_std, syn_std, seed=seed, groups_real=groups_real, groups_syn=groups_syn)
     return out
 
 
@@ -222,10 +244,8 @@ def dcr_metrics(syn: np.ndarray, train: np.ndarray, holdout: np.ndarray, device:
                     percentile of d_hold (0.05 expected; 1 for a copy model)
       dcr_ratio_p05 P5(d_syn) / P5(d_hold), dcr_ratio_med  median ratio
       dcr_copies    share of synthetic days identical to a training day
-      dcr_mwu_p     one-sided Mann-Whitney p-value for d_syn < d_hold
+    Days are clustered by household, so no i.i.d. significance test is reported.
     """
-    from scipy.stats import mannwhitneyu
-
     tr = _t(train, device)
     d_syn = _min_dist(_t(syn, device), tr).cpu().numpy()
     d_hold = _min_dist(_t(holdout, device), tr).cpu().numpy()
@@ -235,31 +255,40 @@ def dcr_metrics(syn: np.ndarray, train: np.ndarray, holdout: np.ndarray, device:
         "dcr_ratio_p05": float(np.quantile(d_syn, 0.05) / p5) if p5 > 0 else np.nan,
         "dcr_ratio_med": float(np.median(d_syn) / np.median(d_hold)),
         "dcr_copies": float(np.mean(d_syn < 1e-6)),
-        "dcr_mwu_p": float(mannwhitneyu(d_syn, d_hold, alternative="less").pvalue),
     }
 
 
-def aggregate_metrics(real: np.ndarray, syn: np.ndarray, n_homes: int = 20, reps: int = 300,
-                      seed: int = 0) -> dict[str, float]:
-    """Load of ``n_homes`` randomly drawn days summed, as seen by a feeder.
+def aggregate_metrics(real: np.ndarray, syn: np.ndarray, n_homes: int = 20, reps: int = 2000, seed: int = 0,
+                      groups_real: np.ndarray | None = None, groups_syn: np.ndarray | None = None) -> dict[str, float]:
+    """Load of ``n_homes`` days summed, as seen by a feeder.
 
-    Compares the distribution of the aggregate peak and of the coincidence
-    factor CF = max_t(sum_i x_i,t) / sum_i max_t(x_i,t) between real and
-    synthetic draws (independent days in both cases, so weather-driven
-    coincidence across households is not represented).
+    A real feeder takes ``n_homes`` distinct households and one random day of
+    each (``groups_*`` = household ids); synthetic days are independent draws
+    unless groups are given.  Compared: the aggregate peak distribution and the
+    coincidence factor CF = max_t(sum_i x_i,t) / sum_i max_t(x_i,t).  Days are
+    drawn independently across households, so weather-driven coincidence is not
+    represented; values are interpreted relative to the real-data reference.
     """
     rng = np.random.default_rng(seed)
 
-    def draw(X):
-        idx = rng.integers(0, len(X), size=(reps, n_homes))
+    def draw(X, groups):
+        if groups is None:
+            idx = rng.integers(0, len(X), size=(reps, n_homes))
+        else:
+            _, inv, counts = np.unique(groups, return_inverse=True, return_counts=True)
+            order = np.argsort(inv, kind="stable")              # rows grouped by household
+            starts = np.r_[0, np.cumsum(counts)[:-1]]
+            k = min(n_homes, len(counts))
+            chosen = np.argsort(rng.random((reps, len(counts))), axis=1)[:, :k]   # k distinct households
+            offset = (rng.random((reps, k)) * counts[chosen]).astype(np.int64)     # one random day each
+            idx = order[starts[chosen] + offset]
         S = X[idx]                                  # reps x n x T
-        agg = S.sum(1)
-        peak = agg.max(1)
+        peak = S.sum(1).max(1)
         indiv = S.max(2).sum(1)
         return peak, np.where(indiv > 0, peak / np.where(indiv > 0, indiv, 1), np.nan)
 
-    pr, cr = draw(np.asarray(real, np.float64))
-    ps, cs = draw(np.asarray(syn, np.float64))
+    pr, cr = draw(np.asarray(real, np.float64), groups_real)
+    ps, cs = draw(np.asarray(syn, np.float64), groups_syn)
     sd = pr.std(ddof=1)
     return {
         "agg_peak_w1_std": float(wasserstein_distance(pr, ps) / sd) if sd > 0 else np.nan,

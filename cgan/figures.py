@@ -178,7 +178,7 @@ def training_curves(runs: Path, models, out: Path):
     plt.close(fig)
 
 
-def label_heatmaps(runs: Path, models, out: Path, metrics=("profile.energy", "kpi.near_peak.w1_std")):
+def label_heatmaps(runs: Path, models, out: Path, metrics=("profile.energy_rel", "kpi.near_peak.w1_std")):
     from .report import collect
 
     df = collect(runs)

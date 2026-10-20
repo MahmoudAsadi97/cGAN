@@ -130,18 +130,32 @@ def _mlp(dims, act_slope=0.2, norm: str | None = None):
 
 
 class BoundedOutput(nn.Module):
-    """Maps a linear output into [lo, hi] with a sigmoid (identity when no range is given)."""
+    """Maps a linear output into [lo, hi] with a sigmoid (identity when no range is given).
 
-    def __init__(self, out_range=None):
+    With ``lo_nopv`` the lower bound of labels without PV is raised to that
+    value (the scaled 0 kWh): households without PV cannot export, so their
+    net load is non-negative.
+    """
+
+    def __init__(self, out_range=None, lo_nopv=None):
         super().__init__()
         self.bounded = out_range is not None
+        self.pv_aware = self.bounded and lo_nopv is not None
         lo, hi = out_range if self.bounded else (0.0, 1.0)
         # Not persistent: the range is part of the saved model config.
         self.register_buffer("lo", torch.tensor(float(lo)), persistent=False)
-        self.register_buffer("span", torch.tensor(float(hi) - float(lo)), persistent=False)
+        self.register_buffer("hi", torch.tensor(float(hi)), persistent=False)
+        self.register_buffer("lo_nopv", torch.tensor(float(lo_nopv if lo_nopv is not None else lo)),
+                             persistent=False)
 
-    def forward(self, h: torch.Tensor) -> torch.Tensor:
-        return self.lo + self.span * torch.sigmoid(h) if self.bounded else h
+    def forward(self, h: torch.Tensor, label: torch.Tensor | None = None) -> torch.Tensor:
+        if not self.bounded:
+            return h
+        lo = self.lo
+        if self.pv_aware:
+            _, group, _ = decode_label_t(label)
+            lo = torch.where((group & 1).bool(), self.lo, self.lo_nopv)[:, None]
+        return lo + (self.hi - lo) * torch.sigmoid(h)
 
 
 class MLPGenerator(nn.Module):
@@ -153,16 +167,16 @@ class MLPGenerator(nn.Module):
     """
 
     def __init__(self, noise_dim: int = 32, out_dim: int = 24, hidden: int = 256, depth: int = 3,
-                 cond: str = "factor", cond_kw=None, out_range=None):
+                 cond: str = "factor", cond_kw=None, out_range=None, lo_nopv=None):
         super().__init__()
         self.noise_dim = noise_dim
         self.cond = make_cond(cond, **(cond_kw or {}))
         self.body = _mlp([noise_dim + self.cond.dim] + [hidden] * depth)
         self.out = nn.Linear(hidden, out_dim)
-        self.bound = BoundedOutput(out_range)
+        self.bound = BoundedOutput(out_range, lo_nopv)
 
     def forward(self, noise: torch.Tensor, label: torch.Tensor) -> torch.Tensor:
-        return self.bound(self.out(self.body(torch.cat([noise, self.cond(label)], dim=1))))
+        return self.bound(self.out(self.body(torch.cat([noise, self.cond(label)], dim=1))), label)
 
 
 class ProjectionCritic(nn.Module):
@@ -196,11 +210,13 @@ def build_nets(cfg: dict, data_dim: int):
     cond = cfg.get("cond", "onehot")
     cond_kw = cfg.get("cond_kw") or {}
     if arch == "ref":
+        if cfg.get("out_range") is not None or cfg.get("out_bound") is not None:
+            raise ValueError("bounded output is not available for arch 'ref' (reference linear output)")
         g = RefGenerator(cfg.get("noise_dim", 24), data_dim, cfg.get("hidden", 64), cond, cond_kw)
         d = RefDiscriminator(data_dim, cfg.get("hidden", 64), cfg.get("dropout", 0.4), cond, cond_kw)
     elif arch == "mlp":
         g = MLPGenerator(cfg.get("noise_dim", 32), data_dim, cfg.get("g_hidden", 256), cfg.get("g_depth", 3),
-                         cond, cond_kw, cfg.get("out_range"))
+                         cond, cond_kw, cfg.get("out_range"), cfg.get("lo_nopv"))
         d = ProjectionCritic(data_dim, cfg.get("d_hidden", 256), cfg.get("d_depth", 3), cond, cond_kw,
                              cfg.get("projection", True), cfg.get("concat", True), cfg.get("d_norm"))
     else:

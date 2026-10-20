@@ -76,6 +76,9 @@ def train(cfg: dict, seed: int, run_dir: Path, device: str | None = None, quiet:
         lo, hi = float(Xs.min()), float(Xs.max())
         margin = float(cfg["model"]["out_bound"]) * (hi - lo)
         cfg["model"]["out_range"] = [lo - margin, hi + margin]
+        if cfg["model"].get("nonneg_without_pv"):
+            # Lower bound for labels without PV = scaled 0 kWh (no export possible).
+            cfg["model"]["lo_nopv"] = float(scaler.transform(np.float64(0.0)))
     X = torch.from_numpy(Xs).to(device)
     Y = torch.from_numpy(train_split.label).to(device)
 
@@ -200,9 +203,7 @@ def train(cfg: dict, seed: int, run_dir: Path, device: str | None = None, quiet:
             torch.cuda.synchronize()
             graph = torch.cuda.CUDAGraph()
             with torch.cuda.graph(graph):
-                step(s_real, s_y)
-            acc.zero_()  # capture records but does not run; keep accumulator clean
-            n_acc = 0
+                step(s_real, s_y)  # recorded, not executed: acc / n_acc still hold the warm-up steps
         if graph is not None and full:
             s_real.copy_(reals)
             s_y.copy_(ys)

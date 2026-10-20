@@ -35,15 +35,29 @@ this repository.
 Group naming used throughout: `none`, `PV`, `HP`, `HP+PV`, `EV`, `EV+PV`,
 `HP+EV`, `HP+EV+PV` (group index = 4·EV + 2·HP + PV).  PV meters are those that
 injected in all 12 months; non-PV meters never injected (a few heat-pump meters
-show injections up to 0.18 kWh per quarter hour).  The EV flag comes from
-customer declarations or Fluvius' detection algorithm; meters with known storage
-systems were removed by Fluvius, but undeclared storage cannot be excluded.
+show injections up to 0.18 kWh per quarter hour).  The flags are registry
+indicators of the distribution system operator: the EV flag comes from
+customer declarations or Fluvius' detection algorithm, a heat pump is flagged
+only when declared as main heating, and meters with known storage were removed,
+but undeclared batteries cannot be excluded (a share of PV homes shows a
+battery-like signature).  The measured load therefore does not always reflect
+the flags, which bounds how well any model — or a classifier on real data — can
+recover them; factor accuracies are always reported next to the real-data
+reference.
+
+Seasons and clock time: spring and fall each mix CET and CEST days, so within
+these labels real PV timing is a mixture of two clock offsets one hour apart;
+winter combines January-February and December of 2024.
 
 ### Preprocessing (`cgan/data`)
 
 * **Timestamps** are local wall-clock time (CET/CEST) despite the `Z` suffix:
   31 March has 92 quarter hours and 27 October 100.  Readings are indexed by
   (local date, quarter of day); the two DST days are excluded (`drop_dst_days`).
+* **No-flow days**: meter-days with zero import and zero export in every
+  quarter hour (vacancy, disconnection or zero-filled data; 881 of 873,600,
+  almost all from a few training households) are excluded in all splits
+  (`drop_zero_days`).
 * **Target**: daily profiles of hourly **net load** = import − export (kWh/h),
   i.e. what the distribution grid sees; negative values are PV export.
   `target: import | export | import_export` and `resolution: quarter` (96
@@ -58,8 +72,8 @@ systems were removed by Fluvius, but undeclared storage cannot be excluded.
   households are used only for checkpoint selection and GMM order selection; all
   reported numbers are on the test households.
 
-Resulting sizes: 611,520 training, 131,040 validation and 131,040 test
-day-profiles; 5,670 - 13,440 training days and 1,215 - 2,880 test days per label.
+Resulting sizes: 610,745 training, 130,935 validation and 131,039 test
+day-profiles; 5,635 - 13,440 training days and 1,215 - 2,880 test days per label.
 
 ## Models
 
@@ -95,17 +109,29 @@ graph for speed; eager and graph execution give identical results.
 ### Improved model: `cwgan_gp`
 
 * **Loss**: WGAN-GP (λ = 10, 5 critic steps per generator step, Adam
-  lr 1e-4, betas (0.5, 0.9)), batch 1,024, 100,000 generator iterations.
+  lr 1e-4, betas (0.5, 0.9)), batch 1,024, 50,000 generator iterations.
 * **Conditioning**: factorised embeddings for PV, heat pump, EV, day type and
   season (8-d each) plus a 16-d joint-label embedding, fed to the generator
   input; the critic uses input concatenation and a projection term
   ⟨embed(y), φ(x)⟩ (Miyato & Koyama, 2018).  Labels that share a technology or a
   season share parameters.
 * **Networks**: 3×256 LeakyReLU MLPs (no normalisation in the critic).
-* **Value transform**: asinh(x / c) followed by standardisation (c = median |x|
-  on training data), which is linear near zero, compresses the EV / heat-pump
-  tail and handles negative net load.
+* **Value transform**: asinh(x / c) followed by standardisation, with
+  c = 1.5 kWh; it is linear for ordinary loads, mildly compresses the EV /
+  heat-pump tail and handles negative net load.
+* **Bounded output**: the generator output passes through a sigmoid onto the
+  scaled training range widened by 5 % on each side.
 * **EMA** of generator weights (0.999); checkpoint selected on validation.
+
+The transform knee and the output bound were chosen on the validation
+households.  With a strongly compressive transform (c = median |x| = 0.32 kWh)
+and a linear output, the fit in the transformed space kept improving while a
+few hundred samples per million fell far outside the observed range (up to
+≈ 370 kWh/h against a training maximum of 24.4) after the inverse transform,
+inflating the dispersion of the kWh profiles by ≈ 40 %; the validation score
+in kWh then deteriorated after ≈ 4k iterations.  Bounding the output and
+using c = 1.5 kWh removed the effect (dispersion ratio 0.99, 28 ppm of values
+beyond the training range).  `abl_unbounded` documents this configuration.
 
 ### Ablations (3 seeds each)
 
@@ -115,6 +141,7 @@ graph for speed; eager and graph execution give identical results.
 | `abl_noproj` | no projection term in the critic |
 | `abl_minmax` | global min-max scaling instead of asinh |
 | `abl_refnet_wgan` | the exact cGAN_EB networks and scaling trained with WGAN-GP (isolates the loss) |
+| `abl_unbounded` | linear (unbounded) generator output and the strong asinh transform (c = median \|x\|) |
 | `cwgan_gp[best_raw]` | raw instead of EMA generator weights (no retraining needed) |
 
 ### Baselines (`cgan/baselines.py`)
@@ -136,17 +163,24 @@ For every label the number of synthetic days equals the number of real test
 days.  Profile-level metrics use the hourly mean and standard deviation of the
 training data for standardisation.  All metrics are computed per label and then
 averaged over the 64 labels; tables report mean ± standard deviation over
-seeds.
+seeds.  Because the labels of a group share the same test households, labels
+are not treated as independent units: model comparisons report the share of
+labels on which a model is better (descriptive), Welch tests over training
+seeds (Holm-corrected), and a household-level cluster bootstrap
+(`cgan/bootstrap.py`: the 45 test households of each group are resampled with
+replacement, 1,000 replicates) that gives paired confidence intervals for
+differences in energy distance and MMD².  Precision / recall / density /
+coverage treat days as exchangeable and are used descriptively.
 
 | family | metrics |
 |---|---|
-| whole profile | Fréchet distance of Gaussian fits (24-d), MMD² (RBF, median heuristic, 3 bandwidths), energy distance, precision / recall / density / coverage (k = 5), classifier two-sample test (gradient boosting, 5-fold ROC-AUC) |
+| whole profile | Fréchet distance of Gaussian fits (24-d; also relative to the trace of the real covariance), energy distance (also relative to the real E\|X−X′\|), MMD² (RBF, median heuristic, 3 bandwidths), precision / recall / density / coverage (k = 5), classifier two-sample test (gradient boosting, ROC-AUC with 5 folds grouped by household) |
 | temporal | RMSE of the mean, standard-deviation and 90th-percentile profiles, mean absolute difference of hour-to-hour correlations, autocorrelation error (lags 1-6), hourly Wasserstein-1 and KS, Wasserstein-1 of hourly ramps |
 | load-shape KPIs | Price (2010) near-peak (97.5th pct), near-base (2.5th pct), high-load duration, rise and fall time; daily energy, peak hour, ramps, exported energy — each compared by W1 (also in units of the real standard deviation), KS, Jensen-Shannon divergence and KL on shared smoothed histograms |
-| conditional fidelity | a label classifier trained on real training data recovers the intended label / PV / HP / EV / day type / season from synthetic days (compared with its accuracy on real test days) |
-| utility | train-on-synthetic, test-on-real (TSTR) with the same classifier and budget |
-| aggregate load | sums of 20 random days: Wasserstein-1 of the aggregate peak, relative error of its 95th percentile, coincidence-factor difference; evening (17-22 h) energy for EV labels |
-| memorisation | distance of each synthetic day to its closest training day vs the same distance for real days of unseen households: share below the holdout 5th percentile (0.05 expected, 1 for a copy model), median ratio, exact copies, one-sided Mann-Whitney test |
+| conditional fidelity | a label classifier trained on the *validation* households (unseen by every generator) recovers the intended label / PV / HP / EV / day type / season from synthetic days; compared with its accuracy on the test households (balanced accuracy) |
+| utility | train-on-synthetic, test-on-real (TSTR) vs train-on-real training households (TRTR), same classifier, budget and days per label |
+| aggregate load | feeders of 20 distinct households (one random day each): Wasserstein-1 of the aggregate peak, relative error of its 95th percentile, coincidence-factor difference, read against the real reference; evening (17-22 h) energy on EV labels, exported energy on PV labels |
+| memorisation | distance of each synthetic day to its closest training day vs the same distance for real days of unseen households: share below the holdout 5th percentile (0.05 expected, 1 for a copy model), median ratio, exact copies |
 | physical | negative net load for non-PV labels, values beyond the training maximum |
 
 **Reference-metric defects.**  The reference `utils.py` is reproduced for
@@ -171,6 +205,7 @@ python -m cgan.data.prepare --raw data/raw/raw.zip --out data/processed
 python -m pytest
 python -m cgan.experiments --plan configs/experiments.yaml   # train + evaluate everything (resumable)
 python -m cgan.report --runs runs --out results
+python -m cgan.bootstrap --runs runs --out results --models cwgan_gp "cgan_eb[best_raw]" baseline_copula baseline_gmm baseline_gaussian baseline_resample
 python -m cgan.figures --runs runs --out results/figures --models cgan_eb cwgan_gp baseline_copula
 ```
 

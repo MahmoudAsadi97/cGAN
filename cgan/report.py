@@ -7,8 +7,11 @@ Reads every ``runs/<model>/seed<k>/eval_<split>*.csv`` and writes:
     results/all_metrics_long.csv      model, seed, label, metric, value
     results/summary_<table>.{csv,md,tex}
         cell = mean +/- std over seeds of the label-averaged (macro) value
-    results/significance.csv          paired Wilcoxon signed-rank tests over
-        labels (seed-averaged per-label values), Holm-corrected per metric
+    results/comparisons.csv           ours vs every other model: share of labels
+        on which ours is better (descriptive) and a Welch t-test over seeds on
+        the macro values, Holm-corrected per metric.  Labels share test
+        households, so no label-level p-values are given; household-level
+        uncertainty comes from ``cgan.bootstrap``.
     results/by_group_<metric>.csv     macro value per technology group
 """
 from __future__ import annotations
@@ -19,7 +22,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from scipy.stats import wilcoxon
+from scipy.stats import ttest_ind
 
 from .data.prepare import GROUP_NAMES
 from .data.profiles import decode_label
@@ -27,8 +30,9 @@ from .data.profiles import decode_label
 # (metric, direction): -1 lower is better, +1 higher is better, 0 closer to target
 TABLES = {
     "fidelity": [
-        ("profile.fd", -1), ("profile.mmd2", -1), ("profile.energy", -1), ("profile.c2st_auc", -1),
+        ("profile.rfd", -1), ("profile.energy_rel", -1), ("profile.mmd2", -1), ("profile.c2st_auc", -1),
         ("profile.precision", +1), ("profile.recall", +1), ("profile.density", 0), ("profile.coverage", +1),
+        ("profile.fd", -1), ("profile.energy", -1),
     ],
     "temporal": [
         ("temporal.mean_profile_rmse", -1), ("temporal.std_profile_rmse", -1), ("temporal.q90_profile_rmse", -1),
@@ -45,10 +49,13 @@ TABLES = {
         for k in ["ref_peak", "ref_base", "ref_duration", "ref_rise", "ref_fall"]
         for m in ["mean_diff.abs", "std_diff.abs", "kl", "fd1"]
     ],
+    # balanced accuracies; recovery_real / trtr are the real-data references (identical for all models)
     "conditional": [
-        (f"cond.{kind}.{f}", +1) for kind in ["recovery", "tstr"]
+        (f"cond.{kind}.{f}", +1) for kind in ["recovery", "recovery_real", "tstr", "trtr"]
         for f in ["label", "pv", "hp", "ev", "daytype", "season"]
-    ] + [(f"cond.real_reference.{f}", +1) for f in ["label", "pv", "hp", "ev", "daytype", "season"]],
+    ],
+    # aggregate metrics are read against the real-data (between-household) reference, not against 0;
+    # evening energy: EV labels only; export energy: PV labels only
     "aggregate": [
         ("aggregate.agg_peak_w1_std", -1), ("aggregate.agg_peak_p95_rel", 0), ("aggregate.agg_cf_mean_diff", 0),
         ("kpi.evening_energy.w1_std", -1), ("kpi.export_energy.w1_std", -1),
@@ -58,9 +65,8 @@ TABLES = {
         ("physical.neg_share", -1), ("physical.above_train_max", -1),
     ],
 }
-TARGET = {"profile.density": 1.0, "privacy.dcr_q05": 0.05, "privacy.dcr_ratio_med": 1.0,
-          "aggregate.agg_peak_p95_rel": 0.0, "aggregate.agg_cf_mean_diff": 0.0}
-SIGNIFICANCE_METRICS = ["profile.fd", "profile.mmd2", "profile.energy", "profile.c2st_auc", "profile.coverage",
+TARGET = {"profile.density": 1.0, "privacy.dcr_q05": 0.05, "privacy.dcr_ratio_med": 1.0}
+SIGNIFICANCE_METRICS = ["profile.rfd", "profile.energy_rel", "profile.mmd2", "profile.c2st_auc", "profile.coverage",
                         "temporal.corr_mad", "temporal.hourly_w1", "kpi.near_peak.w1_std", "kpi.daily_energy.w1_std"]
 
 
@@ -117,36 +123,40 @@ def _fmt(mean, std, digits=3):
     return out
 
 
-def significance(df: pd.DataFrame, ours: str, metrics=SIGNIFICANCE_METRICS) -> pd.DataFrame:
+def comparisons(df: pd.DataFrame, mac: pd.DataFrame, ours: str, metrics=SIGNIFICANCE_METRICS) -> pd.DataFrame:
+    """Ours vs each other model.
+
+    win_rate_labels: share of labels on which ours is better (seed-averaged values; descriptive only,
+    labels share test households).  p_welch_seeds: Welch t-test of the macro values across training
+    seeds (Holm-corrected within each metric).
+    """
     per_label = df[df.label >= 0].groupby(["model", "metric", "label"]).value.mean().reset_index()
     rows = []
-    models = sorted(set(per_label.model) - {ours})
+    models = sorted(set(mac.model) - {ours})
+    directions = dict(m for t in TABLES.values() for m in t)
     for metric in metrics:
-        direction = dict(m for t in TABLES.values() for m in t).get(metric, -1)
-        a = per_label[(per_label.model == ours) & (per_label.metric == metric)].set_index("label").value
-        pvals = []
+        direction = directions.get(metric, -1)
+        a_lab = per_label[(per_label.model == ours) & (per_label.metric == metric)].set_index("label").value
+        a_seed = mac[(mac.model == ours) & (mac.metric == metric)].value.to_numpy()
+        idx = []
         for other in models:
-            b = per_label[(per_label.model == other) & (per_label.metric == metric)].set_index("label").value
-            common = a.index.intersection(b.index)
-            if len(common) < 5:
+            b_lab = per_label[(per_label.model == other) & (per_label.metric == metric)].set_index("label").value
+            b_seed = mac[(mac.model == other) & (mac.metric == metric)].value.to_numpy()
+            common = a_lab.index.intersection(b_lab.index)
+            if len(common) == 0 or len(b_seed) == 0:
                 continue
-            x, y = a[common].to_numpy(), b[common].to_numpy()
+            x, y = a_lab[common].to_numpy(), b_lab[common].to_numpy()
             better = (x < y) if direction < 0 else (x > y)
-            try:
-                p = wilcoxon(x, y).pvalue
-            except ValueError:
-                p = np.nan
-            rows.append({"metric": metric, "ours": ours, "other": other, "n_labels": len(common),
-                         "median_ours": np.median(x), "median_other": np.median(y),
-                         "win_rate_ours": better.mean(), "p_wilcoxon": p})
-            pvals.append(len(rows) - 1)
-        # Holm correction within metric
-        idx = [i for i in pvals if not np.isnan(rows[i]["p_wilcoxon"])]
-        order = sorted(idx, key=lambda i: rows[i]["p_wilcoxon"])
+            p = ttest_ind(a_seed, b_seed, equal_var=False).pvalue if len(a_seed) > 1 and len(b_seed) > 1 else np.nan
+            rows.append({"metric": metric, "ours": ours, "other": other, "macro_ours": a_seed.mean(),
+                         "macro_other": b_seed.mean(), "seeds_ours": len(a_seed), "seeds_other": len(b_seed),
+                         "win_rate_labels": better.mean(), "p_welch_seeds": p})
+            idx.append(len(rows) - 1)
+        valid = sorted((i for i in idx if not np.isnan(rows[i]["p_welch_seeds"])),
+                       key=lambda i: rows[i]["p_welch_seeds"])
         running = 0.0
-        for rank, i in enumerate(order):
-            adj = min(1.0, (len(order) - rank) * rows[i]["p_wilcoxon"])
-            running = max(running, adj)
+        for rank, i in enumerate(valid):
+            running = max(running, min(1.0, (len(valid) - rank) * rows[i]["p_welch_seeds"]))
             rows[i]["p_holm"] = running
     return pd.DataFrame(rows)
 
@@ -176,7 +186,7 @@ def compute_table(runs: Path) -> pd.DataFrame:
                                    params_d=("params_d", "first"), device=("device", "first"))
 
 
-def metric_agreement(mac: pd.DataFrame, metrics=("profile.energy", "profile.mmd2", "profile.fd", "profile.c2st_auc",
+def metric_agreement(mac: pd.DataFrame, metrics=("profile.energy_rel", "profile.mmd2", "profile.rfd", "profile.c2st_auc",
                                                  "profile.coverage", "kpi.near_peak.w1_std",
                                                  "temporal.hourly_w1")) -> pd.DataFrame:
     """Kendall tau between model rankings induced by different metrics (seed-averaged macro values)."""
@@ -226,14 +236,14 @@ def main(argv=None) -> None:
         (out / f"summary_{name}.md").write_text(table.to_markdown())
         (out / f"summary_{name}.tex").write_text(table.to_latex(escape=True))
     if args.ours in set(df.model):
-        significance(df, args.ours).to_csv(out / "significance.csv", index=False)
+        comparisons(df, mac, args.ours).to_csv(out / "comparisons.csv", index=False)
     comp = compute_table(Path(args.runs))
     if len(comp):
         comp.to_csv(out / "compute.csv")
         (out / "compute.md").write_text(comp.to_markdown())
     if df.model.nunique() >= 3:
         metric_agreement(mac).to_csv(out / "metric_agreement_kendall.csv")
-    for metric in ["profile.energy", "profile.coverage", "kpi.near_peak.w1_std", "temporal.hourly_w1"]:
+    for metric in ["profile.energy_rel", "profile.rfd", "profile.coverage", "kpi.near_peak.w1_std", "temporal.hourly_w1"]:
         by_group(df, metric).to_csv(out / f"by_group_{metric.replace('.', '_')}.csv")
     print(f"wrote tables for {df.model.nunique()} models to {out}")
 

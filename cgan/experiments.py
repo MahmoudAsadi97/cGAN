@@ -121,7 +121,7 @@ def main(argv=None) -> None:
                 if not (run_dir / f"{tag}.csv").exists():
                     run_dir.mkdir(parents=True, exist_ok=True)
                     splits = get_splits(data_cfg)
-                    df = evaluate(RealSource(splits[r["split"]], {"data": data_cfg}), splits, data_cfg, split,
+                    df = evaluate(RealSource(splits[r["split"]], {"data": data_cfg}, r["split"], seed), splits, data_cfg, split,
                                   EVAL_SEED + seed, log=_log, save_samples=run_dir / f"samples_{split}.npz")
                     _write_eval(df, run_dir, tag)
                     _log(f"evaluated real reference ({r['split']}) seed {seed}")

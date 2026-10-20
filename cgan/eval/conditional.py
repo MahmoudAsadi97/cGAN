@@ -38,8 +38,13 @@ def decode_factors(label: np.ndarray) -> dict[str, np.ndarray]:
 
 
 def factor_accuracy(pred: np.ndarray, true: np.ndarray) -> dict[str, float]:
+    """Balanced accuracy (mean per-class recall) of each factor; chance = 1 / number of classes."""
     p, t = decode_factors(pred), decode_factors(true)
-    return {f: float(np.mean(p[f] == t[f])) for f in FACTORS}
+    out = {}
+    for f in FACTORS:
+        classes = np.unique(t[f])
+        out[f] = float(np.mean([np.mean(p[f][t[f] == c] == c) for c in classes]))
+    return out
 
 
 class LabelClassifier:

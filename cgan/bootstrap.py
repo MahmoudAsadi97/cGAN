@@ -35,6 +35,30 @@ from .eval.metrics import median_bandwidth
 from .utils import load_config
 
 
+def real_terms(xr: torch.Tensor, W: torch.Tensor, sigmas) -> dict:
+    """Real-real terms for count weights W (B x n): E|X-X'| and mean k(X, X') over distinct positions."""
+    D = torch.cdist(xr, xr)
+    K = sum(torch.exp(-D.pow(2) / (2 * s * s)) for s in sigmas)
+    m = W.sum(1)
+    return {"m": m, "exx": ((W @ D) * W).sum(1) / (m * (m - 1)),
+            "kxx": (((W @ K) * W).sum(1) - len(sigmas) * m) / (m * (m - 1))}
+
+
+def weighted_ed_mmd(xr: torch.Tensor, ys: torch.Tensor, W: torch.Tensor, sigmas, rt: dict | None = None):
+    """Energy distance and MMD^2 (U-statistics) between the W-weighted real sample and ys, per replicate."""
+    rt = rt or real_terms(xr, W, sigmas)
+    n = ys.shape[0]
+    Dxy = torch.cdist(xr, ys)
+    Kxy = sum(torch.exp(-Dxy.pow(2) / (2 * s * s)) for s in sigmas)
+    Dyy = torch.cdist(ys, ys)
+    Kyy = sum(torch.exp(-Dyy.pow(2) / (2 * s * s)) for s in sigmas)
+    eyy = Dyy.sum() / (n * (n - 1))
+    kyy = (Kyy.sum() - len(sigmas) * n) / (n * (n - 1))
+    exy = (W @ Dxy.mean(1)) / rt["m"]
+    kxy = (W @ Kxy.mean(1)) / rt["m"]
+    return 2 * exy - rt["exx"] - eyy, rt["kxx"] + kyy - 2 * kxy
+
+
 def _sample_files(runs: Path, spec: str) -> list[Path]:
     m = re.fullmatch(r"([\w\-]+)(?:\[(\w+)\])?", spec)
     name, ckpt = m.group(1), m.group(2) or "best"
@@ -96,30 +120,18 @@ def main(argv=None) -> None:
         idx = np.flatnonzero(test.label == lab)
         meters = test.factors["meter"][idx]
         xr = torch.as_tensor(Xr[idx], dtype=torch.float64, device=dev)
-        sig = median_bandwidth(xr)
+        sig = median_bandwidth(xr)  # same bandwidth rule as the main evaluation
         sigmas = [0.5 * sig, sig, 2 * sig]
-        D = torch.cdist(xr, xr)
-        K = sum(torch.exp(-D.pow(2) / (2 * s * s)) for s in sigmas)
         W = torch.as_tensor(np.array([[w.get(int(mt), 0) for mt in meters] for w in meter_weights]),
                             dtype=torch.float64, device=dev)              # B x n
-        m_tot = W.sum(1)
-        exx = ((W @ D) * W).sum(1) / (m_tot * (m_tot - 1))
-        kxx = (((W @ K) * W).sum(1) - len(sigmas) * m_tot) / (m_tot * (m_tot - 1))
+        rt = real_terms(xr, W, sigmas)
         for model in models:
             ed_s, mmd_s = [], []
             for arr in samples[model]:
                 ys = torch.as_tensor(arr[idx], dtype=torch.float64, device=dev)
-                n = ys.shape[0]
-                Dxy = torch.cdist(xr, ys)
-                Kxy = sum(torch.exp(-Dxy.pow(2) / (2 * s * s)) for s in sigmas)
-                Dyy = torch.cdist(ys, ys)
-                Kyy = sum(torch.exp(-Dyy.pow(2) / (2 * s * s)) for s in sigmas)
-                eyy = Dyy.sum() / (n * (n - 1))
-                kyy = (Kyy.sum() - len(sigmas) * n) / (n * (n - 1))
-                exy = (W @ Dxy.mean(1)) / m_tot
-                kxy = (W @ Kxy.mean(1)) / m_tot
-                ed_s.append((2 * exy - exx - eyy).cpu().numpy())
-                mmd_s.append((kxx + kyy - 2 * kxy).cpu().numpy())
+                e, k = weighted_ed_mmd(xr, ys, W, sigmas, rt)
+                ed_s.append(e.cpu().numpy())
+                mmd_s.append(k.cpu().numpy())
             ed[model][:, li] = np.mean(ed_s, 0)       # seed-averaged
             mmd[model][:, li] = np.mean(mmd_s, 0)
 

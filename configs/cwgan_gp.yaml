@@ -21,6 +21,7 @@ model:
   projection: true
   concat: true
   out_bound: 0.05             # G output limited to the scaled training range +/- 5 % of its width
+  nonneg_without_pv: true     # lower bound 0 kWh for labels without PV (no export possible)
 
 train:
   loss: wgan_gp

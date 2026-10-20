@@ -1,6 +1,7 @@
 # V3 research design
 
-Status: proposed for review. No V3 model has been implemented or trained.
+Status: Phase 1 scope approved on 2026-10-20. Implementation and experimental
+verification are in progress; completion and results are recorded separately.
 
 ## Objective
 
@@ -62,9 +63,11 @@ Two alternatives were considered:
 2. Start with a new convolutional or attention-based generator. This requires
    a separate research hypothesis and larger comparison budget.
 
-Both alternatives remain possible later experiments. The first V3 milestone
-establishes a trustworthy reference baseline and the evidence needed to justify
-an extension.
+The user explicitly selected two phases. Phase 1 implements and validates the
+reference architecture on Fluvius. Phase 2 may improve the method and add
+federated learning, but must wait for the user's review and approval after
+Phase 1. No Phase 2 architecture, loss, calibration or federated component is
+part of the current implementation.
 
 ## Data contract and split
 
@@ -83,8 +86,11 @@ the reference's 0-to-100 filter. Exclude the two local daylight-saving dates,
 explicitly account for other incomplete or malformed days; never interpolate
 them silently. Report exclusions and metadata discrepancies.
 
-Primary resolution: 96 quarter-hour energy values per day. The hourly
-sensitivity sums consecutive groups of four, producing 24 hourly kWh values.
+Primary model resolution: 24 hourly energy values per day, preserving the
+reference network's exact input/output dimensions. The source preparation and
+identity audit retain 96 quarter-hour values; sum consecutive groups of four
+after identity curation to obtain the hourly modeling data. A 96-output neural
+variant is deferred, so Phase 1 does not change the reference architecture.
 Quarter-hour interval-average kW equals four times the interval kWh. Net import
 does not identify gross consumption or PV generation.
 
@@ -125,7 +131,7 @@ scaler parameters. Preserve original metadata and curation provenance.
 
 Implement the reference generator with Gaussian latent dimension 24,
 one-hot conditions, hidden widths 64/128/64 and LeakyReLU slope 0.2. Its output
-is linear with 96 or 24 values. Use the reference discriminator widths
+is linear with 24 values. Use the reference discriminator widths
 64/128/256, LeakyReLU 0.2 and dropout 0.4.
 
 Use non-saturating binary cross-entropy with logits, equivalent to the
@@ -161,7 +167,7 @@ Required comparisons:
 - Conditional mean: a deliberately low-diversity control.
 - Conditional Gaussian copula: a non-neural joint-distribution baseline.
 - Unconditional GAN: matched architecture and budget without conditioning.
-- Conditional reference GAN at quarter-hour and hourly resolutions.
+- Conditional reference GAN at hourly resolution.
 
 For the copula, fit separate empirical marginals by condition and slot using
 training observations only. Map average ranks to probabilities `(rank-0.5)/n`
@@ -193,11 +199,9 @@ Evaluate fidelity in physical units: per-slot Wasserstein distances,
 daily net-energy distributions, maximum interval-average power, signed
 within-day power differences, autocorrelation distributions, mean and quantile
 profiles, and diversity. Report condition-level sample counts and both
-condition-macro and sample-weighted summaries. Compare resolutions on a common
-hourly representation as well as at their native resolutions.
-Fit one separate hourly evaluation transform on the common curated hourly
-training profiles and apply it to both arms after aggregation. Never directly
-rank native 24-dimensional and 96-dimensional normalized distances.
+condition-macro and sample-weighted summaries. Use the same hourly training
+transform and physical units for all Phase 1 methods. Source quarter-hour
+identity checks are not a separate neural experiment.
 
 Do not pair independent generated and real days and interpret their pointwise
 RMSE as forecasting error. Do not port the reference's invalid raw-value

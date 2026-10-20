@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Research artifacts; anchors keep similarly named package modules trackable.
+/data/
+/runs/
+/artifacts/

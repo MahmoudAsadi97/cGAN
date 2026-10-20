@@ -98,6 +98,10 @@ def test_replay_isolation_scaler_provenance_and_artifacts(tmp_path, normalizatio
     assert checkpoint["metadata"]["source_sha256"] == "a" * 64
     assert checkpoint["provenance"]["git_commit_tree"] == subprocess.check_output(
         ["git", "rev-parse", "HEAD^{tree}"], cwd=Path(__file__).resolve().parents[1], text=True).strip()
+    root = Path(__file__).resolve().parents[1]
+    assert checkpoint["provenance"]["source_files_sha256"] == {
+        str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted((root / "src" / "fluvius_cgan").glob("*.py"))}
     labels = np.array([0, 8, 0], dtype=np.int64)
     a = generate(out1 / "best.pt", labels, seed=30)
     b = generate(out2 / "best.pt", labels, seed=30)
@@ -184,7 +188,9 @@ def test_provenance_and_input_mismatches_fail_closed(tmp_path, violation):
     ("objective", "wasserstein"), ("objective", None), ("objective", []),
     ("adam_beta1", -0.1), ("adam_beta1", True), ("adam_beta1", 1),
     ("adam_beta2", float("nan")), ("adam_beta2", float("inf")), ("adam_beta2", 1),
-    ("discriminator_hidden_dim", 0), ("discriminator_hidden_dim", True)])
+    ("discriminator_hidden_dim", 0), ("discriminator_hidden_dim", True),
+    ("conditional_mean_residual", "false"), ("conditional_mean_residual", 1),
+    ("conditional_mean_residual", None)])
 def test_invalid_config_rejected(tmp_path, key, value):
     data = prepared(tmp_path)
     with pytest.raises(ValueError):
@@ -197,7 +203,8 @@ def test_inverse_scaling_is_used_for_generation(tmp_path):
     train(data, out, settings(epochs=1))
     checkpoint = torch.load(out / "best.pt", weights_only=True)
     # Checkpoints from before objective/normalization config fields still load.
-    for name in ("objective", "normalization", "adam_beta1", "adam_beta2", "discriminator_hidden_dim"):
+    for name in ("objective", "normalization", "adam_beta1", "adam_beta2",
+                 "discriminator_hidden_dim", "conditional_mean_residual"):
         checkpoint["config"].pop(name, None)
     for key, value in checkpoint["generator_state_dict"].items():
         checkpoint["generator_state_dict"][key] = torch.zeros_like(value)
@@ -362,3 +369,62 @@ def test_discriminator_width_can_change_without_generator_width(tmp_path):
     assert checkpoint["discriminator_state_dict"]["model.0.weight"].shape == (8, 88)
     assert checkpoint["generator_state_dict"]["model.0.weight"].shape == (4, 68)
     assert checkpoint["config"]["discriminator_hidden_dim"] == 8
+
+
+@pytest.mark.parametrize("normalization", ["minmax", "standard"])
+def test_residual_fits_selected_train_and_replays_inverse(tmp_path, normalization):
+    data = prepared(tmp_path)
+    options = settings(epochs=1, max_train_samples=3, normalization=normalization,
+                       conditional_mean_residual=True)
+    out, replay = tmp_path / "first", tmp_path / "replay"
+    train(data, out, options)
+    train(data, replay, options)
+    checkpoint = torch.load(out / "best.pt", weights_only=True)
+    with np.load(data / "train.npz") as saved_train:
+        raw, labels = saved_train["x"].astype(np.float64), saved_train["y"]
+    selected = np.sort(np.random.default_rng(options["seed"]).choice(len(raw), 3, replace=False))
+    offset = raw.mean() if normalization == "standard" else raw.min()
+    scale = raw.std() if normalization == "standard" else raw.max() - raw.min()
+    normalized = ((raw - offset) / scale).astype(np.float32)
+    state = checkpoint["generator_state_dict"]
+    for label in np.unique(labels[selected]):
+        mask = labels[selected] == label
+        expected = normalized[selected][mask].astype(np.float64).mean(axis=0).astype(np.float32)
+        np.testing.assert_array_equal(state["mean_profiles"][label].numpy(), expected)
+        assert not np.array_equal(expected, normalized[labels == label].mean(axis=0))
+    support = np.zeros(64, dtype=bool)
+    support[np.unique(labels[selected])] = True
+    np.testing.assert_array_equal(state["supported_conditions"].numpy(), support)
+    generation_labels = np.array(checkpoint["supported_labels"] * 2)
+    np.testing.assert_array_equal(generate(out / "best.pt", generation_labels, seed=31),
+                                  generate(replay / "best.pt", generation_labels, seed=31))
+    # Zero only the learned residual parameters; preserve fixed offsets/support.
+    for name, value in state.items():
+        if name.startswith("base."):
+            state[name] = torch.zeros_like(value)
+    torch.save(checkpoint, out / "zero_residual.pt")
+    expected_raw = (state["mean_profiles"][generation_labels].numpy().astype(np.float64) * scale + offset).astype(np.float32)
+    np.testing.assert_array_equal(generate(out / "zero_residual.pt", generation_labels), expected_raw)
+    # Outer support metadata alone must not override the restored wrapper mask.
+    absent = int(np.flatnonzero(~support)[0])
+    checkpoint["supported_labels"].append(absent)
+    torch.save(checkpoint, out / "altered_support.pt")
+    with pytest.raises(ValueError, match="unsupported"):
+        generate(out / "altered_support.pt", np.array([absent]))
+
+
+def test_unconditional_residual_uses_one_empirical_global_mean_without_labels(tmp_path):
+    data = prepared(tmp_path)
+    # Unequal condition counts distinguish empirical global means from an equal
+    # average of per-condition means. Technology remains constant within meters.
+    change_npz(data / "train.npz", y=np.array([0, 0, 0, 0, 0, 0, 8, 8]))
+    out = tmp_path / "run"
+    train(data, out, settings(epochs=1, unconditional=True, conditional_mean_residual=True))
+    checkpoint = torch.load(out / "best.pt", weights_only=True)
+    raw = np.load(data / "train.npz")["x"].astype(np.float64)
+    normalized = ((raw - raw.min()) / (raw.max() - raw.min())).astype(np.float32)
+    expected = normalized.astype(np.float64).mean(axis=0).astype(np.float32)[None, :]
+    np.testing.assert_array_equal(checkpoint["generator_state_dict"]["mean_profiles"].numpy(), expected)
+    assert checkpoint["generator_state_dict"]["supported_conditions"].tolist() == [True]
+    np.testing.assert_array_equal(generate(out / "best.pt", np.array([0, 8, 0]), seed=31),
+                                  generate(out / "best.pt", np.array([8, 0, 8]), seed=31))

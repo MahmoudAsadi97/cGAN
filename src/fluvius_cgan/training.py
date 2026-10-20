@@ -24,6 +24,7 @@ import torch
 from torch.nn import functional as F
 
 from .models import Discriminator, Generator
+from .residual import ResidualGenerator, fit_mean_profiles
 
 
 DEFAULT_CONFIG = {
@@ -32,7 +33,7 @@ DEFAULT_CONFIG = {
     "num_threads": 1, "unconditional": False, "validation_samples": 2048,
     "max_train_samples": None, "patience": None, "normalization": "minmax",
     "objective": "bce", "adam_beta1": 0.9, "adam_beta2": 0.999,
-    "discriminator_hidden_dim": None,
+    "discriminator_hidden_dim": None, "conditional_mean_residual": False,
 }
 VALIDATION_METRIC = "mean_interval_wasserstein_normalized"
 CHECKPOINT_FORMAT = 1
@@ -69,8 +70,9 @@ def _config(config):
         if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value) or not 0 <= value < 1:
             raise ValueError(f"{name} must be finite and in [0, 1)")
         result[name] = float(value)
-    if not isinstance(result["unconditional"], bool):
-        raise ValueError("unconditional must be a boolean")
+    for name in ("unconditional", "conditional_mean_residual"):
+        if not isinstance(result[name], bool):
+            raise ValueError(f"{name} must be a boolean")
     if result["normalization"] not in ("minmax", "standard"):
         raise ValueError("normalization must be minmax or standard")
     if result["objective"] not in ("bce", "hinge_sn"):
@@ -225,6 +227,9 @@ def _atomic_checkpoint(path, checkpoint):
 def _provenance(device):
     root = Path(__file__).resolve().parents[2]
     result = {"git_commit": None, "git_commit_tree": None, "git_dirty": None,
+              "source_files_sha256": {
+                  str(path.relative_to(root)): _sha256(path)
+                  for path in sorted(Path(__file__).resolve().parent.glob("*.py"))},
               "python": platform.python_version(),
               "numpy": str(np.__version__), "torch": str(torch.__version__),
               "hardware": {"platform": platform.platform(), "machine": platform.machine(),
@@ -443,6 +448,9 @@ def _train(prepared_dir, output_dir, config, started):
     best_score, best_epoch, stale_epochs = math.inf, 0, 0
     with _deterministic(config["seed"], config["num_threads"], device):
         generator = Generator(config["latent_dim"], condition_dim, config["hidden_dim"], metadata["resolution"]).to(device)
+        if config["conditional_mean_residual"]:
+            # Fixed offsets use only the normalized rows actually trained on.
+            generator = ResidualGenerator(generator, fit_mean_profiles(train_x, labels, condition_dim))
         discriminator = Discriminator(metadata["resolution"], condition_dim,
                                       config["discriminator_hidden_dim"] or config["hidden_dim"],
                                       objective=config["objective"]).to(device)
@@ -574,6 +582,9 @@ def generate(checkpoint, labels: np.ndarray, seed=42, batch_size=1024) -> np.nda
         raise ValueError("checkpoint scaler kind disagrees with normalization config")
     with _deterministic(seed, config["num_threads"], torch.device("cpu")):
         generator = Generator(config["latent_dim"], condition_dim, config["hidden_dim"], saved["output_dim"])
+        if config["conditional_mean_residual"]:
+            generator = ResidualGenerator(generator, saved["generator_state_dict"]["mean_profiles"])
+        # Restore the residual support mask as well as its means and base weights.
         generator.load_state_dict(saved["generator_state_dict"], strict=True)
         generator.eval()
         # Draw once so latent vectors do not depend on how inference is batched.

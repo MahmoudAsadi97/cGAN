@@ -69,6 +69,26 @@ isolate spectral normalization from loss, dropout or optimizer changes. The
 reference BCE arms keep the original Adam defaults. Future attribution of the
 stabilization package requires separate component ablations.
 
+## Conditional mean residual screen (declared before execution)
+
+The completed normalization comparison reduced macro interval W1 from 0.37745
+to 0.10940 kWh and ramp W1 from 1.54375 to 0.15496 kW. Diversity remained low
+(0.37607), daily-energy W1 was 7.92715 kWh and lag-one ACF W1 was 0.18011.
+Standardization helped, but did not meet the screening gates.
+
+Test a generator skip connection containing the normalized training conditional
+mean profile. Fit the means only from the actual selected training rows; preserve
+the learned generator's original initialization, latent inputs and unbounded
+residual outputs. This is a learned residual model, distinct from the diagnostic
+post-hoc mean replacement. Both adversaries still see reconstructed normalized
+profiles and use the same pooled checkpoint score. For an unconditional ablation,
+use a single global mean so no label information enters the model.
+
+Run one residual arm paired with standard BCE/width64, and one paired with the
+standard spectral-hinge/width128 package. Keep the same seed42, 65,536 profiles,
+120 epochs and batch512. These comparisons isolate residual centering within
+each objective. All arms, including ineffective changes, remain in the ledger.
+
 Published foundations: Gulrajani et al., *Improved Training of Wasserstein GANs*,
 NeurIPS 2017 (https://papers.nips.cc/paper/7159-improved-training-of-wasserstein-gans.pdf);
 Miyato et al., *Spectral Normalization for Generative Adversarial Networks*, ICLR

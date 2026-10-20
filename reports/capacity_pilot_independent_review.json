@@ -1,0 +1,735 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-20T16:26:31.870338+00:00",
+  "audit_status": "discrepancies_found",
+  "scope": "Independent JSON-only audit of the complete prospective three-seed capacity validation pilot; no model fitting, profile arrays, checkpoint/map archive reads, or TEST access.",
+  "test_used": false,
+  "assessment": "runs/capacity_pilot.json",
+  "audit_script": {
+    "path": "runs/audit_capacity_pilot.py",
+    "sha256": "253869b8592ce785c54f4677a9a64e0e17347e3df9f0078de4721f6e0775651a"
+  },
+  "protocol": "docs/CAPACITY_REFINEMENT.md",
+  "numerical_comparison_tolerance": {
+    "relative": 1e-12,
+    "absolute": 1e-12
+  },
+  "inputs": {
+    "runs/capacity_pilot.json": {
+      "sha256": "477d62a38e6b536a8d844388abf81e768cb8da0f4013d66389e4970072742c29",
+      "bytes": 22541910
+    },
+    "runs/audit_capacity_pilot.py": {
+      "sha256": "253869b8592ce785c54f4677a9a64e0e17347e3df9f0078de4721f6e0775651a",
+      "bytes": 21796
+    },
+    "docs/CAPACITY_REFINEMENT.md": {
+      "sha256": "4273dcbb7d3d4e0c64dff52cb0e9a502b84debf5cb0b40ad492ea84052971ae3",
+      "bytes": 15956
+    },
+    "scripts/assess_temporal_pilot.py": {
+      "sha256": "310cb6e2ccec0d2b728ac26c4da8ecc453bfb057edcbdb76bae7edae2b047c26",
+      "bytes": 40581
+    },
+    "scripts/collect_calibrated_study.py": {
+      "sha256": "980606d2b6f31d80dd4a25df05deef73f0fd7d8677de3c11b5ab09efafe83425",
+      "bytes": 49573
+    },
+    "runs/curated_capacity/seed_11/config.json": {
+      "sha256": "8316e36a2330c51d54fe879fb14f83dc7fad890336dc0e68e624f4eb83278ccc",
+      "bytes": 679
+    },
+    "runs/curated_capacity/seed_11/summary.json": {
+      "sha256": "1436c35ffcf26781a0cfe44ddd21692b8499494608563bf5f4fefe3b5b35da64",
+      "bytes": 64034
+    },
+    "runs/curated_capacity/seed_11/history.json": {
+      "sha256": "3acd2b0b64ad23ee68dcd27b61be77cb838e624f3ef33f1a905a7716fe013ed1",
+      "bytes": 41221
+    },
+    "runs/curated_capacity/seed_11/validation_report.json": {
+      "sha256": "7deb731e7a5abda660c6e1b6c446cfb89c14f3b0abe8b24ba64cafd56c807511",
+      "bytes": 406379
+    },
+    "runs/curated_capacity/seed_11/calibration_validation.json": {
+      "sha256": "b6da9faa6bef9a0d423b1d897cd977a33e7fd22ff15228b2b30f097414add080",
+      "bytes": 3520292
+    },
+    "runs/curated_capacity/seed_11/utility_validation.json": {
+      "sha256": "8372684d5ccae28c850b0a20a4ed41f2c9c9b61a389f0e7fd9e5d8f48a825562",
+      "bytes": 102062
+    },
+    "runs/curated_capacity/seed_22/config.json": {
+      "sha256": "b8861a55384ec81075ff11a370d674aba5a7dfab8e96ffecb03ad04094d890d3",
+      "bytes": 679
+    },
+    "runs/curated_capacity/seed_22/summary.json": {
+      "sha256": "1636af759e1d0a8612f163aaa7beac457b4fc14ddde29e9239d2930411daf427",
+      "bytes": 64025
+    },
+    "runs/curated_capacity/seed_22/history.json": {
+      "sha256": "2eff94ec99d3c35ebc74b02d8329e0163a42510b7448c2d88f6f624535667660",
+      "bytes": 41229
+    },
+    "runs/curated_capacity/seed_22/validation_report.json": {
+      "sha256": "aa8bffa68cfd61c52104cb6374732b1e57a9bf4f8de78870edf1196107a489f5",
+      "bytes": 406377
+    },
+    "runs/curated_capacity/seed_22/calibration_validation.json": {
+      "sha256": "6a4aa9f2fd8ff82565ab2fa83d24d41cd2696dac1563ea1acdcdb2f15d31a378",
+      "bytes": 3521109
+    },
+    "runs/curated_capacity/seed_22/utility_validation.json": {
+      "sha256": "5e870dcfc64ee0ff4cd89afbe27b11689772b87b8ac1e665c7430d0833c63875",
+      "bytes": 102074
+    },
+    "runs/curated_capacity/seed_33/config.json": {
+      "sha256": "dcec07e0feb1eaf75d2fa60620d86cea44ee72fd29227977bfb79849aabf29b3",
+      "bytes": 679
+    },
+    "runs/curated_capacity/seed_33/summary.json": {
+      "sha256": "be72e639010d160da291018dd5e48342cb9b0edc099964bcdcff2b8d0a3aeb48",
+      "bytes": 64014
+    },
+    "runs/curated_capacity/seed_33/history.json": {
+      "sha256": "63c4a5ce180368b163906ea168f891e849ba5c66dd6671d96498791483bebde1",
+      "bytes": 41248
+    },
+    "runs/curated_capacity/seed_33/validation_report.json": {
+      "sha256": "b80bc7bba1814fbe55b81b82e1c4328faa82383979ab6658a10818ba07902122",
+      "bytes": 406343
+    },
+    "runs/curated_capacity/seed_33/calibration_validation.json": {
+      "sha256": "122c66b0e01ebab28cfa3185b2d296883661469600e54bb92227215912b2c89e",
+      "bytes": 3520757
+    },
+    "runs/curated_capacity/seed_33/utility_validation.json": {
+      "sha256": "37cb42245fa677355ee43de3bc8c9fa481f5ecdc450c616bdf7d1b373cadf312",
+      "bytes": 102066
+    },
+    "runs/curated_swd10/seed_11/config.json": {
+      "sha256": "22b27b295beff5e77f05e1fc28563d78f8062adc4c6092d6bbc2ab691f97cefb",
+      "bytes": 646
+    },
+    "runs/curated_swd10/seed_11/summary.json": {
+      "sha256": "b8c0df0b92012dd74f7c4112503566ddeaa4a8d4f7c9f0ec750b8664a01a5378",
+      "bytes": 63338
+    },
+    "runs/curated_swd10/seed_11/history.json": {
+      "sha256": "c38ac8750f9bda8fcb6c35562a6faf6f3cbba9a32118ef4fa9a53ab8f65f46dc",
+      "bytes": 40378
+    },
+    "runs/curated_swd10/seed_11/validation_report.json": {
+      "sha256": "81cf4924a7672dd4a1b31383bf759dc978172acd831492f8bd1ad07c070d6679",
+      "bytes": 406386
+    },
+    "runs/curated_swd10/seed_11/calibration_validation.json": {
+      "sha256": "4e6903f67d346fb67df7a7394ef46d166cd709836309f2c849d7ec7dc33056ec",
+      "bytes": 3520108
+    },
+    "runs/curated_swd10/seed_11/utility_validation.json": {
+      "sha256": "cc500f622c4afc9c0690ab4984b7cf86602e9b94af911cc56ca683002f9fe5c5",
+      "bytes": 101124
+    },
+    "runs/curated_swd10/seed_22/config.json": {
+      "sha256": "d43faf2d6315fdb0f3321642f558dc3680aee16042e00ff157f27bbd46c84e44",
+      "bytes": 646
+    },
+    "runs/curated_swd10/seed_22/summary.json": {
+      "sha256": "73ad91f1873fa83f830df33a71b8f572e6e91f5bd31d6abd6bdddca8a0a84ba8",
+      "bytes": 63324
+    },
+    "runs/curated_swd10/seed_22/history.json": {
+      "sha256": "df5b2aac10e53274d2ab0d8c297d94381eb1ab79c3327d308364a6f1d7dcb5c2",
+      "bytes": 40367
+    },
+    "runs/curated_swd10/seed_22/validation_report.json": {
+      "sha256": "3d33d55198ea728ca15a0e78a3daec64955d448b613551d6adf3d459c1a8d312",
+      "bytes": 406322
+    },
+    "runs/curated_swd10/seed_22/calibration_validation.json": {
+      "sha256": "da4e9457d5d91e21d394b49bd58a3c2c18ef6a8fff49f76d341878064c389665",
+      "bytes": 3519115
+    },
+    "runs/curated_swd10/seed_22/utility_validation.json": {
+      "sha256": "34ed240db6309b4e76725d71cbe978ff51f57e930de5e3c5c1c4964465627fd4",
+      "bytes": 101236
+    },
+    "runs/curated_swd10/seed_33/config.json": {
+      "sha256": "320cf4d49f864d105c94702a4580ba1c9e7d96574e7913ea0b668d755c5b4655",
+      "bytes": 646
+    },
+    "runs/curated_swd10/seed_33/summary.json": {
+      "sha256": "eab79bc3a80725a19db2861f42d513ca0e65fcd1c72ef5c2a2171072fac17020",
+      "bytes": 63315
+    },
+    "runs/curated_swd10/seed_33/history.json": {
+      "sha256": "11f969353f6882137cff67c2f9f825ebc528dd83325a17f0eba90635e227754b",
+      "bytes": 40405
+    },
+    "runs/curated_swd10/seed_33/validation_report.json": {
+      "sha256": "20c45c2c87432b6d6fdba4c1c66126dc731366f4c466628d792f3eff65fc51fd",
+      "bytes": 406339
+    },
+    "runs/curated_swd10/seed_33/calibration_validation.json": {
+      "sha256": "8daf1b0970f78c9f52c0b2cf7c40235c53886677b93eebc29d5b9ab6b6800091",
+      "bytes": 3519389
+    },
+    "runs/curated_swd10/seed_33/utility_validation.json": {
+      "sha256": "93f8de3a916a8c4789166f2902a3b73bf6c081e9880a8ed8bad3822cc35eb12e",
+      "bytes": 101242
+    }
+  },
+  "checks": {
+    "total": 1469,
+    "passed": 1468,
+    "failures": [
+      "assessment binds collector source"
+    ],
+    "maximum_source_macro_absolute_difference": {
+      "physical": 4.440892098500626e-16,
+      "battery": 1.7763568394002505e-15,
+      "utility": 2.7755575615628914e-17
+    }
+  },
+  "seed_coverage": {
+    "candidate": [
+      11,
+      22,
+      33
+    ],
+    "baseline": [
+      11,
+      22,
+      33
+    ]
+  },
+  "per_run": [
+    {
+      "arm": "candidate",
+      "seed": 11,
+      "directory": "runs/curated_capacity/seed_11",
+      "selected_epoch": 26,
+      "completed_epochs": 26,
+      "updates_per_adversary": 30784,
+      "sampled_profiles": 15761408,
+      "calibrated_metrics": {
+        "ramp_wasserstein_kw": 0.13506057900928783,
+        "daily_energy_wasserstein_kwh": 3.18656939123467,
+        "peak_power_wasserstein_kw": 0.8039454341005061,
+        "lag_one_acf_wasserstein": 0.07210339218484788,
+        "projected_profile_wasserstein_kwh": 0.06587813097874388
+      },
+      "utility_macros": {
+        "training_real": {
+          "rmse_kwh": 0.14488224995380156,
+          "mae_kwh": 0.07264503140401525
+        },
+        "training_cgan": {
+          "rmse_kwh": 0.14591169918391442,
+          "mae_kwh": 0.07512536356996424
+        },
+        "training_calibrated_cgan": {
+          "rmse_kwh": 0.1455880981011446,
+          "mae_kwh": 0.0740542458394677
+        },
+        "training_resampling": {
+          "rmse_kwh": 0.1448808404654576,
+          "mae_kwh": 0.07265155865845165
+        },
+        "training_copula": {
+          "rmse_kwh": 0.14752831544413034,
+          "mae_kwh": 0.07674517021648682
+        },
+        "persistence": {
+          "rmse_kwh": 0.15024220538922758,
+          "mae_kwh": 0.06875339870285968
+        }
+      },
+      "recorded_checkpoint_sha256": "33874aabccc193cea9959a57cea4a00bfa871d1475e5629c17c1358a9a0b5bed",
+      "recorded_map_sha256": "920ee452c76bd9ff80e21c50aeddda8039035967c347a776c0bca1402c3423d5"
+    },
+    {
+      "arm": "candidate",
+      "seed": 22,
+      "directory": "runs/curated_capacity/seed_22",
+      "selected_epoch": 26,
+      "completed_epochs": 26,
+      "updates_per_adversary": 30784,
+      "sampled_profiles": 15761408,
+      "calibrated_metrics": {
+        "ramp_wasserstein_kw": 0.12569026345910123,
+        "daily_energy_wasserstein_kwh": 2.945281686609934,
+        "peak_power_wasserstein_kw": 0.7529402027214948,
+        "lag_one_acf_wasserstein": 0.06708644861049172,
+        "projected_profile_wasserstein_kwh": 0.06345109572467719
+      },
+      "utility_macros": {
+        "training_real": {
+          "rmse_kwh": 0.14488224995380156,
+          "mae_kwh": 0.07264503140401525
+        },
+        "training_cgan": {
+          "rmse_kwh": 0.145719011348722,
+          "mae_kwh": 0.07492017743432539
+        },
+        "training_calibrated_cgan": {
+          "rmse_kwh": 0.14534594353211586,
+          "mae_kwh": 0.07376112841962211
+        },
+        "training_resampling": {
+          "rmse_kwh": 0.1448808404654576,
+          "mae_kwh": 0.07265155865845165
+        },
+        "training_copula": {
+          "rmse_kwh": 0.14752831544413034,
+          "mae_kwh": 0.07674517021648682
+        },
+        "persistence": {
+          "rmse_kwh": 0.15024220538922758,
+          "mae_kwh": 0.06875339870285968
+        }
+      },
+      "recorded_checkpoint_sha256": "d5e79b39ce4c8bc46c4e79d08829cbd008db7e54163c6029c028e1707a97665a",
+      "recorded_map_sha256": "3e93a85463f257484eb00d0ac1da799c40156b56e0190edf32419bef3b450e68"
+    },
+    {
+      "arm": "candidate",
+      "seed": 33,
+      "directory": "runs/curated_capacity/seed_33",
+      "selected_epoch": 25,
+      "completed_epochs": 26,
+      "updates_per_adversary": 30784,
+      "sampled_profiles": 15761408,
+      "calibrated_metrics": {
+        "ramp_wasserstein_kw": 0.1287349765211043,
+        "daily_energy_wasserstein_kwh": 2.9725465441327517,
+        "peak_power_wasserstein_kw": 0.7549512263937035,
+        "lag_one_acf_wasserstein": 0.06996264947905008,
+        "projected_profile_wasserstein_kwh": 0.06490031857546658
+      },
+      "utility_macros": {
+        "training_real": {
+          "rmse_kwh": 0.14488224995380156,
+          "mae_kwh": 0.07264503140401525
+        },
+        "training_cgan": {
+          "rmse_kwh": 0.14585455291101176,
+          "mae_kwh": 0.07478034291266938
+        },
+        "training_calibrated_cgan": {
+          "rmse_kwh": 0.14555054200459097,
+          "mae_kwh": 0.07390873660531759
+        },
+        "training_resampling": {
+          "rmse_kwh": 0.1448808404654576,
+          "mae_kwh": 0.07265155865845165
+        },
+        "training_copula": {
+          "rmse_kwh": 0.14752831544413034,
+          "mae_kwh": 0.07674517021648682
+        },
+        "persistence": {
+          "rmse_kwh": 0.15024220538922758,
+          "mae_kwh": 0.06875339870285968
+        }
+      },
+      "recorded_checkpoint_sha256": "c69b39ccec4565eed9fed3df61f2c7278a84114c25219a77a4523da80d6edec9",
+      "recorded_map_sha256": "9891e3f1ba243abd352a96130e04813e67c0a02aec0a4e3319cdf2e6fcbdb8f9"
+    },
+    {
+      "arm": "baseline",
+      "seed": 11,
+      "directory": "runs/curated_swd10/seed_11",
+      "selected_epoch": 25,
+      "completed_epochs": 26,
+      "updates_per_adversary": 30784,
+      "sampled_profiles": 15761408,
+      "calibrated_metrics": {
+        "ramp_wasserstein_kw": 0.10226174681737113,
+        "daily_energy_wasserstein_kwh": 3.165317400565605,
+        "peak_power_wasserstein_kw": 0.7765825149167422,
+        "lag_one_acf_wasserstein": 0.08151894745123689,
+        "projected_profile_wasserstein_kwh": 0.06504365321920129
+      },
+      "utility_macros": {
+        "training_real": {
+          "rmse_kwh": 0.14488224995380156,
+          "mae_kwh": 0.07264503140401525
+        },
+        "training_cgan": {
+          "rmse_kwh": 0.14542379462659244,
+          "mae_kwh": 0.07435897034637778
+        },
+        "training_calibrated_cgan": {
+          "rmse_kwh": 0.14529783410387223,
+          "mae_kwh": 0.07366167457843452
+        },
+        "training_resampling": {
+          "rmse_kwh": 0.1448808404654576,
+          "mae_kwh": 0.07265155865845165
+        },
+        "training_copula": {
+          "rmse_kwh": 0.14752831544413034,
+          "mae_kwh": 0.07674517021648682
+        },
+        "persistence": {
+          "rmse_kwh": 0.15024220538922758,
+          "mae_kwh": 0.06875339870285968
+        }
+      },
+      "recorded_checkpoint_sha256": "12159e0495b1a6a53e5814eebd1cff54ad50d53a259fdbe3e64cbc4d6e703a4b",
+      "recorded_map_sha256": "74fd16d428d98e93f6bf1fa6469cc0638d59da979a77991fc5571d84da91aca5"
+    },
+    {
+      "arm": "baseline",
+      "seed": 22,
+      "directory": "runs/curated_swd10/seed_22",
+      "selected_epoch": 25,
+      "completed_epochs": 26,
+      "updates_per_adversary": 30784,
+      "sampled_profiles": 15761408,
+      "calibrated_metrics": {
+        "ramp_wasserstein_kw": 0.0907247080811097,
+        "daily_energy_wasserstein_kwh": 3.3589236080923883,
+        "peak_power_wasserstein_kw": 0.7942376059888471,
+        "lag_one_acf_wasserstein": 0.09242641043980945,
+        "projected_profile_wasserstein_kwh": 0.06564590182277076
+      },
+      "utility_macros": {
+        "training_real": {
+          "rmse_kwh": 0.14488224995380156,
+          "mae_kwh": 0.07264503140401525
+        },
+        "training_cgan": {
+          "rmse_kwh": 0.14544847165371433,
+          "mae_kwh": 0.07347182187649538
+        },
+        "training_calibrated_cgan": {
+          "rmse_kwh": 0.14516134828274302,
+          "mae_kwh": 0.07261325480499047
+        },
+        "training_resampling": {
+          "rmse_kwh": 0.1448808404654576,
+          "mae_kwh": 0.07265155865845165
+        },
+        "training_copula": {
+          "rmse_kwh": 0.14752831544413034,
+          "mae_kwh": 0.07674517021648682
+        },
+        "persistence": {
+          "rmse_kwh": 0.15024220538922758,
+          "mae_kwh": 0.06875339870285968
+        }
+      },
+      "recorded_checkpoint_sha256": "71600382449bdd109a1f05ce2898c4eac02b17d155d7e4363d863b7fefb23765",
+      "recorded_map_sha256": "7ce4fc08449755f4e653783bb2f3760ca0bfb74403e6ca74cd71d19ee6a336e3"
+    },
+    {
+      "arm": "baseline",
+      "seed": 33,
+      "directory": "runs/curated_swd10/seed_33",
+      "selected_epoch": 24,
+      "completed_epochs": 26,
+      "updates_per_adversary": 30784,
+      "sampled_profiles": 15761408,
+      "calibrated_metrics": {
+        "ramp_wasserstein_kw": 0.10132022978588841,
+        "daily_energy_wasserstein_kwh": 3.221379776754639,
+        "peak_power_wasserstein_kw": 0.7885203482101544,
+        "lag_one_acf_wasserstein": 0.08661056833194371,
+        "projected_profile_wasserstein_kwh": 0.06565020622626468
+      },
+      "utility_macros": {
+        "training_real": {
+          "rmse_kwh": 0.14488224995380156,
+          "mae_kwh": 0.07264503140401525
+        },
+        "training_cgan": {
+          "rmse_kwh": 0.14550472843944984,
+          "mae_kwh": 0.074139306784422
+        },
+        "training_calibrated_cgan": {
+          "rmse_kwh": 0.1454568395208995,
+          "mae_kwh": 0.0733736796617774
+        },
+        "training_resampling": {
+          "rmse_kwh": 0.1448808404654576,
+          "mae_kwh": 0.07265155865845165
+        },
+        "training_copula": {
+          "rmse_kwh": 0.14752831544413034,
+          "mae_kwh": 0.07674517021648682
+        },
+        "persistence": {
+          "rmse_kwh": 0.15024220538922758,
+          "mae_kwh": 0.06875339870285968
+        }
+      },
+      "recorded_checkpoint_sha256": "fd866bc7e2b032997576609575a953750f6d5a5af13448d8518476e213bdc1aa",
+      "recorded_map_sha256": "62794b732cd2dd3ea09db7b8d3738e02871e42cad8d310785c46441a8be73dde"
+    }
+  ],
+  "recomputed_gates": {
+    "ramp_lower_in_every_paired_seed": {
+      "pass": false,
+      "per_seed": [
+        {
+          "seed": 11,
+          "candidate": 0.13506057900928783,
+          "reference": 0.10226174681737113,
+          "maximum_ratio": 1,
+          "limit": 0.10226174681737113,
+          "difference": 0.032798832191916705,
+          "ratio": 1.3207341279871936,
+          "relative_change": 0.32073412798719364,
+          "pass": false,
+          "comparison": "strictly_lower"
+        },
+        {
+          "seed": 22,
+          "candidate": 0.12569026345910123,
+          "reference": 0.0907247080811097,
+          "maximum_ratio": 1,
+          "limit": 0.0907247080811097,
+          "difference": 0.03496555537799152,
+          "ratio": 1.3854027873722297,
+          "relative_change": 0.3854027873722296,
+          "pass": false,
+          "comparison": "strictly_lower"
+        },
+        {
+          "seed": 33,
+          "candidate": 0.1287349765211043,
+          "reference": 0.10132022978588841,
+          "maximum_ratio": 1,
+          "limit": 0.10132022978588841,
+          "difference": 0.027414746735215892,
+          "ratio": 1.2705752522783376,
+          "relative_change": 0.2705752522783376,
+          "pass": false,
+          "comparison": "strictly_lower"
+        }
+      ]
+    },
+    "mean_ramp_wasserstein_kw": {
+      "candidate": 0.12982860632983112,
+      "reference": 0.09810222822812308,
+      "maximum_ratio": 0.9,
+      "limit": 0.08829200540531076,
+      "difference": 0.031726378101708044,
+      "ratio": 1.32340119765611,
+      "relative_change": 0.32340119765611,
+      "pass": false,
+      "candidate_by_seed": {
+        "11": 0.13506057900928783,
+        "22": 0.12569026345910123,
+        "33": 0.1287349765211043
+      },
+      "baseline_by_seed": {
+        "11": 0.10226174681737113,
+        "22": 0.0907247080811097,
+        "33": 0.10132022978588841
+      }
+    },
+    "mean_daily_energy_wasserstein_kwh": {
+      "candidate": 3.034799207325785,
+      "reference": 3.248540261804211,
+      "maximum_ratio": 1.1,
+      "limit": 3.5733942879846325,
+      "difference": -0.21374105447842595,
+      "ratio": 0.9342039693977147,
+      "relative_change": -0.06579603060228535,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 3.18656939123467,
+        "22": 2.945281686609934,
+        "33": 2.9725465441327517
+      },
+      "baseline_by_seed": {
+        "11": 3.165317400565605,
+        "22": 3.3589236080923883,
+        "33": 3.221379776754639
+      }
+    },
+    "mean_peak_power_wasserstein_kw": {
+      "candidate": 0.7706122877385682,
+      "reference": 0.7864468230385813,
+      "maximum_ratio": 1.1,
+      "limit": 0.8650915053424395,
+      "difference": -0.01583453530001311,
+      "ratio": 0.9798657266630775,
+      "relative_change": -0.02013427333692249,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 0.8039454341005061,
+        "22": 0.7529402027214948,
+        "33": 0.7549512263937035
+      },
+      "baseline_by_seed": {
+        "11": 0.7765825149167422,
+        "22": 0.7942376059888471,
+        "33": 0.7885203482101544
+      }
+    },
+    "mean_lag_one_acf_wasserstein": {
+      "candidate": 0.0697174967581299,
+      "reference": 0.08685197540766335,
+      "maximum_ratio": 1.1,
+      "limit": 0.09553717294842969,
+      "difference": -0.01713447864953345,
+      "ratio": 0.8027163047344851,
+      "relative_change": -0.1972836952655149,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 0.07210339218484788,
+        "22": 0.06708644861049172,
+        "33": 0.06996264947905008
+      },
+      "baseline_by_seed": {
+        "11": 0.08151894745123689,
+        "22": 0.09242641043980945,
+        "33": 0.08661056833194371
+      }
+    },
+    "mean_projected_profile_wasserstein_kwh": {
+      "candidate": 0.06474318175962922,
+      "reference": 0.06544658708941224,
+      "maximum_ratio": 1.1,
+      "limit": 0.07199124579835348,
+      "difference": -0.0007034053297830245,
+      "ratio": 0.9892522229032044,
+      "relative_change": -0.010747777096795615,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 0.06587813097874388,
+        "22": 0.06345109572467719,
+        "33": 0.06490031857546658
+      },
+      "baseline_by_seed": {
+        "11": 0.06504365321920129,
+        "22": 0.06564590182277076,
+        "33": 0.06565020622626468
+      }
+    },
+    "utility_each_seed_within_both_references": {
+      "pass": true,
+      "per_seed": [
+        {
+          "seed": 11,
+          "comparisons": {
+            "training_real": {
+              "candidate": 0.1455880981011446,
+              "reference": 0.14488224995380156,
+              "maximum_ratio": 1.1,
+              "limit": 0.15937047494918172,
+              "difference": 0.0007058481473430356,
+              "ratio": 1.0048718745572223,
+              "relative_change": 0.004871874557222217,
+              "pass": true
+            },
+            "training_resampling": {
+              "candidate": 0.1455880981011446,
+              "reference": 0.1448808404654576,
+              "maximum_ratio": 1.1,
+              "limit": 0.15936892451200338,
+              "difference": 0.000707257635686992,
+              "ratio": 1.0048816505578984,
+              "relative_change": 0.004881650557898412,
+              "pass": true
+            }
+          }
+        },
+        {
+          "seed": 22,
+          "comparisons": {
+            "training_real": {
+              "candidate": 0.14534594353211586,
+              "reference": 0.14488224995380156,
+              "maximum_ratio": 1.1,
+              "limit": 0.15937047494918172,
+              "difference": 0.00046369357831430036,
+              "ratio": 1.0032004857631778,
+              "relative_change": 0.003200485763177738,
+              "pass": true
+            },
+            "training_resampling": {
+              "candidate": 0.14534594353211586,
+              "reference": 0.1448808404654576,
+              "maximum_ratio": 1.1,
+              "limit": 0.15936892451200338,
+              "difference": 0.00046510306665825674,
+              "ratio": 1.003210245503574,
+              "relative_change": 0.0032102455035739963,
+              "pass": true
+            }
+          }
+        },
+        {
+          "seed": 33,
+          "comparisons": {
+            "training_real": {
+              "candidate": 0.14555054200459097,
+              "reference": 0.14488224995380156,
+              "maximum_ratio": 1.1,
+              "limit": 0.15937047494918172,
+              "difference": 0.0006682920507894152,
+              "ratio": 1.0046126564917546,
+              "relative_change": 0.004612656491754599,
+              "pass": true
+            },
+            "training_resampling": {
+              "candidate": 0.14555054200459097,
+              "reference": 0.1448808404654576,
+              "maximum_ratio": 1.1,
+              "limit": 0.15936892451200338,
+              "difference": 0.0006697015391333716,
+              "ratio": 1.0046224299706008,
+              "relative_change": 0.00462242997060085,
+              "pass": true
+            }
+          }
+        }
+      ],
+      "three_seed_means_rmse_kwh": {
+        "training_calibrated_cgan": 0.14549486121261715,
+        "training_real": 0.14488224995380156,
+        "training_resampling": 0.1448808404654576
+      },
+      "aggregate_comparisons": {
+        "training_real": {
+          "candidate": 0.14549486121261715,
+          "reference": 0.14488224995380156,
+          "maximum_ratio": 1.1,
+          "limit": 0.15937047494918172,
+          "difference": 0.000612611258815593,
+          "ratio": 1.004228338937385,
+          "relative_change": 0.004228338937384915,
+          "pass": true
+        },
+        "training_resampling": {
+          "candidate": 0.14549486121261715,
+          "reference": 0.1448808404654576,
+          "maximum_ratio": 1.1,
+          "limit": 0.15936892451200338,
+          "difference": 0.0006140207471595494,
+          "ratio": 1.0042381086773577,
+          "relative_change": 0.0042381086773578165,
+          "pass": true
+        }
+      }
+    }
+  },
+  "recomputed_failed_gates": [
+    "ramp_lower_in_every_paired_seed",
+    "mean_ramp_wasserstein_kw"
+  ],
+  "recomputed_pilot_outcome": "fail",
+  "assessor_decision_agrees": true,
+  "limitations": [
+    "JSON/report bindings independently checked; actual checkpoint and calibration archive bytes were not opened or hashed by this audit. Their recorded digests are cross-bound, and binary verification remains the completed assessor's responsibility.",
+    "No prepared arrays or TEST were accessed. TRAIN source identity and exposure are checked from retained JSON records, not independently replayed training.",
+    "All 64 condition means and all three seed gates recomputed. No confidence intervals averaged, no significance or external-confirmation claim. Battery diagnostics remain secondary and do not change promotion gates.",
+    "Historical source differences and the pinned old interpolation implementation remain part of the exploratory validation qualification."
+  ]
+}

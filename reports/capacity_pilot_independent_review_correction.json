@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-20T16:28:32.590119+00:00",
+  "audit_status": "verified_with_source_binding_correction",
+  "scope": "Append-only correction to the independent audit's source-location assumption; no scientific metric recomputation.",
+  "test_used": false,
+  "scientific_metrics_recomputed": false,
+  "original_review": {
+    "path": "reports/capacity_pilot_independent_review.json",
+    "sha256": "14b77399100025cfde9b894288381e8a3a386515d0f385e38cdae7a0d74f70e6",
+    "preserved_unchanged": true
+  },
+  "assessment": {
+    "path": "runs/capacity_pilot.json",
+    "sha256": "477d62a38e6b536a8d844388abf81e768cb8da0f4013d66389e4970072742c29"
+  },
+  "audit_script": {
+    "path": "runs/audit_capacity_pilot.py",
+    "sha256": "253869b8592ce785c54f4677a9a64e0e17347e3df9f0078de4721f6e0775651a"
+  },
+  "correction_script": {
+    "path": "runs/correct_capacity_audit_source_binding.py",
+    "sha256": "18dbe68e27d0b3ccad3a3aadcb76bf083c3b21af1120ef4b7a008af7d7afdfcc"
+  },
+  "resolved_check": "assessment binds collector source",
+  "cause": "The independent auditor compared the recorded collector hash with the later main worktree. The assessor was intentionally executed from the declared clean cGAN-assess checkout at 64a2e9aee98b0e3552ad3775df99f9cee35b2f8c. Its source and Git blob hashes match the recorded hashes exactly. This was an auditor source-location error, not a run-artifact or scientific-arithmetic error.",
+  "pinned_assessment_source": {
+    "worktree_name": "cGAN-assess",
+    "git_commit": "64a2e9aee98b0e3552ad3775df99f9cee35b2f8c",
+    "git_dirty": false,
+    "files": {
+      "scripts/collect_calibrated_study.py": {
+        "recorded_sha256": "6ad46ce7f8bb2dd35018555fc76c338f10bf8d6cab3fad57cd2c6cfceef965c8",
+        "actual_sha256": "6ad46ce7f8bb2dd35018555fc76c338f10bf8d6cab3fad57cd2c6cfceef965c8",
+        "git_blob_sha256": "6ad46ce7f8bb2dd35018555fc76c338f10bf8d6cab3fad57cd2c6cfceef965c8",
+        "verified": true
+      },
+      "scripts/assess_temporal_pilot.py": {
+        "recorded_sha256": "310cb6e2ccec0d2b728ac26c4da8ecc453bfb057edcbdb76bae7edae2b047c26",
+        "actual_sha256": "310cb6e2ccec0d2b728ac26c4da8ecc453bfb057edcbdb76bae7edae2b047c26",
+        "git_blob_sha256": "310cb6e2ccec0d2b728ac26c4da8ecc453bfb057edcbdb76bae7edae2b047c26",
+        "verified": true
+      },
+      "docs/CAPACITY_REFINEMENT.md": {
+        "recorded_sha256": "4273dcbb7d3d4e0c64dff52cb0e9a502b84debf5cb0b40ad492ea84052971ae3",
+        "actual_sha256": "4273dcbb7d3d4e0c64dff52cb0e9a502b84debf5cb0b40ad492ea84052971ae3",
+        "git_blob_sha256": "4273dcbb7d3d4e0c64dff52cb0e9a502b84debf5cb0b40ad492ea84052971ae3",
+        "verified": true
+      }
+    }
+  },
+  "later_main_collector_sha256": "980606d2b6f31d80dd4a25df05deef73f0fd7d8677de3c11b5ab09efafe83425",
+  "audit_check_accounting": {
+    "original_checks": 1469,
+    "original_correct_checks_passed": 1468,
+    "source_binding_checks_resolved": 1,
+    "unresolved_discrepancies": []
+  },
+  "independently_recomputed_pilot_outcome": "fail",
+  "independently_recomputed_failed_gates": [
+    "ramp_lower_in_every_paired_seed",
+    "mean_ramp_wasserstein_kw"
+  ],
+  "independently_recomputed_gates_retained_from_original_review": {
+    "ramp_lower_in_every_paired_seed": {
+      "pass": false,
+      "per_seed": [
+        {
+          "seed": 11,
+          "candidate": 0.13506057900928783,
+          "reference": 0.10226174681737113,
+          "maximum_ratio": 1,
+          "limit": 0.10226174681737113,
+          "difference": 0.032798832191916705,
+          "ratio": 1.3207341279871936,
+          "relative_change": 0.32073412798719364,
+          "pass": false,
+          "comparison": "strictly_lower"
+        },
+        {
+          "seed": 22,
+          "candidate": 0.12569026345910123,
+          "reference": 0.0907247080811097,
+          "maximum_ratio": 1,
+          "limit": 0.0907247080811097,
+          "difference": 0.03496555537799152,
+          "ratio": 1.3854027873722297,
+          "relative_change": 0.3854027873722296,
+          "pass": false,
+          "comparison": "strictly_lower"
+        },
+        {
+          "seed": 33,
+          "candidate": 0.1287349765211043,
+          "reference": 0.10132022978588841,
+          "maximum_ratio": 1,
+          "limit": 0.10132022978588841,
+          "difference": 0.027414746735215892,
+          "ratio": 1.2705752522783376,
+          "relative_change": 0.2705752522783376,
+          "pass": false,
+          "comparison": "strictly_lower"
+        }
+      ]
+    },
+    "mean_ramp_wasserstein_kw": {
+      "candidate": 0.12982860632983112,
+      "reference": 0.09810222822812308,
+      "maximum_ratio": 0.9,
+      "limit": 0.08829200540531076,
+      "difference": 0.031726378101708044,
+      "ratio": 1.32340119765611,
+      "relative_change": 0.32340119765611,
+      "pass": false,
+      "candidate_by_seed": {
+        "11": 0.13506057900928783,
+        "22": 0.12569026345910123,
+        "33": 0.1287349765211043
+      },
+      "baseline_by_seed": {
+        "11": 0.10226174681737113,
+        "22": 0.0907247080811097,
+        "33": 0.10132022978588841
+      }
+    },
+    "mean_daily_energy_wasserstein_kwh": {
+      "candidate": 3.034799207325785,
+      "reference": 3.248540261804211,
+      "maximum_ratio": 1.1,
+      "limit": 3.5733942879846325,
+      "difference": -0.21374105447842595,
+      "ratio": 0.9342039693977147,
+      "relative_change": -0.06579603060228535,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 3.18656939123467,
+        "22": 2.945281686609934,
+        "33": 2.9725465441327517
+      },
+      "baseline_by_seed": {
+        "11": 3.165317400565605,
+        "22": 3.3589236080923883,
+        "33": 3.221379776754639
+      }
+    },
+    "mean_peak_power_wasserstein_kw": {
+      "candidate": 0.7706122877385682,
+      "reference": 0.7864468230385813,
+      "maximum_ratio": 1.1,
+      "limit": 0.8650915053424395,
+      "difference": -0.01583453530001311,
+      "ratio": 0.9798657266630775,
+      "relative_change": -0.02013427333692249,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 0.8039454341005061,
+        "22": 0.7529402027214948,
+        "33": 0.7549512263937035
+      },
+      "baseline_by_seed": {
+        "11": 0.7765825149167422,
+        "22": 0.7942376059888471,
+        "33": 0.7885203482101544
+      }
+    },
+    "mean_lag_one_acf_wasserstein": {
+      "candidate": 0.0697174967581299,
+      "reference": 0.08685197540766335,
+      "maximum_ratio": 1.1,
+      "limit": 0.09553717294842969,
+      "difference": -0.01713447864953345,
+      "ratio": 0.8027163047344851,
+      "relative_change": -0.1972836952655149,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 0.07210339218484788,
+        "22": 0.06708644861049172,
+        "33": 0.06996264947905008
+      },
+      "baseline_by_seed": {
+        "11": 0.08151894745123689,
+        "22": 0.09242641043980945,
+        "33": 0.08661056833194371
+      }
+    },
+    "mean_projected_profile_wasserstein_kwh": {
+      "candidate": 0.06474318175962922,
+      "reference": 0.06544658708941224,
+      "maximum_ratio": 1.1,
+      "limit": 0.07199124579835348,
+      "difference": -0.0007034053297830245,
+      "ratio": 0.9892522229032044,
+      "relative_change": -0.010747777096795615,
+      "pass": true,
+      "candidate_by_seed": {
+        "11": 0.06587813097874388,
+        "22": 0.06345109572467719,
+        "33": 0.06490031857546658
+      },
+      "baseline_by_seed": {
+        "11": 0.06504365321920129,
+        "22": 0.06564590182277076,
+        "33": 0.06565020622626468
+      }
+    },
+    "utility_each_seed_within_both_references": {
+      "pass": true,
+      "per_seed": [
+        {
+          "seed": 11,
+          "comparisons": {
+            "training_real": {
+              "candidate": 0.1455880981011446,
+              "reference": 0.14488224995380156,
+              "maximum_ratio": 1.1,
+              "limit": 0.15937047494918172,
+              "difference": 0.0007058481473430356,
+              "ratio": 1.0048718745572223,
+              "relative_change": 0.004871874557222217,
+              "pass": true
+            },
+            "training_resampling": {
+              "candidate": 0.1455880981011446,
+              "reference": 0.1448808404654576,
+              "maximum_ratio": 1.1,
+              "limit": 0.15936892451200338,
+              "difference": 0.000707257635686992,
+              "ratio": 1.0048816505578984,
+              "relative_change": 0.004881650557898412,
+              "pass": true
+            }
+          }
+        },
+        {
+          "seed": 22,
+          "comparisons": {
+            "training_real": {
+              "candidate": 0.14534594353211586,
+              "reference": 0.14488224995380156,
+              "maximum_ratio": 1.1,
+              "limit": 0.15937047494918172,
+              "difference": 0.00046369357831430036,
+              "ratio": 1.0032004857631778,
+              "relative_change": 0.003200485763177738,
+              "pass": true
+            },
+            "training_resampling": {
+              "candidate": 0.14534594353211586,
+              "reference": 0.1448808404654576,
+              "maximum_ratio": 1.1,
+              "limit": 0.15936892451200338,
+              "difference": 0.00046510306665825674,
+              "ratio": 1.003210245503574,
+              "relative_change": 0.0032102455035739963,
+              "pass": true
+            }
+          }
+        },
+        {
+          "seed": 33,
+          "comparisons": {
+            "training_real": {
+              "candidate": 0.14555054200459097,
+              "reference": 0.14488224995380156,
+              "maximum_ratio": 1.1,
+              "limit": 0.15937047494918172,
+              "difference": 0.0006682920507894152,
+              "ratio": 1.0046126564917546,
+              "relative_change": 0.004612656491754599,
+              "pass": true
+            },
+            "training_resampling": {
+              "candidate": 0.14555054200459097,
+              "reference": 0.1448808404654576,
+              "maximum_ratio": 1.1,
+              "limit": 0.15936892451200338,
+              "difference": 0.0006697015391333716,
+              "ratio": 1.0046224299706008,
+              "relative_change": 0.00462242997060085,
+              "pass": true
+            }
+          }
+        }
+      ],
+      "three_seed_means_rmse_kwh": {
+        "training_calibrated_cgan": 0.14549486121261715,
+        "training_real": 0.14488224995380156,
+        "training_resampling": 0.1448808404654576
+      },
+      "aggregate_comparisons": {
+        "training_real": {
+          "candidate": 0.14549486121261715,
+          "reference": 0.14488224995380156,
+          "maximum_ratio": 1.1,
+          "limit": 0.15937047494918172,
+          "difference": 0.000612611258815593,
+          "ratio": 1.004228338937385,
+          "relative_change": 0.004228338937384915,
+          "pass": true
+        },
+        "training_resampling": {
+          "candidate": 0.14549486121261715,
+          "reference": 0.1448808404654576,
+          "maximum_ratio": 1.1,
+          "limit": 0.15936892451200338,
+          "difference": 0.0006140207471595494,
+          "ratio": 1.0042381086773577,
+          "relative_change": 0.0042381086773578165,
+          "pass": true
+        }
+      }
+    }
+  },
+  "assessor_decision_agrees": true,
+  "conclusion": "The fixed three-seed capacity pilot fails both ramp criteria. All other aggregate physical/projected gates and every per-seed real/resampling utility tolerance pass. No seed extension is supported by the declared promotion rule.",
+  "limitations": [
+    "JSON/report bindings independently checked; actual checkpoint and calibration archive bytes were not opened or hashed by this audit. Their recorded digests are cross-bound, and binary verification remains the completed assessor's responsibility.",
+    "No prepared arrays or TEST were accessed. TRAIN source identity and exposure are checked from retained JSON records, not independently replayed training.",
+    "All 64 condition means and all three seed gates recomputed. No confidence intervals averaged, no significance or external-confirmation claim. Battery diagnostics remain secondary and do not change promotion gates.",
+    "Historical source differences and the pinned old interpolation implementation remain part of the exploratory validation qualification."
+  ]
+}

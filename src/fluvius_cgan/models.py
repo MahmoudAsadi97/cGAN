@@ -1,14 +1,17 @@
 """MLPs adapted from malvin0130/cGAN_EB (MIT; see docs/UPSTREAM_LICENSE.txt).
 
 The discriminator returns raw scores for BCE or spectral-normalized hinge loss.
-The generator's linear output deliberately permits values outside the training
-min/max range.
+The legacy generator's linear output permits values outside the training range.
+An opt-in fixed quantile wrapper interprets that same head as logits instead.
 """
-from numbers import Integral
+import math
+from numbers import Integral, Real
 
 import torch
 from torch import nn
 from torch.nn.utils.parametrizations import spectral_norm
+
+from .quantile_decoder import ConditionalQuantileDecoder
 
 
 def _dimension(name: str, value: int, *, allow_zero: bool = False) -> int:
@@ -45,6 +48,59 @@ class Generator(nn.Module):
 
     def forward(self, noise: torch.Tensor, onehot: torch.Tensor) -> torch.Tensor:
         return self.model(_join(noise, onehot, self.latent_dim, self.condition_dim))
+
+
+class QuantileDecodedGenerator(nn.Module):
+    """Learn logits, decode physical values, then normalize for physical losses.
+
+    Float32 base logits are promoted before sigmoid and fixed-quantile
+    interpolation; physical output is rounded once to float32. ``forward`` then
+    uses the same float64 scalar affine transform as real-profile normalization.
+    Inference calls ``decode_physical`` directly, avoiding an affine roundtrip.
+    This wrapper adds fixed buffers and no trainable parameters.
+    """
+
+    def __init__(self, base: Generator, decoder: ConditionalQuantileDecoder, *, offset, scale):
+        super().__init__()
+        if not isinstance(decoder, ConditionalQuantileDecoder):
+            raise ValueError("quantile generator requires a fixed conditional decoder")
+        if (base.condition_dim < 1 or base.condition_dim != decoder.condition_dim
+                or base.output_dim != decoder.output_dim):
+            raise ValueError("base generator and decoder conditional/output dimensions disagree")
+        if any(isinstance(v, bool) or not isinstance(v, Real) or not math.isfinite(v) for v in (offset, scale)) or scale <= 0:
+            raise ValueError("quantile generator requires a finite offset and positive effective scale")
+        parameter = next(base.parameters())
+        if (parameter.dtype not in (torch.float32, torch.float64)
+                or parameter.device != decoder.quantiles.device or decoder.quantiles.dtype != torch.float64):
+            raise ValueError("base and canonical float64 decoder must share a device")
+        self.base, self.decoder = base, decoder
+        self.latent_dim, self.condition_dim, self.output_dim = base.latent_dim, base.condition_dim, base.output_dim
+        self.register_buffer("normalization_offset", torch.tensor(float(offset), dtype=torch.float64, device=parameter.device))
+        self.register_buffer("normalization_scale", torch.tensor(float(scale), dtype=torch.float64, device=parameter.device))
+
+    def decode_with_probabilities(self, noise, onehot):
+        parameter = next(self.base.parameters())
+        if (not isinstance(noise, torch.Tensor) or noise.dtype != parameter.dtype or noise.device != parameter.device
+                or not isinstance(onehot, torch.Tensor) or onehot.device != noise.device
+                or onehot.shape != (len(noise), self.condition_dim)
+                or not ((onehot == 0) | (onehot == 1)).all() or not (onehot.sum(dim=1) == 1).all()):
+            raise ValueError("quantile generator needs matching noise and one-hot conditional rows")
+        logits = self.base(noise, onehot)
+        return self.decoder.decode_with_probabilities(logits, onehot.argmax(dim=1))
+
+    def decode_physical(self, noise, onehot):
+        return self.decode_with_probabilities(noise, onehot)[0]
+
+    def forward(self, noise, onehot):
+        physical = self.decode_physical(noise, onehot)
+        if (self.normalization_offset.dtype != torch.float64 or self.normalization_scale.dtype != torch.float64
+                or not torch.isfinite(self.normalization_offset) or not torch.isfinite(self.normalization_scale)
+                or self.normalization_scale <= 0):
+            raise ValueError("quantile generator normalization must retain finite canonical float64 buffers")
+        normalized = ((physical.to(torch.float64) - self.normalization_offset) / self.normalization_scale).to(physical.dtype)
+        if not torch.isfinite(normalized).all():
+            raise ValueError("quantile generator produced nonfinite normalized profiles")
+        return normalized
 
 
 class Discriminator(nn.Module):

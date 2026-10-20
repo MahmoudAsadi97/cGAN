@@ -89,28 +89,26 @@ def _repair_correlation(correlation: np.ndarray, eigenvalue_floor: float = 1e-10
 def _inverse_quantiles(uniform: np.ndarray, quantiles: np.ndarray) -> np.ndarray:
     """Monotone linear inverse with exact ties/endpoints and bounded probabilities.
 
-    Anchor same-sign intervals at the endpoint nearest zero. This avoids the
-    rounding variation of two weighted copies of an equal value, and avoids
-    cancellation near zero. Opposite-sign intervals use the weighted form so
-    their endpoint difference never overflows. Each fixed interval formula is
-    monotone in the probability; no output clipping or cumulative repair is
-    needed.
+    Anchor same-sign open intervals at the left endpoint, with exact endpoint
+    copies. A right anchor can undershoot a negative left knot at tiny positive
+    weights. The fixed left anchor also keeps ties exact and avoids a midpoint
+    anchor switch, at the cost of relative accuracy near right-endpoint
+    cancellation. Opposite-sign intervals use the weighted form so their
+    endpoint difference never overflows. No output clipping or cumulative
+    repair is used.
     """
     positions = np.clip(uniform, 0.0, 1.0) * (len(quantiles) - 1)
     lower = np.minimum(positions.astype(np.int64), len(quantiles) - 2)
     weight = positions - lower
     columns = np.arange(quantiles.shape[1])
     left, right = quantiles[lower, columns], quantiles[lower + 1, columns]
-    nonnegative = left >= 0
-    nonpositive = (right <= 0) & ~nonnegative
-    crossing = ~(nonnegative | nonpositive)
+    same_sign = (left >= 0) | (right <= 0)
+    crossing = ~same_sign
     values = np.empty_like(weight)
     # Mask before arithmetic: np.where would still evaluate overflowing
     # right-left differences on intervals spanning both float64 extremes.
-    values[nonnegative] = (left[nonnegative]
-                          + weight[nonnegative] * (right[nonnegative] - left[nonnegative]))
-    values[nonpositive] = (right[nonpositive]
-                          - (1.0 - weight[nonpositive]) * (right[nonpositive] - left[nonpositive]))
+    values[same_sign] = (left[same_sign]
+                        + weight[same_sign] * (right[same_sign] - left[same_sign]))
     values[crossing] = ((1.0 - weight[crossing]) * left[crossing]
                         + weight[crossing] * right[crossing])
     np.copyto(values, left, where=weight == 0)

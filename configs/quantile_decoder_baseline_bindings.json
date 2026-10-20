@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "scope": "Original curated SWD10 comparators fixed before any quantile-decoder fit or endpoint. Reevaluate these exact artifacts under one corrected numerical source shared with the decoder candidate.",
+  "source_assessment": {
+    "path": "runs/capacity_pilot.json",
+    "sha256": "477d62a38e6b536a8d844388abf81e768cb8da0f4013d66389e4970072742c29"
+  },
+  "seeds": {
+    "11": {
+      "checkpoint_sha256": "12159e0495b1a6a53e5814eebd1cff54ad50d53a259fdbe3e64cbc4d6e703a4b",
+      "calibration_sha256": "74fd16d428d98e93f6bf1fa6469cc0638d59da979a77991fc5571d84da91aca5",
+      "selected_epoch": 25,
+      "config": {
+        "adam_beta1": 0.5,
+        "adam_beta2": 0.999,
+        "allow_uncurated_data": false,
+        "batch_sampling": "balanced_conditions",
+        "batch_size": 512,
+        "conditional_mean_residual": false,
+        "conditions_per_batch": 4,
+        "device": "cpu",
+        "discriminator_hidden_dim": 128,
+        "epochs": 26,
+        "hidden_dim": 64,
+        "latent_dim": 24,
+        "lr_d": 0.0002,
+        "lr_g": 0.0001,
+        "max_train_samples": null,
+        "normalization": "standard",
+        "num_threads": 1,
+        "objective": "hinge_sn",
+        "patience": null,
+        "seed": 11,
+        "swd_projections": 128,
+        "swd_weight": 10.0,
+        "unconditional": false,
+        "validation_samples": 4096,
+        "validation_selection": "conditional_w1"
+      },
+      "prepared_data_hashes": {
+        "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+        "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+        "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+        "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1"
+      },
+      "checkpoint_data_hashes": {
+        "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+        "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+        "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+        "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+        "curation_manifest.json": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3"
+      },
+      "training_source": {
+        "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+        "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+        "git_dirty": true,
+        "source_files_sha256": {
+          "src/fluvius_cgan/__init__.py": "6492d4cfc58c39594f849ec7274ca0d995d12b15fd0108006f27f87e490df548",
+          "src/fluvius_cgan/__main__.py": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+          "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+          "src/fluvius_cgan/cli.py": "825994a8082e06add40f303d32af4e573dc76bdfb4252c3b4944a3db9b3a56ad",
+          "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+          "src/fluvius_cgan/curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+          "src/fluvius_cgan/data.py": "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5",
+          "src/fluvius_cgan/distribution_loss.py": "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a",
+          "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+          "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+          "src/fluvius_cgan/release.py": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe",
+          "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+          "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+          "src/fluvius_cgan/uncertainty.py": "468c8abcb3ad85c4b03d7508b13a41a9adaa289fbba1a66c5a3257eea5b3e214",
+          "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133"
+        },
+        "python": "3.12.14",
+        "numpy": "2.3.5",
+        "torch": "2.14.1+cu130",
+        "hardware": {
+          "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+          "machine": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": 9,
+          "device": "cpu",
+          "cuda_device": null
+        }
+      }
+    },
+    "22": {
+      "checkpoint_sha256": "71600382449bdd109a1f05ce2898c4eac02b17d155d7e4363d863b7fefb23765",
+      "calibration_sha256": "7ce4fc08449755f4e653783bb2f3760ca0bfb74403e6ca74cd71d19ee6a336e3",
+      "selected_epoch": 25,
+      "config": {
+        "adam_beta1": 0.5,
+        "adam_beta2": 0.999,
+        "allow_uncurated_data": false,
+        "batch_sampling": "balanced_conditions",
+        "batch_size": 512,
+        "conditional_mean_residual": false,
+        "conditions_per_batch": 4,
+        "device": "cpu",
+        "discriminator_hidden_dim": 128,
+        "epochs": 26,
+        "hidden_dim": 64,
+        "latent_dim": 24,
+        "lr_d": 0.0002,
+        "lr_g": 0.0001,
+        "max_train_samples": null,
+        "normalization": "standard",
+        "num_threads": 1,
+        "objective": "hinge_sn",
+        "patience": null,
+        "seed": 22,
+        "swd_projections": 128,
+        "swd_weight": 10.0,
+        "unconditional": false,
+        "validation_samples": 4096,
+        "validation_selection": "conditional_w1"
+      },
+      "prepared_data_hashes": {
+        "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+        "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+        "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+        "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1"
+      },
+      "checkpoint_data_hashes": {
+        "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+        "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+        "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+        "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+        "curation_manifest.json": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3"
+      },
+      "training_source": {
+        "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+        "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+        "git_dirty": true,
+        "source_files_sha256": {
+          "src/fluvius_cgan/__init__.py": "6492d4cfc58c39594f849ec7274ca0d995d12b15fd0108006f27f87e490df548",
+          "src/fluvius_cgan/__main__.py": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+          "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+          "src/fluvius_cgan/cli.py": "825994a8082e06add40f303d32af4e573dc76bdfb4252c3b4944a3db9b3a56ad",
+          "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+          "src/fluvius_cgan/curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+          "src/fluvius_cgan/data.py": "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5",
+          "src/fluvius_cgan/distribution_loss.py": "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a",
+          "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+          "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+          "src/fluvius_cgan/release.py": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe",
+          "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+          "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+          "src/fluvius_cgan/uncertainty.py": "468c8abcb3ad85c4b03d7508b13a41a9adaa289fbba1a66c5a3257eea5b3e214",
+          "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133"
+        },
+        "python": "3.12.14",
+        "numpy": "2.3.5",
+        "torch": "2.14.1+cu130",
+        "hardware": {
+          "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+          "machine": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": 9,
+          "device": "cpu",
+          "cuda_device": null
+        }
+      }
+    },
+    "33": {
+      "checkpoint_sha256": "fd866bc7e2b032997576609575a953750f6d5a5af13448d8518476e213bdc1aa",
+      "calibration_sha256": "62794b732cd2dd3ea09db7b8d3738e02871e42cad8d310785c46441a8be73dde",
+      "selected_epoch": 24,
+      "config": {
+        "adam_beta1": 0.5,
+        "adam_beta2": 0.999,
+        "allow_uncurated_data": false,
+        "batch_sampling": "balanced_conditions",
+        "batch_size": 512,
+        "conditional_mean_residual": false,
+        "conditions_per_batch": 4,
+        "device": "cpu",
+        "discriminator_hidden_dim": 128,
+        "epochs": 26,
+        "hidden_dim": 64,
+        "latent_dim": 24,
+        "lr_d": 0.0002,
+        "lr_g": 0.0001,
+        "max_train_samples": null,
+        "normalization": "standard",
+        "num_threads": 1,
+        "objective": "hinge_sn",
+        "patience": null,
+        "seed": 33,
+        "swd_projections": 128,
+        "swd_weight": 10.0,
+        "unconditional": false,
+        "validation_samples": 4096,
+        "validation_selection": "conditional_w1"
+      },
+      "prepared_data_hashes": {
+        "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+        "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+        "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+        "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1"
+      },
+      "checkpoint_data_hashes": {
+        "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+        "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+        "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+        "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+        "curation_manifest.json": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3"
+      },
+      "training_source": {
+        "git_commit": "fa1a83eb5aa3a1c7d551e1348f213063873042d4",
+        "git_commit_tree": "9c7e401219580a1054119ddd24d64c8e6aef35e6",
+        "git_dirty": true,
+        "source_files_sha256": {
+          "src/fluvius_cgan/__init__.py": "6492d4cfc58c39594f849ec7274ca0d995d12b15fd0108006f27f87e490df548",
+          "src/fluvius_cgan/__main__.py": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+          "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+          "src/fluvius_cgan/cli.py": "825994a8082e06add40f303d32af4e573dc76bdfb4252c3b4944a3db9b3a56ad",
+          "src/fluvius_cgan/copula.py": "5739c8d0cb438ebd3fa06bc67ba79d6037493f8406a4e7ac1ba50ebba29d6939",
+          "src/fluvius_cgan/curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
+          "src/fluvius_cgan/data.py": "824f6f2d8ca0e1bfff9c27af6825c5f47739b22b40023585c8bafbc5de3c96b5",
+          "src/fluvius_cgan/distribution_loss.py": "37e810c829d18569325e9b95592a65a7268d100e9a51196a7baa0f399c41ac0a",
+          "src/fluvius_cgan/evaluation.py": "3f59f817abda7fbd7d4d043b5bee81b1c2c700db219f9af35acf94b7c910281e",
+          "src/fluvius_cgan/models.py": "a47a2321e1229aa5a053fac16b6300b3f3a2504a008ade2fe861e9333bc87da7",
+          "src/fluvius_cgan/release.py": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe",
+          "src/fluvius_cgan/residual.py": "e50a55ddfb7b74c62b3717d9b3924879c2bb109198325f6b39f062aa0e789b80",
+          "src/fluvius_cgan/training.py": "d5974cd4aeaa1040ef1373a29123705c3ac86669ba99959c245393069af459d3",
+          "src/fluvius_cgan/uncertainty.py": "468c8abcb3ad85c4b03d7508b13a41a9adaa289fbba1a66c5a3257eea5b3e214",
+          "src/fluvius_cgan/utility.py": "65db77468ea664844426bfd62041dded781302e195820bb52a11d88a8feb5133"
+        },
+        "python": "3.12.14",
+        "numpy": "2.3.5",
+        "torch": "2.14.1+cu130",
+        "hardware": {
+          "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+          "machine": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": 9,
+          "device": "cpu",
+          "cuda_device": null
+        }
+      }
+    }
+  }
+}

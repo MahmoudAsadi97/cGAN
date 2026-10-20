@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-20T17:03:47.897737+00:00",
+  "scope": "Synthetic-only lower-endpoint interpolation correction; no actual-study equality or statistical-equivalence claim.",
+  "actual_study_arrays_read": false,
+  "test_data_read": false,
+  "actual_training_or_evaluation_run": false,
+  "numeric_environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1
+  },
+  "before_source": {
+    "git_commit": "e527c35056aa696a8ef3cfa989a243d8987d2fb8",
+    "git_path": "src/fluvius_cgan/copula.py",
+    "sha256": "f692737d98c4452eeec92a07777386c848648f3345477b561e4457b83304624c",
+    "preserved_copy": "runs/quantile_interpolation_boundary_before_source.py"
+  },
+  "after_source_files_sha256": {
+    "src/fluvius_cgan/copula.py": "96b001dd31a9b41278800532b3794ea640b8b7d0158cc3df83d1e9c6888fd1bf",
+    "src/fluvius_cgan/calibration.py": "5b4bfe252500e8e11a96f2102822842d6a4e60ef107df8d66c878b7b44a7598f",
+    "src/fluvius_cgan/quantile_decoder.py": "74efbab0041d8bb7c3d9fc76b2f5c5023999200fbaede13b4addaa90d0a4ac82",
+    "src/fluvius_cgan/models.py": "e71ce1c06ec98b3203f76c84d5c18b4082b2dc5900467d71d917daf877ce2710"
+  },
+  "test_files_sha256": {
+    "tests/test_quantile_interpolation.py": "a8cf43d10c63a24bcac83659567ed5cfc3e979e8dfb844fbde6794071a5e5447",
+    "tests/test_copula.py": "13288c33faddfdd9113b17e91192c5240b5ea69b3297d94d376d8c288ff8dde4",
+    "tests/test_calibration.py": "979e1b219fa688475a2ad4593877bdbc52043f54ff764fa0a740eae2e502065e",
+    "tests/test_quantile_decoder.py": "9328bb166c28071d4121cf3e072dd2b28de67dd6c3a59e5a25e4a70142af2b70"
+  },
+  "counterexample": {
+    "knots_expression": [
+      "-(1.5 + 2**-52)",
+      "-(3 * 2**-53)"
+    ],
+    "knots": [
+      -1.5000000000000002,
+      -3.3306690738754696e-16
+    ],
+    "knots_hex": [
+      "-0x1.8000000000001p+0",
+      "-0x1.8000000000000p-52"
+    ],
+    "probabilities": [
+      0.0,
+      1e-30
+    ],
+    "dtype": "float64",
+    "before": {
+      "knots": [
+        -1.5000000000000002,
+        -3.3306690738754696e-16
+      ],
+      "probabilities": [
+        0.0,
+        1e-30
+      ],
+      "output": [
+        -1.5000000000000002,
+        -1.5000000000000004
+      ],
+      "output_hex": [
+        "-0x1.8000000000001p+0",
+        "-0x1.8000000000002p+0"
+      ],
+      "support_preserved": false,
+      "monotone": false
+    },
+    "after": {
+      "output": [
+        -1.5000000000000002,
+        -1.5000000000000002
+      ],
+      "output_hex": [
+        "-0x1.8000000000001p+0",
+        "-0x1.8000000000001p+0"
+      ],
+      "support_preserved": true,
+      "monotone": true
+    },
+    "observed_max_absolute_before_after_difference": 2.220446049250313e-16
+  },
+  "arithmetic": {
+    "same_sign_open_interval": "a + f*(b-a), separate multiply and add, fixed left anchor",
+    "crossing_zero": "(1-f)*a + f*b, masked before opposite-sign subtraction",
+    "endpoints": "copy a at f=0 and b at f=1",
+    "probability_bounds": "existing [0,1] input clipping unchanged",
+    "physical_output_clipping": false,
+    "midpoint_anchor_switch": false,
+    "tolerance_or_cumulative_repair": false,
+    "tradeoff": "poorer relative accuracy near right-endpoint cancellation; no actual-study difference bound claimed"
+  },
+  "first_plateau_regression": {
+    "historical_report": "reports/quantile_interpolation_verification.json",
+    "historical_report_sha256": "8511f0ae46ee4be8b08629188dda19db480e946594742c8b863453de90f777e0",
+    "seed": 7312,
+    "source_recipe": "Repeat each row of default_rng(7312).normal(size=(8,24)) 512 times, sort each column, compress to 1025 evenly spaced knots.",
+    "original_weighted_formula_descending_steps_reported_previously": 931,
+    "current_descending_steps": 0,
+    "current_minimum_increment": 0.0,
+    "current_knots_sha256": "afd4e922237456429ae86e8976d31792f39c64f7f8e970fbc94c3fb95cf400b2"
+  },
+  "verification": {
+    "lock": "runs/heavy_evaluation.lock",
+    "before": {
+      "command": "python -m pytest tests/test_quantile_interpolation.py -q -k negative_interval",
+      "failed": 1,
+      "deselected": 6,
+      "elapsed_seconds": 0.95,
+      "log": "runs/quantile_interpolation_lower_endpoint_before.log",
+      "log_sha256": "c5e4b25ba4fd32f94e3de80b928fc4098a432ee964dc26e53b577f8d143f5efa"
+    },
+    "after": {
+      "command": "python -m pytest tests/test_quantile_interpolation.py tests/test_copula.py tests/test_calibration.py tests/test_quantile_decoder.py -q",
+      "passed": 158,
+      "failed": 0,
+      "elapsed_seconds": 6.31,
+      "log": "runs/quantile_interpolation_lower_endpoint_after.log",
+      "log_sha256": "5b8efd57893c4ebe38a8eac2cda1d32897817bde378c298f43ad0ac103043e9d"
+    },
+    "existing_tests_or_tolerances_weakened": false,
+    "independent_review": "Read-only source review found no concrete blocker; no reviewer execution."
+  },
+  "prior_evidence": {
+    "runs/quantile_decoder_boundary_before.json": "222a73d2425763e7b534e4c711093cf4f99d663cf540e2898f1ff0bb5e63592e",
+    "runs/quantile_decoder_boundary_after.json": "0408f5dc88cadef22faa5974ceb02dde57d439769df2d9ec5296ed48a58036af",
+    "runs/quantile_decoder_regression_before.log": "ba959d25af2e0579e31f259eefc502a325d4d171bdd0f5662e8573874668b4b2",
+    "runs/quantile_decoder_focused_after.log": "8f002a5b554214c7aa4ad33e7571dccf8ad01b68995bee69febe55c1a877b18e"
+  },
+  "provenance_limits": [
+    "Retained clean worktrees and historical reports were not modified by this correction.",
+    "Historical results retain their original source and output hashes.",
+    "Both arms in the forthcoming decoder comparison must use the same newly pinned shared helper.",
+    "The reproduced one-ULP difference is synthetic evidence only, not an actual-study array, metric, hash or scientific-equivalence claim.",
+    "Tests cover declared cases; they are not a universal floating-point monotonicity proof."
+  ]
+}

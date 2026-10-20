@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-20T17:08:56.637406+00:00",
+  "test_used": false,
+  "status": "paused; no scientific restart authorized",
+  "related_launch_receipt": {
+    "path": "reports/reference_service_disconnection_recovery.json",
+    "sha256": "2a4968e419f765c5982f13ea4642f48008da5965cbffa4600ef1b7dc2b7c7b97",
+    "bytes": 20999
+  },
+  "approved_plan_sha256": "bc8415bf0c7f43675f5fbf809627f6c18ab4424ce163e6aa26c991361301ef91",
+  "approved_orchestrator_sha256": "74e6845972aaa49142fbfc0fcc61dc8b55b87bf0b061edbc07096b3985281848",
+  "queue_exit": {
+    "returncode": 1,
+    "at": "2026-10-20T17:05:49.125967+00:00",
+    "scientific_jobs_completed_before_stop": 7,
+    "pending_original_jobs": 40,
+    "qualification": "Seven child jobs completed and passed immediate checks. One saved map changed afterward, so that artifact set is now held unresolved; completion is not treated as enduring artifact validity."
+  },
+  "failure": {
+    "job": "hourly.curated_reference_bce24.33.utility_validation",
+    "error": "input differs from approved or newly completed dependency",
+    "at": "2026-10-20T17:05:49.110927+00:00",
+    "stage": "pre-child input fingerprint check",
+    "scientific_child_launched": false,
+    "claim": {
+      "path": "runs/curated_reference_bce24/seed_33/utility_validation.json.disconnect_recovery_attempt.json",
+      "sha256": "af38e9ec62b385f9a336d81612c6029141c704bff1293e0b940d8ee5074fbc44",
+      "bytes": 1380
+    },
+    "receipt": {
+      "path": "runs/reference_execution/disconnect_recovery_20261020T170110Z/hourly.curated_reference_bce24.33.utility_validation.json",
+      "sha256": "1d9109a46c4c4476e87f43dd933a9b3a59dd4df193d504d51b71db3044836470",
+      "bytes": 1635
+    }
+  },
+  "changed_map": {
+    "path": "runs/curated_reference_bce24/seed_33/calibration.npz",
+    "recorded_completion_and_report_sha256": "6d5c2a1f02b1b20f7183219ba04bc0b561ef741a4ee6245f947e2100de6f51ae",
+    "observed_changed_sha256": "daa16c90e043ff575a4bfef6e61f1ec29d8279f83a8c1d87a0cc614190934381",
+    "snapshot": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/runs/curated_reference_bce24/seed_33/calibration.npz",
+      "sha256": "daa16c90e043ff575a4bfef6e61f1ec29d8279f83a8c1d87a0cc614190934381",
+      "bytes": 13824557
+    },
+    "archive_observation": {
+      "valid_central_directory": false,
+      "error": "File is not a zip file",
+      "first16_hex": "504b03042d0000000800000021001ac2",
+      "last16_hex": "69d7514e77d4d67f214ae6dd1a26fd3f",
+      "zip_end_record_position": -1
+    },
+    "qualification": "The saved report is unchanged and binds the earlier map digest. The changed bytes lack a ZIP central directory, so this is not explained merely by differing NPZ timestamps. No map-content equivalence or recovery is claimed."
+  },
+  "other_outputs": "The ten other newly produced report/map artifacts matched their successful completion receipts at inspection.",
+  "old_queue_evidence": {
+    "changed_prior_log_or_receipt_hashes": [],
+    "qualification": "All historical native/hourly/supplement logs and receipts still matched the approved plan at snapshot time. This does not prove that no external or formerly running writer existed."
+  },
+  "writer_observation": {
+    "visible_open_map_descriptors": [],
+    "qualification": "Point-in-time /proc view only, not proof that there is no external or prior writer."
+  },
+  "cause": "unknown; no OOM, duplicate queue or filesystem-synchronization cause inferred",
+  "preservation": {
+    "snapshot_inventory": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/snapshot_receipt.json",
+      "sha256": "73cdebb1fb6792b7f3dd6a86309cbe719b9c5bf6ce1c583c442507dd091d5383",
+      "bytes": 10989
+    },
+    "snapshot_count": 15,
+    "original_reports_logs_claims_retained": true,
+    "changed_map_bytes_copied_without_overwrite": true,
+    "binding_guard_relaxed": false,
+    "scientific_recomputation_performed_for_diagnosis": false
+  },
+  "continuation_requirement": "Identify the writer or corruption mechanism and obtain root authorization for a separately bound no-overwrite continuation; retain both prior failures and current changed bytes."
+}

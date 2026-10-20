@@ -212,7 +212,7 @@ def test_inverse_scaling_is_used_for_generation(tmp_path):
     for name in ("objective", "normalization", "adam_beta1", "adam_beta2",
                  "discriminator_hidden_dim", "conditional_mean_residual", "batch_sampling",
                  "conditions_per_batch", "swd_weight", "swd_projections", "validation_selection",
-                 "allow_uncurated_data", "derivative_swd_weight"):
+                 "allow_uncurated_data", "derivative_swd_weight", "conditional_quantile_decoder"):
         checkpoint["config"].pop(name, None)
     for key, value in checkpoint["generator_state_dict"].items():
         checkpoint["generator_state_dict"][key] = torch.zeros_like(value)

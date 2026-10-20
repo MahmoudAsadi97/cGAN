@@ -1,0 +1,49 @@
+{
+  "actual_dataset_arrays_used": false,
+  "base_commit": "e527c35056aa696a8ef3cfa989a243d8987d2fb8",
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "tests/test_quantile_decoder_training.py",
+    "tests/test_training.py",
+    "-q"
+  ],
+  "existing_training_checks": 111,
+  "exit_status_note": "The exec service disconnected after completion; parent and worker independently recovered the completed pytest log. The original process exit status could not be recovered.",
+  "failed": 0,
+  "kind": "quantile_decoder_training_focused_verification",
+  "limitations": [
+    "Software checks do not establish model performance.",
+    "Final integrated tests must cover any subsequent interpolation source refinement; this receipt remains bound to the exact preceding source hashes."
+  ],
+  "log": {
+    "bytes": 261,
+    "path": "runs/quantile_decoder_training_validation.log",
+    "sha256": "6e6a0a13e5b3ae29d0eb2fc30a614c278edfdfc425e63cd70a41ba59fe13f7ae",
+    "text": "........................................................................ [ 49%]\n........................................................................ [ 99%]\n.                                                                        [100%]\n145 passed in 11.90s\n"
+  },
+  "new_decoder_integration_checks": 34,
+  "passed": 145,
+  "process_exit_code": null,
+  "schema_version": 1,
+  "scope": "synthetic_only",
+  "seconds": 11.9,
+  "serialization_lock": "runs/heavy_evaluation.lock",
+  "source_files_sha256": {
+    "src/fluvius_cgan/models.py": "e71ce1c06ec98b3203f76c84d5c18b4082b2dc5900467d71d917daf877ce2710",
+    "src/fluvius_cgan/quantile_decoder.py": "62715afc66efd79f38fa9866e6c2338dc2cf152dfcc6f03bf46e57b97ddce1db",
+    "src/fluvius_cgan/training.py": "5fabfb0e77a1fb33f6e2e3914448eb58fbf8611ceb386ae8fe57b4c9fcbe4e8d",
+    "tests/test_quantile_decoder_training.py": "01df090d0a897b224fcef693dc87b67d3f6f70d0a04c83e6a8b5e9fc6ef3123a",
+    "tests/test_training.py": "5b39e6d5a00fdf3af1058de5206fd3bcd3ad7625cdb6849f0624f41500447e91"
+  },
+  "source_state": "uncommitted prospective implementation, prior to the separately reviewed interpolation boundary refinement",
+  "status": "passed_completed_pytest_log",
+  "test_split_used": false,
+  "thread_limits": {
+    "MKL_NUM_THREADS": 1,
+    "NUMEXPR_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1
+  }
+}

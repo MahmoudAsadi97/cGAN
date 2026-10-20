@@ -50,10 +50,15 @@ calibration is a separate TRAIN-target fitting stage with a generated reference.
 | Profile SWD weight 0 | 11, 22, 33 | All full-budget training and primary calibration reports complete; matched three-seed attribution is preliminary |
 | Interrupted weight-zero attempts | 22, 33 | Interrupted after 6 and 5 epochs by resource failure; retained under `runs/interrupted_oom_20261020/`; not accepted as completed runs |
 | Derivative-distribution weight 1, profile weight 10 | 11, 22, 33 | Complete; promotion failed. Ramp error improved 8.79% (required 10%); ACF error worsened 15.56% (allowed 10%). No seeds 44/55 are authorized for this arm. |
-| Larger generator, profile weight 10 | 11, 22, 33 | Activated after the complete derivative failure; fixed width 128 and latent dimension 96 under `docs/CAPACITY_REFINEMENT.md`. Extend to 44/55 only if every pilot gate passes. |
-| Reference conditional BCE96 | 11, 22, 33, 44, 55 | Declared under `docs/REFERENCE_COMPLETION.md`; complete package comparison with the candidate |
-| Reference unconditional BCE96 | 11, 22, 33, 44, 55 | Declared matched network-conditioning comparison within the BCE reference method |
-| Reference conditional BCE24 | 11, 22, 33, 44, 55 | Hourly TRAIN/VAL derivation verified at clean source ec10d83; training began after all three capacity training runs completed; evaluations are serialized |
+| Larger generator, profile weight 10 | 11, 22, 33 | Complete; promotion failed. Mean ramp error increased 32.34% and every paired ramp error worsened. Other mean gates and utility tolerances pass. No seeds 44/55; see `docs/CURATED_CAPACITY_PILOT.md`. |
+| Fixed conditional TRAIN quantile decoder, profile weight 10 | 11, 22, 33 | Activated after complete capacity failure; implementation and synthetic verification before any fit. Same fixed gates; no generated-CDF posthoc map. See `docs/QUANTILE_DECODER_REFINEMENT.md`. |
+| Reference conditional BCE96 | 11, 22, 33, 44, 55 | All five full-budget fits complete; validation reports are being completed under `docs/REFERENCE_COMPLETION.md` |
+| Reference unconditional BCE96 | 11, 22, 33, 44, 55 | All five full-budget fits complete; matched network-conditioning validation remains in progress |
+| Reference conditional BCE24 | 11, 22, 33, 44, 55 | All five full-budget fits complete; hourly TRAIN/VAL derivation verified at clean source ec10d83. Evaluations are serialized |
+
+The [reference training receipt](../reports/reference_training_completion.json)
+retains all fifteen full budgets, selected epochs, source pins and artifact
+hashes. It does not substitute for the pending complete reference validation.
 
 Completed controls 22/33 restart from initialization with the same seeds and full
 budget. The interruption is documented in `reports/resource_incident.json` and
@@ -64,10 +69,31 @@ software check and resource-aware retry. Actual research training continued.
 The native BCE96 seed11 cap-1,000 calibration evaluation later exited with
 signal9 and no saved report while training remained active. Its failed receipt
 is retained in `reports/resource_incident_reference_precision_20261020.json`.
-The same evaluation is deferred until training completion; completed primary
+The same evaluation is deferred until the current reference training phase completes.
+Any later decoder training phase must hold the evaluation lock throughout,
+excluding heavy evaluations. Completed primary
 reports, model checkpoints, sample counts and random seeds are unchanged.
 Completed artifacts are never overwritten to hide failed evaluations; for example,
 the partial first plotting directory remains separate from any finished rerun.
+
+The execution service disconnected around 16:47 UTC on 2026-10-20. The
+[recovery receipt](../reports/reference_service_disconnection_recovery.json)
+records 23 completed reference evaluations and the fixed 47-job remainder.
+Native BCE96 seed55 calibration had started but saved neither report nor map.
+The cause is undetermined; this event is distinct from the earlier signal9
+precision failure. Recovery preserves completed outputs, source pins and exact
+commands, with historical hashes distinguished from hashes verified only at
+recovery. The receipt records a launch, not completion of the remaining study.
+
+The recovered hourly seed33 map subsequently failed its binding check and ZIP
+integrity. Its unchanged report retains the original expected map hash; the
+damaged bytes and execution evidence are preserved in
+`reports/reference_recovery_map_binding_failure.json`. No dependent utility job
+ran with that map. Reconstruction used the original source and TRAIN inputs;
+the [restoration receipt](../reports/reference_recovery_exact_map_restoration.json)
+confirms exact original-file SHA-256 equality before canonical restoration.
+Physical and utility metrics were not recomputed. The cause is undetermined
+and is not attributed to the service disconnection.
 
 The original five-seed SWD10 primary ramp mean is 0.100655 kW, above the fixed
 0.10 kW target despite a 28.63% improvement over the matched Gaussian copula.
@@ -82,8 +108,19 @@ The complete derivative assessment is retained in
 `docs/CURATED_DERIVATIVE_PILOT.md`; its two failed gates were independently
 recomputed from the source reports. The capacity package was prepared as a
 contingency before that endpoint decision and activated afterward. It tests a
-different structural hypothesis against the original SWD10 comparator. These
-sequential validation decisions remain part of the reported selection history.
+different structural hypothesis against the original SWD10 comparator. Its
+complete screen failed both ramp criteria. An independent audit initially compared
+the collector hash to a later checkout; the retained correction verifies the
+actual clean assessor pin and resolves that source-location mistake without
+changing endpoints or the failed decision.
+
+The quantile-decoder contingency was prepared before capacity endpoints were
+read and activated only after that complete failure. It is a new exploratory
+training/inference package, using physical TRAIN quantiles within the generator
+and no later marginal correction. Original checkpoint/map identities are fixed
+in `configs/quantile_decoder_baseline_bindings.json`. Both sides will be evaluated
+with the same corrected numerical implementation; the old comparisons remain
+unchanged. These sequential validation decisions remain part of the selection history.
 
 The hourly preparation and common-hourly physical comparison are implemented in
 `docs/HOURLY_IMPLEMENTATION.md`. Their synthetic verification is separate from

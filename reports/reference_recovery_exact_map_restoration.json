@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-20T17:14:31.583665+00:00",
+  "completed_at": "2026-10-20T17:12:44.516806+00:00",
+  "status": "exact_map_reconstruction_and_atomic_canonical_restoration_verified",
+  "test_used": false,
+  "physical_or_utility_metrics_recomputed": false,
+  "original_report_overwritten": false,
+  "cause_of_original_corruption": "unknown; no OOM, duplicate-queue or filesystem mechanism claimed",
+  "scope": "Reconstructed only the original hourly seed33 calibration map from the same frozen checkpoint and actual TRAIN pool. No endpoint metrics, model training, altered map settings or scientific queue continuation.",
+  "previous_failure_receipt": {
+    "path": "reports/reference_recovery_map_binding_failure.json",
+    "sha256": "03cefd52ff77f5070435e3bc0557fee80607e3827a4bbef6526eb39bff164ea9",
+    "bytes": 4210
+  },
+  "original_report": {
+    "path": "runs/curated_reference_bce24/seed_33/calibration_validation.json",
+    "sha256": "7a65312742e61586213342373ab0e2e2472525e550c333b4b526a6edb7d44357",
+    "bytes": 1522250
+  },
+  "original_success_receipt": {
+    "path": "runs/reference_execution/disconnect_recovery_20261020T170110Z/hourly.curated_reference_bce24.33.calibration_validation.json",
+    "sha256": "30b2d9704edfcfc6e4327c71499c476dda8b064c17a3218282625c1c7d146159",
+    "bytes": 7361
+  },
+  "source": {
+    "commit": "ec10d83359eb1d5a3fa965a882687569f0a86e39",
+    "clean_pinned_worktree_verified": true,
+    "all_numerical_source_files_unchanged": true,
+    "source_inventory_entries": 43,
+    "source_inventory_canonical_json_sha256": "7786cb89f2ad1638caff8a7b80d52960249c994f4a2b18a0a5fbb8857d537ffc",
+    "source_inventory_binding": {
+      "path": "runs/reference_execution/disconnect_recovery_plan_20261020.json",
+      "sha256": "bc8415bf0c7f43675f5fbf809627f6c18ab4424ce163e6aa26c991361301ef91",
+      "bytes": 137771
+    },
+    "reconstruction_script": {
+      "path": "runs/reconstruct_hourly33_calibration_map.py",
+      "sha256": "f789337a1b5f6ea384938e87d258d0b5dff33162dccad1de1a0b69bc88f0ba8d"
+    },
+    "runtime": {
+      "python": "3.12.14",
+      "numpy": "2.3.5",
+      "torch": "2.14.1+cu130",
+      "scipy": "1.17.0"
+    }
+  },
+  "frozen_inputs_sha256": {
+    "data/curated24/derivation_manifest.json": "8bf2b6922d4b2537a08650c3dec35fb01c3e37f3e58abcb96aa38041f9f8864c",
+    "data/curated24/metadata.json": "50138ba86dd441a1b8cdad09cec7098e97bbc3d0a19cc27e18afe8fb02bc3a3c",
+    "data/curated24/scaler.json": "a7019afb1e3ca1bbcc7b830a98dc00fcce077aa248445147f3b3bf2bf41d1092",
+    "data/curated24/train.npz": "5b5ef39134ec3e978e8cc4807ea3432e62cb81d9592e628dac20ab5c8104de21",
+    "data/curated24/val.npz": "4fa5bf3689e302cde0ab88e80b4629a960c477e11b20094d64da622cf8b81b52",
+    "data/curated96/curation_manifest.json": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3",
+    "data/curated96/metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+    "data/curated96/scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+    "data/curated96/train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+    "data/curated96/val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8",
+    "runs/curated_reference_bce24/seed_33/best.pt": "606d968ea4ed05b7f6e01e6fc505a3116c337ee1aac5650939f4c989c08e7972",
+    "runs/curated_reference_bce24/seed_33/config.json": "5ca7a14410ab28ea5a775b781bad96e80a865654f68d0497f593a0749d05187b",
+    "runs/curated_reference_bce24/seed_33/history.json": "a24b887d30fdd1c27f78222dfad7f6587d812b9b7a1a596c22d88ab2c64fe181",
+    "runs/curated_reference_bce24/seed_33/last.pt": "91e4bb4cfc8505d630a65088ca3328512ef0103d77d64b2e6a5c98e79475e11f",
+    "runs/curated_reference_bce24/seed_33/summary.json": "04bba04e4d431ecabf9804fb0a20e49573af05a0a980abb18e9e03ae6a576549",
+    "runs/curated_reference_bce24/seed_33/validation_report.json": "b7f2f43f7467e4a403c5fd66a87ea6348cb813f74c731a7d5e74fc6fd7d7b614",
+    "runs/reference_execution/heavy_precision_training_complete.json": "d14f20267da33e60e2745dc90e0bb970c99c00d8f12914f2c233d1c1434adbd6"
+  },
+  "calibration_provenance": {
+    "checkpoint_sha256": "606d968ea4ed05b7f6e01e6fc505a3116c337ee1aac5650939f4c989c08e7972",
+    "train_indices_sha256": "4f54a755eff0ab215eff43d0c215228a044010ed24d47572a40b2c8e8804ae23",
+    "prepared_data_hashes": {
+      "train.npz": "5b5ef39134ec3e978e8cc4807ea3432e62cb81d9592e628dac20ab5c8104de21",
+      "val.npz": "4fa5bf3689e302cde0ab88e80b4629a960c477e11b20094d64da622cf8b81b52",
+      "metadata.json": "50138ba86dd441a1b8cdad09cec7098e97bbc3d0a19cc27e18afe8fb02bc3a3c",
+      "scaler.json": "a7019afb1e3ca1bbcc7b830a98dc00fcce077aa248445147f3b3bf2bf41d1092"
+    },
+    "calibration_seed": 7301,
+    "calibration_samples_per_condition": 4096,
+    "calibration_profiles_total": 262144,
+    "calibration_generated_profiles_sha256": "44164a054e2dcc95222c9f235d0bd51ff6fe513097cfb64854b5c58e8b4ad322",
+    "calibration_labels_sha256": "151c79f872b11765c6e1d1ce1e8a233e889d80ce3f8a332e4740245abdae65b9",
+    "generator_inference_batch_size": 1024,
+    "quantile_knots": 1025
+  },
+  "restoration": {
+    "original_report_expected_archive_sha256": "6d5c2a1f02b1b20f7183219ba04bc0b561ef741a4ee6245f947e2100de6f51ae",
+    "new_incident_archive": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/exact_map_reconstruction/reconstructed_calibration.npz",
+      "sha256": "6d5c2a1f02b1b20f7183219ba04bc0b561ef741a4ee6245f947e2100de6f51ae",
+      "bytes": 14431255
+    },
+    "restored_canonical_archive": {
+      "path": "runs/curated_reference_bce24/seed_33/calibration.npz",
+      "sha256": "6d5c2a1f02b1b20f7183219ba04bc0b561ef741a4ee6245f947e2100de6f51ae",
+      "bytes": 14431255
+    },
+    "preserved_corrupt_archive": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/runs/curated_reference_bce24/seed_33/calibration.npz",
+      "sha256": "daa16c90e043ff575a4bfef6e61f1ec29d8279f83a8c1d87a0cc614190934381",
+      "bytes": 13824557
+    },
+    "successful_npz_load_under_pinned_source": true,
+    "archive_features": 24,
+    "supported_conditions": 64,
+    "quantile_knots": 1025,
+    "full_provenance_and_generated_source_hashes_match_original": true,
+    "atomic_canonical_replacement": true,
+    "closed_fsynced_staging_then_publication": true,
+    "post_publication_and_post_restore_rehashes": true,
+    "all_original_inputs_reports_and_incident_copies_reverified": true,
+    "qualification": "Exact archive digest equality establishes byte-identical restored map bytes, not a newly recomputed scientific result. Five-second post-publication checks were performed; no guarantee against future external mutation is claimed."
+  },
+  "evidence": {
+    "complete_receipt": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/exact_map_reconstruction/complete.json",
+      "sha256": "ac987c1a4a9631548b3bcb8aec46ece288a03c831c3c5c6d8e46764a401829a8",
+      "bytes": 2207
+    },
+    "pre_restore_exact_match_receipt": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/exact_map_reconstruction/exact_match_before_restore.json",
+      "sha256": "0ccb82a559e6e1af307aede10b02ce99a46d97c42afe318d22299dec758fc42c",
+      "bytes": 1927
+    },
+    "launch_receipt": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/map_reconstruction_launch.json",
+      "sha256": "808347f215bd0becda58c6b48cc301014b14c53377cd314460f80e984229acc3",
+      "bytes": 740
+    },
+    "log": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/map_reconstruction.log",
+      "sha256": "80233a854ab2e04d91f88a93ecf84449fa85b1439f52412e0f5c2b7997365510",
+      "bytes": 177
+    },
+    "incident_snapshot_receipt": {
+      "path": "runs/reference_execution/map_binding_incident_20261020T1710/snapshot_receipt.json",
+      "sha256": "73cdebb1fb6792b7f3dd6a86309cbe719b9c5bf6ce1c583c442507dd091d5383",
+      "bytes": 10989
+    }
+  },
+  "continuation": "A separately approved 40-job no-overwrite continuation plan is required. Preserve all 30 previously completed evaluation reports and all failed/interrupted attempts."
+}

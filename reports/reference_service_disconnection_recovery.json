@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-20T17:02:15.059905+00:00",
+  "role": "service_disconnection_recovery_launch_receipt",
+  "test_used": false,
+  "scientific_settings_changed": false,
+  "completion_claimed": false,
+  "event": {
+    "reported_service_disconnection_utc": "2026-10-20T16:47Z",
+    "cause": "undetermined; this receipt does not attribute the event to an out-of-memory kill",
+    "evidence_scope": "Durable queue logs, JSONL success/failure receipts, current file hashes and report bindings; no model loading or scientific metric recomputation during recovery planning.",
+    "interrupted_attempts": [
+      {
+        "log": "runs/reference_native_recovery_evaluation.log",
+        "start": "START 2026-10-20T16:47:16.184620+00:00 curated_reference_bce96 55 calibration_validation.json",
+        "completion_receipt": null,
+        "outputs_present": false,
+        "classification": "service_disconnect_without_completed_report_or_map; explicit recovery approval required"
+      }
+    ],
+    "historical_failure_retained": [
+      {
+        "receipt": "runs/reference_execution/native_evaluation_jobs.jsonl",
+        "output": "runs/curated_reference_bce96/seed_11/calibration_precision.json",
+        "returncode": -9,
+        "qualification": "Earlier failed precision attempt preserved separately; returncode -9 alone does not establish a cause for the later service disconnection."
+      }
+    ]
+  },
+  "authorization": {
+    "actor": "root agent",
+    "scope": "Exact immutable recovery plan and orchestrator hashes; 47 pending jobs only; shared heavy lock and gate policy; preserve all previous artifacts."
+  },
+  "approved_plan": {
+    "path": "runs/reference_execution/disconnect_recovery_plan_20261020.json",
+    "sha256": "bc8415bf0c7f43675f5fbf809627f6c18ab4424ce163e6aa26c991361301ef91",
+    "bytes": 137771,
+    "orchestrator": {
+      "path": "runs/run_reference_disconnect_recovery.py",
+      "sha256": "74e6845972aaa49142fbfc0fcc61dc8b55b87bf0b061edbc07096b3985281848"
+    },
+    "counts": {
+      "native": {
+        "scheduled": 35,
+        "completed": 9,
+        "pending": 26
+      },
+      "hourly": {
+        "scheduled": 20,
+        "completed": 7,
+        "pending": 13
+      },
+      "supplement": {
+        "scheduled": 15,
+        "completed": 7,
+        "pending": 8
+      }
+    },
+    "completed": 23,
+    "pending": 47,
+    "prior_successes_with_historical_sha_checked": 6,
+    "legacy_successes_without_historical_sha": 17,
+    "legacy_hash_qualification": "For 17 legacy successes, returncode 0, historical exact commands/source pins, current output SHA and current checkpoint/map/prepared-file bindings were verified. A historical output or input digest is not invented."
+  },
+  "source_pins": {
+    "native": "1ca62d0fbe1d77f916f8904e812db7d720f8cf53",
+    "hourly": "ec10d83359eb1d5a3fa965a882687569f0a86e39",
+    "supplement": "9d233043601b737982a5eabc5fe685d243e9258e"
+  },
+  "prior_evidence_sha256": {
+    "runs/run_reference_native_recovery_queue.py": "0f90018ba521e4b1ceb4cd7aad7db7dc067cb4a5d84394648d2983450bb364d2",
+    "runs/run_reference_hourly_evaluation_queue.py": "ebaa69dbafa3a9ae22f33ce83c71d772486f2d76e57e8dc2782f0efcd1e3930e",
+    "runs/run_reference_supplement_queue.py": "b9ced4278c7ae0371ba7cbd7872d21e5718181fe9d55deecf419d498a7249ace",
+    "runs/reference_native_recovery_evaluation.log": "e0d0959cd49e4181c6b43245364ce1ae09b3969292f8c802d5144680419b6254",
+    "runs/reference_hourly_evaluation.log": "ee7554be8ae1ec360793b2e62b47040072d3ad3bd764d2266d753780b62d82cf",
+    "runs/reference_supplement_evaluation.log": "3893209d695817c039754ec87f363496da94fc8433eaaf039dc5bff17bec2ac3",
+    "runs/reference_execution/native_evaluation_jobs.jsonl": "8d4e0f65bbfc33eaff18c98cdcc450b414ca312c2cd261920c3849b488fe8e3d",
+    "runs/reference_execution/native_evaluation_recovery_jobs.jsonl": "1238fe20761817db131bb0ab92fd222bf8c504f97ee4154658c60d533ad8288b",
+    "runs/hourly_execution/native_evaluation_jobs.jsonl": "fbddb53a83d92a2d2e5971ef79d3642e4eb3351c77b4fbd4c76cf4afbb74b3e7",
+    "runs/reference_execution/supplement_evaluation_jobs.jsonl": "b9a24a3c426ab8a1479766543cf0b098bf49320272ca6613a56f05c4c7a86fbf"
+  },
+  "completed_reports_preserved": [
+    {
+      "job": "native.curated_reference_bce96.11.calibration_validation",
+      "report": "runs/curated_reference_bce96/seed_11/calibration_validation.json",
+      "sha256_observed_at_recovery": "602b9214eeca5aedde6453a9e0e8957ece1794dd6c706ec6b0e492a3e2859832",
+      "bytes": 3559610,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "native.curated_reference_bce96.11.utility_validation",
+      "report": "runs/curated_reference_bce96/seed_11/utility_validation.json",
+      "sha256_observed_at_recovery": "3f733b87431fe2d43eeff5d034f563be2683bd979cffdc9e8c5376b91d86e531",
+      "bytes": 102003,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "native.curated_reference_unconditional96.11.utility_validation",
+      "report": "runs/curated_reference_unconditional96/seed_11/utility_validation.json",
+      "sha256_observed_at_recovery": "ab758e0730047709421a9f210b86087dd31a2c630f750a2682c50ff0fe729df9",
+      "bytes": 85844,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "hourly.curated_reference_bce24.11.calibration_validation",
+      "report": "runs/curated_reference_bce24/seed_11/calibration_validation.json",
+      "sha256_observed_at_recovery": "10206cc7256dc2ee1119a5906f0e1086b3c8f4457860030135532a41a3a8c871",
+      "bytes": 1521373,
+      "prior_success_receipt": "runs/hourly_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "hourly.curated_reference_bce24.11.utility_validation",
+      "report": "runs/curated_reference_bce24/seed_11/utility_validation.json",
+      "sha256_observed_at_recovery": "ea5a8d62f7a9b56b2d5ed372a4913282926eec03c32a2ea9d06b1be9b39a072c",
+      "bytes": 111500,
+      "prior_success_receipt": "runs/hourly_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "hourly.curated_reference_bce24.11.calibration_precision",
+      "report": "runs/curated_reference_bce24/seed_11/calibration_precision.json",
+      "sha256_observed_at_recovery": "b4403620f9605e8b4f29f411828e1663a8c175910559201bc3cff34621420dac",
+      "bytes": 1528884,
+      "prior_success_receipt": "runs/hourly_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "hourly.curated_reference_bce24.11.utility_precision",
+      "report": "runs/curated_reference_bce24/seed_11/utility_precision.json",
+      "sha256_observed_at_recovery": "ff68dc355c59615100c4215d6e865f3c376fdaef307a98a4428fa219f2d343ed",
+      "bytes": 112402,
+      "prior_success_receipt": "runs/hourly_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "supplement.conditioning.11.conditioning_seed11",
+      "report": "runs/reference_comparisons/conditioning_seed11.json",
+      "sha256_observed_at_recovery": "967815f9b59378c9c34d96f487f5040c7f1bc15a488ef62d079b0ede76cd8cac",
+      "bytes": 1558162,
+      "prior_success_receipt": "runs/reference_execution/supplement_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "supplement.curated_reference_unconditional96.11.unconditional_reference_supplemental_validation",
+      "report": "runs/curated_reference_unconditional96/seed_11/unconditional_reference_supplemental_validation.json",
+      "sha256_observed_at_recovery": "4ad1d702822523424e11cce4dd4ff28e05def0dc0f04d8f4d2bf1362620c3bf4",
+      "bytes": 1086789,
+      "prior_success_receipt": "runs/reference_execution/supplement_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "native.curated_reference_bce96.22.calibration_validation",
+      "report": "runs/curated_reference_bce96/seed_22/calibration_validation.json",
+      "sha256_observed_at_recovery": "b9187f7bf5a9e50f35f3da7b16e149d724fc14e71124cdb9046c37c43026ac58",
+      "bytes": 3559031,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_recovery_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": true
+    },
+    {
+      "job": "native.curated_reference_bce96.22.utility_validation",
+      "report": "runs/curated_reference_bce96/seed_22/utility_validation.json",
+      "sha256_observed_at_recovery": "c2eee21598a3c04e67477313c6c6260169214a14bca96c3346b0b7f3c71a30fb",
+      "bytes": 101994,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_recovery_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": true
+    },
+    {
+      "job": "native.curated_reference_unconditional96.22.utility_validation",
+      "report": "runs/curated_reference_unconditional96/seed_22/utility_validation.json",
+      "sha256_observed_at_recovery": "ea5cddf89284cf245e98118499480d3ca321427f6945f754f4eac97dbbd14db0",
+      "bytes": 85846,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_recovery_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": true
+    },
+    {
+      "job": "hourly.curated_reference_bce24.22.calibration_validation",
+      "report": "runs/curated_reference_bce24/seed_22/calibration_validation.json",
+      "sha256_observed_at_recovery": "9b97f9e01199b1f074f55686ec556a584fb56bb11a7c85c2af0c5a370377fe72",
+      "bytes": 1522279,
+      "prior_success_receipt": "runs/hourly_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "hourly.curated_reference_bce24.22.utility_validation",
+      "report": "runs/curated_reference_bce24/seed_22/utility_validation.json",
+      "sha256_observed_at_recovery": "21b76c87eb76a9cd4b37df1aa997538bdbd19c7abf765dc97c589707e7c47036",
+      "bytes": 111486,
+      "prior_success_receipt": "runs/hourly_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "hourly.curated_reference_bce24.22.calibration_precision",
+      "report": "runs/curated_reference_bce24/seed_22/calibration_precision.json",
+      "sha256_observed_at_recovery": "a95d78ec6803df1a4213fb76a400f182cc919787784cb81bb2351a6720fbebf1",
+      "bytes": 1529529,
+      "prior_success_receipt": "runs/hourly_execution/native_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "supplement.conditioning.22.conditioning_seed22",
+      "report": "runs/reference_comparisons/conditioning_seed22.json",
+      "sha256_observed_at_recovery": "bd46927fc2ddeae2700cc096857009a77acd9414d6aa5b7a9e2d8eb5d2f9ebd0",
+      "bytes": 1558494,
+      "prior_success_receipt": "runs/reference_execution/supplement_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "supplement.curated_reference_unconditional96.22.unconditional_reference_supplemental_validation",
+      "report": "runs/curated_reference_unconditional96/seed_22/unconditional_reference_supplemental_validation.json",
+      "sha256_observed_at_recovery": "6bcaea15cd4cb6a54c134bd24c45b270d064a437686306ea55d4d2f8b08b2ced",
+      "bytes": 1086425,
+      "prior_success_receipt": "runs/reference_execution/supplement_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "native.curated_reference_bce96.33.calibration_validation",
+      "report": "runs/curated_reference_bce96/seed_33/calibration_validation.json",
+      "sha256_observed_at_recovery": "281ef851c0007cd5a21e3ec7f4472bd1ba763f4cd4d24a4e4d3e880164ca3b7e",
+      "bytes": 3559344,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_recovery_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": true
+    },
+    {
+      "job": "native.curated_reference_bce96.33.utility_validation",
+      "report": "runs/curated_reference_bce96/seed_33/utility_validation.json",
+      "sha256_observed_at_recovery": "38ee88a9457904e3fa02e864db4d355ef28fe095a9d59aa71a4109bcc7ef90b8",
+      "bytes": 102024,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_recovery_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": true
+    },
+    {
+      "job": "supplement.conditioning.33.conditioning_seed33",
+      "report": "runs/reference_comparisons/conditioning_seed33.json",
+      "sha256_observed_at_recovery": "a21a5e9670646c5406b507de1ecaf75a81f9204b92572caeed735f26ab5a26ae",
+      "bytes": 1558011,
+      "prior_success_receipt": "runs/reference_execution/supplement_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "native.curated_reference_bce96.44.calibration_validation",
+      "report": "runs/curated_reference_bce96/seed_44/calibration_validation.json",
+      "sha256_observed_at_recovery": "273d12aadbb4306257a419c8d61fc34099f4ee96c84529a1738e1c329dcdde88",
+      "bytes": 3560445,
+      "prior_success_receipt": "runs/reference_execution/native_evaluation_recovery_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": true
+    },
+    {
+      "job": "supplement.conditioning.44.conditioning_seed44",
+      "report": "runs/reference_comparisons/conditioning_seed44.json",
+      "sha256_observed_at_recovery": "43040c50bcf2839c62f2d84fc5ff8537a99dddcf5ed03f612eeb70e975a888bd",
+      "bytes": 1558268,
+      "prior_success_receipt": "runs/reference_execution/supplement_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    },
+    {
+      "job": "supplement.conditioning.55.conditioning_seed55",
+      "report": "runs/reference_comparisons/conditioning_seed55.json",
+      "sha256_observed_at_recovery": "2bf3471bdc19fd75a4db571cfcef8e54e77e4445312643b083c20c859120963a",
+      "bytes": 1558612,
+      "prior_success_receipt": "runs/reference_execution/supplement_evaluation_jobs.jsonl",
+      "historical_output_sha256_available_and_matched": false
+    }
+  ],
+  "pending_job_keys": [
+    "hourly.curated_reference_bce24.33.calibration_validation",
+    "hourly.curated_reference_bce24.44.calibration_validation",
+    "hourly.curated_reference_bce24.55.calibration_validation",
+    "native.curated_reference_bce96.55.calibration_validation",
+    "supplement.curated_reference_unconditional96.33.unconditional_reference_supplemental_validation",
+    "supplement.curated_reference_unconditional96.44.unconditional_reference_supplemental_validation",
+    "supplement.curated_reference_unconditional96.55.unconditional_reference_supplemental_validation",
+    "hourly.curated_reference_bce24.33.utility_validation",
+    "native.curated_reference_unconditional96.33.utility_validation",
+    "hourly.curated_reference_bce24.44.utility_validation",
+    "native.curated_reference_bce96.44.utility_validation",
+    "native.curated_reference_unconditional96.44.utility_validation",
+    "hourly.curated_reference_bce24.55.utility_validation",
+    "native.curated_reference_bce96.55.utility_validation",
+    "native.curated_reference_unconditional96.55.utility_validation",
+    "native.curated_reference_bce96.11.calibration_precision",
+    "native.curated_reference_unconditional96.11.raw_precision",
+    "supplement.curated_reference_unconditional96.11.unconditional_reference_supplemental_precision",
+    "native.curated_reference_bce96.22.calibration_precision",
+    "native.curated_reference_unconditional96.22.raw_precision",
+    "supplement.curated_reference_unconditional96.22.unconditional_reference_supplemental_precision",
+    "hourly.curated_reference_bce24.33.calibration_precision",
+    "native.curated_reference_bce96.33.calibration_precision",
+    "native.curated_reference_unconditional96.33.raw_precision",
+    "supplement.curated_reference_unconditional96.33.unconditional_reference_supplemental_precision",
+    "hourly.curated_reference_bce24.44.calibration_precision",
+    "native.curated_reference_bce96.44.calibration_precision",
+    "native.curated_reference_unconditional96.44.raw_precision",
+    "supplement.curated_reference_unconditional96.44.unconditional_reference_supplemental_precision",
+    "hourly.curated_reference_bce24.55.calibration_precision",
+    "native.curated_reference_bce96.55.calibration_precision",
+    "native.curated_reference_unconditional96.55.raw_precision",
+    "supplement.curated_reference_unconditional96.55.unconditional_reference_supplemental_precision",
+    "native.curated_reference_bce96.11.utility_precision",
+    "native.curated_reference_unconditional96.11.utility_precision",
+    "hourly.curated_reference_bce24.22.utility_precision",
+    "native.curated_reference_bce96.22.utility_precision",
+    "native.curated_reference_unconditional96.22.utility_precision",
+    "hourly.curated_reference_bce24.33.utility_precision",
+    "native.curated_reference_bce96.33.utility_precision",
+    "native.curated_reference_unconditional96.33.utility_precision",
+    "hourly.curated_reference_bce24.44.utility_precision",
+    "native.curated_reference_bce96.44.utility_precision",
+    "native.curated_reference_unconditional96.44.utility_precision",
+    "hourly.curated_reference_bce24.55.utility_precision",
+    "native.curated_reference_bce96.55.utility_precision",
+    "native.curated_reference_unconditional96.55.utility_precision"
+  ],
+  "protocol": {
+    "training_references": "All 15 reference fits have complete 26-epoch budgets, 30784 generator/discriminator updates, 15761408 samples seen and ordered 26-row histories.",
+    "seeds": [
+      11,
+      22,
+      33,
+      44,
+      55
+    ],
+    "evaluation_seed": 2026,
+    "samples_per_condition": [
+      100,
+      1000
+    ],
+    "saved_conditional_maps": {
+      "calibration_samples_per_condition": 4096,
+      "calibration_seed": 7301,
+      "quantile_knots": 1025
+    },
+    "conditioning_bootstrap_replicates": 500,
+    "conditioning_status": "All five conditioning contrasts were complete and are preserved; none is scheduled again.",
+    "commands": "Every pending command is the exact historical queue command recorded in the approved plan; neither scientific settings nor pinned evaluators change."
+  },
+  "execution": {
+    "launched_at": "2026-10-20T17:01:10.775000+00:00",
+    "launch_receipt": {
+      "path": "runs/reference_execution/disconnect_recovery_20261020T170110Z_launch.json",
+      "sha256": "ab4cec5399ee20fb05fe217df6e3026710e28f9c6e3966a5c68772334b398b65"
+    },
+    "plan_binding_receipt": {
+      "path": "runs/reference_execution/disconnect_recovery_20261020T170110Z/plan_binding.json",
+      "sha256": "1625ca6e74fb901d9756e33753dd3256a44b48944c8313aaf8ed5a2574b3f720"
+    },
+    "log": "runs/reference_execution/disconnect_recovery_20261020T170110Z.log",
+    "ledger": "runs/reference_execution/disconnect_recovery_20261020T170110Z/jobs.jsonl",
+    "execution_session": 22809,
+    "process_lifetime": "Retained foreground wait in a yielded execution session; durable artifacts survive a subsequent process interruption, but uninterrupted execution is not guaranteed.",
+    "status_at_receipt": "launched; no completion claim; consult durable job ledger",
+    "lock": "runs/heavy_evaluation.lock",
+    "resource_gate": {
+      "path": "runs/reference_execution/heavy_precision_training_complete.json",
+      "sha256": "d14f20267da33e60e2745dc90e0bb970c99c00d8f12914f2c233d1c1434adbd6"
+    },
+    "safeguards": [
+      "One scientific child at a time under the exclusive shared lock; future decoder ownership makes the queue wait.",
+      "Persistent exclusive per-output attempt claims, new logs, immutable approved inputs, pre/post input and source hashes.",
+      "No overwrite and no automatic retry after a scientific failure; preserve partial artifacts for review.",
+      "Successful prior reports are never recomputed.",
+      "No actual TEST content is read."
+    ]
+  },
+  "orchestration_startup_attempt_retained": {
+    "launch_receipt": "runs/reference_execution/disconnect_recovery_20261020T170033Z_launch.json",
+    "sha256": "5ded7e950b03bcd247018b7e49603ead857e78a35b0f75828b8c3c6353f12687",
+    "log": "runs/reference_execution/disconnect_recovery_20261020T170033Z.log",
+    "observed_result": "Detached child did not survive closing of its execution sandbox; no recovery directory, scientific claim or output was created. The retained-session launch replaces orchestration startup only."
+  }
+}

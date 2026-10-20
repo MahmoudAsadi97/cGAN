@@ -17,9 +17,12 @@ observed-history utility checks meet the declared tolerance, and the
 seed's paired uncertainty and the stronger resampling results. This is
 validation evidence, not a completed publication result. The fixed three-seed
 [temporal-loss refinement](docs/CURATED_DERIVATIVE_PILOT.md) failed its promotion
-rules. The separately declared [capacity pilot](docs/CAPACITY_REFINEMENT.md)
-and [BCE reference experiments](docs/REFERENCE_COMPLETION.md) are in progress;
-final test performance remains unseen. Earlier reference-architecture runs and
+rules. The [capacity pilot](docs/CURATED_CAPACITY_PILOT.md) also failed: mean
+ramp error increased 32.34% against the original matched three seeds. Neither
+failed pilot expands to seeds 44/55. All fifteen [BCE reference training runs](reports/reference_training_completion.json)
+are complete; their [validation study](docs/REFERENCE_COMPLETION.md) continues. A prospective [quantile-decoder refinement](docs/QUANTILE_DECODER_REFINEMENT.md)
+passed [1,434 integrated software checks](reports/quantile_decoder_software_verification_20261020.json)
+before its first real-data fit; final test performance remains unseen. Earlier reference-architecture runs and
 normalization screens are historical exploratory evidence, not results for this candidate.
 
 **Data-audit update:** different meter IDs were found to share exact full-year
@@ -100,15 +103,19 @@ The fixed configurations and training seeds are:
 
 | Role | Config | Seeds | Budget and device |
 |---|---|---|---|
-| Current candidate, SWD weight 10 | [curated_swd10.json](configs/curated_swd10.json) | 11, 22, 33, 44, 55 | 26 epochs, batch 512, CPU, one thread |
+| Original candidate, SWD weight 10 | [curated_swd10.json](configs/curated_swd10.json) | 11, 22, 33, 44, 55 | 26 epochs, batch 512, CPU, one thread |
 | Attribution control, SWD weight 0 | [curated_swd0.json](configs/curated_swd0.json) | 11, 22, 33 | Same update budget and CPU settings |
 | Temporal refinement pilot (failed promotion) | [curated_derivative1.json](configs/curated_derivative1.json) | 11, 22, 33; complete | Same budget; add derivative SWD weight 1 |
-| Capacity refinement pilot | [curated_capacity.json](configs/curated_capacity.json) | 11, 22, 33; extend only if declared gates pass | Same budget; generator width 128 and latent dimension 96 |
+| Capacity refinement pilot (failed promotion) | [curated_capacity.json](configs/curated_capacity.json) | 11, 22, 33; complete | Same budget; generator width 128 and latent dimension 96 |
+| Prospective quantile-decoder pilot | [curated_quantile_decoder.json](configs/curated_quantile_decoder.json) | 11, 22, 33; declared | Same budget; fixed conditional TRAIN quantiles in the generator |
 
 All use the full curated training pool and discriminator width
 128, and balanced batches of four conditions with 128 profiles each. The original
-and derivative arms use generator width 64 and latent dimension 24. Checkpoints
-are selected by raw conditional validation W1. There is no early stopping or
+and derivative arms, and the decoder pilot, use generator width 64 and latent
+dimension 24. Checkpoints use the conditional validation-W1 selector; it sees
+raw normalized outputs in the earlier arms and normalized decoded physical
+outputs in the decoder arm. The [decoder protocol](docs/QUANTILE_DECODER_REFINEMENT.md)
+discloses this representation difference. There is no early stopping or
 resume. With 606,060 training profiles, the declared budget is 1,184 updates per
 epoch and 30,784 updates per adversary. Replacement sampling means an epoch is an
 update budget, not a traversal of every unique profile.
@@ -123,8 +130,12 @@ matching on 95 adjacent standardized differences, with a single TRAIN-fitted
 scale. Its three-seed promotion criteria are fixed in
 [TEMPORAL_REFINEMENT.md](docs/TEMPORAL_REFINEMENT.md). The
 [completed pilot](docs/CURATED_DERIVATIVE_PILOT.md) failed two promotion gates.
-The next [capacity protocol](docs/CAPACITY_REFINEMENT.md) fixes a larger generator
-package before its training and retains the original model as comparator.
+The [capacity protocol](docs/CAPACITY_REFINEMENT.md) fixed a larger generator
+package before training; its [complete assessment](docs/CURATED_CAPACITY_PILOT.md)
+failed both ramp criteria. A new [quantile-decoder protocol](docs/QUANTILE_DECODER_REFINEMENT.md)
+tests the same fixed TRAIN transformation during training and generation, without
+a second posthoc calibration. It retains the original three checkpoints as comparator
+and the existing promotion thresholds; no decoder result is yet available.
 Keep each arm, failed gates and interrupted attempts.
 The completed three-seed [SWD attribution comparison](docs/CURATED_SWD_ATTRIBUTION.md)
 finds lower calibrated peak/ramp errors with weight 10, alongside ACF and battery

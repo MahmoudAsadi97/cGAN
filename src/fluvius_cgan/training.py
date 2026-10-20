@@ -38,6 +38,7 @@ DEFAULT_CONFIG = {
     "max_train_samples": None, "patience": None, "normalization": "minmax",
     "objective": "bce", "adam_beta1": 0.9, "adam_beta2": 0.999,
     "discriminator_hidden_dim": None, "conditional_mean_residual": False,
+    "conditional_quantile_decoder": False,
     "batch_sampling": "shuffle", "conditions_per_batch": 4,
     "swd_weight": 0.0, "swd_projections": 128,
     "derivative_swd_weight": 0.0,
@@ -81,7 +82,7 @@ def _config(config):
         if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value) or not 0 <= value < 1:
             raise ValueError(f"{name} must be finite and in [0, 1)")
         result[name] = float(value)
-    for name in ("unconditional", "conditional_mean_residual", "allow_uncurated_data"):
+    for name in ("unconditional", "conditional_mean_residual", "conditional_quantile_decoder", "allow_uncurated_data"):
         if not isinstance(result[name], bool):
             raise ValueError(f"{name} must be a boolean")
     if result["normalization"] not in ("minmax", "standard"):
@@ -97,6 +98,11 @@ def _config(config):
         if isinstance(weight, bool) or not isinstance(weight, Real) or not math.isfinite(weight) or weight < 0:
             raise ValueError(f"{name} must be nonnegative and finite")
         result[name] = float(weight)
+    if result["conditional_quantile_decoder"]:
+        if result["unconditional"] or result["normalization"] != "standard" or result["conditional_mean_residual"]:
+            raise ValueError("conditional_quantile_decoder requires conditional standard-normalized training without mean residuals")
+        if result["derivative_swd_weight"]:
+            raise ValueError("conditional_quantile_decoder requires derivative_swd_weight=0")
     auxiliary_enabled = result["swd_weight"] or result["derivative_swd_weight"]
     if result["derivative_swd_weight"] and result["normalization"] != "standard":
         raise ValueError("positive derivative_swd_weight requires standard normalization")
@@ -423,6 +429,97 @@ def _normalized(x, scaler):
     return values
 
 
+def _quantile_decoder_source_binding(selection, hashes, scaler, provenance):
+    """Bind a selected-TRAIN fit to existing immutable run records."""
+    return {
+        "fitting_scope": "actual_gradient_training_subset_only",
+        "train_npz_sha256": hashes["train.npz"],
+        "train_indices_sha256": selection["train_indices_sha256"],
+        "train_labels_sha256": selection["train_labels_sha256"],
+        "train_profiles_available": selection["train_profiles_available"],
+        "train_profiles_used": selection["train_profiles_used"],
+        "data_hashes": dict(hashes), "scaler": dict(scaler),
+        "source_files_sha256": dict(provenance["source_files_sha256"]),
+    }
+
+
+def load_quantile_decoded_generator(saved, device="cpu"):
+    """Reconstruct and verify an embedded TRAIN-only decoder without fitting.
+
+    Source hashes bind the historical implementation recorded at training time;
+    they are not a claim that an arbitrary later checkout has identical code.
+    No prepared-data file is opened by this function.
+    """
+    from .models import QuantileDecodedGenerator
+    from .quantile_decoder import ConditionalQuantileDecoder
+
+    if not isinstance(saved, dict) or saved.get("format_version") != CHECKPOINT_FORMAT:
+        raise ValueError("unsupported decoder checkpoint format")
+    try:
+        config = _config({**saved["config"], "device": "cpu"})
+        if not config["conditional_quantile_decoder"]:
+            raise ValueError("checkpoint does not enable conditional_quantile_decoder")
+        if saved["condition_dim"] != 64 or saved["output_dim"] not in (24, 96):
+            raise ValueError("decoder checkpoint model dimensions disagree with config")
+        scaler, selection, provenance = saved["scaler"], saved["selection"], saved["provenance"]
+        if scaler.get("kind", "minmax") != "standard":
+            raise ValueError("decoder checkpoint requires a standard scaler")
+        offset, scale = _scaler_parameters(scaler)
+        decoder = ConditionalQuantileDecoder.from_state_dict(saved["generator_state_dict"], prefix="decoder.").to("cpu")
+        fit = decoder.fit_metadata
+        if saved.get("quantile_decoder") != fit or provenance.get("quantile_decoder") != fit:
+            raise ValueError("decoder checkpoint fit metadata disagrees with state/provenance")
+        binding = _quantile_decoder_source_binding(selection, saved["data_hashes"], scaler, provenance)
+        if fit["source_binding"] != binding:
+            raise ValueError("decoder checkpoint source binding disagrees with run records")
+        required_sources = {f"src/fluvius_cgan/{name}.py" for name in ("training", "models", "quantile_decoder")}
+        sources = binding["source_files_sha256"]
+        if (not required_sources.issubset(sources) or not sources or
+                any(not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)
+                    for digest in sources.values())):
+            raise ValueError("decoder checkpoint source fingerprints are incomplete")
+        hashes = binding["data_hashes"]
+        if (not {"train.npz", "val.npz", "metadata.json", "scaler.json"}.issubset(hashes) or
+                "test.npz" in hashes or
+                any(not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)
+                    for digest in hashes.values())):
+            raise ValueError("decoder checkpoint development-data fingerprints are invalid")
+        used = _positive_int("decoder train_profiles_used", selection["train_profiles_used"])
+        available = _positive_int("decoder train_profiles_available", selection["train_profiles_available"])
+        if (used > available or saved["metadata"]["splits"]["train"]["profiles"] != available or
+                used != min(available, config["max_train_samples"] or available)):
+            raise ValueError("decoder checkpoint selected TRAIN size disagrees with config/metadata")
+        if (fit["selected_profiles"] != used or fit["output_dim"] != saved["output_dim"] or
+                fit["condition_dim"] != 64 or fit["supported_labels"] != saved["supported_labels"] or
+                fit["selected_indices_sha256"] != selection["train_indices_sha256"] or
+                fit["selected_labels_sha256"] != selection["train_labels_sha256"] or
+                fit["selected_profiles_sha256"] != selection["train_profiles_sha256"] or
+                fit["condition_counts"] != selection["train_profiles_per_condition"]):
+            raise ValueError("decoder checkpoint selected TRAIN support/counts/hashes disagree")
+        base = Generator(config["latent_dim"], 64, config["hidden_dim"], saved["output_dim"])
+        if any(not isinstance(value, torch.Tensor) or value.dtype != torch.float32
+               for name, value in saved["generator_state_dict"].items() if name.startswith("base.")):
+            raise ValueError("decoder checkpoint base weights must retain float32 training dtype")
+        for name, expected in (("normalization_offset", offset), ("normalization_scale", scale)):
+            buffer = saved["generator_state_dict"][name]
+            if (not isinstance(buffer, torch.Tensor) or buffer.dtype != torch.float64 or
+                    buffer.shape != () or buffer.item() != expected):
+                raise ValueError("decoder checkpoint normalization buffers disagree with scaler")
+        generator = QuantileDecodedGenerator(base, decoder, offset=offset, scale=scale)
+        generator.load_state_dict(saved["generator_state_dict"], strict=True)
+        decoder.validate_state()
+        if (generator.normalization_offset.dtype != torch.float64 or
+                generator.normalization_scale.dtype != torch.float64 or
+                generator.normalization_offset.numel() != 1 or generator.normalization_scale.numel() != 1 or
+                generator.normalization_offset.item() != offset or generator.normalization_scale.item() != scale):
+            raise ValueError("decoder checkpoint normalization buffers disagree with scaler")
+        if any(not torch.isfinite(parameter).all() for parameter in generator.parameters()):
+            raise ValueError("decoder checkpoint learned parameters must be finite")
+        return generator.to(device)
+    except (KeyError, TypeError, RuntimeError, AttributeError) as exc:
+        raise ValueError("malformed quantile decoder checkpoint") from exc
+
+
 def _validation_score(generator, normalized, labels, noise, condition_dim, device, batch_size,
                       selection="pooled_w1"):
     """Fixed-sample interval W1 in normalized units, pooled or condition-macro.
@@ -636,6 +733,22 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
         "conditioning": "pooled" if config["unconditional"] else "equal_observed_condition_macro",
         "difference_policy": "signed adjacent within-day differences; no midnight wrap or centering",
     }
+    quantile_decoder = None
+    quantile_decoder_metadata = None
+    if config["conditional_quantile_decoder"]:
+        from .quantile_decoder import fit_quantile_decoder
+        selection["train_labels_sha256"] = hashlib.sha256(labels.astype("<i8").tobytes()).hexdigest()
+        selection["train_profiles_per_condition"] = {
+            str(label): int(np.sum(labels == label)) for label in supported_labels}
+        # Fit physical knots condition by condition; the module selects canonical
+        # TRAIN rows itself. No validation values or generated samples enter fit.
+        quantile_decoder = fit_quantile_decoder(
+            full_train["x"], full_train["y"], selected_indices=selected, condition_dim=64,
+            split="train",
+            source_binding=_quantile_decoder_source_binding(selection, hashes, scaler, provenance))
+        quantile_decoder_metadata = quantile_decoder.fit_metadata
+        selection["train_profiles_sha256"] = quantile_decoder_metadata["selected_profiles_sha256"]
+        provenance["quantile_decoder"] = quantile_decoder_metadata
     output_dir.mkdir(parents=True, exist_ok=True)
     _atomic_json(output_dir / "config.json", config)
     history = []
@@ -648,6 +761,10 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
         if config["conditional_mean_residual"]:
             # Fixed offsets use only the normalized rows actually trained on.
             generator = ResidualGenerator(generator, fit_mean_profiles(train_x, labels, condition_dim))
+        if quantile_decoder is not None:
+            from .models import QuantileDecodedGenerator
+            offset, scale = _scaler_parameters(scaler)
+            generator = QuantileDecodedGenerator(generator, quantile_decoder.to(device), offset=offset, scale=scale)
         discriminator = Discriminator(metadata["resolution"], condition_dim,
                                       config["discriminator_hidden_dim"] or config["hidden_dim"],
                                       objective=config["objective"]).to(device)
@@ -769,6 +886,8 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
                 "optimizer_g_state_dict": optimizer_g.state_dict(),
                 "optimizer_d_state_dict": optimizer_d.state_dict(),
             }
+            if quantile_decoder_metadata is not None:
+                checkpoint["quantile_decoder"] = quantile_decoder_metadata
             if improved:
                 _atomic_checkpoint(output_dir / "best.pt", checkpoint)
             _atomic_checkpoint(output_dir / "last.pt", checkpoint)
@@ -796,6 +915,8 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
         "best_checkpoint": "best.pt", "last_checkpoint": "last.pt",
         "test_used": False,
     }
+    if quantile_decoder_metadata is not None:
+        summary["quantile_decoder"] = quantile_decoder_metadata
     _atomic_json(output_dir / "summary.json", summary)
     return summary
 
@@ -806,6 +927,20 @@ def generate(checkpoint, labels: np.ndarray, seed=42, batch_size=1024) -> np.nda
     Uses safe ``weights_only`` deserialization and CPU inference.  Fixed seed and
     batch size replay exactly in the same software/hardware environment.
     """
+    return _generate(checkpoint, labels, seed, batch_size)
+
+
+def generate_quantile_decoder_diagnostics(checkpoint, labels: np.ndarray, seed=42, batch_size=1024):
+    """Return the same physical draw plus its latent probabilities and fit record.
+
+    This validation helper allocates an extra float64 probability array. Ordinary
+    ``generate`` avoids that allocation, including for full-TRAIN utility draws.
+    No quantiles or normalization parameters are fitted during either path.
+    """
+    return _generate(checkpoint, labels, seed, batch_size, quantile_diagnostics=True)
+
+
+def _generate(checkpoint, labels, seed, batch_size, *, quantile_diagnostics=False):
     seed = _positive_int("seed", seed, 0)
     if seed >= 2**32:
         raise ValueError("seed must be smaller than 2**32")
@@ -818,6 +953,11 @@ def generate(checkpoint, labels: np.ndarray, seed=42, batch_size=1024) -> np.nda
         raise ValueError("unsupported checkpoint format")
     # A CUDA-trained checkpoint remains usable on a CPU-only inference machine.
     config = _config({**saved["config"], "device": "cpu"})
+    if quantile_diagnostics and not config["conditional_quantile_decoder"]:
+        raise ValueError("quantile decoder diagnostics require an enabled decoder checkpoint")
+    if not config["conditional_quantile_decoder"] and (
+            saved.get("quantile_decoder") is not None or saved.get("provenance", {}).get("quantile_decoder") is not None):
+        raise ValueError("decoder fit metadata disagrees with disabled decoder config")
     condition_dim = 0 if config["unconditional"] else 64
     if saved.get("condition_dim") != condition_dim or saved.get("output_dim") not in (24, 96):
         raise ValueError("checkpoint model dimensions disagree with config")
@@ -831,21 +971,37 @@ def generate(checkpoint, labels: np.ndarray, seed=42, batch_size=1024) -> np.nda
     if saved["scaler"].get("kind", "minmax") != config["normalization"]:
         raise ValueError("checkpoint scaler kind disagrees with normalization config")
     with _deterministic(seed, config["num_threads"], torch.device("cpu")):
-        generator = Generator(config["latent_dim"], condition_dim, config["hidden_dim"], saved["output_dim"])
-        if config["conditional_mean_residual"]:
-            generator = ResidualGenerator(generator, saved["generator_state_dict"]["mean_profiles"])
-        # Restore the residual support mask as well as its means and base weights.
-        generator.load_state_dict(saved["generator_state_dict"], strict=True)
+        if config["conditional_quantile_decoder"]:
+            generator = load_quantile_decoded_generator(saved)
+        else:
+            generator = Generator(config["latent_dim"], condition_dim, config["hidden_dim"], saved["output_dim"])
+            if config["conditional_mean_residual"]:
+                generator = ResidualGenerator(generator, saved["generator_state_dict"]["mean_profiles"])
+            # Restore the residual support mask as well as its means and base weights.
+            generator.load_state_dict(saved["generator_state_dict"], strict=True)
         generator.eval()
         # Draw once so latent vectors do not depend on how inference is batched.
         noise = torch.randn((len(labels), config["latent_dim"]), generator=torch.Generator().manual_seed(seed))
         result = np.empty((len(labels), saved["output_dim"]), dtype=np.float32)
+        probabilities = np.empty(result.shape, dtype=np.float64) if quantile_diagnostics else None
         with torch.no_grad():
             for start in range(0, len(labels), batch_size):
                 stop = start + batch_size
                 conditions = _conditions(labels[start:stop], condition_dim, torch.device("cpu"))
-                result[start:stop] = generator(noise[start:stop], conditions).numpy()
-    result = (result.astype(np.float64) * scale + offset).astype(np.float32)
+                if quantile_diagnostics:
+                    physical, probability = generator.decode_with_probabilities(noise[start:stop], conditions)
+                    result[start:stop] = physical.numpy()
+                    probabilities[start:stop] = probability.numpy()
+                elif config["conditional_quantile_decoder"]:
+                    result[start:stop] = generator.decode_physical(noise[start:stop], conditions).numpy()
+                else:
+                    result[start:stop] = generator(noise[start:stop], conditions).numpy()
+    if not config["conditional_quantile_decoder"]:
+        result = (result.astype(np.float64) * scale + offset).astype(np.float32)
     if not np.isfinite(result).all():
         raise ValueError("generator produced nonfinite profiles")
+    if quantile_diagnostics:
+        if not np.isfinite(probabilities).all() or np.any((probabilities < 0) | (probabilities > 1)):
+            raise ValueError("decoder produced invalid latent probabilities")
+        return result, probabilities, saved["quantile_decoder"]
     return result

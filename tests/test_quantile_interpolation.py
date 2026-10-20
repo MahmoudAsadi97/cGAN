@@ -93,3 +93,18 @@ def test_linear_quantile_weights_and_exact_knots_have_manual_oracle():
     uniform = np.broadcast_to(np.arange(9)[:, None] / 8, (9, 3))
     expected = knots[0] + np.arange(9)[:, None] * 2
     np.testing.assert_array_equal(_inverse_quantiles(uniform, knots), expected)
+
+
+def test_negative_interval_does_not_undershoot_at_tiny_positive_probability():
+    # A right anchor rounded the second output one ULP below the first knot.
+    # Preserve that exact case; a tolerance would hide the support violation.
+    a, b = -(1.5 + 2**-52), -(3 * 2**-53)
+    knots = np.array([[a], [b]], dtype=np.float64)
+    probabilities = np.array([0., np.nextafter(0., 1.), 1e-30,
+                              np.nextafter(.5, 0.), .5, np.nextafter(.5, 1.),
+                              np.nextafter(1., 0.), 1.], dtype=np.float64)[:, None]
+    values = _inverse_quantiles(probabilities, knots)
+    np.testing.assert_array_equal(values[:3], np.full((3, 1), a))
+    assert np.all(values[1:] >= values[:-1])
+    assert np.all((values >= a) & (values <= b))
+    np.testing.assert_array_equal(values[[0, -1]], knots)

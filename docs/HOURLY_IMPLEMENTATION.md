@@ -2,8 +2,28 @@
 
 This implements the preparation and physical-comparison parts of
 [REFERENCE_COMPLETION.md](REFERENCE_COMPLETION.md). It does not supply trained
-hourly results or authorize TEST access. Actual execution receipts are recorded
-separately after a clean source revision has been published.
+hourly results or authorize TEST access. The first actual development derivation
+is recorded in [hourly_derivation_verification.json](../reports/hourly_derivation_verification.json).
+
+## Actual preparation record
+
+On 20 October 2026, clean published source
+`ec10d83359eb1d5a3fa965a882687569f0a86e39` created and independently verified the
+published child directory. The integrated fixture suite passed **982 tests**
+before publication; its source hashes are in
+[hourly_software_verification_20261020.json](../reports/hourly_software_verification_20261020.json).
+The actual derivation took 63.46 seconds and preserved 606,060 TRAIN profiles
+from 1,665 canonical meters and 128,492 VAL profiles from 353 canonical meters.
+An open-audit guard observed zero attempted TEST content accesses. No TEST24
+artifact was created. The hourly TRAIN scaler bounds are
+−10.769000053405762 and 22.850000381469727 kWh per interval.
+
+The hourly training queue uses the same clean source pin, the separately
+published reference protocol/configs at
+`64a2e9aee98b0e3552ad3775df99f9cee35b2f8c`, and all five fixed seeds. It waits for
+all three capacity pilot training/raw-validation receipts before using up to
+three one-thread training slots. This scheduling condition uses job completion,
+not model outcomes. Preparation success is not a training or performance result.
 
 ## Preparation and lineage
 

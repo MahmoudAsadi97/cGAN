@@ -4,6 +4,15 @@ All five fixed training seeds (11, 22, 33, 44, 55) now have primary physical eva
 
 The primary setting remains 100 real and generated profiles per condition, 64 equally weighted conditions, evaluation seed 2026, and a TRAIN-only calibration reference of 4,096 draws per condition (seed 7301, 1,025 quantile knots). All five checkpoints and maps were verified by the collector; no prepared arrays were loaded during collection or summarization.
 
+The [paired ramp figure](../reports/figures/curated_primary_ramp_uncertainty.svg)
+shows every seed's estimate and separate descriptive 95% meter interval against
+both Gaussian copula and resampling. Its
+[provenance](../reports/figures/curated_primary_ramp_uncertainty.provenance.json)
+binds the compact report, all ten source comparison hashes and the exact plotted
+values. Recreate it with `scripts/plot_paired_ramps.py`; no arrays or checkpoints
+are loaded. These intervals are not pooled and do not include training or
+selection uncertainty.
+
 ## Primary physical metrics
 
 Neural entries are mean ± sample SD across all five training seeds. Controls are identical frozen draws and appear once; they are not five independent replications. W1 is lower-is-better. Diversity near 1 is only descriptive.

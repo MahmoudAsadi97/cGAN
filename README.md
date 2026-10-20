@@ -322,6 +322,10 @@ hourly TEST file. `scripts/compare_resolutions.py` evaluates verified paired
 models on common hourly validation rows, applying each saved 96-slot map before
 aggregation. Native-resolution scores remain separate.
 
+[Reference evaluation commands](docs/REFERENCE_EVALUATION.md) cover the raw
+unconditional supplement, four matched physical contrasts and common-hourly
+utility, including separate primary and precision reports.
+
 Output dimension comes from prepared metadata. The experiment runner and all
 calibration/comparison/utility/plotting scripts above evaluate validation only.
 The following command is an explicit **raw reference-model final-test example**,

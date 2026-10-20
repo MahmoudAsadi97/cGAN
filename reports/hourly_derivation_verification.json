@@ -1,0 +1,96 @@
+{
+  "created_utc": "2026-10-20T15:04:39.407870+00:00",
+  "completed_utc": "2026-10-20T15:05:42.868913+00:00",
+  "protocol_config_commit": "64a2e9aee98b0e3552ad3775df99f9cee35b2f8c",
+  "protocol_sha256": "45468b58015cdd367ae6504a433c50dc2356f3ab75efabeaa374601607f63513",
+  "source_commit": "ec10d83359eb1d5a3fa965a882687569f0a86e39",
+  "source_tree": "5db0e8c10ffd7572baa25755b090fc468da4fef4",
+  "source_clean": true,
+  "config_sha256": "b5fa650c0b76bd7642e829629e6ad36477674609070c923b3b2e66a5993e3136",
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "epochs": 26,
+  "updates_per_adversary": 30784,
+  "python": "3.12.14",
+  "source_sha256": {
+    "src/fluvius_cgan/derived.py": "680cfcec2e2922202f08393e88cc94eb9587f73c0e513f0d988fe38f98c1055c",
+    "src/fluvius_cgan/training.py": "8548b5decf26b26add75887caab2af6022e61eb7c60bcb56b3dce3c55b9a8651",
+    "src/fluvius_cgan/release.py": "728ca2c24802e0458937e7818f712b5a1e770e5ca40f5fedccfed5b0c75ababe"
+  },
+  "elapsed_seconds": 63.46108068600006,
+  "peak_rss_kib": 605504,
+  "operation": {
+    "name": "consecutive_quarter_hour_energy_sum",
+    "parent_resolution": 96,
+    "child_resolution": 24,
+    "group_size": 4,
+    "input_dtype": "<f4",
+    "accumulator_dtype": "<f8",
+    "output_dtype": "<f4",
+    "formula": "x96.astype('<f8').reshape(N, 24, 4).sum(axis=2).astype('<f4')",
+    "row_order_preserved": true,
+    "row_metadata_bytes_preserved": true,
+    "canonical_membership_preserved": true,
+    "new_identity_audit": false,
+    "hourly_trace_uniqueness_verified": false
+  },
+  "verification": {
+    "status": "verified_hourly_derivation_v1",
+    "pinned_release": true,
+    "metadata_sha256": "50138ba86dd441a1b8cdad09cec7098e97bbc3d0a19cc27e18afe8fb02bc3a3c",
+    "verified_file_hashes": {
+      "metadata.json": "50138ba86dd441a1b8cdad09cec7098e97bbc3d0a19cc27e18afe8fb02bc3a3c",
+      "scaler.json": "a7019afb1e3ca1bbcc7b830a98dc00fcce077aa248445147f3b3bf2bf41d1092",
+      "train.npz": "5b5ef39134ec3e978e8cc4807ea3432e62cb81d9592e628dac20ab5c8104de21",
+      "val.npz": "4fa5bf3689e302cde0ab88e80b4629a960c477e11b20094d64da622cf8b81b52"
+    },
+    "derived_manifest_sha256": "8bf2b6922d4b2537a08650c3dec35fb01c3e37f3e58abcb96aa38041f9f8864c",
+    "parent": {
+      "prepared_dir": "../curated96",
+      "path_policy": "relative_to_child_prepared_directory",
+      "development_files_sha256": {
+        "metadata.json": "09bec3b23679643e000831c755e08475b1a99be9275b320b24e1b85673ec54ac",
+        "scaler.json": "bc4316e731a4295f9fb0aa6ccae6c8f99b8bc0e491864f87791a98b8a1b03fc1",
+        "train.npz": "dfc3a05b3735ddaa4a7c1064d99c94be3507b8addc1dccc85998b49142ef9a0b",
+        "val.npz": "0187c385052dbe92e108c5284360a53061bf731a22d1ccb0bee570c65dd7b3a8"
+      },
+      "curation_manifest_sha256": "2366f0627c92a97e5c7d01ec402624a1bc9175b5622cd5788c6f415d992a79b3"
+    },
+    "qualification": "Verified hourly sum of the original curated-v2 TRAIN/VAL rows; quarter-hour canonical representatives are preserved. No new identity audit was performed; hourly trace uniqueness and independent households are not established. Validation remains exploratory; TEST24 is unmaterialized."
+  },
+  "scaler": {
+    "constant_range": false,
+    "fitted_on": "train",
+    "maximum": 22.850000381469727,
+    "minimum": -10.769000053405762,
+    "range": [
+      0,
+      1
+    ],
+    "transform": "(x - minimum) / (maximum - minimum); use denominator 1 if constant"
+  },
+  "exact_row_metadata_order_and_transformation_verified": true,
+  "test24_materialized": false,
+  "test_content_open_attempts": 0,
+  "test_digest_source": "Existing metadata only; TEST contents were not opened or rehashed.",
+  "split_counts": {
+    "train": {
+      "profiles": 606060,
+      "meters": 1665,
+      "sha256": "5b5ef39134ec3e978e8cc4807ea3432e62cb81d9592e628dac20ab5c8104de21"
+    },
+    "val": {
+      "profiles": 128492,
+      "meters": 353,
+      "sha256": "4fa5bf3689e302cde0ab88e80b4629a960c477e11b20094d64da622cf8b81b52"
+    }
+  },
+  "receipt_sha256": "20f46eef9cec34f188ad95be582ff22677811b41f0f4af971abb65c40d716f23",
+  "receipt_bytes": 46173,
+  "qualification": "Complete hourly development derivation and verification; model fitting and outcomes are separate. Quarter-hour canonical membership is inherited without a new hourly uniqueness audit."
+}

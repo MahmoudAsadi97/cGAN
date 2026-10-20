@@ -53,7 +53,7 @@ calibration is a separate TRAIN-target fitting stage with a generated reference.
 | Larger generator, profile weight 10 | 11, 22, 33 | Activated after the complete derivative failure; fixed width 128 and latent dimension 96 under `docs/CAPACITY_REFINEMENT.md`. Extend to 44/55 only if every pilot gate passes. |
 | Reference conditional BCE96 | 11, 22, 33, 44, 55 | Declared under `docs/REFERENCE_COMPLETION.md`; complete package comparison with the candidate |
 | Reference unconditional BCE96 | 11, 22, 33, 44, 55 | Declared matched network-conditioning comparison within the BCE reference method |
-| Reference conditional BCE24 | 11, 22, 33, 44, 55 | Declared resolution sensitivity; verified derived hourly development preparation required before fitting |
+| Reference conditional BCE24 | 11, 22, 33, 44, 55 | Hourly TRAIN/VAL derivation verified at clean source ec10d83; fixed training queue waits for capacity training to free resource slots |
 
 Completed controls 22/33 restart from initialization with the same seeds and full
 budget. The interruption is documented in `reports/resource_incident.json` and

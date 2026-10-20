@@ -1,0 +1,98 @@
+{
+  "input": "reports/curated_completed_validation.json",
+  "input_sha256": "d4e047c9e5b2c7ec2031377adeb9fb4e763c739921f6f3c35daf63e99db234a0",
+  "plotted_values": {
+    "gaussian_copula": [
+      {
+        "seed": 11,
+        "estimate": -0.03877522245465792,
+        "lower": -0.043046904382928824,
+        "upper": -0.030778299324375286,
+        "source_report_sha256": "5f5c2ac45cafc1a9ceba9dd41cd0b9edc84dbc9d1502b8d76ffe2800734ad2fd"
+      },
+      {
+        "seed": 22,
+        "estimate": -0.05031226119091936,
+        "lower": -0.057261943938431425,
+        "upper": -0.04073720414242353,
+        "source_report_sha256": "5096478c54f38d6d046444c70d27740ae3633f530d63e58cf7ed62a74e6d4d2e"
+      },
+      {
+        "seed": 33,
+        "estimate": -0.03971673948614067,
+        "lower": -0.044429801874451606,
+        "upper": -0.031347230249131365,
+        "source_report_sha256": "e16be6fb2d1794a49df8b95fe62fa6ed57c2ea652ded553464777808bc262e6f"
+      },
+      {
+        "seed": 44,
+        "estimate": -0.033967336418290486,
+        "lower": -0.03738238469830527,
+        "upper": -0.026682359803663975,
+        "source_report_sha256": "0ea8cf7129c11d78499bb96530d7cea45b18c539426ea2364c343f748179933d"
+      },
+      {
+        "seed": 55,
+        "estimate": -0.039137082601620535,
+        "lower": -0.043934388579244914,
+        "upper": -0.03149289320535087,
+        "source_report_sha256": "4497ecd7a9dcf78b3e79e35084c9f6959273cb6f2a6290ba35c2246843cb64de"
+      }
+    ],
+    "conditional_resampling": [
+      {
+        "seed": 11,
+        "estimate": 0.06809303351984936,
+        "lower": 0.05567678650158396,
+        "upper": 0.07012665487559375,
+        "source_report_sha256": "5de7163ad294d6a7c044f0ab7de60dfa983b9afe9d06341b65b35ede53425f67"
+      },
+      {
+        "seed": 22,
+        "estimate": 0.056555994783587915,
+        "lower": 0.0446975734625984,
+        "upper": 0.05729562203729813,
+        "source_report_sha256": "65e94ebceefa88e77338ed3a66fac79a3d2b55745bec2700fafacf21179f5bfb"
+      },
+      {
+        "seed": 33,
+        "estimate": 0.0671515164883666,
+        "lower": 0.054871943630702046,
+        "upper": 0.06954876026733284,
+        "source_report_sha256": "58c48594fab25655a79497c10ba1b8f8ccb5229f0bf63380ead881cf32544fcc"
+      },
+      {
+        "seed": 44,
+        "estimate": 0.07290091955621679,
+        "lower": 0.05977921796523635,
+        "upper": 0.07525238327739167,
+        "source_report_sha256": "8cee9fbb50d10acd24e2a6554d2d42740b40d54e1c3c57322c94d92787bac930"
+      },
+      {
+        "seed": 55,
+        "estimate": 0.06773117337288674,
+        "lower": 0.05512111177565839,
+        "upper": 0.06971122925749022,
+        "source_report_sha256": "f5be3bd6cd5dadf5c6bb6714efa9255cdf0eae81a0480864a5eb67f0f133467b"
+      }
+    ]
+  },
+  "script_sha256": "ccc1f5a2abb50b54469df3007b1989fabbfa211eabc519b6b4bdcbfda364b14d",
+  "python": "3.12.14",
+  "matplotlib": "3.10.8",
+  "outputs_sha256": {
+    "curated_primary_ramp_uncertainty.svg": "884fb2d996a3cd88a31f02d74e765ba1293355e24d250b8f7bfb2cb741c1e78f",
+    "curated_primary_ramp_uncertainty.png": "1331ff19c3937308c528fd5c6822d97b5060972297f0eadde3123790b5e585a6"
+  },
+  "scope": "Original five-seed primary validation only; separate conditional intervals, no pooling.",
+  "visual_review": {
+    "passed": true,
+    "checks": [
+      "All five seeds visible in both panels",
+      "Common numerical axes and zero reference",
+      "No clipped labels or overlapping annotations",
+      "Ten individual intervals; no aggregated confidence interval"
+    ],
+    "reviewed_render_sha256": "1331ff19c3937308c528fd5c6822d97b5060972297f0eadde3123790b5e585a6"
+  }
+}

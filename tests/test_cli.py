@@ -44,12 +44,14 @@ def _prepared_for_cli(tmp_path):
     return prepared
 
 
-def test_train_generate_evaluate_cli_and_fingerprint_guard(tmp_path):
+@pytest.mark.parametrize('normalization', ['minmax', 'standard'])
+def test_train_generate_evaluate_cli_and_fingerprint_guard(tmp_path, normalization):
     import numpy as np
     prepared = _prepared_for_cli(tmp_path)
     config = tmp_path / 'config.json'
     config.write_text(json.dumps({'epochs': 1, 'batch_size': 4, 'hidden_dim': 4,
-                                 'latent_dim': 4, 'validation_samples': 4}))
+                                 'latent_dim': 4, 'validation_samples': 4,
+                                 'normalization': normalization}))
     run = tmp_path / 'run'
     main(['train', '--prepared', str(prepared), '--output', str(run), '--config', str(config)])
     generated = tmp_path / 'generated.npz'

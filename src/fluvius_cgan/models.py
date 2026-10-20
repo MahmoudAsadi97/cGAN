@@ -1,12 +1,14 @@
-"""MLPs adapted from malvin0130/cGAN_EB (MIT; see THIRD_PARTY_NOTICES.md).
+"""MLPs adapted from malvin0130/cGAN_EB (MIT; see docs/UPSTREAM_LICENSE.txt).
 
-The discriminator returns logits for BCEWithLogitsLoss.  The generator's linear
-output deliberately permits values outside the training min/max range.
+The discriminator returns raw scores for BCE or spectral-normalized hinge loss.
+The generator's linear output deliberately permits values outside the training
+min/max range.
 """
 from numbers import Integral
 
 import torch
 from torch import nn
+from torch.nn.utils.parametrizations import spectral_norm
 
 
 def _dimension(name: str, value: int, *, allow_zero: bool = False) -> int:
@@ -46,8 +48,11 @@ class Generator(nn.Module):
 
 
 class Discriminator(nn.Module):
-    def __init__(self, input_dim: int = 96, condition_dim: int = 64, hidden_dim: int = 64):
+    def __init__(self, input_dim: int = 96, condition_dim: int = 64,
+                 hidden_dim: int = 64, *, objective: str = "bce"):
         super().__init__()
+        if objective not in ("bce", "hinge_sn"):
+            raise ValueError("objective must be bce or hinge_sn")
         self.input_dim = _dimension("input_dim", input_dim)
         self.condition_dim = _dimension("condition_dim", condition_dim, allow_zero=True)
         hidden_dim = _dimension("hidden_dim", hidden_dim)
@@ -58,9 +63,13 @@ class Discriminator(nn.Module):
             nn.LeakyReLU(0.2, inplace=True),
             nn.Linear(hidden_dim * 2, hidden_dim * 4),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Dropout(0.4),
+            nn.Dropout(0.0 if objective == "hinge_sn" else 0.4),
             nn.Linear(hidden_dim * 4, 1),
         )
+        if objective == "hinge_sn":
+            for layer in self.model:
+                if isinstance(layer, nn.Linear):
+                    spectral_norm(layer)
 
     def forward(self, data: torch.Tensor, onehot: torch.Tensor) -> torch.Tensor:
         return self.model(_join(data, onehot, self.input_dim, self.condition_dim))

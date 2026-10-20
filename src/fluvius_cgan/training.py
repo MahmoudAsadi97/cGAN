@@ -1,4 +1,4 @@
-"""Reproducible BCE cGAN training with validation-only checkpoint selection.
+"""Reproducible cGAN training with validation-only checkpoint selection.
 
 Prepared profiles are in original kWh/interval.  Only train.npz and val.npz are
 opened; the test split is reserved for a separate final evaluation command.
@@ -21,7 +21,6 @@ import time
 import numpy as np
 from scipy.stats import wasserstein_distance
 import torch
-from torch import nn
 from torch.nn import functional as F
 
 from .models import Discriminator, Generator
@@ -32,6 +31,8 @@ DEFAULT_CONFIG = {
     "hidden_dim": 64, "lr_g": 1e-4, "lr_d": 2e-4, "device": "cpu",
     "num_threads": 1, "unconditional": False, "validation_samples": 2048,
     "max_train_samples": None, "patience": None, "normalization": "minmax",
+    "objective": "bce", "adam_beta1": 0.9, "adam_beta2": 0.999,
+    "discriminator_hidden_dim": None,
 }
 VALIDATION_METRIC = "mean_interval_wasserstein_normalized"
 CHECKPOINT_FORMAT = 1
@@ -55,7 +56,7 @@ def _config(config):
     result["seed"] = _positive_int("seed", result["seed"], 0)
     if result["seed"] >= 2**32:
         raise ValueError("seed must be smaller than 2**32")
-    for name in ("max_train_samples", "patience"):
+    for name in ("max_train_samples", "patience", "discriminator_hidden_dim"):
         if result[name] is not None:
             result[name] = _positive_int(name, result[name])
     for name in ("lr_g", "lr_d"):
@@ -63,10 +64,17 @@ def _config(config):
         if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value) or value <= 0:
             raise ValueError(f"{name} must be positive and finite")
         result[name] = float(value)
+    for name in ("adam_beta1", "adam_beta2"):
+        value = result[name]
+        if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value) or not 0 <= value < 1:
+            raise ValueError(f"{name} must be finite and in [0, 1)")
+        result[name] = float(value)
     if not isinstance(result["unconditional"], bool):
         raise ValueError("unconditional must be a boolean")
     if result["normalization"] not in ("minmax", "standard"):
         raise ValueError("normalization must be minmax or standard")
+    if result["objective"] not in ("bce", "hinge_sn"):
+        raise ValueError("objective must be bce or hinge_sn")
     if result["device"] == "auto":
         result["device"] = "cuda" if torch.cuda.is_available() else "cpu"
     if not isinstance(result["device"], str) or not re.fullmatch(r"cpu|cuda(?::\d+)?", result["device"]):
@@ -321,6 +329,37 @@ def _validation_score(generator, normalized, labels, noise, condition_dim, devic
                           for t in range(normalized.shape[1])]))
 
 
+def _discriminator_loss(real_logits, fake_logits, objective):
+    if objective == "hinge_sn":
+        return F.relu(1 - real_logits).mean() + F.relu(1 + fake_logits).mean()
+    return (F.binary_cross_entropy_with_logits(real_logits, torch.ones_like(real_logits)) +
+            F.binary_cross_entropy_with_logits(fake_logits, torch.zeros_like(fake_logits))) / 2
+
+
+def _generator_loss(fake_logits, objective):
+    if objective == "hinge_sn":
+        return -fake_logits.mean()
+    return F.binary_cross_entropy_with_logits(fake_logits, torch.ones_like(fake_logits))
+
+
+@contextmanager
+def _frozen_discriminator(discriminator, *, freeze_buffers=False):
+    """Keep gradients to generated profiles while holding discriminator fixed.
+
+    For spectral normalization, eval mode also freezes the power-iteration
+    vectors during G's update. BCE keeps its original training-mode dropout.
+    """
+    was_training = discriminator.training
+    discriminator.requires_grad_(False)
+    if freeze_buffers:
+        discriminator.eval()
+    try:
+        yield
+    finally:
+        discriminator.requires_grad_(True)
+        discriminator.train(was_training)
+
+
 @contextmanager
 def _run_directory(path):
     """Atomically reserve an empty experiment so concurrent jobs cannot mix it."""
@@ -400,13 +439,16 @@ def _train(prepared_dir, output_dir, config, started):
     output_dir.mkdir(parents=True, exist_ok=True)
     _atomic_json(output_dir / "config.json", config)
     history = []
+    generator_updates = discriminator_updates = 0
     best_score, best_epoch, stale_epochs = math.inf, 0, 0
     with _deterministic(config["seed"], config["num_threads"], device):
         generator = Generator(config["latent_dim"], condition_dim, config["hidden_dim"], metadata["resolution"]).to(device)
-        discriminator = Discriminator(metadata["resolution"], condition_dim, config["hidden_dim"]).to(device)
-        optimizer_g = torch.optim.Adam(generator.parameters(), lr=config["lr_g"])
-        optimizer_d = torch.optim.Adam(discriminator.parameters(), lr=config["lr_d"])
-        objective = nn.BCEWithLogitsLoss()
+        discriminator = Discriminator(metadata["resolution"], condition_dim,
+                                      config["discriminator_hidden_dim"] or config["hidden_dim"],
+                                      objective=config["objective"]).to(device)
+        betas = (config["adam_beta1"], config["adam_beta2"])
+        optimizer_g = torch.optim.Adam(generator.parameters(), lr=config["lr_g"], betas=betas)
+        optimizer_d = torch.optim.Adam(discriminator.parameters(), lr=config["lr_d"], betas=betas)
         shuffle_rng = torch.Generator().manual_seed(config["seed"] + 3)
         for epoch in range(1, config["epochs"] + 1):
             epoch_started = time.perf_counter()
@@ -414,34 +456,34 @@ def _train(prepared_dir, output_dir, config, started):
             discriminator.train()
             permutation = torch.randperm(len(selected), generator=shuffle_rng)
             total_g = total_d = 0.0
+            epoch_generator_updates = epoch_discriminator_updates = 0
             for start in range(0, len(selected), config["batch_size"]):
                 batch_indices = permutation[start:start + config["batch_size"]]
                 real = train_x[batch_indices].to(device)
                 c = _conditions(labels[batch_indices.numpy()], condition_dim, device)
-                ones = torch.ones((len(real), 1), device=device)
-                zeros = torch.zeros_like(ones)
                 optimizer_d.zero_grad(set_to_none=True)
                 noise = torch.randn((len(real), config["latent_dim"]), device=device)
                 # No G graph is retained for the discriminator step.
                 with torch.no_grad():
                     fake = generator(noise, c)
-                loss_d = (objective(discriminator(real, c), ones) +
-                          objective(discriminator(fake.detach(), c), zeros)) / 2
+                loss_d = _discriminator_loss(discriminator(real, c), discriminator(fake.detach(), c),
+                                             config["objective"])
                 if not torch.isfinite(loss_d):
                     raise ValueError("nonfinite discriminator loss")
                 loss_d.backward()
                 optimizer_d.step()
+                discriminator_updates += 1
+                epoch_discriminator_updates += 1
                 optimizer_g.zero_grad(set_to_none=True)
-                discriminator.requires_grad_(False)
-                try:
+                with _frozen_discriminator(discriminator, freeze_buffers=config["objective"] == "hinge_sn"):
                     noise = torch.randn((len(real), config["latent_dim"]), device=device)
-                    loss_g = objective(discriminator(generator(noise, c), c), ones)
+                    loss_g = _generator_loss(discriminator(generator(noise, c), c), config["objective"])
                     if not torch.isfinite(loss_g):
                         raise ValueError("nonfinite generator loss")
                     loss_g.backward()
                     optimizer_g.step()
-                finally:
-                    discriminator.requires_grad_(True)
+                    generator_updates += 1
+                    epoch_generator_updates += 1
                 total_g += float(loss_g.detach()) * len(real)
                 total_d += float(loss_d.detach()) * len(real)
             score = _validation_score(generator, val_x, val_labels, validation_noise,
@@ -450,6 +492,8 @@ def _train(prepared_dir, output_dir, config, started):
                 raise ValueError("nonfinite validation score")
             history.append({"epoch": epoch, "loss_g": total_g / len(selected),
                             "loss_d": total_d / len(selected), "validation_score": score,
+                            "generator_updates": epoch_generator_updates,
+                            "discriminator_updates": epoch_discriminator_updates,
                             "elapsed_seconds": time.perf_counter() - epoch_started})
             improved = score < best_score
             if improved:
@@ -465,6 +509,7 @@ def _train(prepared_dir, output_dir, config, started):
                 "provenance": provenance, "validation_metric": VALIDATION_METRIC,
                 "validation_score": score, "best_epoch": best_epoch,
                 "best_validation_score": best_score,
+                "generator_updates": generator_updates, "discriminator_updates": discriminator_updates,
                 "generator_state_dict": generator.state_dict(),
                 "discriminator_state_dict": discriminator.state_dict(),
                 "optimizer_g_state_dict": optimizer_g.state_dict(),
@@ -482,6 +527,7 @@ def _train(prepared_dir, output_dir, config, started):
     summary = {
         "best_epoch": best_epoch, "best_validation_score": best_score,
         "validation_metric": VALIDATION_METRIC, "epochs_completed": len(history),
+        "generator_updates": generator_updates, "discriminator_updates": discriminator_updates,
         "stopped_early": len(history) < config["epochs"],
         "supported_labels": supported_labels, "condition_dim": condition_dim,
         "resolution": metadata["resolution"], "target": metadata["target"],

@@ -69,16 +69,23 @@ def test_model_shapes_gradients_and_logits(condition_dim):
 
 
 @pytest.mark.parametrize("normalization", ["minmax", "standard"])
-def test_replay_isolation_scaler_provenance_and_artifacts(tmp_path, normalization):
+@pytest.mark.parametrize("objective,adam_beta1", [("bce", 0.9), ("hinge_sn", 0.5)])
+def test_replay_isolation_scaler_provenance_and_artifacts(tmp_path, normalization, objective, adam_beta1):
     data = prepared(tmp_path)
     out1, out2 = tmp_path / "first", tmp_path / "second"
-    first = train(data, out1, settings(normalization=normalization))
-    second = train(data, out2, settings(normalization=normalization))
+    options = settings(normalization=normalization, objective=objective, adam_beta1=adam_beta1)
+    first = train(data, out1, options)
+    second = train(data, out2, options)
     assert first["best_validation_score"] == second["best_validation_score"]
     assert first["best_epoch"] == second["best_epoch"]
     assert first["epochs_completed"] == 2
+    assert first["generator_updates"] == first["discriminator_updates"] == 6
+    history = json.loads((out1 / "history.json").read_text())
+    assert all(row["generator_updates"] == row["discriminator_updates"] == 3 for row in history)
     assert {p.name for p in out1.iterdir()} == {"best.pt", "last.pt", "config.json", "history.json", "summary.json"}
     checkpoint = torch.load(out1 / "best.pt", weights_only=True)
+    for name in ("optimizer_g_state_dict", "optimizer_d_state_dict"):
+        assert checkpoint[name]["param_groups"][0]["betas"] == (adam_beta1, 0.999)
     expected_scaler = json.loads((data / "scaler.json").read_text())
     if normalization == "standard":
         x = np.load(data / "train.npz")["x"].astype(np.float64)
@@ -173,7 +180,11 @@ def test_provenance_and_input_mismatches_fail_closed(tmp_path, violation):
     ("latent_dim", True), ("lr_g", float("nan")), ("device", "magic"),
     ("num_threads", 0), ("unconditional", "false"), ("validation_samples", 0),
     ("max_train_samples", 0), ("patience", 0), ("unknown", 1),
-    ("normalization", "robust"), ("normalization", None), ("normalization", [])])
+    ("normalization", "robust"), ("normalization", None), ("normalization", []),
+    ("objective", "wasserstein"), ("objective", None), ("objective", []),
+    ("adam_beta1", -0.1), ("adam_beta1", True), ("adam_beta1", 1),
+    ("adam_beta2", float("nan")), ("adam_beta2", float("inf")), ("adam_beta2", 1),
+    ("discriminator_hidden_dim", 0), ("discriminator_hidden_dim", True)])
 def test_invalid_config_rejected(tmp_path, key, value):
     data = prepared(tmp_path)
     with pytest.raises(ValueError):
@@ -185,6 +196,9 @@ def test_inverse_scaling_is_used_for_generation(tmp_path):
     out = tmp_path / "run"
     train(data, out, settings(epochs=1))
     checkpoint = torch.load(out / "best.pt", weights_only=True)
+    # Checkpoints from before objective/normalization config fields still load.
+    for name in ("objective", "normalization", "adam_beta1", "adam_beta2", "discriminator_hidden_dim"):
+        checkpoint["config"].pop(name, None)
     for key, value in checkpoint["generator_state_dict"].items():
         checkpoint["generator_state_dict"][key] = torch.zeros_like(value)
     torch.save(checkpoint, out / "zero.pt")
@@ -292,3 +306,59 @@ def test_standard_inverse_preserves_model_output_and_zero_std(tmp_path, constant
     scaler = checkpoint["scaler"]
     expected = np.float32(scaler["mean"] + 2 * (scaler["std"] or 1.))
     np.testing.assert_array_equal(generate(out / "fixed.pt", np.array([0, 8])), np.full((2, 24), expected))
+
+
+def test_hinge_losses_have_the_requested_scale_and_gradients():
+    from fluvius_cgan.training import _discriminator_loss, _generator_loss
+    real = torch.tensor([[-2.], [0.5], [2.]], requires_grad=True)
+    fake = torch.tensor([[-2.], [-0.5], [2.]], requires_grad=True)
+    loss = _discriminator_loss(real, fake, "hinge_sn")
+    assert loss.item() == pytest.approx(7 / 3)
+    loss.backward()
+    torch.testing.assert_close(real.grad, torch.tensor([[-1 / 3], [-1 / 3], [0.]]))
+    torch.testing.assert_close(fake.grad, torch.tensor([[0.], [1 / 3], [1 / 3]]))
+    fake.grad = None
+    loss_g = _generator_loss(fake, "hinge_sn")
+    assert loss_g.item() == pytest.approx(1 / 6)
+    loss_g.backward()
+    torch.testing.assert_close(fake.grad, torch.full_like(fake, -1 / 3))
+    expected_d = (torch.nn.functional.binary_cross_entropy_with_logits(real, torch.ones_like(real)) +
+                  torch.nn.functional.binary_cross_entropy_with_logits(fake, torch.zeros_like(fake))) / 2
+    torch.testing.assert_close(_discriminator_loss(real, fake, "bce"), expected_d, rtol=0, atol=0)
+    torch.testing.assert_close(_generator_loss(fake, "bce"),
+                               torch.nn.functional.binary_cross_entropy_with_logits(fake, torch.ones_like(fake)),
+                               rtol=0, atol=0)
+
+
+def test_spectral_discriminator_preserves_widths_and_freezes_buffers_for_generator():
+    from fluvius_cgan.training import _frozen_discriminator
+    g = Generator(latent_dim=4, hidden_dim=4, output_dim=24)
+    d = Discriminator(input_dim=24, hidden_dim=4, objective="hinge_sn")
+    linear = [module for module in d.modules() if isinstance(module, torch.nn.Linear)]
+    assert [module.out_features for module in linear] == [4, 8, 16, 1]
+    assert all(torch.nn.utils.parametrize.is_parametrized(module, "weight") for module in linear)
+    assert all(module.p == 0 for module in d.modules() if isinstance(module, torch.nn.Dropout))
+    baseline = Discriminator(input_dim=24, hidden_dim=4)
+    assert not any(torch.nn.utils.parametrize.is_parametrized(module) for module in baseline.modules())
+    assert [module.p for module in baseline.modules() if isinstance(module, torch.nn.Dropout)] == [0.4]
+    buffers_before = {name: value.clone() for name, value in d.named_buffers()}
+    with _frozen_discriminator(d, freeze_buffers=True):
+        assert not d.training
+        fake = g(torch.randn(3, 4), torch.zeros(3, 64))
+        (-d(fake, torch.zeros(3, 64)).mean()).backward()
+    assert d.training and all(parameter.requires_grad for parameter in d.parameters())
+    assert all(parameter.grad is None for parameter in d.parameters())
+    assert all(parameter.grad is not None and torch.isfinite(parameter.grad).all() for parameter in g.parameters())
+    assert any(torch.any(parameter.grad != 0) for parameter in g.parameters())
+    for name, value in d.named_buffers():
+        torch.testing.assert_close(value, buffers_before[name], rtol=0, atol=0)
+
+
+def test_discriminator_width_can_change_without_generator_width(tmp_path):
+    data = prepared(tmp_path)
+    out = tmp_path / "run"
+    train(data, out, settings(epochs=1, discriminator_hidden_dim=8))
+    checkpoint = torch.load(out / "best.pt", weights_only=True)
+    assert checkpoint["discriminator_state_dict"]["model.0.weight"].shape == (8, 88)
+    assert checkpoint["generator_state_dict"]["model.0.weight"].shape == (4, 68)
+    assert checkpoint["config"]["discriminator_hidden_dim"] == 8

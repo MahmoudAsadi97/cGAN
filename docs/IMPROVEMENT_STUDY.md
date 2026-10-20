@@ -6,8 +6,9 @@ the method, budgets, metrics and seed list are frozen.
 
 ## Diagnosis and hypotheses
 
-On 100 validation profiles per condition, conditional slot mean bias explains at
-least 94.5% of the pilot's interval Wasserstein distance. Repeated generated class
+On 100 validation profiles per condition, mean absolute conditional slot bias
+provides a lower bound equal to 94.5% of the pilot's interval Wasserstein distance.
+Repeated generated class
 means account for 97.6% of squared ramp energy. Replacing these means with training
 means in a diagnostic counterfactual improves interval W1 from 0.5375 to 0.1227
 kWh, but does not repair deficient diversity. This is a diagnosis, not a fitted
@@ -49,6 +50,24 @@ thresholds, not statistical significance or publication criteria. Review every
 condition for collapse, support violations and copying. Require consistent
 direction on at least three seeds, then the five declared seeds (11,22,33,44,55)
 with full-data baselines and uncertainty before a promising-result claim.
+
+## Second screen (declared before execution)
+
+A read-only review found that adapting 24 outputs to 96 while retaining a
+64-unit discriminator first layer introduces an at-least-32-dimensional linear
+nullspace. At pilot epoch nine, 23.4% of squared conditional mean error lies in
+that subspace. This is a demonstrable limitation, not proof of dominant causation:
+most error remains visible and the nullspace changes during optimization.
+
+After the two normalization arms, retain standard normalization and compare:
+(a) the same BCE generator with discriminator width 128, and (b) width-128
+discriminator with spectral normalization on all linear layers, no dropout,
+hinge adversarial losses and Adam betas (0.5,0.999). Generator width stays 64.
+Use the same 120 epochs, 65,536 profiles, batch 512 and seed 42. Arm (a) isolates
+capacity; arm (b) tests a declared stabilization package rather than claiming to
+isolate spectral normalization from loss, dropout or optimizer changes. The
+reference BCE arms keep the original Adam defaults. Future attribution of the
+stabilization package requires separate component ablations.
 
 Published foundations: Gulrajani et al., *Improved Training of Wasserstein GANs*,
 NeurIPS 2017 (https://papers.nips.cc/paper/7159-improved-training-of-wasserstein-gans.pdf);

@@ -1,0 +1,19 @@
+{
+  "epochs": 120,
+  "batch_size": 512,
+  "seed": 42,
+  "latent_dim": 24,
+  "hidden_dim": 64,
+  "lr_g": 0.0001,
+  "lr_d": 0.0002,
+  "device": "cpu",
+  "num_threads": 1,
+  "unconditional": false,
+  "validation_samples": 2048,
+  "max_train_samples": 65536,
+  "normalization": "standard",
+  "discriminator_hidden_dim": 128,
+  "objective": "hinge_sn",
+  "adam_beta1": 0.5,
+  "adam_beta2": 0.999
+}

@@ -64,8 +64,22 @@ def evaluate_checkpoint(prepared, checkpoint, *, split='val', samples_per_condit
         raise ValueError('samples_per_condition must be positive')
     prepared = Path(prepared)
     metadata = json.loads((prepared / 'metadata.json').read_text())
+    derived_status = None
+    if ('derived' in metadata or 'reserved_parent_test96' in metadata or
+            (prepared / 'derivation_manifest.json').exists()):
+        # Hourly development artifacts deliberately have no TEST24. Reject the
+        # request before opening a checkpoint or any prepared NPZ, even if an
+        # unexpected file was placed at the reserved child TEST path.
+        if split != 'val':
+            raise ValueError('Derived hourly TEST is unmaterialized; evaluation requires a future sealed TEST path')
+        from .training import _training_curation_guard
+        derived_status = _training_curation_guard(prepared, {'allow_uncurated_data': False})
     # Bind evaluation to the exact training dataset recorded in the checkpoint.
     state = torch.load(checkpoint, map_location='cpu', weights_only=True)
+    if derived_status is not None:
+        if (state.get('data_hashes', {}).get('derivation_manifest.json') != derived_status['derived_manifest_sha256'] or
+                state.get('data_curation') != derived_status or state.get('metadata') != metadata):
+            raise ValueError('Checkpoint does not bind the verified hourly derivation provenance')
     train_data, digest = _read_split(prepared / 'train.npz')
     heldout_data, heldout_digest = _read_split(prepared / f'{split}.npz')
     train_x, train_y, train_ids = (train_data[k] for k in ('x', 'y', 'meter_id'))
@@ -131,6 +145,19 @@ def evaluate_checkpoint(prepared, checkpoint, *, split='val', samples_per_condit
         'interpretation': 'Descriptive held-out diagnostics; no privacy guarantee or significance claim. '
                           'Repeated test use invalidates a final untouched-test claim.',
     }
+    if derived_status is not None:
+        if sha256_file(prepared / 'derivation_manifest.json') != derived_status['derived_manifest_sha256']:
+            raise ValueError('Derivation manifest changed during raw validation evaluation')
+        if any(sha256_file(prepared / name) != digest for name, digest in derived_status['verified_file_hashes'].items()):
+            raise ValueError('Derived development files changed during raw validation evaluation')
+        report.update({
+            'data_curation_status': derived_status['status'],
+            'data_qualification': derived_status['qualification'],
+            'derivation_metadata': metadata['derived'],
+            'derivation_manifest_sha256': derived_status['derived_manifest_sha256'],
+            'prepared_data_hashes': derived_status['verified_file_hashes'],
+            'test_used': False,
+        })
     return report
 
 

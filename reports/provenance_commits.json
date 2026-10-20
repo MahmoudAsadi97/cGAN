@@ -1,5 +1,5 @@
 {
-  "scope": "Content-equivalent publication mapping for curated-study training provenance",
+  "scope": "Content-equivalent publication mappings for study source, protocol and evidence commits",
   "explanation": "Local commits are published using GitHub Git-data APIs; remote commit identities differ because author/committer metadata differ. Trees were verified equal before moving V2. Training artifacts remain unmodified. For dirty workspaces, also use their captured source-file hashes; a base-tree mapping alone does not assert that all working files were committed.",
   "mappings": [
     {
@@ -11,6 +11,26 @@
       "local_commit": "3b46678819a1a35a3e306a3af2025bb5dd307b37",
       "published_commit": "d50dec16a6d0f48a3a3aec7236f5a95a4a3d3a2c",
       "tree": "859c78ca2d5441df7602feaddec622b09061f04e"
+    },
+    {
+      "local_commit": "e719fd7d7b9115bc4b76e0d258168f8ada72d687",
+      "published_commit": "747ef83d7f468e4328335e2da769093035fa9fd0",
+      "tree": "8154c43c77f45372de72290b98a66baeb593fcc6"
+    },
+    {
+      "local_commit": "5d645914cb565e9c5da0213fd7c396f6182c6499",
+      "published_commit": "55b096b897abb742387d73747779d7dfc2dd783a",
+      "tree": "6376273879fbed404e89a89dbac558a0e6a4dfc9"
+    },
+    {
+      "local_commit": "112bf29eb3ba1d096ba5e3d938328800d17c9f1a",
+      "published_commit": "0d07ae3bb2492beeacaeb652223d47e562cca04d",
+      "tree": "459d13d6811045d7a4538d36998e1372d85c6898"
+    },
+    {
+      "local_commit": "359a65ad3b3e2faa2aaba96676db8d352a89a038",
+      "published_commit": "64a2e9aee98b0e3552ad3775df99f9cee35b2f8c",
+      "tree": "e85e3cc99e98e0fa49403c0ba3683008b37144d5"
     }
   ]
 }

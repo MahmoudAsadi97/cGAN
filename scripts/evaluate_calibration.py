@@ -110,6 +110,42 @@ def _generate_verified(checkpoint, details, labels, seed):
     return output
 
 
+def _preparation_binding(prepared, metadata, hashes):
+    """Qualify data already verified by _load_prepared; keep map hashes at four files."""
+    if "derived" in metadata:
+        manifest_hash = sha256_file(Path(prepared) / "derivation_manifest.json")
+        return {**hashes, "derivation_manifest.json": manifest_hash}, {
+            "data_curation_status": "verified_hourly_derivation_v1",
+            "curation_metadata": None,
+            "derivation_metadata": metadata["derived"],
+            "derivation_manifest_sha256": manifest_hash,
+            "reserved_parent_test96": metadata["reserved_parent_test96"],
+            "data_integrity_note": (
+                "The prepared-data loader verified the parent curation binding, canonical development "
+                "rows and exact hourly transformation. Parent quarter-hour identity curation is inherited; "
+                "no new hourly identity audit was performed. Hourly trace uniqueness and independent "
+                "households are not established. Reserved TEST96 is recorded from metadata only; "
+                "TEST24 remains unmaterialized. Validation remains exploratory."
+            ),
+        }
+    curated = isinstance(metadata.get("curation"), dict) and bool(metadata["curation"])
+    return hashes, {
+        "data_curation_status": "curation_metadata_present_not_reaudited" if curated else "unverified_no_curation_metadata",
+        "curation_metadata": metadata.get("curation"),
+        "data_integrity_note": (
+            "Curation metadata are retained, but this runner does not independently audit cross-meter duplication."
+            if curated else
+            "No curation metadata are present. Original-study train/validation data had cross-meter annual duplicates; these results do not establish contamination-free evaluation."
+        ),
+    }
+
+
+def _check_preparation_unchanged(prepared, qualification):
+    if ("derivation_manifest_sha256" in qualification and
+            sha256_file(Path(prepared) / "derivation_manifest.json") != qualification["derivation_manifest_sha256"]):
+        raise ValueError("derivation manifest changed during evaluation")
+
+
 def _battery_diagnostics(real_battery, generated, labels, interval_hours):
     """Compare daily application outputs; real dispatch is cached across methods."""
     generated_battery = simulate_battery(generated, interval_hours)
@@ -163,7 +199,8 @@ def evaluate(prepared, checkpoint, *, calibration_samples_per_condition=4096,
     started = time.perf_counter()
     train, val, metadata, scaler, hashes = _load_prepared(prepared)
     _validate_manifest(metadata, hashes, train, val)
-    details, indices = _checkpoint(checkpoint, train, metadata, scaler, hashes)
+    checkpoint_hashes, qualification = _preparation_binding(prepared, metadata, hashes)
+    details, indices = _checkpoint(checkpoint, train, metadata, scaler, checkpoint_hashes)
     conditions = np.unique(val["y"])
     missing = sorted(set(conditions.tolist()) - set(details["supported_labels"]))
     if missing:
@@ -248,6 +285,7 @@ def evaluate(prepared, checkpoint, *, calibration_samples_per_condition=4096,
     neighbors_at = time.perf_counter()
     if sha256_file(checkpoint) != details["sha256"]:
         raise ValueError("checkpoint changed during calibration evaluation")
+    _check_preparation_unchanged(prepared, qualification)
     provenance = _provenance(torch.device("cpu"))
     provenance.update({"scipy": str(scipy.__version__), "blas_thread_limit": thread_limit,
                        "evaluation_script_sha256": sha256_file(Path(__file__)),
@@ -263,17 +301,10 @@ def evaluate(prepared, checkpoint, *, calibration_samples_per_condition=4096,
         artifact = {"path": str(calibration_output), "sha256": sha256_file(calibration_output),
                     "format": "ConditionalMarginalCalibrator NPZ schema version 1; no pickle"}
     saved_at = time.perf_counter()
-    curated = isinstance(metadata.get("curation"), dict) and bool(metadata["curation"])
     return {
         "schema_version": 1, "split": "val", "test_used": False,
         "scope": "EXPLORATORY DIAGNOSTICS ONLY; no confirmatory claim and no checkpoint selection by this runner.",
-        "data_curation_status": "curation_metadata_present_not_reaudited" if curated else "unverified_no_curation_metadata",
-        "curation_metadata": metadata.get("curation"),
-        "data_integrity_note": (
-            "Curation metadata are retained, but this runner does not independently audit cross-meter duplication."
-            if curated else
-            "No curation metadata are present. Original-study train/validation data had cross-meter annual duplicates; these results do not establish contamination-free evaluation."
-        ),
+        **qualification,
         "source_sha256": metadata["source_sha256"], "prepared_data_hashes": hashes,
         "units": metadata["units"], "target": metadata["target"], "resolution": metadata["resolution"],
         "interval_hours": 24 / metadata["resolution"], "checkpoint": details,

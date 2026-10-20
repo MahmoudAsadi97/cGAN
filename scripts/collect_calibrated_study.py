@@ -12,7 +12,8 @@ import argparse
 import hashlib
 import json
 import math
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import posixpath
 import re
 import statistics
 import sys
@@ -38,6 +39,8 @@ TRAINING_CORE_FILES = ("src/fluvius_cgan/training.py", "src/fluvius_cgan/models.
                        "src/fluvius_cgan/residual.py", "src/fluvius_cgan/distribution_loss.py",
                        "src/fluvius_cgan/temporal_loss.py")
 EVALUATION_CORE_FILES = ("src/fluvius_cgan/evaluation.py", "src/fluvius_cgan/copula.py", "src/fluvius_cgan/calibration.py")
+QUALIFICATION_FIELDS = ("data_curation_status", "curation_metadata", "derivation_metadata",
+                        "derivation_manifest_sha256", "reserved_parent_test96", "data_integrity_note")
 
 
 def _check(condition, message):
@@ -116,6 +119,68 @@ def _frozen_match(report, calibration, name):
            f"{name} validation profiles differ")
 
 
+def _preparation_qualification(calibrated, state, summary):
+    """Bind recorded derivation claims without reading parent or child profiles."""
+    metadata, data_hashes = state["metadata"], state["data_hashes"]
+    _check(calibrated.get("curation_metadata") == metadata.get("curation"),
+           "calibration report curation metadata differs from checkpoint metadata")
+    if "derived" not in metadata:
+        _check(calibrated.get("derivation_metadata") is None and
+               calibrated.get("derivation_manifest_sha256") is None and
+               calibrated.get("reserved_parent_test96") is None and
+               "derivation_manifest.json" not in data_hashes and "reserved_parent_test96" not in metadata,
+               "ordinary preparation must not claim hourly derivation")
+        expected = ("curation_metadata_present_not_reaudited" if metadata.get("curation")
+                    else "unverified_no_curation_metadata")
+    else:
+        from fluvius_cgan.derived import OPERATION, QUALIFICATION
+        from fluvius_cgan.release import RELEASE_SHA256
+        derived = metadata["derived"]
+        _check(isinstance(derived, dict) and type(derived.get("schema_version")) is int and
+               derived["schema_version"] == 1 and derived.get("operation") == OPERATION and
+               derived.get("test24_materialized") is False and derived.get("qualification") == QUALIFICATION and
+               "curation" not in metadata and metadata.get("resolution") == 24 and
+               metadata.get("interval_hours") == 1 and metadata.get("source_sha256") == RELEASE_SHA256,
+               "unsupported or contradictory recorded hourly derivation")
+        parent = derived.get("parent")
+        _check(isinstance(parent, dict) and isinstance(parent.get("prepared_dir"), str) and
+               bool(parent["prepared_dir"]) and isinstance(parent.get("development_files_sha256"), dict) and
+               set(parent["development_files_sha256"]) == set(PREPARED_FILES) and
+               all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
+                   for value in [*parent["development_files_sha256"].values(), parent.get("curation_manifest_sha256")]),
+               "invalid recorded parent development/curation binding")
+        location = parent["prepared_dir"]
+        _check(parent.get("path_policy") == "relative_to_child_prepared_directory" and
+               "\\" not in location and "\x00" not in location and location != "." and
+               ":" not in location.split("/")[0] and not PurePosixPath(location).is_absolute() and
+               PurePosixPath(location).as_posix() == location and posixpath.normpath(location) == location,
+               "hourly parent location must be a canonical relative recorded path")
+        digest = data_hashes.get("derivation_manifest.json")
+        _check(isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest) and
+               "curation_manifest.json" not in data_hashes and "test.npz" not in data_hashes,
+               "hourly checkpoint requires its derivation manifest, without child curation or TEST hashes")
+        guard = state.get("data_curation")
+        _check(isinstance(guard, dict) and guard.get("status") == "verified_hourly_derivation_v1" and
+               guard.get("pinned_release") is True and
+               guard.get("metadata_sha256") == data_hashes["metadata.json"] and
+               guard.get("verified_file_hashes") == {key: data_hashes[key] for key in PREPARED_FILES} and
+               guard.get("derived_manifest_sha256") == digest and guard.get("parent") == parent and
+               guard.get("qualification") == QUALIFICATION and summary.get("data_curation") == guard,
+               "checkpoint/summary hourly verification record disagrees with bound preparation")
+        reserved = metadata.get("reserved_parent_test96")
+        _check(isinstance(reserved, dict) and reserved.get("resolution") == 96 and
+               reserved.get("materialized_in_child") is False and
+               reserved.get("access") == "metadata_only_not_content_verified",
+               "hourly preparation must retain reserved parent TEST as metadata only")
+        _check(calibrated.get("derivation_metadata") == derived and
+               calibrated.get("derivation_manifest_sha256") == digest and
+               calibrated.get("reserved_parent_test96") == reserved,
+               "calibration report derivation metadata/manifest differs from checkpoint")
+        expected = "verified_hourly_derivation_v1"
+    _check(calibrated.get("data_curation_status") == expected,
+           "calibration curation status differs from checkpoint")
+
+
 def _collect_run(name, directory):
     """Verify one completed run using its saved artifacts, without prepared data."""
     directory = Path(directory)
@@ -176,11 +241,7 @@ def _collect_run(name, directory):
     _check(raw["train_sha256"] == state["data_hashes"]["train.npz"] and
            raw["evaluation_sha256"] == state["data_hashes"]["val.npz"], "raw validation data fingerprints mismatch")
     _bound_report(calibrated, state, checkpoint_hash, "calibration_validation.json")
-    _check(calibrated.get("curation_metadata") == state["metadata"].get("curation"),
-           "calibration report curation metadata differs from checkpoint metadata")
-    expected_curation = ("curation_metadata_present_not_reaudited" if state["metadata"].get("curation")
-                         else "unverified_no_curation_metadata")
-    _check(calibrated.get("data_curation_status") == expected_curation, "calibration curation status differs from checkpoint")
+    _preparation_qualification(calibrated, state, summary)
     _check(REQUIRED_METHODS <= calibrated["methods"].keys(), "calibration report lacks required comparison methods")
     _check(raw["seed"] == calibrated["seed"] and raw["samples_per_condition_cap"] ==
            calibrated["validation_selection"]["samples_per_condition_cap"], "raw and calibrated evaluation settings differ")
@@ -219,6 +280,8 @@ def _collect_run(name, directory):
     if utility_path.exists():
         report = _json(utility_path)
         _bound_report(report, state, checkpoint_hash, "utility_validation.json")
+        if "derived" in state["metadata"]:
+            _preparation_qualification(report, state, summary)
         _check(report.get("calibration", {}).get("sha256") == map_hash, "utility calibration fingerprint mismatch")
         _check(report["calibration"].get("provenance") == map_provenance, "utility map provenance mismatch")
         _check(report["config"]["seed"] == calibrated["seed"] and
@@ -237,6 +300,7 @@ def _collect_run(name, directory):
                report["source_training_pool"]["actual_gan_profiles"] == used,
                "utility source training pool differs from verified checkpoint subset")
         utility = {"file": utility_path.name, "sha256": hashes[utility_path.name],
+                   **{key: report.get(key) for key in QUALIFICATION_FIELDS},
                    "config": report["config"], "methods": report["methods"],
                    "training": report["training"], "task": report["task"],
                    "provenance": report.get("provenance"),
@@ -246,6 +310,8 @@ def _collect_run(name, directory):
     for path in uncertainty_paths:
         report = _json(path)
         _bound_report(report, state, checkpoint_hash, path.name, details_key="candidate")
+        if "derived" in state["metadata"]:
+            _preparation_qualification(report, state, summary)
         _check(report["calibrator"].get("sha256") == map_hash and report["calibrator"].get("provenance") == map_provenance,
                f"{path.name} map fingerprint or provenance mismatch")
         _frozen_match(report, calibrated, path.name)
@@ -257,6 +323,7 @@ def _collect_run(name, directory):
         _check(all(_same(values, calibrated["methods"][method]) for method, values in report["methods"].items()),
                f"{path.name} metrics differ from frozen calibration report")
         uncertainty.append({"file": path.name, "sha256": hashes[path.name], "comparator": report["comparator"],
+                            **{key: report.get(key) for key in QUALIFICATION_FIELDS},
                             "replicates": report["replicates"], "paired_comparison": report["paired_comparison"],
                             "interpretation": report["interpretation"], "provenance": report.get("provenance")})
     for filename, path in paths.items():
@@ -320,6 +387,11 @@ def _collect_run(name, directory):
         "selection_metric": summary["validation_metric"], "best_selection_score": summary["best_validation_score"],
         "elapsed_seconds": summary.get("elapsed_seconds"), "generator_updates": summary.get("generator_updates"),
         "data_curation_status": calibrated.get("data_curation_status"), "curation_metadata": calibrated.get("curation_metadata"),
+        "derivation_metadata": calibrated.get("derivation_metadata"),
+        "derivation_manifest_sha256": calibrated.get("derivation_manifest_sha256"),
+        "reserved_parent_test96": calibrated.get("reserved_parent_test96"),
+        "data_integrity_note": calibrated.get("data_integrity_note"),
+        "preparation_binding_scope": "Saved report/checkpoint/summary consistency only; the collector does not reaudit data or execute derivation.",
         "identity_audit": None, "validation_selection": calibrated["validation_selection"],
         "frozen_samples": calibrated["frozen_samples"], "calibration_provenance": map_provenance,
         "methods": _methods(calibrated["methods"]), "raw_validation_methods": _methods(raw["methods"]),

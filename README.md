@@ -313,7 +313,14 @@ python scripts/run_experiments.py --prepared data/curated96 --config configs/cur
 
 # Hourly sensitivity must aggregate curated quarter-hour profiles, preserving
 # their canonical meter membership. Do not independently re-split the raw archive.
+python scripts/derive_hourly.py --parent data/curated96 --output data/curated24
 ```
+
+The [hourly implementation](docs/HOURLY_IMPLEMENTATION.md) verifies every derived
+TRAIN/VAL row and preserves portable, checkpoint-bound lineage. It creates no
+hourly TEST file. `scripts/compare_resolutions.py` evaluates verified paired
+models on common hourly validation rows, applying each saved 96-slot map before
+aggregation. Native-resolution scores remain separate.
 
 Output dimension comes from prepared metadata. The experiment runner and all
 calibration/comparison/utility/plotting scripts above evaluate validation only.

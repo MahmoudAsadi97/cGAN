@@ -30,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from compare_checkpoints import _checkpoint, _digest, _generate_verified, _validate_manifest
+from evaluate_calibration import _preparation_binding, _check_preparation_unchanged
 from fluvius_cgan.calibration import load_verified_calibrator
 from fluvius_cgan.copula import fit_conditional_copula
 from fluvius_cgan.evaluation import resample_baseline
@@ -78,7 +79,8 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
     started = time.perf_counter()
     train, val, metadata, scaler, hashes = _load_prepared(prepared)
     _validate_manifest(metadata, hashes, train, val)
-    checkpoint_details, actual_indices = _checkpoint(checkpoint, train, metadata, scaler, hashes)
+    checkpoint_hashes, qualification = _preparation_binding(prepared, metadata, hashes)
+    checkpoint_details, actual_indices = _checkpoint(checkpoint, train, metadata, scaler, checkpoint_hashes)
     conditions = np.unique(val["y"])
     missing = sorted(set(conditions.tolist()) - set(checkpoint_details["supported_labels"]))
     if missing:
@@ -195,6 +197,7 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
         raise ValueError("checkpoint changed during utility evaluation")
     if calibrator is not None and sha256_file(calibrator) != calibration_details["sha256"]:
         raise ValueError("calibration archive changed during utility evaluation")
+    _check_preparation_unchanged(prepared, qualification)
 
     counts = _counts(utility_y)
     matched_counts = all(fit["condition_counts"] == counts for fit in fits.values())
@@ -205,6 +208,7 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
     provenance["source_file_sha256"] = {
         str(path.relative_to(ROOT)): sha256_file(path) for path in (
             Path(__file__), ROOT / "scripts" / "compare_checkpoints.py",
+            ROOT / "scripts" / "evaluate_calibration.py",
             ROOT / "src" / "fluvius_cgan" / "utility.py",
             ROOT / "src" / "fluvius_cgan" / "training.py",
             ROOT / "src" / "fluvius_cgan" / "models.py",
@@ -222,6 +226,7 @@ def evaluate(prepared, checkpoint, *, samples_per_condition=100, seed=2026,
         "split": "val",
         "test_used": False,
         "scope": "Exploratory validation-only downstream utility; no final test evaluation.",
+        **qualification,
         "source_sha256": metadata["source_sha256"],
         "prepared_data_hashes": hashes,
         "target": metadata["target"],

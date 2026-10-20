@@ -143,6 +143,14 @@ def _training_curation_guard(prepared_dir, config):
     """Qualify new training inputs without opening or hashing reserved TEST."""
     directory = Path(prepared_dir)
     metadata, metadata_hash = _json_snapshot(directory / "metadata.json")
+    if ("derived" in metadata or "reserved_parent_test96" in metadata or
+            (directory / "derivation_manifest.json").exists()):
+        from .derived import resolve_parent_directory, verify_hourly_development
+        parent = resolve_parent_directory(directory, metadata.get("derived"))
+        verified = verify_hourly_development(parent, directory)
+        if verified["metadata_sha256"] != metadata_hash:
+            raise ValueError("derived metadata changed during the training provenance check")
+        return verified
     pinned = metadata.get("source_sha256") == RELEASE_SHA256
     status = {"pinned_release": pinned, "metadata_sha256": metadata_hash}
     if "curation" not in metadata:
@@ -244,6 +252,12 @@ def _read_split(path):
 def _load_prepared(prepared_dir):
     directory = Path(prepared_dir)
     metadata, metadata_hash = _json_snapshot(directory / "metadata.json")
+    derived_status = None
+    if ("derived" in metadata or "reserved_parent_test96" in metadata or
+            (directory / "derivation_manifest.json").exists()):
+        derived_status = _training_curation_guard(directory, {"allow_uncurated_data": False})
+        if derived_status["metadata_sha256"] != metadata_hash:
+            raise ValueError("derived metadata changed before loading")
     scaler, scaler_hash = _json_snapshot(directory / "scaler.json")
     train_data, train_hash = _read_split(directory / "train.npz")
     val_data, val_hash = _read_split(directory / "val.npz")
@@ -280,6 +294,11 @@ def _load_prepared(prepared_dir):
         raise ValueError("scaler does not match the training-only minimum and maximum")
     hashes = {"train.npz": train_hash, "val.npz": val_hash,
               "metadata.json": metadata_hash, "scaler.json": scaler_hash}
+    if derived_status is not None:
+        if hashes != derived_status["verified_file_hashes"]:
+            raise ValueError("derived development files changed after transformation verification")
+        if _sha256(directory / "derivation_manifest.json") != derived_status["derived_manifest_sha256"]:
+            raise ValueError("derivation manifest changed after transformation verification")
     return train_data, val_data, metadata, scaler, hashes
 
 
@@ -538,6 +557,11 @@ def _train(prepared_dir, output_dir, config, started, curation_status):
         if manifest_hash != curation_status["manifest_sha256"]:
             raise ValueError("curation manifest changed after verification")
         hashes["curation_manifest.json"] = manifest_hash
+    if curation_status.get("derived_manifest_sha256"):
+        manifest_hash = _sha256(Path(prepared_dir) / "derivation_manifest.json")
+        if manifest_hash != curation_status["derived_manifest_sha256"]:
+            raise ValueError("derivation manifest changed after verification")
+        hashes["derivation_manifest.json"] = manifest_hash
     if config["normalization"] == "standard":
         # Fit a single population mean/std over all prepared TRAIN values, before
         # smoke subsampling. Keep the verified original min/max and file hashes.

@@ -77,6 +77,12 @@ contingency before that endpoint decision and activated afterward. It tests a
 different structural hypothesis against the original SWD10 comparator. These
 sequential validation decisions remain part of the reported selection history.
 
+The hourly preparation and common-hourly physical comparison are implemented in
+`docs/HOURLY_IMPLEMENTATION.md`. Their synthetic verification is separate from
+actual data derivation, training and endpoint reports. The hourly child preserves
+the quarter-hour canonical membership and carries an inherited-audit
+qualification; no additional hourly trace-uniqueness claim is made.
+
 ## Evidence needed before a manuscript claim
 
 Keep the full source-hashed reports, best/last checkpoints, saved calibration maps,

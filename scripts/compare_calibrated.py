@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from compare_checkpoints import _checkpoint, _digest, _validate_manifest
+from evaluate_calibration import _preparation_binding, _check_preparation_unchanged
 from fluvius_cgan.calibration import load_verified_calibrator
 from fluvius_cgan.copula import fit_conditional_copula
 from fluvius_cgan.evaluation import evaluate_conditional, resample_baseline
@@ -54,7 +55,8 @@ def compare(prepared, checkpoint, calibrator, *, baseline="gaussian_copula",
 
     train, val, metadata, scaler, hashes = _load_prepared(prepared)
     _validate_manifest(metadata, hashes, train, val)
-    details, indices = _checkpoint(checkpoint, train, metadata, scaler, hashes)
+    checkpoint_hashes, qualification = _preparation_binding(prepared, metadata, hashes)
+    details, indices = _checkpoint(checkpoint, train, metadata, scaler, checkpoint_hashes)
     tx, ty = train["x"][indices], train["y"][indices]
     calibration, calibration_details = load_verified_calibrator(
         calibrator, checkpoint_sha256=details["sha256"],
@@ -122,19 +124,19 @@ def compare(prepared, checkpoint, calibrator, *, baseline="gaussian_copula",
         raise ValueError("checkpoint changed during comparison")
     if sha256_file(calibrator) != calibration_details["sha256"]:
         raise ValueError("calibrator changed during comparison")
+    _check_preparation_unchanged(prepared, qualification)
     provenance = _provenance(torch.device("cpu"))
     provenance.update({"comparison_script_sha256": sha256_file(Path(__file__)),
                        "comparison_helper_sha256": sha256_file(ROOT / "scripts" / "compare_checkpoints.py"),
+                       "preparation_helper_sha256": sha256_file(ROOT / "scripts" / "evaluate_calibration.py"),
                        "blas_thread_limit": thread_limit})
-    curation = metadata.get("curation")
     return {
         "schema_version": 1, "split": "val", "test_used": False,
         "scope": "Exploratory validation-only paired comparison; not a final test or significance claim.",
         "source_sha256": metadata["source_sha256"], "prepared_data_hashes": hashes,
         "target": metadata["target"], "units": metadata["units"],
         "resolution": metadata["resolution"], "interval_hours": hours,
-        "data_curation_status": "curation_metadata_present_not_reaudited" if isinstance(curation, dict) and curation
-                                else "unverified_no_curation_metadata",
+        **qualification,
         "identity_qualification": (
             "This command does not repeat identity auditing. Exact-trace curation does not prove "
             "independent households or exclude near-duplicates. Earlier original-split results "

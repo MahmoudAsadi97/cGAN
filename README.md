@@ -7,10 +7,15 @@ All development is on **V2**; `main` is unchanged. This is a research baseline;
 passing tests or a short training run does not establish publication readiness.
 
 **Current study:** the identity-curated, fixed-calibration candidate is defined in
-[CALIBRATION_STUDY.md](docs/CALIBRATION_STUDY.md). Curated training and evaluation
-remain pending; the workflow below describes the declared experiments, not
-successful results. Earlier reference-architecture runs and normalization screens
-are historical exploratory evidence, not results for this candidate.
+[CALIBRATION_STUDY.md](docs/CALIBRATION_STUDY.md). All five curated SWD10 runs and
+their primary/precision calibration evaluations are complete. Mean primary ramp
+W1 is 0.100655 kW, 28.63% below the matched Gaussian copula, but narrowly above
+the fixed 0.10 kW practical target. Daily-energy and whole-profile tradeoffs remain;
+see [the robustness report](docs/CURATED_CALIBRATION_ROBUSTNESS.md). This is
+validation evidence, not a completed publication result. A fixed three-seed
+[temporal-loss refinement](docs/TEMPORAL_REFINEMENT.md) is now being tested;
+final test performance remains unseen. Earlier reference-architecture runs and
+normalization screens are historical exploratory evidence, not results for this candidate.
 
 **Data-audit update:** different meter IDs were found to share exact full-year
 traces across the original train/validation split. Earlier reported scores are
@@ -85,8 +90,9 @@ The fixed configurations and training seeds are:
 |---|---|---|---|
 | Current candidate, SWD weight 10 | [curated_swd10.json](configs/curated_swd10.json) | 11, 22, 33, 44, 55 | 26 epochs, batch 512, CPU, one thread |
 | Attribution control, SWD weight 0 | [curated_swd0.json](configs/curated_swd0.json) | 11, 22, 33 | Same update budget and CPU settings |
+| Temporal refinement pilot | [curated_derivative1.json](configs/curated_derivative1.json) | 11, 22, 33; extend only if declared gates pass | Same budget; add derivative SWD weight 1 |
 
-Both use the full curated training pool, generator width 64, discriminator width
+All use the full curated training pool, generator width 64, discriminator width
 128, and balanced batches of four conditions with 128 profiles each. Checkpoints
 are selected by raw conditional validation W1. There is no early stopping or
 resume. With 606,060 training profiles, the declared budget is 1,184 updates per
@@ -98,6 +104,12 @@ update budget, not a traversal of every unique profile.
 GPU when available. Those configs are reference/attribution experiments, not the
 current candidate or an interchangeable execution setting.
 
+The temporal refinement retains profile SWD weight 10 and adds distribution
+matching on 95 adjacent standardized differences, with a single TRAIN-fitted
+scale. Its three-seed promotion criteria are fixed in
+[TEMPORAL_REFINEMENT.md](docs/TEMPORAL_REFINEMENT.md). No improved result is assumed
+from the added loss. Keep each arm, failed gates and interrupted attempts.
+
 ```bash
 python scripts/run_experiments.py --prepared data/curated96 \
   --config configs/curated_swd10.json --output runs/curated_swd10 \
@@ -105,7 +117,15 @@ python scripts/run_experiments.py --prepared data/curated96 \
 python scripts/run_experiments.py --prepared data/curated96 \
   --config configs/curated_swd0.json --output runs/curated_swd0 \
   --seeds 11 22 33 --samples-per-condition 100
+python scripts/run_experiments.py --prepared data/curated96 \
+  --config configs/curated_derivative1.json --output runs/curated_derivative1 \
+  --seeds 11 22 33 --samples-per-condition 100
 ```
+
+Schedule heavy calibration, utility, uncertainty and plotting stages sequentially
+on an 8 GiB machine. Running several of them concurrently caused a recorded
+resource interruption in this study. Training and evaluation budgets do not
+change when scheduling changes.
 
 The runner writes a **raw-generator** `validation_report.json` for each completed
 seed. It does not fit or evaluate a calibrator. Retain all attempted seeds and

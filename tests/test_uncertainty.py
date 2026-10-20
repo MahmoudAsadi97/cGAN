@@ -234,3 +234,85 @@ def test_single_interval_is_rejected_because_ramps_are_unavailable():
         data[method] = data[method][:, :1]
     with pytest.raises(ValueError, match="at least two intervals"):
         paired_condition_macro_meter_bootstrap(**data, n_bootstrap=2)
+
+
+JOINT_METRICS = (*METRICS, "peak_power_wasserstein_kw", "lag_one_acf_wasserstein")
+
+
+def _selected_metrics(row):
+    return [row[metric] if metric != "lag_one_acf_wasserstein"
+            else row["autocorrelation"]["1"]["wasserstein"] for metric in JOINT_METRICS]
+
+
+def test_optional_joint_metrics_and_condition_intervals_match_same_stratified_draws():
+    data = example()
+    # Each of four meters has both conditions. Two technology-like strata.
+    data["real_meter_ids"] = np.repeat(["a", "b", "c", "d"], 2)
+    data["real_labels"] = np.tile([0, 1], 4)
+    strata = np.repeat([0, 1], 4)
+    seed, draws, confidence = 31, 19, .8
+    result = paired_condition_macro_meter_bootstrap(
+        **data, n_bootstrap=draws, seed=seed, confidence=confidence,
+        real_meter_strata=strata, metrics=JOINT_METRICS, return_per_condition=True,
+    )
+    rng = np.random.default_rng(seed)
+    groups = [np.flatnonzero(data["real_meter_ids"] == meter)
+              for meter in np.unique(data["real_meter_ids"])]
+
+    def errors(indices, method):
+        return evaluate_conditional(data["real"][indices], data["real_labels"][indices],
+                                    data[method], data[f"{method}_labels"])
+
+    points = {method: errors(slice(None), method) for method in ("generated", "comparator")}
+    differences = []
+    for _ in range(draws):
+        selected = np.r_[rng.integers(0, 2, size=2), rng.integers(2, 4, size=2)]
+        indices = np.concatenate([groups[meter] for meter in selected])
+        rows = [errors(indices, method) for method in ("generated", "comparator")]
+        differences.append([
+            np.array(_selected_metrics(rows[0]["per_condition"][label]))
+            - _selected_metrics(rows[1]["per_condition"][label]) for label in ("0", "1")
+        ])
+    bounds = np.quantile(differences, [.1, .9], axis=0)
+    macro_bounds = np.quantile(np.mean(differences, axis=1), [.1, .9], axis=0)
+    for condition_index, label in enumerate(("0", "1")):
+        condition = result["per_condition"][label]
+        assert condition["interval_status"] == "complete"
+        for method in points:
+            assert list(condition["point_estimates"][method].values()) == pytest.approx(
+                _selected_metrics(points[method]["per_condition"][label]))
+        for metric_index, metric in enumerate(JOINT_METRICS):
+            interval = condition["intervals"][metric]
+            assert interval["lower"] == pytest.approx(bounds[0, condition_index, metric_index])
+            assert interval["upper"] == pytest.approx(bounds[1, condition_index, metric_index])
+            assert result["intervals"][metric]["lower"] == pytest.approx(macro_bounds[0, metric_index])
+            assert result["intervals"][metric]["upper"] == pytest.approx(macro_bounds[1, metric_index])
+    json.dumps(result, allow_nan=False)
+
+
+def test_optional_conditions_withhold_all_intervals_if_any_global_draw_is_undefined():
+    profiles = np.array([[0., 0.], [1., 1.], [2., 2.]])
+    result = paired_condition_macro_meter_bootstrap(
+        profiles, [0, 1, 2], profiles, [0, 1, 2], profiles + 1, [0, 1, 2],
+        [0, 1, 2], n_bootstrap=2, seed=0, metrics=JOINT_METRICS, return_per_condition=True,
+    )
+    assert result["n_valid_bootstrap"] == 0
+    for condition in result["per_condition"].values():
+        assert condition["interval_status"] == "unavailable_missing_condition_draws"
+        assert all(row["lower"] is None and row["upper"] is None
+                   for row in condition["intervals"].values())
+
+
+@pytest.mark.parametrize("options", [
+    {"metrics": []}, {"metrics": ["unknown"]}, {"metrics": [METRICS[0], METRICS[0]]},
+    {"metrics": METRICS[0]}, {"return_per_condition": 1},
+])
+def test_invalid_optional_metric_requests_fail(options):
+    with pytest.raises(ValueError):
+        paired_condition_macro_meter_bootstrap(**example(), n_bootstrap=2, **options)
+
+
+def test_default_metric_set_and_output_shape_remain_backward_compatible():
+    result = paired_condition_macro_meter_bootstrap(**example(), n_bootstrap=3)
+    assert tuple(result["intervals"]) == METRICS
+    assert "per_condition" not in result

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .evaluation import _interval_hours, _labels, _matching_width, _profiles
+from .evaluation import _acf, _interval_hours, _labels, _matching_width, _profiles
 
 
 _METRICS = (
@@ -16,6 +16,22 @@ _METRICS = (
     "daily_energy_wasserstein_kwh",
     "ramp_wasserstein_kw",
 )
+_SUPPORTED_METRICS = (*_METRICS, "peak_power_wasserstein_kw", "lag_one_acf_wasserstein")
+
+
+def _metric_features(profiles, metric, hours):
+    """Return columns defining one W1 diagnostic and rows contributed per day."""
+    if metric == "pointwise_wasserstein_kwh":
+        return profiles, 1
+    if metric == "daily_energy_wasserstein_kwh":
+        return profiles.sum(axis=1, keepdims=True), 1
+    if metric == "ramp_wasserstein_kw":
+        return (np.diff(profiles, axis=1) / hours).reshape(-1, 1), profiles.shape[1] - 1
+    if metric == "peak_power_wasserstein_kw":
+        return profiles.max(axis=1, keepdims=True) / hours, 1
+    if metric == "lag_one_acf_wasserstein":
+        return _acf(profiles, 1)[:, None], 1
+    raise ValueError(f"unsupported metric: {metric}")
 
 
 class _FixedReferenceWasserstein:
@@ -95,6 +111,8 @@ def paired_condition_macro_meter_bootstrap(
     confidence: float = .95,
     seed: int = 42,
     real_meter_strata=None,
+    metrics=None,
+    return_per_condition: bool = False,
 ) -> dict:
     """Compare fixed generated and comparator samples with paired percentile CIs.
 
@@ -137,7 +155,24 @@ def paired_condition_macro_meter_bootstrap(
     observed condition support. They exclude training-seed, synthetic Monte Carlo,
     preprocessing-fit, model-selection, and future-period uncertainty. More draws
     improve quantile precision, but do not cover these excluded uncertainties.
+
+    ``metrics=None`` preserves the original interval/daily/ramp diagnostics.
+    An explicit nonempty unique sequence may also request peak-power W1 and
+    ``lag_one_acf_wasserstein``. ACF follows evaluation.py's full-row biased ACF,
+    with ACF=0 for constant profiles. ``return_per_condition=True`` adds marginal
+    condition intervals computed from the same globally paired meter draws, not
+    separate condition-specific resampling. All intervals remain withheld if any
+    global draw lacks an original condition; these are not simultaneous intervals.
     """
+    if not isinstance(return_per_condition, (bool, np.bool_)):
+        raise ValueError("return_per_condition must be boolean")
+    if metrics is None:
+        metrics = _METRICS
+    if (not isinstance(metrics, (tuple, list)) or not metrics
+            or any(not isinstance(metric, str) or metric not in _SUPPORTED_METRICS for metric in metrics)
+            or len(set(metrics)) != len(metrics)):
+        raise ValueError("metrics must be a nonempty sequence of unique supported metric names")
+    metrics = tuple(metrics)
     real = _profiles(real, "real")
     generated = _profiles(generated, "generated")
     comparator = _profiles(comparator, "comparator")
@@ -182,11 +217,7 @@ def paired_condition_macro_meter_bootstrap(
         real_part, part_meters = real[mask], real_meters[mask]
         condition_meter_counts.append(np.bincount(part_meters, minlength=n_meters))
         counts["real"][str(condition)] = len(real_part)
-        real_features = (
-            real_part,
-            real_part.sum(axis=1, keepdims=True),
-            (np.diff(real_part, axis=1) / hours).reshape(-1, 1),
-        )
+        real_features = [_metric_features(real_part, metric, hours) for metric in metrics]
         by_method = []
         for name, profiles, labels in (
             ("generated", generated, generated_labels),
@@ -194,33 +225,34 @@ def paired_condition_macro_meter_bootstrap(
         ):
             part = profiles[labels == condition]
             counts[name][str(condition)] = len(part)
-            features = (part, part.sum(axis=1, keepdims=True),
-                        (np.diff(part, axis=1) / hours).reshape(-1, 1))
+            features = [_metric_features(part, metric, hours)[0] for metric in metrics]
             by_method.append([
                 _FixedReferenceWasserstein(
                     x, y,
-                    part_meters if i < 2 else np.repeat(part_meters, real.shape[1] - 1),
+                    part_meters if repeats == 1 else np.repeat(part_meters, repeats),
                     n_meters,
-                    repeats=1 if i < 2 else real.shape[1] - 1,
+                    repeats=repeats,
                 )
-                for i, (x, y) in enumerate(zip(real_features, features))
+                for (x, repeats), y in zip(real_features, features)
             ])
         grids.append(by_method)
     condition_meter_counts = np.asarray(condition_meter_counts)
 
-    def macro(multiplicities, real_counts):
+    def condition_values(multiplicities, real_counts):
         # The final sentinel has zero multiplicity for every fixed reference row.
         weights = np.append(multiplicities, 0)
-        total = np.zeros((2, len(_METRICS)))
-        for n_real, methods in zip(real_counts, grids):
-            for method, metrics in enumerate(methods):
-                for metric, grid in enumerate(metrics):
-                    total[method, metric] += grid.distance(weights, n_real)
-        return total / len(support)
+        values = np.empty((len(support), 2, len(metrics)))
+        for condition, (n_real, methods) in enumerate(zip(real_counts, grids)):
+            for method, method_metrics in enumerate(methods):
+                for metric, grid in enumerate(method_metrics):
+                    values[condition, method, metric] = grid.distance(weights, n_real)
+        return values
 
-    estimate = macro(np.ones(n_meters, dtype=np.int64), condition_meter_counts.sum(axis=1))
+    condition_estimate = condition_values(np.ones(n_meters, dtype=np.int64), condition_meter_counts.sum(axis=1))
+    estimate = condition_estimate.mean(axis=0)
     rng = np.random.default_rng(seed)
     draws = []
+    condition_draws = []
     missing_counts = np.zeros(len(support), dtype=np.int64)
     n_invalid = 0
     for _ in range(n_bootstrap):
@@ -234,11 +266,14 @@ def paired_condition_macro_meter_bootstrap(
             missing_counts += missing
             n_invalid += 1
             continue
-        values = macro(multiplicities, real_counts)
-        draws.append(values[0] - values[1])
+        values = condition_values(multiplicities, real_counts)
+        macro = values.mean(axis=0)
+        draws.append(macro[0] - macro[1])
+        if return_per_condition:
+            condition_draws.append(values[:, 0] - values[:, 1])
     alpha = (1 - confidence) / 2
     bounds = None if n_invalid else np.quantile(draws, [alpha, 1 - alpha], axis=0)
-    return {
+    result = {
         "method": "paired_percentile_cluster_bootstrap",
         "resampling_unit": "real_meter",
         "resampling_scheme": "global_real_meter" if real_meter_strata is None else "within_stratum_real_meter",
@@ -273,7 +308,7 @@ def paired_condition_macro_meter_bootstrap(
         "confidence": confidence,
         "seed": int(seed),
         "point_estimates": {
-            name: {metric: float(estimate[i, j]) for j, metric in enumerate(_METRICS)}
+            name: {metric: float(estimate[i, j]) for j, metric in enumerate(metrics)}
             for i, name in enumerate(("generated", "comparator"))
         },
         "intervals": {
@@ -282,6 +317,27 @@ def paired_condition_macro_meter_bootstrap(
                 "lower": None if bounds is None else float(bounds[0, i]),
                 "upper": None if bounds is None else float(bounds[1, i]),
             }
-            for i, metric in enumerate(_METRICS)
+            for i, metric in enumerate(metrics)
         },
     }
+    if return_per_condition:
+        condition_bounds = None if n_invalid else np.quantile(condition_draws, [alpha, 1 - alpha], axis=0)
+        result["per_condition"] = {
+            str(condition): {
+                "interval_status": result["interval_status"],
+                "point_estimates": {
+                    name: {metric: float(condition_estimate[c, i, j]) for j, metric in enumerate(metrics)}
+                    for i, name in enumerate(("generated", "comparator"))
+                },
+                "intervals": {
+                    metric: {
+                        "estimate": float(condition_estimate[c, 0, j] - condition_estimate[c, 1, j]),
+                        "lower": None if condition_bounds is None else float(condition_bounds[0, c, j]),
+                        "upper": None if condition_bounds is None else float(condition_bounds[1, c, j]),
+                    }
+                    for j, metric in enumerate(metrics)
+                },
+            }
+            for c, condition in enumerate(support)
+        }
+    return result

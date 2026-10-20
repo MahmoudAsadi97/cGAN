@@ -8,6 +8,10 @@ All 64 conditions are required. Curves and example rows follow predeclared
 selection rules; real and generated rows are independent, never paired. This
 utility reads train/validation data only and has no test-evaluation option.
 Matplotlib is an optional plotting dependency.
+
+Optional --calibrator applies a previously fitted, provenance-verified marginal
+map. It adds no fitting step: bands/examples show the calibrated sample, while
+the heatmap compares the same raw and calibrated draws on common color scales.
 """
 from __future__ import annotations
 
@@ -22,9 +26,13 @@ import numpy as np
 import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from compare_checkpoints import _checkpoint, _validate_manifest
+from fluvius_cgan.calibration import load_verified_calibrator
 from fluvius_cgan.cli import evaluate_checkpoint
+from fluvius_cgan.evaluation import evaluate_conditional
 from fluvius_cgan.release import sha256_file
-from fluvius_cgan.training import _read_split, generate
+from fluvius_cgan.training import _load_prepared, _read_split, generate
 
 
 CONDITIONS = np.arange(64, dtype=np.int64)
@@ -36,6 +44,10 @@ GENERATED_COLOR = "#D45B28"
 
 def _array_hash(values):
     return hashlib.sha256(np.asarray(values, dtype="<i8").tobytes()).hexdigest()
+
+
+def _profile_hash(values):
+    return hashlib.sha256(np.asarray(values, dtype="<f8").tobytes(order="C")).hexdigest()
 
 
 def _technology(group):
@@ -142,7 +154,57 @@ def _heatmap_figure(plt, TwoSlopeNorm, metrics, method):
     return figure
 
 
-def _examples_figure(plt, Line2D, real, fake, labels, hours, group, method):
+def _calibration_heatmap_figure(plt, TwoSlopeNorm, raw_metrics, calibrated_metrics, method, raw_method):
+    """Compare all 64 conditions with one shared color scale per metric."""
+    specifications = (
+        ("pointwise_wasserstein_kwh", "Interval Wasserstein distance", "kWh / interval", "viridis"),
+        ("diversity_ratio", "Within-condition diversity ratio", "Generated / validation variance", "RdBu_r"),
+    )
+    figure, axes = plt.subplots(2, 2, figsize=(16, 12))
+    column_names = [f"{day}\n{season}" for day in ("Weekday", "Weekend") for season in SEASONS]
+    for row, (metric, title, units, cmap_name) in enumerate(specifications):
+        grids = [np.array([np.nan if metrics[str(label)][metric] is None else metrics[str(label)][metric]
+                           for label in CONDITIONS]).reshape(8, 8)
+                 for metrics in (raw_metrics, calibrated_metrics)]
+        finite = np.concatenate([grid[np.isfinite(grid)] for grid in grids])
+        maximum = max(2.0, float(finite.max())) if metric == "diversity_ratio" and len(finite) else 2.0
+        norm = TwoSlopeNorm(vmin=0, vcenter=1, vmax=maximum) if metric == "diversity_ratio" else None
+        vmax = max(float(finite.max()), np.finfo(float).eps) if len(finite) else 1.0
+        for column, (values, name) in enumerate(zip(grids, (raw_method, method))):
+            axis = axes[row, column]
+            cmap = plt.get_cmap(cmap_name).copy()
+            cmap.set_bad("#CCCCCC")
+            scale = {"norm": norm} if norm is not None else {"vmin": 0, "vmax": vmax}
+            image = axis.imshow(np.ma.masked_invalid(values), cmap=cmap, aspect="auto", **scale)
+            axis.set_title(f"{name}: {title}", fontsize=11, pad=12)
+            axis.set_xticks(np.arange(8), column_names, fontsize=8)
+            axis.set_yticks(np.arange(8), [_technology(group) for group in range(8)], fontsize=9)
+            axis.tick_params(axis="both", length=0)
+            axis.set_xticks(np.arange(-.5, 8, 1), minor=True)
+            axis.set_yticks(np.arange(-.5, 8, 1), minor=True)
+            axis.grid(which="minor", color="white", linewidth=.7)
+            axis.tick_params(which="minor", bottom=False, left=False)
+            for group in range(8):
+                for condition in range(8):
+                    value = values[group, condition]
+                    text = "NA" if not np.isfinite(value) else f"{value:.3f}"
+                    rgba = image.cmap(image.norm(value)) if np.isfinite(value) else (.8, .8, .8, 1)
+                    lightness = .2126 * rgba[0] + .7152 * rgba[1] + .0722 * rgba[2]
+                    axis.text(condition, group, text, ha="center", va="center", fontsize=8,
+                              color="black" if lightness > .55 else "white")
+        color_axis = figure.add_axes([.925, .56 if row == 0 else .16, .014, .30])
+        figure.colorbar(image, cax=color_axis, label=units)
+    figure.suptitle(f"{method}: raw and calibrated metrics across all 64 validation conditions", fontsize=14, y=.97)
+    figure.text(.5, .045, "Same validation rows and raw generator draws; shared color scales within each metric. "
+                "Lower Wasserstein is better; diversity ratio 1 matches variance only.", ha="center", fontsize=9)
+    figure.text(.5, .025, "The fixed marginal map moves samples toward training marginals. "
+                "Marginal improvement alone does not establish learned dependence. NA denotes zero real variance.",
+                ha="center", fontsize=9)
+    figure.subplots_adjust(left=.095, right=.895, bottom=.13, top=.91, wspace=.32, hspace=.40)
+    return figure
+
+
+def _examples_figure(plt, Line2D, real, fake, labels, hours, group, method, *, calibrated=False):
     figure, axes = plt.subplots(2, 4, figsize=(14, 7), sharex=True, sharey=True)
     for offset, axis in enumerate(axes.flat):
         label = group * 8 + offset
@@ -159,13 +221,16 @@ def _examples_figure(plt, Line2D, real, fake, labels, hours, group, method):
         Line2D([], [], color=REAL_COLOR, label="Validation profiles"),
         Line2D([], [], color=GENERATED_COLOR, label="Generated profiles"),
     ], loc="lower center", bbox_to_anchor=(.5, .02), ncol=2, frameon=False)
-    figure.text(.5, .005, "Independent samples; rows are not paired. First sampled rows are shown without ranking, "
-                "replacement, smoothing, or clipping.", ha="center", fontsize=9)
+    note = ("Independent real/generated samples; rows are not paired. First sampled rows; "
+            "fixed marginal map applied. No ranking or smoothing." if calibrated else
+            "Independent samples; rows are not paired. First sampled rows are shown without ranking, "
+            "replacement, smoothing, or clipping.")
+    figure.text(.5, .005, note, ha="center", fontsize=9)
     figure.subplots_adjust(left=.07, right=.99, top=.9, bottom=.17, wspace=.13, hspace=.27)
     return figure
 
 
-def plot_checkpoint(prepared, checkpoint, output_dir, *, seed=2026, samples_per_condition=100):
+def plot_checkpoint(prepared, checkpoint, output_dir, *, seed=2026, samples_per_condition=100, calibrator=None):
     """Write ten figures in SVG/PNG plus a manifest, using one plotting sample."""
     if samples_per_condition < 1 or not 0 <= seed < 2 ** 32:
         raise ValueError("samples-per-condition must be positive; seed must be in [0, 2**32)")
@@ -177,18 +242,38 @@ def plot_checkpoint(prepared, checkpoint, output_dir, *, seed=2026, samples_per_
     state = torch.load(checkpoint, map_location="cpu", weights_only=True)
     if sorted(state["supported_labels"]) != CONDITIONS.tolist():
         raise ValueError("these predeclared figures require checkpoint support for all 64 conditions")
-    # Use the production evaluator to verify the checkpoint/prepared fingerprints,
-    # model-selected training subset, and meter-disjoint validation data. Its
-    # condition metrics supply the heatmaps; plotting does not re-evaluate them.
-    report = evaluate_checkpoint(prepared, checkpoint, split="val",
-                                 samples_per_condition=samples_per_condition, seed=seed)
-    if report["checkpoint_sha256"] != initial_checkpoint_hash:
-        raise ValueError("checkpoint changed during evaluation")
-    # Reload validation once for all figures, verifying the bytes against that
-    # evaluation. There are no data reloads inside any plotting function.
-    val, val_hash = _read_split(prepared / "val.npz")
-    if val_hash != report["evaluation_sha256"]:
-        raise ValueError("validation data changed after evaluation")
+    calibration, calibration_details = None, None
+    method_key = "cgan" if calibrator is None else "calibrated_cgan"
+    if calibrator is None:
+        # Preserve the raw plotting path and its production-evaluator metrics.
+        report = evaluate_checkpoint(prepared, checkpoint, split="val",
+                                     samples_per_condition=samples_per_condition, seed=seed)
+        if report["checkpoint_sha256"] != initial_checkpoint_hash:
+            raise ValueError("checkpoint changed during evaluation")
+        val, val_hash = _read_split(prepared / "val.npz")
+        if val_hash != report["evaluation_sha256"]:
+            raise ValueError("validation data changed after evaluation")
+    else:
+        # Reuse the comparison workflow's verification and exact training-row
+        # reconstruction. The shared binder owns every calibration-map check.
+        train, val, metadata, scaler, hashes = _load_prepared(prepared)
+        _validate_manifest(metadata, hashes, train, val)
+        details, indices = _checkpoint(checkpoint, train, metadata, scaler, hashes)
+        if details["sha256"] != initial_checkpoint_hash:
+            raise ValueError("checkpoint changed during calibration verification")
+        calibration, calibration_details = load_verified_calibrator(
+            calibrator, checkpoint_sha256=details["sha256"],
+            train_indices_sha256=details["training_selection"]["train_indices_sha256"],
+            prepared_data_hashes=hashes, generation_seed=seed,
+            n_features=metadata["resolution"], train_labels=train["y"][indices],
+        )
+        val_hash = hashes["val.npz"]
+        report = {
+            "train_sha256": hashes["train.npz"], "evaluation_sha256": val_hash,
+            "training_profiles": {"prepared": len(train["x"]), "model": len(indices), "calibration": len(indices)},
+            "sampling": "Uniform without replacement within each observed condition; macro averages weight conditions equally.",
+        }
+        del train
     if np.unique(val["y"]).tolist() != CONDITIONS.tolist():
         raise ValueError("these predeclared figures require all 64 validation conditions")
     rng = np.random.default_rng(seed)
@@ -199,17 +284,28 @@ def plot_checkpoint(prepared, checkpoint, output_dir, *, seed=2026, samples_per_
     ])
     labels = val["y"][selected]
     real = val["x"][selected].astype(np.float64)
-    generated = generate(checkpoint, labels, seed=seed).astype(np.float64)
+    raw_generated = generate(checkpoint, labels, seed=seed).astype(np.float64)
+    generated = raw_generated if calibration is None else calibration.transform(raw_generated, labels)
     if sha256_file(checkpoint) != initial_checkpoint_hash:
         raise ValueError("checkpoint changed during plotting-sample generation")
     counts = {str(label): int(np.sum(labels == label)) for label in CONDITIONS}
-    if counts != report["methods"]["cgan"]["counts"]["real"]:
-        raise ValueError("plot sample condition counts differ from verified evaluation")
     resolution = real.shape[1]
     interval_hours = 24 / resolution
+    if calibration is not None:
+        report["methods"] = {
+            "raw_cgan": evaluate_conditional(real, labels, raw_generated, labels, interval_hours=interval_hours),
+            "calibrated_cgan": evaluate_conditional(real, labels, generated, labels, interval_hours=interval_hours),
+        }
+        if sha256_file(calibrator) != calibration_details["sha256"]:
+            raise ValueError("calibrator changed during plotting-sample generation")
+    if counts != report["methods"][method_key]["counts"]["real"]:
+        raise ValueError("plot sample condition counts differ from verified evaluation")
     hours = np.arange(resolution) * interval_hours
     real_power, generated_power = real / interval_hours, generated / interval_hours
     method = "Unconditional generator" if state["config"]["unconditional"] else "Conditional generator"
+    raw_method = "Raw unconditional generator" if state["config"]["unconditional"] else "Raw cGAN"
+    if calibration is not None:
+        method = "Calibrated unconditional generator" if state["config"]["unconditional"] else "Calibrated cGAN"
     if state["metadata"]["target"] != "net":
         raise ValueError("these net-power figures require the signed net target")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -221,13 +317,19 @@ def plot_checkpoint(prepared, checkpoint, output_dir, *, seed=2026, samples_per_
         "svg.hashsalt": f"{initial_checkpoint_hash}:{seed}", "axes.titlesize": 10,
         "figure.facecolor": "white", "savefig.facecolor": "white",
     }
+    if calibration_details is not None:
+        style["svg.hashsalt"] += f":{calibration_details['sha256']}"
     with matplotlib.rc_context(style):
         figure = _median_figure(plt, Line2D, Patch, real_power, generated_power, labels, hours, method)
         artifacts.extend(_save(figure, output_dir, "winter_weekday_quantiles", plt))
-        figure = _heatmap_figure(plt, TwoSlopeNorm, report["methods"]["cgan"]["per_condition"], method)
+        figure = (_heatmap_figure(plt, TwoSlopeNorm, report["methods"][method_key]["per_condition"], method)
+                  if calibration is None else
+                  _calibration_heatmap_figure(plt, TwoSlopeNorm, report["methods"]["raw_cgan"]["per_condition"],
+                                             report["methods"][method_key]["per_condition"], method, raw_method))
         artifacts.extend(_save(figure, output_dir, "conditional_metric_heatmaps", plt))
         for group in range(8):
-            figure = _examples_figure(plt, Line2D, real_power, generated_power, labels, hours, group, method)
+            figure = _examples_figure(plt, Line2D, real_power, generated_power, labels, hours, group, method,
+                                     calibrated=calibration is not None)
             artifacts.extend(_save(figure, output_dir, f"profile_examples_technology_{group}", plt))
     manifest = {
         "schema_version": 1, "split": "val", "test_used": False,
@@ -265,7 +367,7 @@ def plot_checkpoint(prepared, checkpoint, output_dir, *, seed=2026, samples_per_
         "heatmap_rows": [_technology(group) for group in range(8)],
         "heatmap_columns": [f"{day}: {season.lower()}" for day in ("weekday", "weekend") for season in SEASONS],
         "heatmap_values": {
-            metric: [[report["methods"]["cgan"]["per_condition"][str(group * 8 + offset)][metric]
+            metric: [[report["methods"][method_key]["per_condition"][str(group * 8 + offset)][metric]
                       for offset in range(8)] for group in range(8)]
             for metric in ("pointwise_wasserstein_kwh", "diversity_ratio")
         },
@@ -278,6 +380,40 @@ def plot_checkpoint(prepared, checkpoint, output_dir, *, seed=2026, samples_per_
                      "torch": str(torch.__version__), "matplotlib": matplotlib.__version__},
         "artifacts": {name: {"sha256": sha256_file(output_dir / name)} for name in artifacts},
     }
+    if calibration_details is not None:
+        if sha256_file(checkpoint) != initial_checkpoint_hash:
+            raise ValueError("checkpoint changed during calibrated plotting")
+        if sha256_file(calibrator) != calibration_details["sha256"]:
+            raise ValueError("calibrator changed during plotting")
+        manifest.update({
+            "calibrator": calibration_details, "calibrator_sha256": calibration_details["sha256"],
+            "raw_method": raw_method,
+            "frozen_samples": {
+                "hash_encoding": "Little-endian float64 C-order profile bytes",
+                "real_profiles_sha256": _profile_hash(real),
+                "raw_profiles_sha256": _profile_hash(raw_generated),
+                "calibrated_profiles_sha256": _profile_hash(generated),
+            },
+            "raw_heatmap_values": {
+                metric: [[report["methods"]["raw_cgan"]["per_condition"][str(group * 8 + offset)][metric]
+                          for offset in range(8)] for group in range(8)]
+                for metric in ("pointwise_wasserstein_kwh", "diversity_ratio")
+            },
+            "heatmap_metrics_source": "evaluate_conditional on one verified validation sample and identical "
+                                      "generator draws before/after the saved map; heatmap_values are calibrated, "
+                                      "raw_heatmap_values are raw. Color scales are shared within each metric.",
+            "example_selection": "First up to three rows in seeded sample order for every label; independent "
+                                 "real/generated profiles. Fixed saved marginal map applied to generated rows; "
+                                 "no current-batch ranks, refitting, sample ranking, or smoothing.",
+            "postprocessing": "Previously fitted conditional marginal map, bound to checkpoint and exact "
+                              "training subset; no fitting on validation rows. Map interpolation may create "
+                              "ties or endpoint saturation. Marginals are approximately calibrated toward training marginals.",
+            "interpretation": "Exploratory validation-only figures for a frozen calibrated pipeline. "
+                              "Empirical pointwise bands are not confidence intervals; examples are unpaired. "
+                              "Marginal improvement is imposed by the map and does not independently establish "
+                              "learned dependence or joint-profile fidelity. No final test data are used.",
+            "plotting_script_sha256": sha256_file(Path(__file__)),
+        })
     with (output_dir / "plot_manifest.json").open("x", encoding="utf-8") as handle:
         json.dump(manifest, handle, indent=2, allow_nan=False)
         handle.write("\n")
@@ -291,11 +427,13 @@ def main():
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--samples-per-condition", type=int, default=100)
+    parser.add_argument("--calibrator", help="Previously fitted calibration NPZ; verified and applied without refitting")
     args = parser.parse_args()
     if args.samples_per_condition < 1 or not 0 <= args.seed < 2 ** 32:
         parser.error("samples-per-condition must be positive; seed must be in [0, 2**32)")
     manifest = plot_checkpoint(args.prepared, args.checkpoint, args.output_dir,
-                               seed=args.seed, samples_per_condition=args.samples_per_condition)
+                               seed=args.seed, samples_per_condition=args.samples_per_condition,
+                               calibrator=args.calibrator)
     print(f"Wrote {len(manifest['artifacts'])} validation figure files and plot_manifest.json to {args.output_dir}")
 
 

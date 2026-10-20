@@ -50,7 +50,10 @@ split contains 606,060 profiles. Batch 512 gives 1,184 updates per epoch; 26 epo
 give 30,784 updates per adversary. An epoch is a replacement-sampling budget,
 not one traversal of unique profiles. No early stopping or resume is used.
 Run all five seeds 11, 22, 33, 44 and 55 under the same budget, scheduled
-in batches of at most three for available CPU/memory. Retain every
+within available CPU/memory. Initial three-process measurements showed about
+3 GiB anonymous memory in total with an 8 GiB limit, permitting all five
+one-thread jobs concurrently. Scheduling does not change per-run seeds, numerical
+settings, sampling or update budgets. Retain every
 attempt, and do not replace unsuccessful seeds. Additional methods or budgets
 require an explicit new exploratory protocol entry.
 
@@ -99,3 +102,61 @@ Repeat calibration/evaluation for every declared seed. The inference command bin
 the fixed map to the checkpoint hash and produces original-unit profiles without
 reading validation or test data. Keep both checkpoint and map when distributing
 the calibrated generator; a raw checkpoint alone represents a different method.
+
+## Attribution control (declared before curated endpoint evaluation)
+
+Run `configs/curated_swd0.json` with seeds 11, 22 and 33 on the same curated
+training pool and 26-epoch budget. It differs only in auxiliary SWD weight (zero
+instead of ten); balanced sampling, conditional checkpoint selection, generator,
+discriminator and optimizer settings are shared. Compare both raw and calibrated
+outputs with the same fixed references. This three-seed control supports
+preliminary attribution; it does not replace the remaining reference-architecture,
+unconditional and resolution ablations required for a completed manuscript.
+Training exposure and elapsed time differ only as recorded (the weight-zero arm
+skips SWD computation); update counts remain matched. All attempted seeds remain
+in the ledger. This addition was chosen on methodological grounds before any
+curated model's final temporal/utility metrics were evaluated.
+
+## Primary evidence and secondary joint check
+
+Before any curated final endpoint evaluation, designate condition-macro **ramp W1**
+as the primary physical comparison with the matched-knot Gaussian copula. A useful
+exploratory signal is at least 20% lower mean ramp W1 over the five fixed seeds,
+with the same direction in at least four seeds. This is a project-specific
+practical target, not a p-value, a preregistered external trial or a publication
+acceptance rule. Require the existing absolute physical gates and inspect daily
+energy, peak and ACF tradeoffs, each condition and all seeds. Report resampling
+even if it remains better. Never describe nonidentical synthetic profiles as a
+privacy advantage.
+
+The fixed real-validation ridge task supplies a complementary utility check.
+As a descriptive tolerance, calibrated synthetic training should have macro RMSE
+no more than 10% above both real-trained and resampling-trained references. This
+is not a formal noninferiority test; paired utility uncertainty and broader
+application validation remain separate requirements. All methods use the full
+actual training pool and matched downstream profile/label counts in primary runs.
+
+Add a secondary whole-profile diagnostic using 128 fixed unit-normalized Gaussian
+projection directions, seed 9182. Compute exact empirical one-dimensional W1 on
+each projected profile distribution, average directions within each condition,
+then average the 64 conditions equally. Freeze these directions across methods
+and seeds and record their hash. Original-unit projections have kWh units but
+are not daily-energy totals; compare within the same resolution only. Finite
+projections cannot certify equality of the complete joint distribution. This
+diagnostic is distinct from the training loss's fresh squared-W2 projections.
+
+## Evaluation precision and calibration sensitivity
+
+Keep the declared 100-profile-per-condition primary reports. Also evaluate every
+completed candidate seed at a cap of 1,000 real and generated profiles per
+condition, with the same checkpoints and fixed calibration settings. This
+separate precision check addresses finite-sample metric noise; do not replace
+the primary result with whichever sample size looks better or select a seed.
+Use the same seed2026 and selection rule for all methods at each sample size,
+and report actual counts if a condition has fewer available rows.
+
+For the predetermined candidate seed11, assess calibration-reference sensitivity
+with (4,096 draws/condition, seed7302) and (8,192 draws/condition, seed7301), keeping
+checkpoint, target knots and evaluation draws fixed. These checks quantify
+reference-estimation stability, not additional GAN-training repetitions. Any
+resulting method change requires a new exploratory entry before final testing.

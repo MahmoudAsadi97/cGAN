@@ -1,0 +1,297 @@
+{
+  "split": "val",
+  "seed": 42,
+  "max_per_condition": 20,
+  "n_evaluated": 1280,
+  "dataset_sha256": "943d48ba29f639fac228b3c1878417a7d4cc6a0e7867f8294e6cefaf3fda767d",
+  "checkpoint_sha256": "8f09b4d9fb12fa1544f1aeea0cb73006dbf9517187cc1994a27a0ceb6e5fbaf8",
+  "checkpoint_data_binding": {
+    "verified": true,
+    "dataset_sha256": "943d48ba29f639fac228b3c1878417a7d4cc6a0e7867f8294e6cefaf3fda767d",
+    "metadata_sha256": "affd7086b8afdd389bda4eb690fa41dde84d669f1e16829097d9b445dda925f7"
+  },
+  "classes": [
+    "PV=0|EV=0|HP=0|season=DJF|weekend=0",
+    "PV=0|EV=0|HP=0|season=DJF|weekend=1",
+    "PV=0|EV=0|HP=0|season=JJA|weekend=0",
+    "PV=0|EV=0|HP=0|season=JJA|weekend=1",
+    "PV=0|EV=0|HP=0|season=MAM|weekend=0",
+    "PV=0|EV=0|HP=0|season=MAM|weekend=1",
+    "PV=0|EV=0|HP=0|season=SON|weekend=0",
+    "PV=0|EV=0|HP=0|season=SON|weekend=1",
+    "PV=0|EV=0|HP=1|season=DJF|weekend=0",
+    "PV=0|EV=0|HP=1|season=DJF|weekend=1",
+    "PV=0|EV=0|HP=1|season=JJA|weekend=0",
+    "PV=0|EV=0|HP=1|season=JJA|weekend=1",
+    "PV=0|EV=0|HP=1|season=MAM|weekend=0",
+    "PV=0|EV=0|HP=1|season=MAM|weekend=1",
+    "PV=0|EV=0|HP=1|season=SON|weekend=0",
+    "PV=0|EV=0|HP=1|season=SON|weekend=1",
+    "PV=0|EV=1|HP=0|season=DJF|weekend=0",
+    "PV=0|EV=1|HP=0|season=DJF|weekend=1",
+    "PV=0|EV=1|HP=0|season=JJA|weekend=0",
+    "PV=0|EV=1|HP=0|season=JJA|weekend=1",
+    "PV=0|EV=1|HP=0|season=MAM|weekend=0",
+    "PV=0|EV=1|HP=0|season=MAM|weekend=1",
+    "PV=0|EV=1|HP=0|season=SON|weekend=0",
+    "PV=0|EV=1|HP=0|season=SON|weekend=1",
+    "PV=0|EV=1|HP=1|season=DJF|weekend=0",
+    "PV=0|EV=1|HP=1|season=DJF|weekend=1",
+    "PV=0|EV=1|HP=1|season=JJA|weekend=0",
+    "PV=0|EV=1|HP=1|season=JJA|weekend=1",
+    "PV=0|EV=1|HP=1|season=MAM|weekend=0",
+    "PV=0|EV=1|HP=1|season=MAM|weekend=1",
+    "PV=0|EV=1|HP=1|season=SON|weekend=0",
+    "PV=0|EV=1|HP=1|season=SON|weekend=1",
+    "PV=1|EV=0|HP=0|season=DJF|weekend=0",
+    "PV=1|EV=0|HP=0|season=DJF|weekend=1",
+    "PV=1|EV=0|HP=0|season=JJA|weekend=0",
+    "PV=1|EV=0|HP=0|season=JJA|weekend=1",
+    "PV=1|EV=0|HP=0|season=MAM|weekend=0",
+    "PV=1|EV=0|HP=0|season=MAM|weekend=1",
+    "PV=1|EV=0|HP=0|season=SON|weekend=0",
+    "PV=1|EV=0|HP=0|season=SON|weekend=1",
+    "PV=1|EV=0|HP=1|season=DJF|weekend=0",
+    "PV=1|EV=0|HP=1|season=DJF|weekend=1",
+    "PV=1|EV=0|HP=1|season=JJA|weekend=0",
+    "PV=1|EV=0|HP=1|season=JJA|weekend=1",
+    "PV=1|EV=0|HP=1|season=MAM|weekend=0",
+    "PV=1|EV=0|HP=1|season=MAM|weekend=1",
+    "PV=1|EV=0|HP=1|season=SON|weekend=0",
+    "PV=1|EV=0|HP=1|season=SON|weekend=1",
+    "PV=1|EV=1|HP=0|season=DJF|weekend=0",
+    "PV=1|EV=1|HP=0|season=DJF|weekend=1",
+    "PV=1|EV=1|HP=0|season=JJA|weekend=0",
+    "PV=1|EV=1|HP=0|season=JJA|weekend=1",
+    "PV=1|EV=1|HP=0|season=MAM|weekend=0",
+    "PV=1|EV=1|HP=0|season=MAM|weekend=1",
+    "PV=1|EV=1|HP=0|season=SON|weekend=0",
+    "PV=1|EV=1|HP=0|season=SON|weekend=1",
+    "PV=1|EV=1|HP=1|season=DJF|weekend=0",
+    "PV=1|EV=1|HP=1|season=DJF|weekend=1",
+    "PV=1|EV=1|HP=1|season=JJA|weekend=0",
+    "PV=1|EV=1|HP=1|season=JJA|weekend=1",
+    "PV=1|EV=1|HP=1|season=MAM|weekend=0",
+    "PV=1|EV=1|HP=1|season=MAM|weekend=1",
+    "PV=1|EV=1|HP=1|season=SON|weekend=0",
+    "PV=1|EV=1|HP=1|season=SON|weekend=1"
+  ],
+  "sampling_note": "Fixed seeded cap per condition; inspect counts; global mixture reflects this sample.",
+  "status": "Execution smoke test only; not a publication-quality model",
+  "full_report_sha256": "52e0f3c43731da111899b4c7c740eab38de2a8c5674fab2c2d844a9169758959",
+  "workflow_url": "https://github.com/MahmoudAsadi97/cGAN/actions/runs/39354154531",
+  "tested_commit": "35cd9cbbc27267af23da44b93b619de2645cbf23",
+  "epochs": 2,
+  "data_audit": {
+    "rows_loaded": 2400000,
+    "rows_processed": 1686528,
+    "profiles_seen": 17568,
+    "profiles_kept": 17472,
+    "profiles_dropped": 96,
+    "dropped_days_by_reason": {
+      "dst_transition_day": 96,
+      "duplicate_interval": 48,
+      "incomplete_day": 48
+    },
+    "rows_by_issue": {
+      "duplicate_interval": 192
+    },
+    "subset": true,
+    "csv_members": [
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv",
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_met_ZP.csv",
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_enkel_ZP.csv",
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_geen_ZP.csv",
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv",
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_met_ZP.csv",
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv",
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_met_ZP.csv"
+    ],
+    "meters_per_file": {
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_geen_ZP.csv": 6,
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_WP_met_ZP.csv": 6,
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_enkel_ZP.csv": 6,
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_1/P6269_Open_Data_geen_ZP.csv": 6,
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_geen_ZP.csv": 6,
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_EV_met_ZP.csv": 6,
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_geen_ZP.csv": 6,
+      "P6269_1_50_DMK_Sample_Elek_2024_Deel_2/P6269_Open_Data_WP_EV_met_ZP.csv": 6
+    },
+    "meters_seen": 48,
+    "meters_kept": 48,
+    "split_profile_counts": {
+      "test": 2912,
+      "train": 11648,
+      "val": 2912
+    },
+    "split_meter_counts": {
+      "test": 8,
+      "train": 32,
+      "val": 8
+    },
+    "equipment_groups": {
+      "PV=0|EV=0|HP=0": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      },
+      "PV=0|EV=0|HP=1": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      },
+      "PV=0|EV=1|HP=0": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      },
+      "PV=0|EV=1|HP=1": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      },
+      "PV=1|EV=0|HP=0": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      },
+      "PV=1|EV=0|HP=1": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      },
+      "PV=1|EV=1|HP=0": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      },
+      "PV=1|EV=1|HP=1": {
+        "profiles_seen": 2196,
+        "profiles_kept": 2184,
+        "profiles_dropped": 12,
+        "dropped_days_by_reason": {
+          "dst_transition_day": 12,
+          "duplicate_interval": 6,
+          "incomplete_day": 6
+        }
+      }
+    }
+  },
+  "cgan": {
+    "global": {
+      "per_slot_wasserstein": 0.3942252911977972,
+      "daily_energy_wasserstein_kwh": 9.156561904651566,
+      "peak_power_wasserstein_kw": 2.423369081658893,
+      "ramp_power_wasserstein_kw": 1.984145936205857,
+      "mean_profile_mae": 0.3710243282540797,
+      "std_profile_mae": 0.11145357662754228,
+      "autocorrelation_mae_lag_1": 0.6756735122989168,
+      "autocorrelation_mae_lag_quarter_day": 0.04556525428337855,
+      "negative_fraction": 0.33232421875,
+      "metadata": {
+        "n_real": 1280,
+        "n_fake": 1280,
+        "n_time_slots": 96,
+        "interval_hours": 0.25,
+        "profile_duration_hours": 24.0,
+        "profile_value_unit": "kWh",
+        "per_slot_wasserstein_unit": "kWh",
+        "mean_profile_mae_unit": "kWh",
+        "std_profile_mae_unit": "kWh",
+        "autocorrelation_lag_quarter_day": 24,
+        "autocorrelation_valid_real": 1280,
+        "autocorrelation_valid_fake": 1280,
+        "autocorrelation_definition": "mean biased normalized within-profile autocovariance"
+      },
+      "warnings": [],
+      "nearest_neighbor": {
+        "mean_rmse_to_train": 0.4614063237347549,
+        "mean_rmse_to_holdout": 0.461840385222437,
+        "train_to_holdout_rmse_ratio": 0.9990601482642687,
+        "rmse_unit": "kWh",
+        "n_fake": 1280,
+        "n_reference_train": 1280,
+        "n_reference_holdout": 1280,
+        "max_samples": 2000,
+        "seed": 42,
+        "caveat": "Descriptive memorization diagnostic, not a privacy proof. References are subsampled to equal sizes; holdout data must be disjoint from training. A lower ratio means generated profiles are closer to training than holdout. Sampling and distribution shift affect the ratio; a zero holdout distance makes it undefined."
+      }
+    }
+  },
+  "conditional_bootstrap": {
+    "global": {
+      "per_slot_wasserstein": 0.042442455163400915,
+      "daily_energy_wasserstein_kwh": 1.097108035565543,
+      "peak_power_wasserstein_kw": 0.19093124810606235,
+      "ramp_power_wasserstein_kw": 0.03587832123747666,
+      "mean_profile_mae": 0.0350318580937009,
+      "std_profile_mae": 0.0763789103220207,
+      "autocorrelation_mae_lag_1": 0.01978007878872834,
+      "autocorrelation_mae_lag_quarter_day": 0.005580924789582907,
+      "negative_fraction": 0.0,
+      "metadata": {
+        "n_real": 1280,
+        "n_fake": 1280,
+        "n_time_slots": 96,
+        "interval_hours": 0.25,
+        "profile_duration_hours": 24.0,
+        "profile_value_unit": "kWh",
+        "per_slot_wasserstein_unit": "kWh",
+        "mean_profile_mae_unit": "kWh",
+        "std_profile_mae_unit": "kWh",
+        "autocorrelation_lag_quarter_day": 24,
+        "autocorrelation_valid_real": 1280,
+        "autocorrelation_valid_fake": 1280,
+        "autocorrelation_definition": "mean biased normalized within-profile autocovariance"
+      },
+      "warnings": [],
+      "nearest_neighbor": {
+        "mean_rmse_to_train": 0.1142719833292708,
+        "mean_rmse_to_holdout": 0.14484921442930712,
+        "train_to_holdout_rmse_ratio": 0.7889030242897218,
+        "rmse_unit": "kWh",
+        "n_fake": 1280,
+        "n_reference_train": 1280,
+        "n_reference_holdout": 1280,
+        "max_samples": 2000,
+        "seed": 42,
+        "caveat": "Descriptive memorization diagnostic, not a privacy proof. References are subsampled to equal sizes; holdout data must be disjoint from training. A lower ratio means generated profiles are closer to training than holdout. Sampling and distribution shift affect the ratio; a zero holdout distance makes it undefined."
+      }
+    }
+  }
+}

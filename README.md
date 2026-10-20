@@ -4,8 +4,10 @@ A reproducible adaptation of [malvin0130/cGAN_EB](https://github.com/malvin0130/
 for the **2024 Fluvius residential smart-meter data** in this repository's
 [`data` release](https://github.com/MahmoudAsadi97/cGAN/releases/tag/data).
 
-**Status:** research pipeline with software tests and a released-data smoke
-workflow. A short smoke run checks execution, not generative quality. Full
+**Status:** 88 tests pass locally and in CI; a released-data smoke run completed
+on 48 households and 17,472 daily profiles. Its two-epoch cGAN underperforms the
+resampling baseline and generates negative imports. See the [executed validation
+and limitations](docs/VALIDATION.md). A short smoke run checks execution, not generative quality. Full
 multi-seed experiments and publication validation remain necessary. See the
 [research protocol](docs/RESEARCH_PROTOCOL.md) and [upstream audit](docs/UPSTREAM_AUDIT.md).
 

@@ -1,0 +1,5 @@
+# Ablation of cwgan_gp: global min-max scaling (as in cGAN_EB) instead of the asinh transform.
+base: cwgan_gp.yaml
+name: abl_minmax
+scaler:
+  kind: minmax

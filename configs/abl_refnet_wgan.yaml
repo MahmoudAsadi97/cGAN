@@ -1,0 +1,13 @@
+# Ablation from the other side: the exact cGAN_EB networks (one-hot, widths 64-128-64 /
+# 64-128-256, min-max scaling) trained with WGAN-GP instead of BCE.  Dropout is removed
+# from the critic because it is incompatible with the gradient penalty.
+base: cwgan_gp.yaml
+name: abl_refnet_wgan
+scaler:
+  kind: minmax
+model:
+  arch: ref
+  cond: onehot
+  noise_dim: 24
+  hidden: 64
+  dropout: 0.0

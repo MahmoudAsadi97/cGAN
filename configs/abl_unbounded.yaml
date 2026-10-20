@@ -1,0 +1,10 @@
+# Ablation of cwgan_gp: unbounded linear generator output with the stronger asinh
+# transform (c = median |x|), i.e. the configuration whose rare extreme samples
+# explode through the inverse transform.
+base: cwgan_gp.yaml
+name: abl_unbounded
+scaler:
+  kind: asinh
+  asinh_c: null
+model:
+  out_bound: null

@@ -1,0 +1,38 @@
+# Faithful reproduction of cGAN_EB (Li, Dong & Qiu 2025; github.com/malvin0130/cGAN_EB).
+# Architecture, loss, optimiser and batch size follow cGAN.py / train.py exactly.
+# Deliberate deviations (see README, "Faithful reproduction"):
+#   * minibatches are reshuffled every epoch (the reference iterates in file order);
+#   * the scaler is fitted on the training meters only and no rows are dropped by
+#     sign (our target is net load, which is negative during PV export);
+#   * the training budget is matched in generator updates (~1.03-1.04M in the paper:
+#     206,009 profiles / 2,000 per batch x 10,000 epochs) instead of epochs;
+#   * checkpoints are selected on the validation households (the final iterate is
+#     also evaluated).
+base: base.yaml
+name: cgan_eb
+
+scaler:
+  kind: minmax
+
+model:
+  arch: ref
+  cond: onehot
+  noise_dim: 24
+  hidden: 64
+  dropout: 0.4
+
+train:
+  loss: bce                   # Sigmoid + BCELoss, D loss = (real + fake) / 2
+  lr_g: 1.0e-4
+  lr_d: 2.0e-4
+  betas_g: [0.9, 0.999]       # torch defaults, as in the reference
+  betas_d: [0.9, 0.999]
+  batch_size: 2000
+  n_critic: 1
+  shuffle: true
+  drop_last: false
+  g_labels: batch             # G step reuses the labels of the real batch
+  ema: 0.999                  # read-out only (does not affect training); the faithful
+                              # results use the raw weights (checkpoints best_raw / last_raw)
+  iterations: 1040000
+  eval_every: 20000

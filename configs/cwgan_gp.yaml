@@ -1,0 +1,39 @@
+# Improved conditional generator: WGAN-GP with factorised condition embeddings,
+# a projection critic, a mild asinh value transform, a bounded generator output
+# and an EMA of generator weights.  The transform knee (asinh_c) and the output
+# bound were chosen on the validation households (see README).
+base: base.yaml
+name: cwgan_gp
+
+scaler:
+  kind: asinh                 # asinh(x / c) then z-score
+  asinh_c: 1.5                # kWh; chosen on validation from {0.32 (median |x|), 1.5, no transform}
+
+model:
+  arch: mlp
+  cond: factor
+  cond_kw: {emb_dim: 8, joint_dim: 16}
+  noise_dim: 32
+  g_hidden: 256
+  g_depth: 3
+  d_hidden: 256
+  d_depth: 3
+  projection: true
+  concat: true
+  out_bound: 0.05             # G output limited to the scaled training range +/- 5 % of its width
+
+train:
+  loss: wgan_gp
+  gp_lambda: 10.0
+  n_critic: 5
+  lr_g: 1.0e-4
+  lr_d: 1.0e-4
+  betas_g: [0.5, 0.9]
+  betas_d: [0.5, 0.9]
+  batch_size: 1024
+  shuffle: true
+  drop_last: true
+  g_labels: batch
+  ema: 0.999
+  iterations: 50000
+  eval_every: 1000

@@ -1,0 +1,5 @@
+# Ablation of cwgan_gp: critic conditioned by input concatenation only (no projection term).
+base: cwgan_gp.yaml
+name: abl_noproj
+model:
+  projection: false

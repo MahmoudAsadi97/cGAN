@@ -1,0 +1,5 @@
+# Ablation of cwgan_gp: flat 64-way one-hot conditioning instead of factorised embeddings.
+base: cwgan_gp.yaml
+name: abl_onehot
+model:
+  cond: onehot

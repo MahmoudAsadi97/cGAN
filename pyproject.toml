@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cgan-fluvius"
+version = "1.0.0"
+description = "Conditional GANs for residential net-load profiles with PV, heat pumps and EVs (Fluvius 2024)"
+requires-python = ">=3.10"
+dependencies = ["torch", "numpy", "pandas", "pyarrow", "scipy", "scikit-learn", "matplotlib", "PyYAML", "tabulate"]
+
+[tool.setuptools.packages.find]
+include = ["cgan*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

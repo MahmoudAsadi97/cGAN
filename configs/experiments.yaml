@@ -1,0 +1,24 @@
+# Experiment matrix used for the paper.  `python -m cgan.experiments --plan configs/experiments.yaml`
+# runs everything that is not finished yet (training, then evaluation on the test split).
+out: runs
+eval_split: test
+jobs: 2                      # concurrent training processes on one GPU
+
+models:
+  - {config: configs/cgan_eb.yaml,  seeds: [0, 1, 2, 3, 4], ckpts: [best_raw, last_raw, best]}
+  - {config: configs/cwgan_gp.yaml, seeds: [0, 1, 2, 3, 4], ckpts: [best, best_raw, last]}
+
+ablations:
+  - {config: configs/abl_onehot.yaml,      seeds: [0, 1, 2], ckpts: [best]}
+  - {config: configs/abl_noproj.yaml,      seeds: [0, 1, 2], ckpts: [best]}
+  - {config: configs/abl_minmax.yaml,      seeds: [0, 1, 2], ckpts: [best]}
+  - {config: configs/abl_refnet_wgan.yaml, seeds: [0, 1, 2], ckpts: [best]}
+  - {config: configs/abl_unbounded.yaml,   seeds: [0, 1, 2], ckpts: [best]}
+
+baselines:
+  kinds: [gaussian, copula, gmm, resample]
+  seeds: [0, 1, 2, 3, 4]
+
+real_reference:
+  split: val                 # real profiles of unseen (validation) households vs the test households
+  seeds: [0]                 # val and test have identical per-label counts, so seeds only reorder

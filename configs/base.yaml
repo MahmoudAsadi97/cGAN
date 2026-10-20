@@ -1,0 +1,16 @@
+# Shared data / validation settings. Model configs inherit with `base: base.yaml`.
+data:
+  processed: data/processed/fluvius2024_qh.npz
+  resolution: hourly          # hourly (24 values/day) | quarter (96 values/day)
+  target: net                 # net = import - export (kWh per step); import | export | import_export
+  holidays_as_weekend: true   # as in Li et al. (2025): holidays counted as weekend
+  drop_dst_days: true         # 2024-03-31 (23 h) and 2024-10-27 (25 h); required
+  drop_zero_days: true        # meter-days with zero import and export in every slot (vacancy/outage)
+  split_fractions: [0.7, 0.15, 0.15]   # train / val / test meters, stratified by group
+  split_seed: 2024
+
+val:
+  n_per_label: 1000           # generated samples per label for the validation score
+  seed: 12345                 # fixed noise for comparable checkpoint scores
+
+deterministic: true

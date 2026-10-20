@@ -10,5 +10,6 @@
   "num_threads": 2,
   "unconditional": false,
   "validation_samples": 512,
-  "max_train_samples": 4096
+  "max_train_samples": 4096,
+  "allow_uncurated_data": true
 }

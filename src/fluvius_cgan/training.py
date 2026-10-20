@@ -17,6 +17,7 @@ import re
 import subprocess
 import tempfile
 import time
+import warnings
 
 import numpy as np
 from scipy.stats import wasserstein_distance
@@ -26,6 +27,7 @@ from torch.nn import functional as F
 from .models import Discriminator, Generator
 from .residual import ResidualGenerator, fit_mean_profiles
 from .distribution_loss import conditional_sliced_wasserstein_loss
+from .release import RELEASE_SHA256
 
 
 DEFAULT_CONFIG = {
@@ -38,6 +40,7 @@ DEFAULT_CONFIG = {
     "batch_sampling": "shuffle", "conditions_per_batch": 4,
     "swd_weight": 0.0, "swd_projections": 128,
     "validation_selection": "pooled_w1",
+    "allow_uncurated_data": False,
 }
 VALIDATION_METRIC = "mean_interval_wasserstein_normalized"
 CONDITIONAL_VALIDATION_METRIC = "mean_condition_interval_wasserstein_normalized"
@@ -76,7 +79,7 @@ def _config(config):
         if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value) or not 0 <= value < 1:
             raise ValueError(f"{name} must be finite and in [0, 1)")
         result[name] = float(value)
-    for name in ("unconditional", "conditional_mean_residual"):
+    for name in ("unconditional", "conditional_mean_residual", "allow_uncurated_data"):
         if not isinstance(result[name], bool):
             raise ValueError(f"{name} must be a boolean")
     if result["normalization"] not in ("minmax", "standard"):
@@ -128,6 +131,68 @@ def _json_snapshot(path):
     if not isinstance(value, dict):
         raise ValueError(f"JSON must contain an object: {path}")
     return value, hashlib.sha256(raw).hexdigest()
+
+
+def _training_curation_guard(prepared_dir, config):
+    """Qualify new training inputs without opening or hashing reserved TEST."""
+    directory = Path(prepared_dir)
+    metadata, metadata_hash = _json_snapshot(directory / "metadata.json")
+    pinned = metadata.get("source_sha256") == RELEASE_SHA256
+    status = {"pinned_release": pinned, "metadata_sha256": metadata_hash}
+    if "curation" not in metadata:
+        if not pinned:
+            return {**status, "status": "not_required_for_unpinned_source",
+                    "qualification": "No pinned-release curation requirement applied; no trace-independence claim."}
+        qualification = ("Exploratory reproduction/software check on uncurated pinned-source data; "
+                         "exact trace aliases can cross splits. Results are not confirmatory.")
+        if not config["allow_uncurated_data"]:
+            raise ValueError(
+                "Pinned-release training requires identity-curated v2 data. Run "
+                "python scripts/curate_prepared.py --prepared ORIGINAL_DIR --output NEW_CURATED_DIR, "
+                "then train from NEW_CURATED_DIR. Explicit allow_uncurated_data=true is reserved "
+                "for qualified historical reproduction or software checks."
+            )
+        warnings.warn(qualification, UserWarning, stacklevel=3)
+        return {**status, "status": "uncurated_explicit_override", "qualification": qualification}
+    from .curation import FINGERPRINT_ALGORITHM, INPUT_FILES, SPLIT_PRIORITY
+    curation = metadata["curation"]
+    priority = list(SPLIT_PRIORITY)
+    canonical_order = "lexicographic within the earliest original split"
+    if (not isinstance(curation, dict) or type(curation.get("schema_version")) is not int or
+            curation["schema_version"] != 1 or type(curation.get("fingerprint_version")) is not int or
+            curation["fingerprint_version"] != 2 or curation.get("fingerprint_algorithm") != FINGERPRINT_ALGORITHM or
+            curation.get("split_priority") != priority or curation.get("canonical_id_order") != canonical_order):
+        raise ValueError("malformed or unsupported claimed curation algorithm/version/split priority")
+    required_flags = {"signed_zero_canonicalized_for_identity_only": True, "nonzero_rounding_or_tolerance": False,
+                      "byte_comparison_verified": True, "original_split_assignments_preserved": True,
+                      "is_new_random_split": False, "development_traces_transferred_to_test": False}
+    if any(curation.get(name) is not expected for name, expected in required_flags.items()):
+        raise ValueError("malformed claimed curation identity/split-preservation flags")
+    try:
+        manifest, manifest_hash = _json_snapshot(directory / "curation_manifest.json")
+    except OSError as error:
+        raise ValueError("claimed curation requires curation_manifest.json") from error
+    if (type(manifest.get("schema_version")) is not int or manifest["schema_version"] != 1 or
+            type(manifest.get("fingerprint_version")) is not int or manifest["fingerprint_version"] != 2 or
+            manifest.get("split_priority") != priority or manifest.get("canonical_id_order") != canonical_order):
+        raise ValueError("malformed curation manifest version/split priority")
+    original_hashes = curation.get("input_files_sha256")
+    if (not isinstance(original_hashes, dict) or set(original_hashes) != set(INPUT_FILES) or
+            any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value) for value in original_hashes.values()) or
+            manifest.get("input_files_sha256") != original_hashes):
+        raise ValueError("curation manifest disagrees with original-input fingerprints")
+    output_hashes = manifest.get("output_files_sha256")
+    if not isinstance(output_hashes, dict) or set(output_hashes) != set(INPUT_FILES):
+        raise ValueError("curation manifest must bind all prepared files")
+    verified = {}
+    for name in ("metadata.json", "scaler.json", "train.npz", "val.npz"):
+        actual = metadata_hash if name == "metadata.json" else _sha256(directory / name)
+        if output_hashes.get(name) != actual:
+            raise ValueError(f"curation manifest hash does not match {name}")
+        verified[name] = actual
+    return {**status, "status": "verified_curation_v2", "manifest_sha256": manifest_hash,
+            "verified_file_hashes": verified,
+            "qualification": "Identity-curated v2; validation remains exploratory and exact-trace uniqueness does not establish independent households."}
 
 
 def _read_split(path):
@@ -453,11 +518,20 @@ def train(prepared_dir, output_dir, config: dict) -> dict:
     started = time.perf_counter()
     config = _config(config)
     with _run_directory(output_dir) as directory:
-        return _train(prepared_dir, directory, config, started)
+        curation_status = _training_curation_guard(prepared_dir, config)
+        return _train(prepared_dir, directory, config, started, curation_status)
 
 
-def _train(prepared_dir, output_dir, config, started):
+def _train(prepared_dir, output_dir, config, started, curation_status):
     full_train, val, metadata, scaler, hashes = _load_prepared(prepared_dir)
+    if (hashes["metadata.json"] != curation_status["metadata_sha256"] or
+            any(hashes.get(name) != digest for name, digest in curation_status.get("verified_file_hashes", {}).items())):
+        raise ValueError("prepared files changed after the training curation check")
+    if curation_status.get("manifest_sha256"):
+        manifest_hash = _sha256(Path(prepared_dir) / "curation_manifest.json")
+        if manifest_hash != curation_status["manifest_sha256"]:
+            raise ValueError("curation manifest changed after verification")
+        hashes["curation_manifest.json"] = manifest_hash
     if config["normalization"] == "standard":
         # Fit a single population mean/std over all prepared TRAIN values, before
         # smoke subsampling. Keep the verified original min/max and file hashes.
@@ -617,6 +691,7 @@ def _train(prepared_dir, output_dir, config, started):
                 "config": config, "condition_dim": condition_dim,
                 "output_dim": metadata["resolution"], "scaler": scaler,
                 "metadata": metadata, "data_hashes": hashes,
+                "data_curation": curation_status,
                 "supported_labels": supported_labels, "selection": selection,
                 "provenance": provenance, "validation_metric": validation_metric,
                 "validation_score": score, "best_epoch": best_epoch,
@@ -649,6 +724,7 @@ def _train(prepared_dir, output_dir, config, started):
         "resolution": metadata["resolution"], "target": metadata["target"],
         "units": metadata["units"], "selection": selection,
         "data_hashes": hashes, "source_sha256": metadata["source_sha256"],
+        "data_curation": curation_status,
         "provenance": provenance, "scaler": scaler,
         "elapsed_seconds": time.perf_counter() - started,
         "best_checkpoint": "best.pt", "last_checkpoint": "last.pt",

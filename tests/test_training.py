@@ -193,7 +193,8 @@ def test_provenance_and_input_mismatches_fail_closed(tmp_path, violation):
     ("conditional_mean_residual", None), ("batch_sampling", "weighted"),
     ("conditions_per_batch", 0), ("conditions_per_batch", True),
     ("swd_weight", -1), ("swd_weight", float("nan")), ("swd_weight", True),
-    ("swd_projections", 0), ("swd_projections", True), ("validation_selection", "unknown")])
+    ("swd_projections", 0), ("swd_projections", True), ("validation_selection", "unknown"),
+    ("allow_uncurated_data", "true"), ("allow_uncurated_data", 1)])
 def test_invalid_config_rejected(tmp_path, key, value):
     data = prepared(tmp_path)
     with pytest.raises(ValueError):
@@ -208,7 +209,8 @@ def test_inverse_scaling_is_used_for_generation(tmp_path):
     # Checkpoints from before objective/normalization config fields still load.
     for name in ("objective", "normalization", "adam_beta1", "adam_beta2",
                  "discriminator_hidden_dim", "conditional_mean_residual", "batch_sampling",
-                 "conditions_per_batch", "swd_weight", "swd_projections", "validation_selection"):
+                 "conditions_per_batch", "swd_weight", "swd_projections", "validation_selection",
+                 "allow_uncurated_data"):
         checkpoint["config"].pop(name, None)
     for key, value in checkpoint["generator_state_dict"].items():
         checkpoint["generator_state_dict"][key] = torch.zeros_like(value)
@@ -591,3 +593,97 @@ def test_conditional_validation_rejects_insufficient_or_indivisible_samples(tmp_
         change_npz(data / "val.npz", y=np.zeros(6, dtype=np.int64))
     with pytest.raises(ValueError, match="conditional validation"):
         train(data, tmp_path / "run", settings(validation_samples=budget, validation_selection="conditional_w1"))
+
+
+def pinned_prepared(tmp_path, *, curate=False):
+    from fluvius_cgan.release import RELEASE_SHA256
+    data = prepared(tmp_path)
+    metadata = json.loads((data / "metadata.json").read_text())
+    metadata["source_sha256"] = RELEASE_SHA256
+    if curate:
+        with np.load(data / "val.npz") as archive:
+            arrays = dict(archive)
+        arrays["meter_id"] = np.array([value.replace("val", "test") for value in arrays["meter_id"]])
+        arrays["x"] = arrays["x"] + 1000
+        np.savez(data / "test.npz", **arrays)
+        metadata["splits"]["test"] = {"profiles": 6, "meters": 3}
+    (data / "metadata.json").write_text(json.dumps(metadata))
+    if curate:
+        from fluvius_cgan.curation import curate_prepared
+        target = tmp_path / "curated"
+        curate_prepared(data, target, expected_dates=np.array(["2024-01-01", "2024-01-02"]))
+        return target
+    return data
+
+
+def test_pinned_training_requires_curation_before_loading_arrays(tmp_path, monkeypatch):
+    data = pinned_prepared(tmp_path)
+    monkeypatch.setattr("fluvius_cgan.training._load_prepared",
+                        lambda *args: pytest.fail("uncurated source must be rejected before loading arrays"))
+    with pytest.raises(ValueError, match="scripts/curate_prepared.py.*--prepared.*--output"):
+        train(data, tmp_path / "run", settings(epochs=1))
+
+
+def test_uncurated_override_warns_and_qualifies_saved_run_without_blocking_generation(tmp_path):
+    data = pinned_prepared(tmp_path)
+    output = tmp_path / "run"
+    with pytest.warns(UserWarning, match="Exploratory"):
+        summary = train(data, output, settings(epochs=1, allow_uncurated_data=True))
+    checkpoint = torch.load(output / "best.pt", weights_only=True)
+    assert summary["data_curation"]["status"] == "uncurated_explicit_override"
+    assert checkpoint["data_curation"] == summary["data_curation"]
+    assert "not confirmatory" in summary["data_curation"]["qualification"]
+    # Generation of an older pinned-source checkpoint does not invoke the guard.
+    checkpoint["config"].pop("allow_uncurated_data")
+    torch.save(checkpoint, output / "legacy.pt")
+    assert generate(output / "legacy.pt", np.array([0, 8])).shape == (2, 24)
+
+
+def test_curated_guard_verifies_development_hashes_without_opening_test(tmp_path, monkeypatch):
+    import fluvius_cgan.training as training
+    data = pinned_prepared(tmp_path, curate=True)
+    # Deliberately no longer matches the TEST hash; training must not check it.
+    (data / "test.npz").write_bytes(b"reserved test must not be read or hashed")
+    original_hash = training._sha256
+
+    def guard_hash(path):
+        assert Path(path).name != "test.npz"
+        return original_hash(path)
+
+    monkeypatch.setattr(training, "_sha256", guard_hash)
+    output = tmp_path / "run"
+    summary = train(data, output, settings(epochs=1))
+    checkpoint = torch.load(output / "best.pt", weights_only=True)
+    assert summary["data_curation"]["status"] == "verified_curation_v2"
+    assert set(summary["data_curation"]["verified_file_hashes"]) == {"train.npz", "val.npz", "metadata.json", "scaler.json"}
+    assert checkpoint["data_hashes"]["curation_manifest.json"] == original_hash(data / "curation_manifest.json")
+    assert "test.npz" not in checkpoint["data_hashes"]
+
+
+@pytest.mark.parametrize("violation", ["version", "algorithm", "priority", "flags", "manifest_version",
+                                      "manifest_priority", "missing_manifest", "train.npz", "val.npz", "metadata.json", "scaler.json"])
+def test_claimed_curation_fails_closed_for_malformed_fields_or_changed_hashes(tmp_path, violation):
+    data = pinned_prepared(tmp_path, curate=True)
+    metadata = json.loads((data / "metadata.json").read_text())
+    manifest = json.loads((data / "curation_manifest.json").read_text())
+    if violation in {"version", "algorithm", "priority", "flags"}:
+        key, value = {"version": ("fingerprint_version", 1), "algorithm": ("fingerprint_algorithm", "unrecognized"),
+                      "priority": ("split_priority", ["test", "val", "train"]),
+                      "flags": ("development_traces_transferred_to_test", True)}[violation]
+        metadata["curation"][key] = value
+        (data / "metadata.json").write_text(json.dumps(metadata))
+        manifest["output_files_sha256"]["metadata.json"] = hashlib.sha256((data / "metadata.json").read_bytes()).hexdigest()
+    elif violation == "manifest_version":
+        manifest["fingerprint_version"] = 1
+    elif violation == "manifest_priority":
+        manifest["split_priority"] = ["test", "val", "train"]
+    elif violation == "missing_manifest":
+        (data / "curation_manifest.json").unlink()
+    else:
+        with (data / violation).open("ab") as handle:
+            handle.write(b"\n")
+    if violation != "missing_manifest":
+        (data / "curation_manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="curation|manifest"):
+        # An override never bypasses malformed claimed-curation validation.
+        train(data, tmp_path / "run", settings(epochs=1, allow_uncurated_data=True))

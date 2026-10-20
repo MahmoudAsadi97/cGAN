@@ -109,6 +109,10 @@ matching on 95 adjacent standardized differences, with a single TRAIN-fitted
 scale. Its three-seed promotion criteria are fixed in
 [TEMPORAL_REFINEMENT.md](docs/TEMPORAL_REFINEMENT.md). No improved result is assumed
 from the added loss. Keep each arm, failed gates and interrupted attempts.
+The completed three-seed [SWD attribution comparison](docs/CURATED_SWD_ATTRIBUTION.md)
+finds lower calibrated peak/ramp errors with weight 10, alongside ACF and battery
+tradeoffs. [EXPERIMENT_LEDGER.md](docs/EXPERIMENT_LEDGER.md) separates retained
+historical screens, current runs and outstanding manuscript experiments.
 
 ```bash
 python scripts/run_experiments.py --prepared data/curated96 \
@@ -213,6 +217,21 @@ It binds and includes `utility_validation.json` and
 evidence explicitly. Use new output paths. The older `collect_study.py` collects
 raw reports only. A completed-run summary does not replace the full attempted-run
 ledger or justify omitting failures.
+
+After all three temporal-pilot runs have their primary calibration and uncapped
+utility reports, assess the declared promotion criteria without refitting:
+
+```bash
+python scripts/assess_temporal_pilot.py \
+  --candidate-root runs/curated_derivative1 --baseline-root runs/curated_swd10 \
+  --output runs/temporal_pilot.json --markdown runs/temporal_pilot.md
+```
+
+The assessor verifies the full budget, bound artifacts, matched controls and
+fixed settings. It exits 0 for a completed passing pilot, 1 for a completed failed
+pilot, and 2 for missing or incompatible evidence. Incomplete evidence never
+authorizes promotion. Full reports retain all conditions and diagnostics; compact
+tracked summaries must preserve their input hashes and disclose failed gates.
 
 ## Dataset handling
 

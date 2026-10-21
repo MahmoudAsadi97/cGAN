@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development conditional mixture baseline screen",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "generation_seeds": [
+    20261023,
+    20261024
+  ],
+  "methods": [
+    {
+      "method_id": "gmm_k1",
+      "n_components": 1,
+      "fit_seed": 20261027,
+      "n_init": 2,
+      "max_iter": 100,
+      "tol": 0.001,
+      "reg_covar": 0.001
+    },
+    {
+      "method_id": "gmm_k2",
+      "n_components": 2,
+      "fit_seed": 20261027,
+      "n_init": 2,
+      "max_iter": 100,
+      "tol": 0.001,
+      "reg_covar": 0.001
+    },
+    {
+      "method_id": "gmm_k4",
+      "n_components": 4,
+      "fit_seed": 20261027,
+      "n_init": 2,
+      "max_iter": 100,
+      "tol": 0.001,
+      "reg_covar": 0.001
+    },
+    {
+      "method_id": "gmm_k8",
+      "n_components": 8,
+      "fit_seed": 20261027,
+      "n_init": 2,
+      "max_iter": 100,
+      "tol": 0.001,
+      "reg_covar": 0.001
+    }
+  ],
+  "reference": {
+    "directory": "/workspace/cGAN/artifacts/phase1-development/strong_baselines",
+    "manifest_sha256": "5b58f602d6435ae1a99228f4da1338b0bd595818d43a884fc8f8b8ac4aaf24e4"
+  },
+  "design": "docs/MIXTURE_BASELINE_PLAN.md",
+  "interpretation": "All arms retained; initialization chosen by TRAIN objective only. Reused post-test development validation, not confirmation. Mixture components do not identify equipment or building labels."
+}

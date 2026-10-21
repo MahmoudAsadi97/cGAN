@@ -31,9 +31,14 @@ def run(plan_path, output, workers=3):
     resumes = plan.get('resume_from', {})
     if not isinstance(resumes, dict) or set(resumes) - set(jobs):
         raise ValueError('Resume entries must name declared jobs')
-    for checkpoint in resumes.values():
+    resume_hashes = plan.get('resume_checkpoint_sha256', {})
+    if set(resume_hashes) != set(resumes):
+        raise ValueError('Plan must bind every continuation checkpoint hash')
+    for name, checkpoint in resumes.items():
         if not Path(checkpoint).is_file():
             raise FileNotFoundError(checkpoint)
+        if _sha256(checkpoint) != resume_hashes[name]:
+            raise ValueError(f'Continuation checkpoint hash mismatch: {name}')
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     (output / 'logs').mkdir()

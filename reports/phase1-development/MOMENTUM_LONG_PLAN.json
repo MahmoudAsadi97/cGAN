@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development; common 30000-step global-standardized momentum study",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "jobs": {
+    "standard_b9_s101": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.9
+    },
+    "standard_b9_s202": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.9
+    },
+    "standard_b5_s101": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.5
+    },
+    "standard_b5_s202": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.5
+    },
+    "standard_b0_s101": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0
+    },
+    "standard_b0_s202": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0
+    }
+  },
+  "prespecified_scope": "Continue all three global-standardized Adam beta1 settings at both seeds to a common 30000 total update pairs, preserving trajectories and prior best checkpoints. Batch512, fixed original networks/dropout/learning rates/selection, CPU.",
+  "initial_interpretation": "Two-seed convergence development; not an independent final validation. Continuation chains are one trajectory each, not additional training seeds. Evaluate best and last, diversity/tails/temporal diagnostics, and sustained learning curves.",
+  "decision_basis": "All settings remain below strong-baseline fidelity at 6000updates. Both betas0.9/0.5 show ongoing or near-boundary improvement; beta0 has no clear advantage. Retain all three in common longer-budget study to avoid choosing an early transient winner.",
+  "resume_from": {
+    "standard_b9_s101": "/workspace/cGAN/runs/phase1-development/normalization_screen/standard_s101/last.pt",
+    "standard_b9_s202": "/workspace/cGAN/runs/phase1-development/normalization_replication/standard_s202/last.pt",
+    "standard_b5_s101": "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b5_s101/last.pt",
+    "standard_b5_s202": "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b5_s202/last.pt",
+    "standard_b0_s101": "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s101/last.pt",
+    "standard_b0_s202": "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s202/last.pt"
+  },
+  "resume_checkpoint_sha256": {
+    "standard_b9_s101": "e3a104ee1683defa2c98af5738b5f5c811ac97339815535aef16079964ef1b52",
+    "standard_b9_s202": "85a8b6c19d76f9bf04729132578da3c18d95837bdaa24a49365535438060d72e",
+    "standard_b5_s101": "4d88f3e9827cc64d50293217f960ad002d85ccf28d30692f08ad0317f6c20a39",
+    "standard_b5_s202": "820c1846b6ef8948925d1e377c43a29205dd6d8fe4df7e578539955a9980e99e",
+    "standard_b0_s101": "558e6563d5448994af06eab06ac4c0f1e75c4ca83d29d12db6e5b4d8b512a7bc",
+    "standard_b0_s202": "09394d8a4e88d78cef24d3188cb1fee0cc3320eeaafbd6af80e4e846254f14e2"
+  }
+}

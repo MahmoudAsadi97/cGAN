@@ -37,7 +37,7 @@ def run(plan_path, output, workers=3):
     for name, checkpoint in resumes.items():
         if not Path(checkpoint).is_file():
             raise FileNotFoundError(checkpoint)
-        if _sha256(checkpoint) != resume_hashes[name]:
+        if _sha256(Path(checkpoint)) != resume_hashes[name]:
             raise ValueError(f'Continuation checkpoint hash mismatch: {name}')
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)

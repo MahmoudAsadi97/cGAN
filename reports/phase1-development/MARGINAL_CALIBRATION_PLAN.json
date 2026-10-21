@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development fixed conditional marginal calibration",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "calibration": {
+    "seed": 20261025,
+    "profiles_per_condition": 16384,
+    "source_cdf": "deterministic_mid_ecdf",
+    "target_inverse": "empirical_step",
+    "constant_source_policy": "fail_if_target_varies"
+  },
+  "generation_seeds": [
+    20261023,
+    20261024
+  ],
+  "candidates": [
+    {
+      "run_directory": "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s101",
+      "checkpoint_sha256": "96758b85e1a8fbfddee3eee81443b39200c91c273a1d3f20009825a985bc9bc7",
+      "manifest_sha256": "001d748ec67e82fe65ed30daf9bf185f58022ef9fbe5440793a0cd3c88fa6b94",
+      "reference_method_id": "candidate_000"
+    },
+    {
+      "run_directory": "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s202",
+      "checkpoint_sha256": "adb165fca29009613ac0d468431f3da3c9173ebd6f3cdf2149b3a08a639faab7",
+      "manifest_sha256": "14c0250d8cac44e6e76221bb8ff93c6be526e5a41529d2b72e7cb3315dfcd1d5",
+      "reference_method_id": "candidate_001"
+    },
+    {
+      "run_directory": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s101",
+      "checkpoint_sha256": "7f54794875a3c9ced3556fad55bd3be35cd924a97293f094e1b43f77abae9220",
+      "manifest_sha256": "d1bc2c7a17df93663938ea1f51d5cbabf4451f6e1dc493156fc77a128c9fabd0",
+      "reference_method_id": "candidate_006"
+    },
+    {
+      "run_directory": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s202",
+      "checkpoint_sha256": "f2515281fb250a36e0e76721285e941c6d7799126169c7e8a85210e6ee9ea89e",
+      "manifest_sha256": "0a0a150fa1482965a5af367ef7b26e1a8f446c07e94d2a02d70e95ffc3b6778f",
+      "reference_method_id": "candidate_007"
+    }
+  ],
+  "reference": {
+    "directory": "/workspace/cGAN/artifacts/phase1-development/fresh_diagnostics",
+    "manifest_sha256": "a06a77cc55bfb2bddf05ac28678220838f5afdb57567552f1f38c2798d2cd63c"
+  },
+  "interpretation": "Paired sampling comparisons on already used inner validation. No untouched validation, new training replicates, checkpoint reselection, or original TEST performance access."
+}

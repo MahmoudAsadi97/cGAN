@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "role": "prospective synthetic-only verification of fixed-score meter intervals",
+  "real_data_access": false,
+  "cohorts_per_scenario": 1000,
+  "bootstrap_replicates": 999,
+  "bootstrap_block_size": 999,
+  "level": 0.95,
+  "fixed_ensemble_size": 64,
+  "stratum_sizes": [25, 30, 35, 40, 45, 50, 55, 60],
+  "calendar": {
+    "year": 2024,
+    "excluded_dates": ["2024-03-31", "2024-10-27"],
+    "bin_encoding": "4*weekend+season; winter=0,spring=1,summer=2,autumn=3",
+    "bin_counts": [66, 66, 65, 65, 25, 25, 27, 25],
+    "locations": [0.0, 0.15, -0.1, 0.2, 0.1, -0.05, 0.12, 0.03],
+    "scales": [0.85, 1.0, 1.15, 0.95, 1.1, 0.9, 1.05, 1.2]
+  },
+  "stratum_locations": [-0.28, -0.2, -0.12, -0.04, 0.04, 0.12, 0.2, 0.28],
+  "stratum_scales": [0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2],
+  "profile": "v*Y with v=(0,1,0,1,...), dimension24",
+  "scores": "ES uses Euclidean/sqrt24; VS uses p=.5 and normalized inverse-lag weights for all h<k",
+  "ensemble_coupling": "Each condition uses shared IID standard-normal members for A and B; each marginal ensemble is IID. Weak/strong scenarios share the same ensembles.",
+  "rng": "Ensembles: SeedSequence([ensemble_seed,refresh_index,condition]); refresh_index=0 for fixed ensembles, cohort_index+1 for refreshed ensembles. Meter effects: SeedSequence([cohort_seed,cohort_index,0]); daily noise: SeedSequence([cohort_seed,cohort_index,1]); bootstrap seed: SeedSequence([bootstrap_seed,cohort_index]).generate_state(1)[0]. All use NumPy default_rng.",
+  "scenarios": [
+    {
+      "id": "weak_normal",
+      "description": "Normal meter effect, rho=.05; same condition marginals and fixed ensembles as strong_normal.",
+      "rho": 0.05,
+      "meter_effect": {"weights": [1.0], "means": [0.0], "sds": [1.0]},
+      "forecast_a": {"offset": 0.1, "sd_factor": 1.0},
+      "forecast_b": {"offset": 0.35, "sd_factor": 0.85},
+      "ensemble_seed": 20261031,
+      "cohort_seed": 20261032,
+      "bootstrap_seed": 20261033
+    },
+    {
+      "id": "strong_normal",
+      "description": "Normal meter effect, rho=.8; same condition marginals and fixed ensembles as weak_normal.",
+      "rho": 0.8,
+      "meter_effect": {"weights": [1.0], "means": [0.0], "sds": [1.0]},
+      "forecast_a": {"offset": 0.1, "sd_factor": 1.0},
+      "forecast_b": {"offset": 0.35, "sd_factor": 0.85},
+      "ensemble_seed": 20261031,
+      "cohort_seed": 20261032,
+      "bootstrap_seed": 20261033
+    },
+    {
+      "id": "skewed_mixture",
+      "description": "Centered unit-variance two-normal-mixture meter effect; rho=.6; non-Gaussian marginal shape.",
+      "rho": 0.6,
+      "meter_effect": {"weights": [0.8, 0.2], "means": [-0.4472135954999579, 1.7888543819998317], "sds": [0.4472135954999579, 0.4472135954999579]},
+      "forecast_a": {"offset": 0.1, "sd_factor": 1.0},
+      "forecast_b": {"offset": 0.35, "sd_factor": 0.85},
+      "ensemble_seed": 20261034,
+      "cohort_seed": 20261035,
+      "bootstrap_seed": 20261036
+    },
+    {
+      "id": "small_difference",
+      "description": "Strong normal clustering and nearby predictive distributions; shared normal ensemble members preserve the small paired difference.",
+      "rho": 0.8,
+      "meter_effect": {"weights": [1.0], "means": [0.0], "sds": [1.0]},
+      "forecast_a": {"offset": 0.1, "sd_factor": 1.0},
+      "forecast_b": {"offset": 0.11, "sd_factor": 1.01},
+      "ensemble_seed": 20261037,
+      "cohort_seed": 20261038,
+      "bootstrap_seed": 20261039
+    }
+  ],
+  "generation_omission": {
+    "id": "refreshed_ensemble_omission",
+    "description": "Separate Gaussian DGP demonstration: M8 ensembles refreshed each cohort, meter-only intervals compared with both conditional finite-ensemble and underlying generator-law targets. Conditional-target coverage is averaged over regenerated ensembles; it does not establish coverage for each individual ensemble.",
+    "ensemble_size": 8,
+    "rho": 0.05,
+    "meter_effect": {"weights": [1.0], "means": [0.0], "sds": [1.0]},
+    "forecast_a": {"offset": 0.0, "sd_factor": 1.0},
+    "forecast_b": {"offset": 0.0, "sd_factor": 0.8},
+    "ensemble_seed": 20261040,
+    "cohort_seed": 20261041,
+    "bootstrap_seed": 20261042
+  },
+  "identical_function_check": "An A-minus-A zero column enters the same core bootstrap; expected degenerate status and no interval are reported separately, with coverage undefined.",
+  "reporting": "All scenarios/cohorts retained. Report bias and its Monte Carlo SE; interval availability; coverage among available intervals with Wilson interval and MCSE; joint availability-and-coverage rate over all cohorts; widths; failure statuses. No nominal-coverage pass/fail threshold.",
+  "scope": "Synthetic independent-meter verification only; finite fixed-ensemble targets. Does not establish coverage on reused/postselection Fluvius validation, under future weather, or for M1024 underlying generator-law inference.",
+  "execution_sources": {
+    "scripts/verify_meter_intervals.py": "cace5805065220762c5e388b389192b25c6a8f7a492e2e5d706949557786758d",
+    "src/fluvius_cgan/meter_uncertainty.py": "6f0b44fc7203e83e2615848487b0c4ceba3fe4cbe079369dbd4fc77355f0d6a8",
+    "src/fluvius_cgan/proper_scores.py": "e1ed06286926b1dc13f647f28e18cd09c673c9c223b7aa92041aae207691d57b"
+  }
+}

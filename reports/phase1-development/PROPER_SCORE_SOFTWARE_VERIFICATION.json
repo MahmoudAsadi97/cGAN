@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-10-21T03:09:43.775750+00:00",
+  "base_commit": "bb7362a2c19eece0a3a501607f9b94378c76670b",
+  "checks": [
+    {
+      "command": "OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m pytest -q --ignore=tests/test_proper_score_comparison.py",
+      "passed": 788,
+      "skipped": 2,
+      "seconds": 53.13,
+      "timing": "Before final evaluator failure/provenance guards and verifier partial-output inventory refinement. Comparison runner not yet implemented.",
+      "skips": "CUDA unavailable for two hardware-specific tests"
+    },
+    {
+      "command": "OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m pytest -q -W error tests/test_proper_score_evaluation.py tests/test_meter_interval_verification.py",
+      "passed": 52,
+      "skipped": 0,
+      "seconds": 27.18,
+      "timing": "Final reviewed evaluator and verifier revisions; warnings treated as errors."
+    }
+  ],
+  "source_hashes": {
+    "scripts/evaluate_proper_scores.py": "e28fe864a6664b52de833f1c0b4f34dcd2459191cda90aed3910e1bec0e216dd",
+    "scripts/verify_meter_intervals.py": "cace5805065220762c5e388b389192b25c6a8f7a492e2e5d706949557786758d",
+    "src/fluvius_cgan/proper_scores.py": "e1ed06286926b1dc13f647f28e18cd09c673c9c223b7aa92041aae207691d57b",
+    "src/fluvius_cgan/meter_uncertainty.py": "6f0b44fc7203e83e2615848487b0c4ceba3fe4cbe079369dbd4fc77355f0d6a8",
+    "tests/test_proper_score_evaluation.py": "0d7ca3e22a163ada4c6499f026ef826c920037073433672707e6fced3f9a574b",
+    "tests/test_meter_interval_verification.py": "8b0c1a9c0f48ea7ba55f254104cee0b5bb16acccd788ef507d321b3fe3cf3cf2"
+  },
+  "review": "Independent mathematical and code reviews; checkpoint-change, partial-worker-receipt and inventory-failure findings resolved with regression coverage.",
+  "scope": "Software checks on synthetic fixtures. No real-data score or synthetic coverage result is implied by these test counts."
+}

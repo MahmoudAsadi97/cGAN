@@ -1,0 +1,21 @@
+{
+  "verified_at_utc": "2026-10-21T00:53:02.317830+00:00",
+  "git_head": "fd2d2effc984c81cd938568bc90969ed3e2447bf",
+  "files": {
+    "src/fluvius_cgan/flow.py": "ab8b18c2f7d09da5dcccbf75d2f3c5bccc019f47b1712b85660b35e47c2c3669",
+    ".cache/phase1-development/correlated_flow/flow.py": "d008806c9a1b66eb3a5bf80a87a12d550aea12a9ee71671f3814fdfaaf56aa26",
+    ".cache/phase1-development/correlated_flow/test_correlated_flow.py": "970244c9e21fef7bcec4eabfff009fc16005cc58d0db81c0b9a107dced3ca56d"
+  },
+  "targeted_tests": {
+    "passed": 5,
+    "warnings_as_errors": true
+  },
+  "full_suite": {
+    "passed": 294,
+    "skipped": 1,
+    "skip_reason": "CUDA hardware unavailable"
+  },
+  "independent_review": "No blockers; covariance construction, source transformation, train-only fit, legacy behavior and source-only baseline verified. Five targeted tests passed independently.",
+  "real_data_training_performed": false,
+  "production_modified": false
+}

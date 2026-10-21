@@ -1,0 +1,20 @@
+{
+  "checked_at_utc": "2026-10-21T00:54:41.627378+00:00",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "/workspace/cGAN/.cache/phase1-development/energy_probe/test_development_energy.py"
+  ],
+  "exit_code": 0,
+  "stdout": "...................s                                                     [100%]\n=========================== short test summary info ============================\nSKIPPED [1] .cache/phase1-development/energy_probe/test_development_energy.py:269: CUDA hardware unavailable\n19 passed, 1 skipped in 3.26s\n",
+  "stderr": "",
+  "source_sha256": {
+    "src/fluvius_cgan/development.py": "421fc51ea39d5a829b0aa9893997acffe12d9c2452b26d7f513fdb8f9e10b27a",
+    ".cache/phase1-development/energy_probe/development.py": "74889eef575e758ff0681604a010638908a35bb808b163f633cc73aa90b059d4",
+    ".cache/phase1-development/energy_probe/test_development_energy.py": "cbbe3f35bc49a52a164ce4b51eb2abcb7c2be212fdf31a7c5868a87b9fb0a385",
+    ".cache/phase1-development/energy_probe/benchmark_energy.py": "58a8ec49009863e8b319d75adc0a760eaaafcd638741896d2b4a8b7bfc507ee5"
+  },
+  "review": "Independent read-only mathematical review: no blockers; same-input pointer assertion strengthened following review."
+}

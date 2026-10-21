@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development; common 30000-step dropout study",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "jobs": {
+    "standard_b0_d0_s101": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.0
+    },
+    "standard_b0_d0_s202": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.0
+    },
+    "standard_b0_d2_s101": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.2
+    },
+    "standard_b0_d2_s202": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.2
+    }
+  },
+  "prespecified_scope": "Continue all four dropout 0/0.2 trajectories at seeds101/202 from6000 to30000 total updates. Compare with beta1=0, dropout0.4 completed momentum_long controls at the same total budget. No additional training seeds are created by continuation.",
+  "initial_interpretation": "Two-seed convergence development; assess best and last trajectories, physical tails, ramps and diversity. No independent confirmation or final publication claim.",
+  "decision_basis": "At6000 updates reducing dropout has no consistent effect across seeds. Retain both settings at a common longer budget before rejecting the regularization hypothesis; original dropout0.4 already completed30000.",
+  "resume_from": {
+    "standard_b0_d0_s101": "/workspace/cGAN/runs/phase1-development/dropout_screen/standard_b0_d0_s101/last.pt",
+    "standard_b0_d0_s202": "/workspace/cGAN/runs/phase1-development/dropout_screen/standard_b0_d0_s202/last.pt",
+    "standard_b0_d2_s101": "/workspace/cGAN/runs/phase1-development/dropout_screen/standard_b0_d2_s101/last.pt",
+    "standard_b0_d2_s202": "/workspace/cGAN/runs/phase1-development/dropout_screen/standard_b0_d2_s202/last.pt"
+  },
+  "resume_checkpoint_sha256": {
+    "standard_b0_d0_s101": "dfedf64b02b2498b4a3a495377f1e0490999649092cf130e72ac1a4ae42ccc53",
+    "standard_b0_d0_s202": "fcade7fd3ada04a335a0b27ce30e3f8c87f80dbd7977abd62d2963976b39a8d9",
+    "standard_b0_d2_s101": "7115ebbe4d8bb13228873f71662cb88bf1458ab596d148d27ad213f4ad55fcf9",
+    "standard_b0_d2_s202": "32ac9e7239ffae614f6b2b26d602536edd51f026aa852dc73660a27dc3089ea2"
+  }
+}

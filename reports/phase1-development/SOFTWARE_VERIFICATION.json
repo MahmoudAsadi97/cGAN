@@ -1,9 +1,9 @@
 {
-  "command": ".venv/bin/python -m pytest -W error",
-  "passed": 287,
-  "skipped": 1,
-  "skip_reason": "CUDA hardware unavailable; actual GPU execution unverified",
-  "elapsed_seconds": 18.22,
+  "command": ".venv/bin/python -m pytest -q -W error --ignore=tests/test_development_candidates.py",
+  "passed": 311,
+  "skipped": 2,
+  "skip_reason": "CUDA hardware unavailable; actual GPU training and auxiliary-loss execution unverified",
+  "elapsed_seconds": 20.02,
   "runtime": {
     "python": "3.12.14",
     "torch": "2.8.0+cpu",
@@ -18,10 +18,10 @@
     "src/fluvius_cgan/cli.py": "6fd7ab2821ecf33202315d460e1dde47f755c04eb1270cf0fdfa7760709f941a",
     "src/fluvius_cgan/curation.py": "b250d1471f688daedd7ca1ea8652811baac89514b1cf22d96b9388d21892db27",
     "src/fluvius_cgan/data.py": "6f91986cf3a2772b52173e527d908fabffd50dd47f18e8b23c182b92183582dd",
-    "src/fluvius_cgan/development.py": "421fc51ea39d5a829b0aa9893997acffe12d9c2452b26d7f513fdb8f9e10b27a",
+    "src/fluvius_cgan/development.py": "74889eef575e758ff0681604a010638908a35bb808b163f633cc73aa90b059d4",
     "src/fluvius_cgan/development_data.py": "191b4d0afd9a56a542ee509dbd9b563db93b1f9662f31f95767dd6ea34e84aa9",
     "src/fluvius_cgan/evaluation.py": "818c2e55df829441de2169254860037d8bc9a9fe2fd1d245e2f404a11290a0ca",
-    "src/fluvius_cgan/flow.py": "ab8b18c2f7d09da5dcccbf75d2f3c5bccc019f47b1712b85660b35e47c2c3669",
+    "src/fluvius_cgan/flow.py": "7f1ddfabc8e000169a15ce2aeb14740cd44c62a0f309d77e54221d4ef7e863ca",
     "src/fluvius_cgan/inference.py": "e9538154aefba7ac9cb98adaf8a853a7b13076ddf86691b85045e0df5d54bd80",
     "src/fluvius_cgan/models.py": "057e9b1f9573855b1f9727b141d4d8e8f004daaf457adaa57a7fbf2d0d5e393a",
     "src/fluvius_cgan/prepared.py": "7a49fa7801c23624b112a2029c4e879796325f9ff85d79ed9c9c444ce34d57ea",
@@ -29,14 +29,16 @@
     "src/fluvius_cgan/study.py": "9d5cd0130e755086082417851c36c97fe78b74611371b7d5dd2b7c0c516ca6e0",
     "src/fluvius_cgan/training.py": "e9884410621028309b9af357d52b7a200718fd5bd0a1307db9c0689e6cef400b",
     "src/fluvius_cgan/uncertainty.py": "e7acadd76b140d451ff7c29257da8b0aa9f0c76f1ef9f1d6242ec03dc2845291",
+    "tests/test_correlated_flow.py": "04ad2e588fda5b3d6a9d095f367efa75aa3908f8de8bbd0ba54514ab807766a3",
     "tests/test_development.py": "36e41e3c2c25975b2d2a7079e09a5e543bc06b3a1382508562ac9a40f4819ea4",
     "tests/test_development_baselines.py": "f29d7dc11da0b19edbeb502d28cdaea10312058db9f2ec027d89bca41823b107",
     "tests/test_development_data.py": "692d10fc54d004e3b71324d9324e472d3b2d097a75f38b909cacd744b3c17c57",
     "tests/test_development_dropout.py": "cf5eae7fa21c71024c662b8ab3377951e6fc20a6cc45323573e57379f6795c3f",
+    "tests/test_development_energy.py": "737266709c1a9f9e23f37810ea7df20e56c2ccf0c083036aca2f739b1c576d46",
     "tests/test_development_resume.py": "1cc91d896df0d1b052bb19b22bae2f9643ffde393d8a0bb1ae97e82e89990f2f",
     "tests/test_development_runner.py": "ae277631cb739838947c3bb438ecfdfa7a919bbece17e94b54b983425c3833ec",
     "tests/test_development_summary.py": "9a706f7194b911cfa9538eb11a64fe644288f9c35dca3a907a8aea96eb1fba18",
     "tests/test_flow.py": "0428d867e6e43256e3c71cbc8a17dd8470d0cdf3a4bb850580ce71456f3f6b18"
   },
-  "interpretation": "Software verification of the recorded source; does not establish generative fidelity or publication readiness."
+  "interpretation": "Software verification of recorded sources; new candidate evaluator remains outside this source freeze. Tests do not establish generative fidelity or publication readiness."
 }

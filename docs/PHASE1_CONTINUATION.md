@@ -109,6 +109,45 @@ The topology and adversarial objective remain fixed. The short screen must be
 followed by a common longer budget if promising; it does not replace the
 five-seed validation requirement or establish publication readiness.
 
+The [completed flow/dropout screen](../reports/phase1-development/flow_dropout_screen/README.md)
+shows why temporal diagnostics matter: basic flow reaches profile SW1 near
+0.0057 but ramp W1 near 0.19 kW, compared with about 0.046 for day resampling.
+Doubling flow integration resolution changes profiles by only about 0.002 kWh
+RMS. Reduced dropout has no consistent short-budget effect across the two seeds.
+Three further comparisons are declared separately:
+
+- [Longer dropout study](../reports/phase1-development/DROPOUT_LONG_PLAN.json):
+  continue both reduced-dropout settings at both seeds to 30,000 total updates,
+  matching the existing dropout-0.4 controls. These are continuations, not new seeds.
+- [Temporal source ablation](../reports/phase1-development/CORRELATED_FLOW_PLAN.json):
+  replace independent source noise with a common TRAIN-fitted Pearson correlation,
+  retaining zero means and unit marginal variances. Fixed 0.01 identity shrinkage
+  gives a positive-definite source. Network, optimizer, base random draws, budget
+  and solver stay fixed. Include the source alone to distinguish prior quality
+  from learned transport. This is TSFlow-inspired source design, not an exact
+  TSFlow reproduction or a fitted Gaussian-process kernel.
+- [cGAN auxiliary-loss study](../reports/phase1-development/ENERGY_SCREEN_PLAN.json):
+  add one declared weight, lambda=1, for conditional Euclidean energy distance
+  on the same generator batch, in globally standardized coordinates. Average
+  eligible conditions equally, exclude within-sample diagonals, and retain finite
+  negative U-statistic estimates. This is an adapted training objective with the
+  reference network topology, not the original method or the Energy Matching
+  paper. The default zero weight preserves the existing training trajectory.
+
+The auxiliary loss measures distribution discrepancy; its name does not refer
+to electrical energy. Its U-statistic form is unbiased for independent conditional
+samples, but minibatches of repeated meters do not supply independent household
+observations. It is an optimization term, not a calibrated significance test.
+The recorded synthetic CPU benchmark estimates roughly twice the cost per update
+when enabled; real training records retain the actual elapsed time.
+
+Fresh generation diagnostics use seeds 20261023/20261024, without checkpoint
+reselection, on the same inner-validation rows. They add signed export behavior,
+quantile errors, covariance and float32-quantized full-row copying to the physical
+metrics. Fresh random draws assess sampling sensitivity; they do not create new
+validation meters. The evaluator verifies checkpoint, source-prior and dataset
+provenance and preserves failed attempts.
+
 ## Scientific acceptance and independent validation
 
 A useful foundation needs competitive distribution fidelity against strong

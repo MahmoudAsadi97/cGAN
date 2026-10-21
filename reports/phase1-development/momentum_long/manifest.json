@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "role": "post-test development",
+  "status": "completed",
+  "created_at_utc": "2026-10-21T00:44:57.946843+00:00",
+  "declared_run_directories": [
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b9_s101",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b9_s202",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b5_s101",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b5_s202",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s101",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s202"
+  ],
+  "baseline_directory": "/workspace/cGAN/artifacts/phase1-development/baselines_screen",
+  "source_manifest_hashes": {
+    "/workspace/cGAN/artifacts/phase1-development/baselines_screen/manifest.json": "f7d944690594a39f1e8dd62b10b811f0bbce7c46586d34f5c86cbc5369212b58",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b9_s101/manifest.json": "7c34029fc4be94738145dbeb37bef93dd64d7781811c38805b6f39c6890f93c0",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b9_s202/manifest.json": "c203de14262be2bab6c74bdf686ed179e5a52b44af13fd492651801879f57654",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b5_s101/manifest.json": "371d482a9c7f3f1b3cff17a38ec4956e93c0c839c3fa7c29264169ab2db778fd",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b5_s202/manifest.json": "0d277b47976783e0b96abf5a536c239051cbdbba0b88893df9695d48f99e4a22",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s101/manifest.json": "001d748ec67e82fe65ed30daf9bf185f58022ef9fbe5440793a0cd3c88fa6b94",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s202/manifest.json": "14c0250d8cac44e6e76221bb8ff93c6be526e5a41529d2b72e7cb3315dfcd1d5"
+  },
+  "script_sha256": "628a3b80f584aa52ae8b0a130c217d1b86cd3d8edd96552740cf13f181928c48",
+  "artifact_hashes": {
+    "checkpoints.csv": "d3ae160fd6032d607d34e0cfaafd7055bc5681c0f7112a36407378498aa53a69",
+    "conditions.csv": "b01c5afaa45dde22d479ba7362c5517c3b0cbccb28ae7a47ff6cfd9026462267",
+    "learning_curves.csv": "164ee8ea3dc29414375132b764efa9c2f049d437e19a48a28f8a9fe8a80c9bdd",
+    "learning_curves.png": "f566c83654ca5e8e3116c3ea0bf1139230e284efea44daba043c115e729b1fba",
+    "learning_curves_detail.png": "e6c8b653415743ad558658246ce3f705645d0d0e048cdffecadd4a77d53da890",
+    "summary.json": "6d46b9ad9acbc24c6cd2fbaba3e44731f056680c786d0fc98730b882bf9020c3"
+  }
+}

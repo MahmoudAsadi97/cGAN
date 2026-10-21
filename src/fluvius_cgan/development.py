@@ -29,7 +29,7 @@ from .training import _json, _read_data, _save, _sha256
 DEFAULTS = {'steps': 6000, 'batch_size': 512, 'seed': 101, 'num_threads': 1,
             'normalization': 'minmax', 'validation_every': 1000,
             'validation_per_condition': 256, 'device': 'cpu', 'beta1': .9,
-            'discriminator_dropout': .4}
+            'discriminator_dropout': .4, 'energy_weight': 0.}
 KINDS = ('minmax', 'standard', 'hourly_standard')
 SCHEMA = 'phase1-development-1'
 
@@ -89,6 +89,47 @@ def physical_metrics(real, fake, labels, training_range):
     return result
 
 
+def _conditional_energy(real, fake, labels):
+    """Equal-condition Euclidean energy-distance U-statistic for training.
+
+    Real/fake rows share one label vector. Conditions with n < 2 contribute
+    nothing. For each eligible condition, use 2*RF/n² - (RR+FF)/(n*(n-1)),
+    excluding RR/FF diagonals but including every RF pair. This is unbiased
+    conditional on counts when real/fake profiles are independent draws from
+    their condition distributions. Minibatches of dependent meter profiles do
+    not provide that independence guarantee or any inferential calibration.
+
+    Finite estimates can be negative and are retained. This statistical energy
+    distance is unrelated to physical electricity energy or Energy Matching
+    potentials. The real argument is detached; all-singleton batches yield a
+    differentiable zero. No random draws or data-dependent clipping are used.
+    """
+    if (real.ndim != 2 or fake.shape != real.shape or not len(real)
+            or not real.shape[1] or labels.shape != (len(real),)
+            or real.dtype != fake.dtype or not fake.is_floating_point()
+            or labels.dtype != torch.int64
+            or real.device != fake.device or labels.device != fake.device):
+        raise ValueError('Expected aligned floating [N,D] real/fake and int64 [N] labels')
+    real = real.detach()
+    _, inverse, group_counts = torch.unique(labels, return_inverse=True, return_counts=True)
+    counts = group_counts[inverse].to(fake.dtype)
+    eligible = counts >= 2
+    groups = (group_counts >= 2).sum().clamp_min(1).to(fake.dtype)
+    same = (labels[:, None] == labels[None, :]) & eligible[:, None]
+    cross_weight = same.to(fake.dtype) / (groups * counts.square())[:, None]
+    within = same & ~torch.eye(len(real), device=fake.device, dtype=torch.bool)
+    within_weight = within.to(fake.dtype) / (groups * counts * (counts - 1).clamp_min(1))[:, None]
+    # Direct subtraction avoids the squared-norm cancellation of the GEMM path
+    # for nearby profiles. Strict CUDA deterministic mode may reject its backward
+    # kernel; that explicit error is propagated, without changing devices/methods.
+    mode = 'donot_use_mm_for_euclid_dist'
+    cross = torch.cdist(real, fake, p=2, compute_mode=mode)
+    real_pairs = torch.cdist(real, real, p=2, compute_mode=mode)
+    fake_pairs = torch.cdist(fake, fake, p=2, compute_mode=mode)
+    return (2 * (cross * cross_weight).sum()
+            - (real_pairs * within_weight).sum() - (fake_pairs * within_weight).sum())
+
+
 def _samples(model, representation, labels, seed, batch_size=2048):
     noise = np.random.default_rng(seed)
     outputs = []
@@ -140,6 +181,9 @@ def _config(values):
     if (type(c['discriminator_dropout']) not in (int, float)
             or not 0 <= c['discriminator_dropout'] < 1):
         raise ValueError('discriminator_dropout must be a number in [0,1)')
+    if (type(c['energy_weight']) not in (int, float)
+            or not np.isfinite(c['energy_weight']) or c['energy_weight'] < 0):
+        raise ValueError('energy_weight must be a finite nonnegative number')
     return c
 
 
@@ -279,6 +323,11 @@ def train_probe(data_dir, run_dir, config, resume=None):
         'metric_normalization': {'fitted_on': 'train', 'minimum': scaler['minimum'], 'maximum': scaler['maximum']},
         'optimizer': {'generator_lr': 1e-4, 'discriminator_lr': 2e-4, 'betas': [c['beta1'], .999], 'g_d_updates': [1, 1]},
         'discriminator_dropout': c['discriminator_dropout'],
+        'generator_objective': {'adversarial': 'non-saturating BCE logits',
+            'energy_weight': c['energy_weight'],
+            'energy_distance': 'Euclidean conditional U-statistic in the TRAIN-fitted representation; equal eligible-condition weights',
+            'energy_minimum_condition_count': 2, 'energy_negative_estimates': 'retained',
+            'energy_uses_same_generator_batch': True},
         'sampling': 'shuffle all inner-training rows per pass; include final partial batch',
         'available_training_rows': len(training['x']), 'source_sha256': source, 'git_head': git,
         'runtime': runtime, 'resume': lineage,
@@ -323,7 +372,7 @@ def train_probe(data_dir, run_dir, config, resume=None):
                 if device.type == 'cuda':
                     torch.cuda.set_rng_state(resumed['cuda_rng_state'])
             loss_fn = nn.BCEWithLogitsLoss()
-            sums = np.zeros(2)
+            sums = np.zeros(4)
             window = 0
             for step in range(start_step, c['steps'] + 1):
                 if cursor >= len(x):
@@ -349,14 +398,21 @@ def train_probe(data_dir, run_dir, config, resume=None):
                 discriminator.requires_grad_(False)
                 try:
                     z = torch.randn(len(batch), 24, generator=noise).to(device)
-                    g_loss = loss_fn(discriminator(generator(z, conditions), conditions), ones)
+                    generated = generator(z, conditions)
+                    adversarial_loss = loss_fn(discriminator(generated, conditions), ones)
+                    if c['energy_weight']:
+                        energy_loss = _conditional_energy(real_batch, generated, conditions)
+                        g_loss = adversarial_loss + c['energy_weight'] * energy_loss
+                    else:
+                        energy_loss = adversarial_loss.new_zeros(())
+                        g_loss = adversarial_loss
                     if not torch.isfinite(g_loss):
                         raise FloatingPointError('Nonfinite generator loss')
                     g_loss.backward()
                     optimizer_g.step()
                 finally:
                     discriminator.requires_grad_(True)
-                sums += [g_loss.item(), d_loss.item()]
+                sums += [g_loss.item(), d_loss.item(), adversarial_loss.item(), energy_loss.item()]
                 window += 1
                 if step != 1 and step % c['validation_every'] and step != c['steps']:
                     continue
@@ -368,6 +424,8 @@ def train_probe(data_dir, run_dir, config, resume=None):
                     best, best_step = score, step
                 row = {'step': step, 'passes_started': epoch, 'row_presentations': presentations,
                     'loss_g': float(sums[0] / window), 'loss_d': float(sums[1] / window),
+                    'loss_adversarial': float(sums[2] / window),
+                    'loss_energy': float(sums[3] / window),
                     'last_batch_real_logit_mean': float(real_logits.detach().mean()),
                     'last_batch_fake_logit_mean': float(fake_logits.detach().mean()),
                     'validation': metrics['macro'], 'diagnostics': metrics['diagnostics'],

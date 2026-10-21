@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development; conditional energy-distance auxiliary objective",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "jobs": {
+    "standard_b0_energy1_s101": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.4,
+      "energy_weight": 1.0
+    },
+    "standard_b0_energy1_s202": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.4,
+      "energy_weight": 1.0
+    }
+  },
+  "prespecified_scope": "Change only generator objective by adding lambda1 conditional Euclidean energy-distance U-statistic in global TRAIN-standardized space, on the same real and generated G-update batch. Equal eligible-condition averaging, n>=2, within-sample diagonals excluded, negative estimates retained. Original G/D architecture, dropout0.4, beta1=0, learning rates and matching6000-update controls retained.",
+  "initial_interpretation": "Two-seed exploratory adaptation; not exact reference training or Energy Matching paper reproduction. Report component losses and measured overhead; U-statistic terminology provides no inference guarantee for dependent meter minibatches.",
+  "decision_basis": "The30k cGAN still loses diversity. A distribution-matching term tests a direct spread-sensitive objective without changing the reference network; lambda1 is a single declared screen, not selected from a hidden search."
+}

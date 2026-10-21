@@ -21,6 +21,11 @@ Recent work is assessed separately in the
 [2024–2026 hybrid-method review](docs/RECENT_HYBRID_METHODS.md) and
 [few-step transport review](docs/RECENT_TRANSPORT_METHODS.md), with source receipts
 and explicit limits on paper access and applicability.
+Current development records include the
+[30,000-update momentum study](reports/phase1-development/momentum_long/README.md)
+and [flow/dropout screen](reports/phase1-development/flow_dropout_screen/README.md).
+Basic flow improves profile fidelity over the screened GANs but still has
+inaccurate hourly ramps; it is not yet an adequate replacement.
 Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
 preserve `main`, `V1`, and `V2`. The user has authorized continued Phase 1

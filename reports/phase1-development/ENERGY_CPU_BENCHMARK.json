@@ -1,0 +1,44 @@
+{
+  "device": "cpu",
+  "threads": 1,
+  "torch": "2.8.0+cpu",
+  "python": "3.12.14",
+  "batch_size": 512,
+  "profile_dimensions": 24,
+  "condition_count": 64,
+  "profiles_per_condition": 8,
+  "input": "synthetic standard Gaussian; no dataset read",
+  "model_seed": 510,
+  "profile_noise_seed": 511,
+  "loss_only_seed": 512,
+  "beta1": 0.0,
+  "discriminator_dropout": 0.4,
+  "warmup_steps_per_trial": 10,
+  "measured_steps_per_trial": 50,
+  "trial_order": [
+    0.0,
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "full_step_seconds_by_weight": {
+    "0.0": [
+      0.01305512713995995,
+      0.014434791800013044,
+      0.01527989760012133
+    ],
+    "1.0": [
+      0.028387622860027478,
+      0.03095782186006545,
+      0.032486493879987394
+    ]
+  },
+  "baseline_median_step_seconds": 0.014434791800013044,
+  "auxiliary_median_step_seconds": 0.03095782186006545,
+  "auxiliary_overhead_seconds": 0.016523030060052405,
+  "auxiliary_to_baseline_ratio": 2.1446670162598034,
+  "loss_only_forward_backward_seconds": 0.015528205360024003,
+  "limitations": "Single shared CPU host microbenchmark; excludes data loading/checkpointing/validation; no CUDA verification"
+}

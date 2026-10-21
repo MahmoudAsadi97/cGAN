@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 import platform
@@ -31,7 +32,7 @@ from fluvius_cgan.training import _json, _read_data, _save, _sha256
 SCHEMA = 'phase1-flow-1'
 DEFAULTS = {'steps': 6000, 'batch_size': 512, 'seed': 101, 'num_threads': 1,
             'device': 'cpu', 'learning_rate': 1e-3, 'validation_every': 1000,
-            'validation_per_condition': 256, 'solver_steps': 32}
+            'validation_per_condition': 256, 'solver_steps': 32, 'source_prior': 'isotropic'}
 ROOT = Path(development.__file__).resolve().parents[2]
 
 
@@ -99,17 +100,109 @@ def _seed(seed):
         raise ValueError('Seed must be an unsigned 32-bit integer')
 
 
-def _samples(model, representation, labels, seed, solver_steps, batch_size=2048):
+def fit_source_prior(training, kind):
+    """Fit a single Gaussian correlation from TRAIN; means remain zero.
+
+    This is a finite-dimensional correlated-source ablation, not an exact
+    implementation of TSFlow or an inferred appliance decomposition.
+    """
+    x = np.asarray(training, dtype=np.float64)
+    if x.ndim != 2 or x.shape[1] != 24 or not len(x) or not np.isfinite(x).all():
+        raise ValueError('Source fitting requires finite nonempty [N,24] TRAIN profiles')
+    if kind not in ('isotropic', 'training_correlation'):
+        raise ValueError('Unknown source prior')
+    correlation, fit = np.eye(24), None
+    if kind == 'training_correlation':
+        mean = x.mean(axis=0)
+        centered = x - mean
+        covariance = centered.T @ centered / len(x)
+        sd = np.sqrt(np.maximum(np.diag(covariance), 0.))
+        active = np.flatnonzero(sd > 0)
+        if len(active):
+            block = covariance[np.ix_(active, active)] / np.outer(sd[active], sd[active])
+            correlation[np.ix_(active, active)] = (block + block.T) / 2
+        np.fill_diagonal(correlation, 1.)
+        correlation = .99 * correlation + .01 * np.eye(24)
+        np.fill_diagonal(correlation, 1.)
+        fit = {'fitted_on': 'inner train', 'rows': len(x), 'per_hour_mean': mean.tolist(),
+               'per_hour_population_sd': sd.tolist(), 'constant_columns': np.flatnonzero(sd == 0).tolist(),
+               'centering': 'per-hour mean', 'covariance_ddof': 0, 'shrinkage_to_identity': .01,
+               'condition_specific': False, 'minimum_eigenvalue': float(np.linalg.eigvalsh(correlation).min())}
+    factor = np.linalg.cholesky(correlation)
+    return {'kind': kind, 'source_mean': [0.] * 24, 'source_marginal_variance': [1.] * 24,
+            'correlation': correlation.tolist(), 'cholesky': factor.tolist(), 'fit': fit,
+            'application': 'base_standard_normal @ cholesky.T', 'application_dtype': 'float32',
+            'cholesky_float64_sha256': hashlib.sha256(factor.astype('<f8').tobytes()).hexdigest()}
+
+
+def _prior_factor(prior):
+    if prior is None:
+        return None
+    try:
+        kind = prior['kind']
+        correlation = np.asarray(prior['correlation'], dtype=np.float64)
+        factor = np.asarray(prior['cholesky'], dtype=np.float64)
+        valid = (kind in ('isotropic', 'training_correlation') and correlation.shape == (24, 24)
+            and factor.shape == (24, 24) and np.isfinite(correlation).all() and np.isfinite(factor).all()
+            and np.array_equal(prior['source_mean'], np.zeros(24))
+            and np.array_equal(prior['source_marginal_variance'], np.ones(24))
+            and np.array_equal(factor, np.tril(factor)) and np.all(np.diag(factor) > 0)
+            and np.allclose(correlation, correlation.T, rtol=0, atol=1e-12)
+            and np.allclose(np.diag(correlation), 1., rtol=0, atol=1e-12)
+            and np.allclose(factor @ factor.T, correlation, rtol=1e-10, atol=1e-12)
+            and prior['cholesky_float64_sha256'] == hashlib.sha256(factor.astype('<f8').tobytes()).hexdigest())
+        if kind == 'isotropic':
+            valid = valid and np.array_equal(correlation, np.eye(24)) and np.array_equal(factor, np.eye(24))
+        if not valid:
+            raise ValueError('Invalid source prior factor or correlation')
+    except (KeyError, TypeError) as error:
+        raise ValueError('Invalid source prior record') from error
+    return None if kind == 'isotropic' else torch.from_numpy(factor.astype(np.float32))
+
+
+def _source_noise(base, factor):
+    # Bypass even an identity multiplication to preserve the original trajectory.
+    return base if factor is None else base @ factor.T
+
+
+def _checkpoint_prior(state, config):
+    prior = state.get('source_prior')
+    if prior is None:
+        if config['source_prior'] != 'isotropic':
+            raise ValueError('Checkpoint is missing its fitted source prior')
+        return None  # Legacy isotropic checkpoint.
+    if prior.get('kind') != config['source_prior']:
+        raise ValueError('Checkpoint source prior differs from its configuration')
+    _prior_factor(prior)
+    return prior
+
+
+def source_samples(representation, labels, seed, source_prior, batch_size=2048):
+    """Sample the fitted source alone in physical units, without a learned map."""
+    labels = _labels(labels)
+    _seed(seed)
+    factor = _prior_factor(source_prior)
+    noise = np.random.default_rng(seed)
+    outputs = []
+    for start in range(0, len(labels), batch_size):
+        count = len(labels[start:start + batch_size])
+        base = torch.from_numpy(noise.standard_normal((count, 24), dtype=np.float32))
+        outputs.append(transform(_source_noise(base, factor).numpy(), representation, inverse=True))
+    return np.concatenate(outputs) if outputs else np.empty((0, 24), dtype=np.float64)
+
+
+def _samples(model, representation, labels, seed, solver_steps, batch_size=2048, source_prior=None):
     labels = _labels(labels)
     _seed(seed)
     noise = np.random.default_rng(seed)
+    factor = _prior_factor(source_prior)
     outputs = []
     was_training = model.training
     model.eval()
     try:
         for start in range(0, len(labels), batch_size):
             condition = torch.from_numpy(labels[start:start + batch_size])
-            z = torch.from_numpy(noise.standard_normal((len(condition), 24), dtype=np.float32))
+            z = _source_noise(torch.from_numpy(noise.standard_normal((len(condition), 24), dtype=np.float32)), factor)
             standardized = heun(model, z, condition, solver_steps).numpy()
             outputs.append(transform(standardized, representation, inverse=True))
     finally:
@@ -124,6 +217,7 @@ def generate(checkpoint, labels, seed, solver_steps=None):
     if state.get('schema_version') != SCHEMA:
         raise ValueError('Expected a Phase 1 flow checkpoint')
     config = _config(state['config'])
+    prior = _checkpoint_prior(state, config)
     steps = config['solver_steps'] if solver_steps is None else solver_steps
     if type(steps) is not int or steps < 1:
         raise ValueError('Solver steps must be a positive integer')
@@ -133,7 +227,7 @@ def generate(checkpoint, labels, seed, solver_steps=None):
         with torch.random.fork_rng(devices=[]):
             model = Velocity()
             model.load_state_dict(state['velocity_model'])
-            return _samples(model, state['representation'], labels, seed, steps)
+            return _samples(model, state['representation'], labels, seed, steps, source_prior=prior)
     finally:
         torch.set_num_threads(previous_threads)
 
@@ -150,6 +244,8 @@ def _config(values):
         raise ValueError('This comparator requires one CPU thread')
     if c['validation_per_condition'] > 1024:
         raise ValueError('Validation sample size exceeds 1024 per condition')
+    if c['source_prior'] not in ('isotropic', 'training_correlation'):
+        raise ValueError('Unknown source prior')
     if (type(c['learning_rate']) not in (int, float) or not np.isfinite(c['learning_rate'])
             or c['learning_rate'] <= 0):
         raise ValueError('learning_rate must be finite and positive')
@@ -201,6 +297,12 @@ def train_probe(data_dir, run_dir, config):
     if metadata.get('development', {}).get('source_partition_role') != 'original_train':
         raise ValueError('Requires inner development data sourced from original TRAIN')
     representation = fit_transform(training['x'], 'standard')
+    prior_started = time.perf_counter()
+    prior = fit_source_prior(training['x'], c['source_prior'])
+    if prior['fit'] is not None:
+        prior['fit']['training_npz_sha256'] = hashes['train.npz']
+    prior_factor = _prior_factor(prior)
+    prior_fit_seconds = time.perf_counter() - prior_started
     real, labels, selected = _selection(training, validation, c['validation_per_condition'])
     training_range = scaler['maximum'] - scaler['minimum']
     package = Path(development.__file__).parent
@@ -211,7 +313,8 @@ def train_probe(data_dir, run_dir, config):
     manifest = {'schema_version': SCHEMA, 'phase': 1, 'method': 'conditional_flow_matching',
         'role': 'post-test development comparator; whole-house profiles', 'status': 'running',
         'test_performance_access': False, 'config': c, 'data_hashes': hashes,
-        'representation': representation, 'selection': selected,
+        'representation': representation, 'source_prior': prior, 'source_prior_fit_seconds': prior_fit_seconds,
+        'selection': selected,
         'metric_normalization': {'fitted_on': 'train', 'minimum': scaler['minimum'], 'maximum': scaler['maximum']},
         'objective': {'path': 'independent Gaussian/data linear bridge', 'time_distribution': 'Uniform(0,1)',
             'target_velocity': 'data - noise', 'loss': 'MSE averaged over examples and 24 coordinates'},
@@ -256,7 +359,7 @@ def train_probe(data_dir, run_dir, config):
                 cursor += len(batch)
                 presentations += len(batch)
                 endpoint, conditions = x[batch], y[batch]
-                z = torch.randn(len(batch), 24, generator=noise)
+                z = _source_noise(torch.randn(len(batch), 24, generator=noise), prior_factor)
                 t = torch.rand(len(batch), 1, generator=times)
                 position, target = linear_bridge(endpoint, z, t)
                 optimizer.zero_grad(set_to_none=True)
@@ -271,7 +374,7 @@ def train_probe(data_dir, run_dir, config):
                 if step != 1 and step % c['validation_every'] and step != c['steps']:
                     continue
                 tick = time.perf_counter()
-                fake = _samples(model, representation, labels, selected['generation_seed'], c['solver_steps'])
+                fake = _samples(model, representation, labels, selected['generation_seed'], c['solver_steps'], source_prior=prior)
                 generation_seconds = time.perf_counter() - tick
                 tick = time.perf_counter()
                 metrics = physical_metrics(real, fake, labels, training_range)
@@ -287,7 +390,7 @@ def train_probe(data_dir, run_dir, config):
                     'elapsed_seconds': time.perf_counter() - started})
                 state = {'schema_version': SCHEMA, 'step': step, 'config': c,
                     'velocity_model': model.state_dict(), 'optimizer': optimizer.state_dict(),
-                    'representation': representation, 'data_hashes': hashes, 'selection': selected,
+                    'representation': representation, 'source_prior': prior, 'data_hashes': hashes, 'selection': selected,
                     'best_step': best_step, 'best_score': best, 'history': history,
                     'model_rng_state': torch.get_rng_state(), 'noise_rng_state': noise.get_state(),
                     'time_rng_state': times.get_state(), 'sampler_rng_state': sampler.get_state(),
@@ -304,12 +407,20 @@ def train_probe(data_dir, run_dir, config):
                 print(f"step={step} flow_seed={c['seed']} val_SW1={score:.6f} "
                       f"diversity={metrics['macro']['diversity_ratio']:.4f}", flush=True)
                 loss_sum, window = 0., 0
+        prior_fake = source_samples(representation, labels, selected['generation_seed'], prior)
+        _json(output / 'prior_baseline.json', {'schema_version': 1, 'method': 'source_only',
+            'source_prior': prior, 'generation_seed': selected['generation_seed'],
+            'conditions': selected['conditions'], 'selection_rows': len(labels),
+            'data_hashes': hashes, 'used_for_selection': False,
+            'metrics': physical_metrics(real, prior_fake, labels, training_range),
+            'generated_physical_float64_sha256': hashlib.sha256(prior_fake.astype('<f8').tobytes()).hexdigest(),
+            'interpretation': 'Common unconditional Gaussian source, inverse-scaled without a trained map; same validation rows and generation seed.'})
         sensitivity = _sensitivity(output / 'best.pt', real, labels, selected, training_range, c['solver_steps'])
         _json(output / 'solver_sensitivity.json', sensitivity)
         manifest.update(status='completed', finished_at_utc=datetime.now(timezone.utc).isoformat(),
             elapsed_seconds=time.perf_counter() - started, training_update_seconds=training_seconds,
             artifact_hashes={name: _sha256(output / name) for name in
-                ('best.pt', 'last.pt', 'history.json', 'best_validation.json', 'solver_sensitivity.json')})
+                ('best.pt', 'last.pt', 'history.json', 'best_validation.json', 'solver_sensitivity.json', 'prior_baseline.json')})
         _json(output / 'manifest.json', manifest)
         return manifest
     except Exception as error:

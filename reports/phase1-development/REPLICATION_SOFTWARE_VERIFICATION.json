@@ -1,0 +1,27 @@
+{
+  "verified_at_utc": "2026-10-21T02:56:42.023850+00:00",
+  "checks": [
+    {
+      "command": ".venv/bin/python -m pytest -q -W error --ignore=tests/test_proper_score_evaluation.py --ignore=tests/test_meter_interval_verification.py",
+      "passed": 738,
+      "skipped": 2,
+      "elapsed_seconds": 41.55,
+      "scope": "Full implemented suite before final fit-runner receipt hardening; pending full-cohort/coverage workflows excluded."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q -W error tests/test_mixture_replicates.py",
+      "passed": 17,
+      "elapsed_seconds": 2.68,
+      "scope": "Final fit-runner after inventory-error and immutable plan-byte hardening; all new regressions exercised."
+    }
+  ],
+  "skip_reason": "CUDA hardware unavailable",
+  "source_sha256": {
+    "scripts/fit_mixture_replicates.py": "e78d09c0478d0b826596c7f3efc1ae78bd9be3b6864483828a67b0ed4a6eda9f",
+    "src/fluvius_cgan/meter_uncertainty.py": "6f0b44fc7203e83e2615848487b0c4ceba3fe4cbe079369dbd4fc77355f0d6a8",
+    "src/fluvius_cgan/mixture_baselines.py": "3ac4dcdd99e3a5c4def9ca96c5aca2b77287e27bc2b96079f72964d7627719e7",
+    "tests/test_mixture_replicates.py": "514acbc6193a80f49213c4e7810775868825f59b288a5d989470a241ba083245",
+    "tests/test_meter_uncertainty.py": "68a2315fc9aaffa83f4f4161f4591e78b573499b3462ce920337db135e536319"
+  },
+  "interpretation": "TRAIN-only fitting and numerical aggregation software verification. Synthetic interval coverage and real-data proper scores are not yet evaluated."
+}

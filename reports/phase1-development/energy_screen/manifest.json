@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "role": "post-test development",
+  "status": "completed",
+  "created_at_utc": "2026-10-21T01:04:20.019684+00:00",
+  "declared_run_directories": [
+    "/workspace/cGAN/runs/phase1-development/energy_screen/standard_b0_energy1_s101",
+    "/workspace/cGAN/runs/phase1-development/energy_screen/standard_b0_energy1_s202",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s101",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s202"
+  ],
+  "baseline_directory": "/workspace/cGAN/artifacts/phase1-development/baselines_screen",
+  "source_manifest_hashes": {
+    "/workspace/cGAN/artifacts/phase1-development/baselines_screen/manifest.json": "f7d944690594a39f1e8dd62b10b811f0bbce7c46586d34f5c86cbc5369212b58",
+    "/workspace/cGAN/runs/phase1-development/energy_screen/standard_b0_energy1_s101/manifest.json": "c6bbb312e7c6c29c064ad3d5f5039733868fa9f0dbc60800ce8ed5dba6a4c615",
+    "/workspace/cGAN/runs/phase1-development/energy_screen/standard_b0_energy1_s202/manifest.json": "847919adaf0f6f5facaf6bd775d7b80be7884832c2a9bab7fec0e8748205f51c",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s101/manifest.json": "cfe6772c38fd04c36c8af1eb80634982edd1950aa56794cfb72b0ca9b4819351",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s202/manifest.json": "fb7104989facd5f5e8ca8c11c604c0eff0b7d3f0f5e3c68488ea1ce59b036a43"
+  },
+  "script_sha256": "628a3b80f584aa52ae8b0a130c217d1b86cd3d8edd96552740cf13f181928c48",
+  "artifact_hashes": {
+    "checkpoints.csv": "10d963514360dd749be41b166634c38a551787b8587de68269ab99d39c197b2e",
+    "conditions.csv": "2fa3d5cd83328346e8d1284b07303b74ac7b9aa6f43819709e1d8d2d29d9acd3",
+    "learning_curves.csv": "48b4288ac2c13fce47e3004f4b636f0cbb9fbb019244a2d5e37367fa80ffec68",
+    "learning_curves.png": "b8988c9a5387e6e0e1952ace784944f79f088e17eab0d7cfd8b80946a9cc1807",
+    "learning_curves_detail.png": "483437a0b9e71001292ae28d795135b818fa1f4f3ac747732e5dab7f589e77b6",
+    "summary.json": "252e6b9d49ea94c9f63156ca72eaf5e8887567bd6e2741a8fe264c0146d0aef3"
+  }
+}

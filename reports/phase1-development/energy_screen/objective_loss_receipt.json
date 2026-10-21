@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "role": "saved training loss components; post-test development",
+  "source_history_sha256": {
+    "/workspace/cGAN/runs/phase1-development/energy_screen/standard_b0_energy1_s101/history.json": "8bb957e05f1e2dba15f10f70bcd5f93b0c9d315855b6027f852b4a161d02632d",
+    "/workspace/cGAN/runs/phase1-development/energy_screen/standard_b0_energy1_s202/history.json": "6798cbad2b0d31166777f272400a838fa95b2d960d08fc7dec353004d672790b",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s101/history.json": "8221178658e1be4eb9121337f6978f6d5d269991863815f758cc50e78f85a27c",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s202/history.json": "4c02fa1f122b1fb9f1421969c5210305e7d6756bec3666e8c8dd275dc0664a83"
+  },
+  "artifact_sha256": {
+    "objective_losses.csv": "f7bd9e4a5945528e6cea080c4472736642f0bf8aece9bd0411a3e3e67c0cfa5f"
+  },
+  "interpretation": "Extracted saved window-average losses. Statistical energy distance is measured in the TRAIN-standardized representation, not kWh. Historical controls have no separately recorded components; their fields remain empty. No new training or evaluation.",
+  "checked_identity": "loss_g approximately equals loss_adversarial + energy_weight * loss_energy for recorded components; absolute tolerance 2e-6 accommodates float32 arithmetic."
+}

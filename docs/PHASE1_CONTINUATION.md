@@ -156,6 +156,18 @@ new runs start from initialization and their first 6,000-update histories are
 checked against the saved screen. Reusing an identical trajectory prefix does
 not create an additional independent training seed.
 
+The [completed auxiliary-loss screen](../reports/phase1-development/energy_screen/README.md)
+improves selected profile SW1 by about 26% and 32% against the matched
+6,000-update cGAN controls. Variance and energy/peak distributions improve,
+while ramp effects differ by seed. Both runs select step 4,000 and remain
+behind resampling and copula. This is a promising optimization diagnostic,
+not a validated replacement objective.
+
+The [fresh-draw comparison plan](../reports/phase1-development/FRESH_DIAGNOSTICS_PLAN.json)
+includes all declared 30,000-update source/dropout arms, their matching cGAN
+controls, and the two 6,000-update auxiliary-loss candidates. Those budgets
+remain explicit. No arm is omitted because its selected score is unfavorable.
+
 ## Scientific acceptance and independent validation
 
 A useful foundation needs competitive distribution fidelity against strong

@@ -33,8 +33,19 @@ which separates marginal modeling from learned temporal dependence.
 The [completed marginal-calibration experiment](reports/phase1-development/marginal_calibration/README.md)
 greatly reduces excess PV=0 negatives. Calibrated flow improves several joint
 metrics over the Gaussian copula, but its ramp errors remain about 2.6 times
-those of complete-day resampling. Direct conditional dependence modeling is
-the next comparator; publication readiness remains unestablished.
+those of complete-day resampling.
+The [stronger classical baseline study](reports/phase1-development/strong_baselines/README.md)
+adds empirical beta and Student-t copulas. The beta model closely reproduces
+training days, while the Student-t models trade improved ramps and peaks for
+errors elsewhere. The [mixture dependence study](reports/phase1-development/mixture_baselines/README.md)
+improves several Gaussian-copula metrics with eight components, while retaining
+tail and convergence concerns. The [reflected-flow experiment](reports/phase1-development/reflection_diagnostics/README.md)
+did not improve the overall comparison. All methods and failed outcomes remain
+in the record. The [fixed-recipe replication plan](docs/BASELINE_REPLICATION_PLAN.md)
+specifies five fresh mixture fits, five fresh cGAN training seeds, and a
+[full-cohort proper-score supplement](docs/PROPER_SCORE_EVIDENCE_PLAN.md).
+These are development comparisons on reused validation meters;
+publication readiness remains unestablished.
 Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
 preserve `main`, `V1`, and `V2`. The user has authorized continued Phase 1

@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "status": "design_only_not_executable",
+  "role": "postselection proper-score comparisons",
+  "groups": [
+    {
+      "id": "mixture_k8",
+      "role": "replicated_mixture",
+      "model_ids": [
+        "mixture_k8_s20261101",
+        "mixture_k8_s20261102",
+        "mixture_k8_s20261103",
+        "mixture_k8_s20261104",
+        "mixture_k8_s20261105"
+      ]
+    },
+    {
+      "id": "gaussian",
+      "role": "gaussian",
+      "model_ids": [
+        "gaussian"
+      ]
+    },
+    {
+      "id": "cgan_cal",
+      "role": "calibrated_cgan",
+      "model_ids": [
+        "cgan_cal_s301",
+        "cgan_cal_s401",
+        "cgan_cal_s501",
+        "cgan_cal_s601",
+        "cgan_cal_s701"
+      ]
+    },
+    {
+      "id": "cgan_raw",
+      "role": "raw_cgan",
+      "model_ids": [
+        "cgan_raw_s301",
+        "cgan_raw_s401",
+        "cgan_raw_s501",
+        "cgan_raw_s601",
+        "cgan_raw_s701"
+      ]
+    },
+    {
+      "id": "mean",
+      "role": "control",
+      "model_ids": [
+        "mean"
+      ]
+    },
+    {
+      "id": "resample",
+      "role": "control",
+      "model_ids": [
+        "resample"
+      ]
+    },
+    {
+      "id": "beta",
+      "role": "control",
+      "model_ids": [
+        "beta"
+      ]
+    },
+    {
+      "id": "student_t4",
+      "role": "control",
+      "model_ids": [
+        "student_t4"
+      ]
+    },
+    {
+      "id": "student_t8",
+      "role": "control",
+      "model_ids": [
+        "student_t8"
+      ]
+    },
+    {
+      "id": "student_t16",
+      "role": "control",
+      "model_ids": [
+        "student_t16"
+      ]
+    },
+    {
+      "id": "flow_raw",
+      "role": "contextual_flow",
+      "model_ids": [
+        "flow_raw_s101",
+        "flow_raw_s202"
+      ]
+    },
+    {
+      "id": "flow_cal",
+      "role": "contextual_flow",
+      "model_ids": [
+        "flow_cal_s101",
+        "flow_cal_s202"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "mixture_k8_vs_gaussian",
+      "left": "mixture_k8",
+      "right": "gaussian",
+      "role": "primary",
+      "priority": 1
+    },
+    {
+      "id": "cgan_cal_vs_mixture_k8",
+      "left": "cgan_cal",
+      "right": "mixture_k8",
+      "role": "primary",
+      "priority": 2
+    },
+    {
+      "id": "cgan_cal_vs_cgan_raw",
+      "left": "cgan_cal",
+      "right": "cgan_raw",
+      "role": "primary",
+      "priority": 3
+    },
+    {
+      "id": "mean_vs_gaussian",
+      "left": "mean",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "resample_vs_gaussian",
+      "left": "resample",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "beta_vs_gaussian",
+      "left": "beta",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "student_t4_vs_gaussian",
+      "left": "student_t4",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "student_t8_vs_gaussian",
+      "left": "student_t8",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "student_t16_vs_gaussian",
+      "left": "student_t16",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "cgan_raw_vs_mixture_k8",
+      "left": "cgan_raw",
+      "right": "mixture_k8",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "flow_raw_vs_mixture_k8",
+      "left": "flow_raw",
+      "right": "mixture_k8",
+      "role": "contextual",
+      "priority": null
+    },
+    {
+      "id": "flow_cal_vs_mixture_k8",
+      "left": "flow_cal",
+      "right": "mixture_k8",
+      "role": "contextual",
+      "priority": null
+    },
+    {
+      "id": "flow_cal_vs_flow_raw",
+      "left": "flow_cal",
+      "right": "flow_raw",
+      "role": "contextual",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_resample",
+      "left": "mixture_k8",
+      "right": "resample",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_beta",
+      "left": "mixture_k8",
+      "right": "beta",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_student_t4",
+      "left": "mixture_k8",
+      "right": "student_t4",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_student_t8",
+      "left": "mixture_k8",
+      "right": "student_t8",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_student_t16",
+      "left": "mixture_k8",
+      "right": "student_t16",
+      "role": "secondary",
+      "priority": null
+    }
+  ],
+  "metrics": [
+    "energy_score",
+    "variogram_score"
+  ],
+  "ensemble_sizes": [
+    512,
+    1024
+  ],
+  "generation_seeds": [
+    20261111,
+    20261112,
+    20261113
+  ],
+  "bootstrap": {
+    "seed": 20261131,
+    "replicates": 1999,
+    "level": 0.95
+  },
+  "averaging": "Equal average of per-profile scores over fixed fits and three independent ensembles. Never concatenate ensembles to score a different mixture law.",
+  "pairing": "Pair calibrated and raw cGAN by the five identical training seeds and checkpoint hashes. Flow comparisons remain contextual two-fit evidence.",
+  "variation": "Report across-fit SD of generation-averaged scores and within-fit three-ensemble SD separately; one-fit controls have null across-fit SD.",
+  "bootstrap_scope": "One common meter multiplicity matrix for every comparison, score, size, individual fit and generation replicate. All intervals are postselection descriptive conditional on fixed score functions and ignore selection and generation error; no actual 95% new-meter coverage claim.",
+  "failures": "Retain every declared result. Observed zero SE or any zero bootstrap SE produces the prescribed explicit status and null interval; do not discard replicates.",
+  "binding_rule": "Not executable until a later comparison plan binds this exact design SHA-256 and completed proper-score study manifests. Group model IDs, comparison order, metrics, sizes, seeds and bootstrap settings must remain identical.",
+  "plan_timing": "Written before real proper-score evaluation and comparison execution; it does not claim prospective model selection or untouched validation."
+}

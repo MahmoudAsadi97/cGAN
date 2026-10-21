@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development paired reflection diagnostics",
+  "training_plan": {
+    "path": "reports/phase1-development/REFLECTION_SCREEN_PLAN.json",
+    "sha256": "4e08729c028a48c31cb83199e42c8d270cda237289c3f30810ccc880b329d2c7"
+  },
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "runs": [
+    "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e3_s101",
+    "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e3_s202",
+    "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e4_s101",
+    "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e4_s202",
+    "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s101",
+    "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s202"
+  ],
+  "baselines": "/workspace/cGAN/artifacts/phase1-development/baselines_screen",
+  "generation_seeds": [
+    20261023,
+    20261024
+  ],
+  "output": "/workspace/cGAN/artifacts/phase1-development/reflection_diagnostics",
+  "interpretation": "Every declared selected checkpoint and the independent-marginal control. Reused development draws, not untouched confirmation."
+}

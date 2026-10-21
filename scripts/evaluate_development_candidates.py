@@ -22,8 +22,9 @@ import numpy as np
 import scipy
 import torch
 
-from fluvius_cgan import development, flow
+from fluvius_cgan import development, flow, reflection
 from fluvius_cgan.baselines import fit_baseline
+from fluvius_cgan.marginals import load_marginals
 from fluvius_cgan.training import _json, _read_data, _sha256
 
 
@@ -183,22 +184,69 @@ def _candidate(directory, index):
     elif schema == flow.SCHEMA and manifest.get('method') == 'conditional_flow_matching':
         _verify(directory, ('solver_sensitivity.json',))
         method, implementation = 'conditional_flow_matching', flow
+    elif schema == reflection.SCHEMA and manifest.get('method') == 'conditional_reflection_copula':
+        artifact = manifest.get('marginals', {}).get('artifact')
+        if not isinstance(artifact, str) or Path(artifact).name != artifact or artifact in ('', '.', '..'):
+            raise ValueError('Invalid reflection marginal artifact name')
+        _verify(directory, (artifact, 'best_probability_diagnostics.json',
+                            'independent_marginals.json', 'solver_sensitivity.json'))
+        method, implementation = 'conditional_reflection_copula', reflection
     else:
         raise ValueError(f'Unsupported candidate checkpoint schema: {directory}')
     path = directory / 'best.pt'
-    checkpoint = torch.load(path, weights_only=True, map_location='cpu')
+    if implementation is reflection:
+        checkpoint, _, fitted_marginals = reflection._load(path)
+    else:
+        checkpoint = torch.load(path, weights_only=True, map_location='cpu')
     current, previous = implementation._config(manifest['config']), implementation._config(checkpoint['config'])
     if (checkpoint.get('schema_version') != schema or checkpoint['step'] != manifest['best_step']
             or checkpoint['best_step'] != checkpoint['step']
             or checkpoint['best_score'] != manifest['best_validation_sw1']
             or checkpoint['data_hashes'] != manifest['data_hashes']
             or checkpoint['selection'] != manifest['selection']
-            or checkpoint['representation'] != manifest['representation']
+            or (implementation is not reflection and checkpoint['representation'] != manifest['representation'])
             or {k: v for k, v in current.items() if k != 'steps'} !=
                {k: v for k, v in previous.items() if k != 'steps'}):
         raise ValueError(f'Selected checkpoint and manifest disagree: {directory}')
     if manifest['completed_steps'] != current['steps'] or checkpoint['step'] > current['steps']:
         raise ValueError(f'Candidate did not complete its declared budget: {directory}')
+    if implementation is reflection:
+        marginal = checkpoint['marginals']
+        if (marginal != manifest.get('marginals')
+                or marginal['sha256'] != manifest['artifact_hashes'][marginal['artifact']]
+                or sum(group['training_profiles'] for group in fitted_marginals.summary()['per_condition'].values())
+                   != manifest['available_training_rows']):
+            raise ValueError('Reflection checkpoint marginal fit differs from manifest')
+        source_report = _read(directory / 'independent_marginals.json')
+        if (source_report.get('method') != 'independent_marginals'
+                or source_report.get('marginals') != marginal
+                or source_report.get('data_hashes') != manifest['data_hashes']
+                or source_report.get('generation_seed') != manifest['selection']['generation_seed']
+                or source_report.get('conditions') != manifest['selection']['conditions']
+                or source_report.get('selection_rows') != len(manifest['selection']['indices'])
+                or source_report.get('used_for_selection') is not False):
+            raise ValueError('Saved reflection independent-marginal report disagrees with fit or selection')
+        probability = _read(directory / 'best_probability_diagnostics.json')
+        if (probability['solver'].get('method') != 'reflected Euler'
+                or probability['solver'].get('steps') != current['solver_steps']
+                or probability['solver'].get('nfe') != current['solver_steps']
+                or probability['solver'].get('max_time') != current['max_time']
+                or probability['probabilities'].get('profiles') != len(manifest['selection']['indices'])
+                or sorted(map(int, probability['probabilities']['per_condition'])) != manifest['selection']['conditions']):
+            raise ValueError('Saved reflection probability diagnostics disagree with selection solver')
+        sensitivity = _read(directory / 'solver_sensitivity.json')
+        if (sensitivity.get('checkpoint_sha256') != _sha256(path)
+                or sensitivity.get('selected_checkpoint_step') != checkpoint['step']
+                or sensitivity.get('generation_seed') != manifest['selection']['generation_seed']
+                or sensitivity.get('common_initial_uniforms') is not True
+                or sensitivity.get('used_for_selection') is not False
+                or sensitivity['selection_solver'].get('steps') != current['solver_steps']
+                or sensitivity['selection_solver'].get('nfe') != current['solver_steps']
+                or sensitivity['sensitivity_solver'].get('steps') != 2 * current['solver_steps']
+                or sensitivity['sensitivity_solver'].get('nfe') != 2 * current['solver_steps']
+                or sensitivity['selection_solver'].get('metrics') != _read(directory / 'best_validation.json')
+                or sensitivity['selection_solver'].get('diagnostics') != probability):
+            raise ValueError('Saved reflection solver sensitivity disagrees with selected checkpoint')
     prior = None
     if implementation is flow:
         prior = checkpoint.get('source_prior')
@@ -237,6 +285,9 @@ def _candidate(directory, index):
     if implementation is flow:
         record.update(representation=checkpoint['representation'], source_prior=prior,
                       source_prior_sha256=_json_digest(prior))
+    elif implementation is reflection:
+        record.update(marginals=checkpoint['marginals'],
+                      marginal_artifact=str(directory / checkpoint['marginals']['artifact']))
     return record, manifest, implementation.generate
 
 
@@ -265,6 +316,29 @@ def _source_controls(candidates):
                 'interpretation': 'Common unconditional Gaussian source with the candidate physical inverse transform; no learned map or equipment conditioning. Equivalent sources across training seeds share one diagnostic, not independent replicates.'}
         controls[key]['originating_candidates'].append({field: candidate[field] for field in
             ('method_id', 'run_directory', 'manifest_sha256', 'checkpoint_sha256', 'source_prior_sha256')})
+    return list(controls.values())
+
+
+def _independent_controls(candidates):
+    """One decoder-only uniform control per identical frozen marginal artifact."""
+    controls = {}
+    for candidate, _, _ in candidates:
+        if candidate['method'] != 'conditional_reflection_copula':
+            continue
+        marginal = candidate['marginals']
+        distribution = {'marginal_artifact_sha256': marginal['sha256'],
+            'training_npz_sha256': marginal['training_npz_sha256'],
+            'algorithm': 'numpy default_rng(seed).random([N,24],dtype=float32); conditional empirical step inverse'}
+        key = _json_digest(distribution)
+        if key not in controls:
+            controls[key] = {'method_id': f'independent_{len(controls):03d}',
+                'method': 'independent_marginals', 'training_seed': None, 'fitted_on': 'inner train',
+                'marginals': marginal, 'marginal_artifact': candidate['marginal_artifact'],
+                'source_distribution': distribution, 'source_distribution_sha256': key,
+                'originating_candidates': [],
+                'interpretation': 'Independent uniforms through the same conditional empirical inverse; no learned dependence. Shared fitted marginals across training seeds create one control, not extra replicates.'}
+        controls[key]['originating_candidates'].append({field: candidate[field] for field in
+            ('method_id', 'run_directory', 'manifest_sha256', 'checkpoint_sha256')})
     return list(controls.values())
 
 
@@ -312,6 +386,7 @@ def evaluate(data, runs, output, seeds=(20261023, 20261024), baselines=None):
     if np.unique(labels).tolist() != selection['conditions']:
         raise ValueError('Saved selection condition coverage disagrees with data')
     source_controls = _source_controls(candidates)
+    independent_controls = _independent_controls(candidates)
     existing_baseline_draws = {}
     baseline_source = None
     if baselines is not None:
@@ -338,7 +413,7 @@ def evaluate(data, runs, output, seeds=(20261023, 20261024), baselines=None):
         'data_directory': str(data), 'data_hashes': hashes, 'selection': selection,
         'real_profile_bytes_sha256': _digest(real, '<f8'), 'label_bytes_sha256': _digest(labels, '<i8'),
         'generation_seeds': seeds, 'generation_seed_role': 'fresh sampling draws, not independent meters or training seeds',
-        'methods': [record for record, _, _ in candidates] + source_controls,
+        'methods': [record for record, _, _ in candidates] + source_controls + independent_controls,
         'existing_baseline_reports': baseline_source,
         'source_controls': 'One matched source-only control per declared prior kind, applied float32 factor and physical inverse affine transform; legacy missing priors mean isotropic. Use identical labels, order and fresh seeds.',
         'baseline_fit': 'Fit each mean/resample/copula once on the identical full inner TRAIN; generate the same fresh draws.',
@@ -369,6 +444,9 @@ def evaluate(data, runs, output, seeds=(20261023, 20261024), baselines=None):
                  for record, _, generate in candidates]
         tasks.extend((record, lambda seed, r=record: flow.source_samples(
             r['representation'], labels, seed, r['source_prior'])) for record in source_controls)
+        for record in independent_controls:
+            fitted = load_marginals(record['marginal_artifact'], record['marginals']['sha256'])
+            tasks.append((record, lambda seed, decoder=fitted: reflection.independent_marginals(decoder, labels, seed)))
         for kind in ('mean', 'resample', 'copula'):
             model = fit_baseline(kind, training['x'], training['y'])
             record = {'method_id': f'baseline_{kind}', 'method': kind, 'training_seed': None, 'fitted_on': 'inner train'}
@@ -420,8 +498,21 @@ def evaluate(data, runs, output, seeds=(20261023, 20261024), baselines=None):
         _json(output / 'manifest.json', manifest)
         return summary
     except Exception as error:
-        manifest.update(status='failed', error=f'{type(error).__name__}: {error}')
-        _json(output / 'manifest.json', manifest)
+        manifest.update(status='failed', error=f'{type(error).__name__}: {error}',
+                        finished_at_utc=datetime.now(timezone.utc).isoformat(), artifact_hashes={})
+        # Preserve both partial scientific artifacts and the original failure.
+        # A secondary read/write problem must not replace that exception.
+        try:
+            for path in sorted(output.iterdir()):
+                if path.is_file() and path.name != 'manifest.json':
+                    try:
+                        manifest['artifact_hashes'][path.name] = _sha256(path)
+                    except Exception as receipt_error:
+                        manifest.setdefault('artifact_hash_errors', {})[path.name] = (
+                            f'{type(receipt_error).__name__}: {receipt_error}')
+            _json(output / 'manifest.json', manifest)
+        except Exception as receipt_error:
+            error.add_note(f'Could not finish failure receipt: {type(receipt_error).__name__}: {receipt_error}')
         raise
     finally:
         torch.set_num_threads(previous_threads)

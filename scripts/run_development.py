@@ -16,13 +16,16 @@ def run(plan_path, output, workers=3):
         raise ValueError('workers must be between 1 and 4')
     plan = json.loads(Path(plan_path).read_text())
     method = plan.get('method', 'cgan')
-    if method not in ('cgan', 'flow'):
+    if method not in ('cgan', 'flow', 'reflection'):
         raise ValueError('Unknown development method')
     validate = _config
     module = 'fluvius_cgan.development'
     if method == 'flow':
         from fluvius_cgan.flow import _config as validate
         module = 'fluvius_cgan.flow'
+    elif method == 'reflection':
+        from fluvius_cgan.reflection import _config as validate
+        module = 'fluvius_cgan.reflection'
     data = Path(plan['data']).resolve()
     if set(plan['data_hashes']) != {'train.npz', 'val.npz', 'scaler.json', 'metadata.json'}:
         raise ValueError('Plan must bind the four development data files')
@@ -39,8 +42,8 @@ def run(plan_path, output, workers=3):
     resumes = plan.get('resume_from', {})
     if not isinstance(resumes, dict) or set(resumes) - set(jobs):
         raise ValueError('Resume entries must name declared jobs')
-    if method == 'flow' and resumes:
-        raise ValueError('Flow continuation is not supported')
+    if method in ('flow', 'reflection') and resumes:
+        raise ValueError(f'{method.capitalize()} continuation is not supported')
     resume_hashes = plan.get('resume_checkpoint_sha256', {})
     if set(resume_hashes) != set(resumes):
         raise ValueError('Plan must bind every continuation checkpoint hash')

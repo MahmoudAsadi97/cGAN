@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development conditional reflection copula screen",
+  "method": "reflection",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "jobs": {
+    "reflection_lr1e3_s101": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 64,
+      "condition_mode": "conditional",
+      "max_time": 1.5,
+      "gradient_clip_norm": 1.0
+    },
+    "reflection_lr1e3_s202": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 64,
+      "condition_mode": "conditional",
+      "max_time": 1.5,
+      "gradient_clip_norm": 1.0
+    },
+    "reflection_lr1e4_s101": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.0001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 64,
+      "condition_mode": "conditional",
+      "max_time": 1.5,
+      "gradient_clip_norm": 1.0
+    },
+    "reflection_lr1e4_s202": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.0001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 64,
+      "condition_mode": "conditional",
+      "max_time": 1.5,
+      "gradient_clip_norm": 1.0
+    }
+  },
+  "selection": "Earliest minimum saved normalized profile SW1; existing inner-VAL rows, seed20261022; no selection from solver sensitivity.",
+  "paired_diagnostic_generation_seeds": [
+    20261023,
+    20261024
+  ],
+  "source_review": "docs/SUPPORT_AWARE_GENERATORS.md",
+  "design": "docs/DEPENDENCE_COMPARISON_PLAN.md",
+  "basic_flow_controls": [
+    {
+      "directory": "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s101",
+      "manifest_sha256": "96dace98e02d3c3a360ebb3408e14981dff8ba8cdd8e6aa8fcb237e4eb495363",
+      "checkpoint_sha256": "6b1fdf7eae4b3bfb360fc1f96ecbb4d9c17a63514651cce937b3d7212be977a4"
+    },
+    {
+      "directory": "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s202",
+      "manifest_sha256": "0dc37d8a3ee4e02cfc6f815830b8e7fdc5afe0390546b992671274b5559d78b4",
+      "checkpoint_sha256": "25a0f311f085aa2e72c333df24399f7a8bbed662f06436b75044faa768e5697c"
+    }
+  ]
+}

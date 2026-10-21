@@ -1,0 +1,28 @@
+{
+  "scope": "Primary package source/code verification; paper and online SciPy endpoints blocked; no full paper read",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/cran/copula/master/man/empCopula.Rd",
+      "sha256": "0a24ce9d2b287b44594ab4fe468521e0e9fd19531328d46549b198d6d66e881a",
+      "cached_file": ".cache/phase1-development/strong_baselines_sources/empCopula.Rd",
+      "bytes": 12605,
+      "verified_at_utc": "2026-10-21T02:16:12.857012+00:00"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cran/copula/master/R/empCopula.R",
+      "sha256": "4bc2e27e84016c823a91469cd22728dceb7725c93189fd73e56eafa9c8de7d95",
+      "cached_file": ".cache/phase1-development/strong_baselines_sources/empCopula.R",
+      "bytes": 12998,
+      "verified_at_utc": "2026-10-21T02:16:13.156452+00:00"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cran/copula/master/R/tCopula.R",
+      "sha256": "6e63238813b58036b5404a1d2fc9ae45c5f6368a290690d55c9472de89f088fe",
+      "cached_file": ".cache/phase1-development/strong_baselines_sources/tCopula.R",
+      "bytes": 7294,
+      "verified_at_utc": "2026-10-21T02:16:13.458768+00:00"
+    }
+  ],
+  "paper": "Segers, Sibuya and Tsukahara (2017), The Empirical Beta Copula, J Multivar Anal 155,35-51, arxiv1607.04430",
+  "tie_extension": "Independent reproducible random tie breaking yields full rank permutations; original continuous construction assumes no ties."
+}

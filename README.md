@@ -5,17 +5,19 @@ values per day** from Fluvius 2024. The five comparison methods are the
 conditional GAN, a matched unconditional GAN, conditional mean, complete-day
 training resampling, and a conditional empirical Gaussian copula.
 
-**Status:** the frozen Phase 1 benchmark is complete. The reference cGAN
+**Status:** Phase 1 development continues. In the completed initial benchmark, the reference cGAN
 underperformed resampling and the Gaussian copula in all 64 conditions for
 each of five training seeds on the primary profile-distribution metric.
 Competitive fidelity, convergence and publication readiness are not established.
-Read the [results and scientific assessment](docs/PHASE1_RESULTS.md) and
-[complete review record](reports/phase1/README.md).
+Read the [initial results and scientific assessment](docs/PHASE1_RESULTS.md),
+[preserved benchmark record](reports/phase1/README.md), and
+[continued development protocol](docs/PHASE1_CONTINUATION.md).
 Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
-preserve `main`, `V1`, and `V2`. Architecture
-improvements, auxiliary losses, calibration, and federated learning require the
-user's separate approval after the Phase 1 review.
+preserve `main`, `V1`, and `V2`. The user has authorized continued Phase 1
+parameter and technique development. Federated learning and Phase 2 remain
+deferred. The table below describes the initial frozen benchmark, not the
+ongoing development experiments.
 
 | Method | Primary normalized profile SW1; lower is better |
 | --- | ---: |

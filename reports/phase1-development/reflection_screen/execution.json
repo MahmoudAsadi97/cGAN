@@ -1,0 +1,87 @@
+{
+  "status": "completed",
+  "started_at_utc": "2026-10-21T02:21:14.262260+00:00",
+  "workers": 3,
+  "method": "reflection",
+  "plan_sha256": "4e08729c028a48c31cb83199e42c8d270cda237289c3f30810ccc880b329d2c7",
+  "test_performance_access": false,
+  "jobs": [
+    {
+      "name": "reflection_lr1e3_s101",
+      "command": [
+        "/workspace/cGAN/.venv/bin/python",
+        "-m",
+        "fluvius_cgan.reflection",
+        "--data",
+        "/workspace/cGAN/.cache/phase1-development/data/inner24",
+        "--run",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e3_s101",
+        "--config",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/configs/reflection_lr1e3_s101.json"
+      ],
+      "started_at_utc": "2026-10-21T02:21:14.263884+00:00",
+      "stdout": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e3_s101.stdout.log",
+      "stderr": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e3_s101.stderr.log",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-21T02:22:11.113148+00:00"
+    },
+    {
+      "name": "reflection_lr1e3_s202",
+      "command": [
+        "/workspace/cGAN/.venv/bin/python",
+        "-m",
+        "fluvius_cgan.reflection",
+        "--data",
+        "/workspace/cGAN/.cache/phase1-development/data/inner24",
+        "--run",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e3_s202",
+        "--config",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/configs/reflection_lr1e3_s202.json"
+      ],
+      "started_at_utc": "2026-10-21T02:21:14.264120+00:00",
+      "stdout": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e3_s202.stdout.log",
+      "stderr": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e3_s202.stderr.log",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-21T02:22:11.870084+00:00"
+    },
+    {
+      "name": "reflection_lr1e4_s101",
+      "command": [
+        "/workspace/cGAN/.venv/bin/python",
+        "-m",
+        "fluvius_cgan.reflection",
+        "--data",
+        "/workspace/cGAN/.cache/phase1-development/data/inner24",
+        "--run",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e4_s101",
+        "--config",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/configs/reflection_lr1e4_s101.json"
+      ],
+      "started_at_utc": "2026-10-21T02:21:14.264914+00:00",
+      "stdout": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e4_s101.stdout.log",
+      "stderr": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e4_s101.stderr.log",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-21T02:22:10.964316+00:00"
+    },
+    {
+      "name": "reflection_lr1e4_s202",
+      "command": [
+        "/workspace/cGAN/.venv/bin/python",
+        "-m",
+        "fluvius_cgan.reflection",
+        "--data",
+        "/workspace/cGAN/.cache/phase1-development/data/inner24",
+        "--run",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/reflection_lr1e4_s202",
+        "--config",
+        "/workspace/cGAN/runs/phase1-development/reflection_screen/configs/reflection_lr1e4_s202.json"
+      ],
+      "started_at_utc": "2026-10-21T02:22:10.964824+00:00",
+      "stdout": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e4_s202.stdout.log",
+      "stderr": "/workspace/cGAN/runs/phase1-development/reflection_screen/logs/reflection_lr1e4_s202.stderr.log",
+      "returncode": 0,
+      "finished_at_utc": "2026-10-21T02:23:02.964120+00:00"
+    }
+  ],
+  "finished_at_utc": "2026-10-21T02:23:02.964959+00:00"
+}

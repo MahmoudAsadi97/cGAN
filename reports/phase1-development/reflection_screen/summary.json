@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "role": "Post-test development; extraction from saved reflection screen diagnostics",
+  "selection_generation_seed": 20261022,
+  "paired_sampling_generation_seeds": [
+    20261023,
+    20261024
+  ],
+  "selection_rows_already_used": true,
+  "solver_sensitivity_used_for_selection": false,
+  "methods": {
+    "reflection_lr1e3_s101": {
+      "method_id": "candidate_000",
+      "config": {
+        "steps": 6000,
+        "batch_size": 512,
+        "seed": 101,
+        "num_threads": 1,
+        "device": "cpu",
+        "learning_rate": 0.001,
+        "validation_every": 1000,
+        "validation_per_condition": 256,
+        "solver_steps": 64,
+        "max_time": 1.5,
+        "gradient_clip_norm": 1.0,
+        "condition_mode": "conditional"
+      },
+      "best_step": 4000,
+      "completed_steps": 6000,
+      "row_presentations": 3071016,
+      "architecture": {
+        "input": {
+          "profile": 24,
+          "time": 1,
+          "one_hot_conditions": 64
+        },
+        "hidden_widths": [
+          64,
+          128,
+          64
+        ],
+        "activation": "SiLU",
+        "output": 24,
+        "trainable_parameters": 23896,
+        "condition_mode": "conditional"
+      },
+      "solver": {
+        "method": "reflected Euler",
+        "steps": 64,
+        "nfe": 64,
+        "sensitivity_steps": 128,
+        "sensitivity_used_for_selection": false,
+        "initial_distribution": "independent Uniform(0,1) coordinates",
+        "batch_size": 2048
+      },
+      "training_git_head": "d96ff765b42230d6d16d1e164ce87361d1de20b6",
+      "checkpoint_sha256": "f619bf914c56cbdeb83476ca9cf5d0782af30df570369304d536dc37fd2267c1",
+      "selected_metrics": {
+        "slot_w1_kwh": 0.2240600835999877,
+        "daily_energy_w1_kwh": 2.834023236151907,
+        "peak_w1_kw": 0.8634290860203038,
+        "ramp_w1_kw": 0.17381076288438818,
+        "mean_profile_rmse_kwh": 0.1653262635865275,
+        "variance_mae_kwh2": 0.8471982413025796,
+        "diversity_ratio": 1.748395513801571,
+        "acf_lag1_w1": 0.09731840713876944,
+        "profile_sw1_kwh": 0.23464838437640567,
+        "acf_lag6_w1": 0.020977656926004357,
+        "normalized_profile_sw1": 0.006979635762064124
+      },
+      "refined_solver_metrics": {
+        "slot_w1_kwh": 0.2366899981943238,
+        "daily_energy_w1_kwh": 2.9673347675439032,
+        "peak_w1_kw": 0.9740813145644438,
+        "ramp_w1_kw": 0.19367927084357983,
+        "mean_profile_rmse_kwh": 0.17021307199410912,
+        "variance_mae_kwh2": 1.0220930152347774,
+        "diversity_ratio": 2.0428195903433606,
+        "acf_lag1_w1": 0.09990380772178467,
+        "profile_sw1_kwh": 0.255398558964091,
+        "acf_lag6_w1": 0.021589243469872454,
+        "normalized_profile_sw1": 0.00759685143566092
+      },
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.21685630875226752,
+        "mean_absolute_kwh": 0.022873068829514526,
+        "maximum_absolute_kwh": 11.722999572753906,
+        "probability_rmse": 0.001745413411455165
+      },
+      "last_loss_by_time_bin": [
+        {
+          "lower": 0.0,
+          "upper": 0.01,
+          "rows": 146448,
+          "mean_squared_error": 1.000962070394342
+        },
+        {
+          "lower": 0.01,
+          "upper": 0.1,
+          "rows": 113892,
+          "mean_squared_error": 0.9484310331563529
+        },
+        {
+          "lower": 0.1,
+          "upper": 0.5,
+          "rows": 128897,
+          "mean_squared_error": 0.8475556331458103
+        },
+        {
+          "lower": 0.5,
+          "upper": 1.0,
+          "rows": 73619,
+          "mean_squared_error": 0.9965955717634731
+        },
+        {
+          "lower": 1.0,
+          "upper": 1.5,
+          "rows": 48980,
+          "mean_squared_error": 1.0010773243935511
+        }
+      ],
+      "independent_marginals_selection_metrics": {
+        "slot_w1_kwh": 0.1585524331284113,
+        "daily_energy_w1_kwh": 5.491499981681336,
+        "peak_w1_kw": 1.4378013133872827,
+        "ramp_w1_kw": 0.5332902456166857,
+        "mean_profile_rmse_kwh": 0.1431795209851443,
+        "variance_mae_kwh2": 0.5915146869767092,
+        "diversity_ratio": 1.265932444622196,
+        "acf_lag1_w1": 0.4188991072219492,
+        "profile_sw1_kwh": 0.2872794630576151,
+        "acf_lag6_w1": 0.058105899918892825,
+        "normalized_profile_sw1": 0.008545151586669637
+      }
+    },
+    "reflection_lr1e3_s202": {
+      "method_id": "candidate_001",
+      "config": {
+        "steps": 6000,
+        "batch_size": 512,
+        "seed": 202,
+        "num_threads": 1,
+        "device": "cpu",
+        "learning_rate": 0.001,
+        "validation_every": 1000,
+        "validation_per_condition": 256,
+        "solver_steps": 64,
+        "max_time": 1.5,
+        "gradient_clip_norm": 1.0,
+        "condition_mode": "conditional"
+      },
+      "best_step": 6000,
+      "completed_steps": 6000,
+      "row_presentations": 3071016,
+      "architecture": {
+        "input": {
+          "profile": 24,
+          "time": 1,
+          "one_hot_conditions": 64
+        },
+        "hidden_widths": [
+          64,
+          128,
+          64
+        ],
+        "activation": "SiLU",
+        "output": 24,
+        "trainable_parameters": 23896,
+        "condition_mode": "conditional"
+      },
+      "solver": {
+        "method": "reflected Euler",
+        "steps": 64,
+        "nfe": 64,
+        "sensitivity_steps": 128,
+        "sensitivity_used_for_selection": false,
+        "initial_distribution": "independent Uniform(0,1) coordinates",
+        "batch_size": 2048
+      },
+      "training_git_head": "d96ff765b42230d6d16d1e164ce87361d1de20b6",
+      "checkpoint_sha256": "c7be696c7ac950b7b15e8f296176251993bcbb0c0d0ba43631abc6a0ebd675f1",
+      "selected_metrics": {
+        "slot_w1_kwh": 0.26419668438613775,
+        "daily_energy_w1_kwh": 4.5193610296535525,
+        "peak_w1_kw": 0.9844766370819755,
+        "ramp_w1_kw": 0.18995945228123828,
+        "mean_profile_rmse_kwh": 0.2077762710672839,
+        "variance_mae_kwh2": 1.1605093525832215,
+        "diversity_ratio": 2.0728057621100966,
+        "acf_lag1_w1": 0.0837269998574882,
+        "profile_sw1_kwh": 0.29767643484664763,
+        "acf_lag6_w1": 0.020949792766435688,
+        "normalized_profile_sw1": 0.00885441037960254
+      },
+      "refined_solver_metrics": {
+        "slot_w1_kwh": 0.2875650667123771,
+        "daily_energy_w1_kwh": 5.022886330057155,
+        "peak_w1_kw": 1.1004396639933418,
+        "ramp_w1_kw": 0.21774127778174895,
+        "mean_profile_rmse_kwh": 0.21572789541308005,
+        "variance_mae_kwh2": 1.4604965915513541,
+        "diversity_ratio": 2.462820908815943,
+        "acf_lag1_w1": 0.08622864807926303,
+        "profile_sw1_kwh": 0.33361014193784416,
+        "acf_lag6_w1": 0.021143547307213073,
+        "normalized_profile_sw1": 0.00992326149376547
+      },
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.2726444687604335,
+        "mean_absolute_kwh": 0.035011233268472296,
+        "maximum_absolute_kwh": 12.521999597549438,
+        "probability_rmse": 0.001960275819493714
+      },
+      "last_loss_by_time_bin": [
+        {
+          "lower": 0.0,
+          "upper": 0.01,
+          "rows": 146859,
+          "mean_squared_error": 1.0011161592720816
+        },
+        {
+          "lower": 0.01,
+          "upper": 0.1,
+          "rows": 113658,
+          "mean_squared_error": 0.9494927558122269
+        },
+        {
+          "lower": 0.1,
+          "upper": 0.5,
+          "rows": 128760,
+          "mean_squared_error": 0.8460056020153508
+        },
+        {
+          "lower": 0.5,
+          "upper": 1.0,
+          "rows": 73354,
+          "mean_squared_error": 0.9957499839866223
+        },
+        {
+          "lower": 1.0,
+          "upper": 1.5,
+          "rows": 49205,
+          "mean_squared_error": 1.0010878915576453
+        }
+      ],
+      "independent_marginals_selection_metrics": {
+        "slot_w1_kwh": 0.1585524331284113,
+        "daily_energy_w1_kwh": 5.491499981681336,
+        "peak_w1_kw": 1.4378013133872827,
+        "ramp_w1_kw": 0.5332902456166857,
+        "mean_profile_rmse_kwh": 0.1431795209851443,
+        "variance_mae_kwh2": 0.5915146869767092,
+        "diversity_ratio": 1.265932444622196,
+        "acf_lag1_w1": 0.4188991072219492,
+        "profile_sw1_kwh": 0.2872794630576151,
+        "acf_lag6_w1": 0.058105899918892825,
+        "normalized_profile_sw1": 0.008545151586669637
+      }
+    },
+    "reflection_lr1e4_s101": {
+      "method_id": "candidate_002",
+      "config": {
+        "steps": 6000,
+        "batch_size": 512,
+        "seed": 101,
+        "num_threads": 1,
+        "device": "cpu",
+        "learning_rate": 0.0001,
+        "validation_every": 1000,
+        "validation_per_condition": 256,
+        "solver_steps": 64,
+        "max_time": 1.5,
+        "gradient_clip_norm": 1.0,
+        "condition_mode": "conditional"
+      },
+      "best_step": 5000,
+      "completed_steps": 6000,
+      "row_presentations": 3071016,
+      "architecture": {
+        "input": {
+          "profile": 24,
+          "time": 1,
+          "one_hot_conditions": 64
+        },
+        "hidden_widths": [
+          64,
+          128,
+          64
+        ],
+        "activation": "SiLU",
+        "output": 24,
+        "trainable_parameters": 23896,
+        "condition_mode": "conditional"
+      },
+      "solver": {
+        "method": "reflected Euler",
+        "steps": 64,
+        "nfe": 64,
+        "sensitivity_steps": 128,
+        "sensitivity_used_for_selection": false,
+        "initial_distribution": "independent Uniform(0,1) coordinates",
+        "batch_size": 2048
+      },
+      "training_git_head": "d96ff765b42230d6d16d1e164ce87361d1de20b6",
+      "checkpoint_sha256": "bb92f147a977789291abf7a82bfebe1652f26c598c226bf164c427475d6300b6",
+      "selected_metrics": {
+        "slot_w1_kwh": 0.289126641694302,
+        "daily_energy_w1_kwh": 3.7267427403207165,
+        "peak_w1_kw": 2.1662540704282804,
+        "ramp_w1_kw": 0.5169119322492485,
+        "mean_profile_rmse_kwh": 0.2187317419158107,
+        "variance_mae_kwh2": 2.062758154844902,
+        "diversity_ratio": 3.2955761806021395,
+        "acf_lag1_w1": 0.2295325821808581,
+        "profile_sw1_kwh": 0.45979061845756825,
+        "acf_lag6_w1": 0.052984911644645735,
+        "normalized_profile_sw1": 0.013676510290819255
+      },
+      "refined_solver_metrics": {
+        "slot_w1_kwh": 0.3236916566901481,
+        "daily_energy_w1_kwh": 4.467819595593092,
+        "peak_w1_kw": 2.472344891075167,
+        "ramp_w1_kw": 0.5694823015253849,
+        "mean_profile_rmse_kwh": 0.24032889331670154,
+        "variance_mae_kwh2": 2.6042105313273085,
+        "diversity_ratio": 3.9298512113737356,
+        "acf_lag1_w1": 0.23577796355430303,
+        "profile_sw1_kwh": 0.5329776237201767,
+        "acf_lag6_w1": 0.05437797026235214,
+        "normalized_profile_sw1": 0.015853463865875026
+      },
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.3243631008861312,
+        "mean_absolute_kwh": 0.04202462782012765,
+        "maximum_absolute_kwh": 11.193999290466309,
+        "probability_rmse": 0.0004786759916339397
+      },
+      "last_loss_by_time_bin": [
+        {
+          "lower": 0.0,
+          "upper": 0.01,
+          "rows": 146448,
+          "mean_squared_error": 1.0120723522294182
+        },
+        {
+          "lower": 0.01,
+          "upper": 0.1,
+          "rows": 113892,
+          "mean_squared_error": 0.9795564634404446
+        },
+        {
+          "lower": 0.1,
+          "upper": 0.5,
+          "rows": 128897,
+          "mean_squared_error": 0.9385137286824506
+        },
+        {
+          "lower": 0.5,
+          "upper": 1.0,
+          "rows": 73619,
+          "mean_squared_error": 1.0055056436151786
+        },
+        {
+          "lower": 1.0,
+          "upper": 1.5,
+          "rows": 48980,
+          "mean_squared_error": 1.012433968201164
+        }
+      ],
+      "independent_marginals_selection_metrics": {
+        "slot_w1_kwh": 0.1585524331284113,
+        "daily_energy_w1_kwh": 5.491499981681336,
+        "peak_w1_kw": 1.4378013133872827,
+        "ramp_w1_kw": 0.5332902456166857,
+        "mean_profile_rmse_kwh": 0.1431795209851443,
+        "variance_mae_kwh2": 0.5915146869767092,
+        "diversity_ratio": 1.265932444622196,
+        "acf_lag1_w1": 0.4188991072219492,
+        "profile_sw1_kwh": 0.2872794630576151,
+        "acf_lag6_w1": 0.058105899918892825,
+        "normalized_profile_sw1": 0.008545151586669637
+      }
+    },
+    "reflection_lr1e4_s202": {
+      "method_id": "candidate_003",
+      "config": {
+        "steps": 6000,
+        "batch_size": 512,
+        "seed": 202,
+        "num_threads": 1,
+        "device": "cpu",
+        "learning_rate": 0.0001,
+        "validation_every": 1000,
+        "validation_per_condition": 256,
+        "solver_steps": 64,
+        "max_time": 1.5,
+        "gradient_clip_norm": 1.0,
+        "condition_mode": "conditional"
+      },
+      "best_step": 6000,
+      "completed_steps": 6000,
+      "row_presentations": 3071016,
+      "architecture": {
+        "input": {
+          "profile": 24,
+          "time": 1,
+          "one_hot_conditions": 64
+        },
+        "hidden_widths": [
+          64,
+          128,
+          64
+        ],
+        "activation": "SiLU",
+        "output": 24,
+        "trainable_parameters": 23896,
+        "condition_mode": "conditional"
+      },
+      "solver": {
+        "method": "reflected Euler",
+        "steps": 64,
+        "nfe": 64,
+        "sensitivity_steps": 128,
+        "sensitivity_used_for_selection": false,
+        "initial_distribution": "independent Uniform(0,1) coordinates",
+        "batch_size": 2048
+      },
+      "training_git_head": "d96ff765b42230d6d16d1e164ce87361d1de20b6",
+      "checkpoint_sha256": "6136234cb4a257ca2f6e1cdc04425227805bde6617ec717408106ab2f2241a2b",
+      "selected_metrics": {
+        "slot_w1_kwh": 0.3026279036204495,
+        "daily_energy_w1_kwh": 4.535374593712618,
+        "peak_w1_kw": 2.201762587647096,
+        "ramp_w1_kw": 0.4601285556837277,
+        "mean_profile_rmse_kwh": 0.2527351253015839,
+        "variance_mae_kwh2": 2.194429599026104,
+        "diversity_ratio": 3.4995970415914472,
+        "acf_lag1_w1": 0.1700955176707553,
+        "profile_sw1_kwh": 0.4655260022669218,
+        "acf_lag6_w1": 0.03213595132551298,
+        "normalized_profile_sw1": 0.0138471097605378
+      },
+      "refined_solver_metrics": {
+        "slot_w1_kwh": 0.3391616920716241,
+        "daily_energy_w1_kwh": 5.377555277693325,
+        "peak_w1_kw": 2.5020700142512453,
+        "ramp_w1_kw": 0.5121064391741615,
+        "mean_profile_rmse_kwh": 0.27927436418040985,
+        "variance_mae_kwh2": 2.758054528376949,
+        "diversity_ratio": 4.18052000394005,
+        "acf_lag1_w1": 0.1768030200464374,
+        "profile_sw1_kwh": 0.5393870737336792,
+        "acf_lag6_w1": 0.03395118288601531,
+        "normalized_profile_sw1": 0.016044113491050553
+      },
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.3393774784506175,
+        "mean_absolute_kwh": 0.045774464675817285,
+        "maximum_absolute_kwh": 13.807999610900879,
+        "probability_rmse": 0.0005275797251959137
+      },
+      "last_loss_by_time_bin": [
+        {
+          "lower": 0.0,
+          "upper": 0.01,
+          "rows": 146859,
+          "mean_squared_error": 1.0124868431710956
+        },
+        {
+          "lower": 0.01,
+          "upper": 0.1,
+          "rows": 113658,
+          "mean_squared_error": 0.9799845839500833
+        },
+        {
+          "lower": 0.1,
+          "upper": 0.5,
+          "rows": 128760,
+          "mean_squared_error": 0.9358287675800361
+        },
+        {
+          "lower": 0.5,
+          "upper": 1.0,
+          "rows": 73354,
+          "mean_squared_error": 1.0046555282963034
+        },
+        {
+          "lower": 1.0,
+          "upper": 1.5,
+          "rows": 49205,
+          "mean_squared_error": 1.0130386289497202
+        }
+      ],
+      "independent_marginals_selection_metrics": {
+        "slot_w1_kwh": 0.1585524331284113,
+        "daily_energy_w1_kwh": 5.491499981681336,
+        "peak_w1_kw": 1.4378013133872827,
+        "ramp_w1_kw": 0.5332902456166857,
+        "mean_profile_rmse_kwh": 0.1431795209851443,
+        "variance_mae_kwh2": 0.5915146869767092,
+        "diversity_ratio": 1.265932444622196,
+        "acf_lag1_w1": 0.4188991072219492,
+        "profile_sw1_kwh": 0.2872794630576151,
+        "acf_lag6_w1": 0.058105899918892825,
+        "normalized_profile_sw1": 0.008545151586669637
+      }
+    }
+  }
+}

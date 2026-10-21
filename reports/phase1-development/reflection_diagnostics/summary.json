@@ -1,0 +1,1046 @@
+{
+  "schema_version": 1,
+  "role": "post-test development fresh-generation diagnostics",
+  "generation_seeds": [
+    20261023,
+    20261024
+  ],
+  "selection_profiles": 16384,
+  "conditions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "uncertainty_note": "Sampling SD is across fresh generation draws only; no confidence, privacy, or untouched-validation claim.",
+  "methods": {
+    "candidate_000": {
+      "method": "conditional_reflection_copula",
+      "training_seed": 101,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.00702359878640567,
+          "sampling_sd": 0.00013050979079249635,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 2.80442925778053,
+          "sampling_sd": 0.05559637575639895,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 0.9093832898816849,
+          "sampling_sd": 0.02037962851167852,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.18036312760332723,
+          "sampling_sd": 0.006388844206888945,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.16084997108167245,
+          "sampling_sd": 0.0017450339955260076,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 1.8019716886173434,
+          "sampling_sd": 0.021168106841888468,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.10060115134801421,
+          "sampling_sd": 0.0010090836434878787,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.02169829909709168,
+          "sampling_sd": 0.0004988062897545135,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 0.8152076083933883,
+          "sampling_sd": 0.014910554875228596,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 5.566979019763718,
+          "sampling_sd": 0.026434470761030667,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 2.1525370399418167,
+          "sampling_sd": 0.05552336385401637,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.6659210015226116,
+          "sampling_sd": 0.026387333001940867,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.41950882860844074,
+          "sampling_sd": 0.0017812787182252354,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.012607574462890627,
+          "sampling_sd": 0.0002751346270791187,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.045196533203125,
+          "sampling_sd": 0.001942126779381997,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "candidate_001": {
+      "method": "conditional_reflection_copula",
+      "training_seed": 202,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.008709676215200007,
+          "sampling_sd": 0.00010145084101012695,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 4.297454359271356,
+          "sampling_sd": 0.06827788541552492,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 1.0118628842064865,
+          "sampling_sd": 0.017102426339040074,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.19205936448471428,
+          "sampling_sd": 0.006343946487856215,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.19983959938442294,
+          "sampling_sd": 0.0006025564972760818,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 2.1562867126251755,
+          "sampling_sd": 0.003132623741947709,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.08439352198451877,
+          "sampling_sd": 0.0011142640927773804,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.020962594226605024,
+          "sampling_sd": 0.0003845832645286655,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 0.9566157038769466,
+          "sampling_sd": 0.01935824983435665,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 8.729056219026734,
+          "sampling_sd": 0.43790524602730363,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 2.2648582308190544,
+          "sampling_sd": 0.023478484813482865,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.7474611101187076,
+          "sampling_sd": 0.03683872910844453,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.5547473777198988,
+          "sampling_sd": 0.012503777677997673,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.02205657958984375,
+          "sampling_sd": 4.675490394808184e-05,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.04754638671875,
+          "sampling_sd": 0.003107402847011195,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "candidate_002": {
+      "method": "conditional_reflection_copula",
+      "training_seed": 101,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.014170703707743825,
+          "sampling_sd": 1.8550659564336768e-05,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 3.9879557005455624,
+          "sampling_sd": 0.12370391469740173,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 2.2668473021806506,
+          "sampling_sd": 0.03156067498882466,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.529605438488236,
+          "sampling_sd": 0.005358078249517752,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.2300241918494465,
+          "sampling_sd": 0.0003469588552193612,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 3.428077319335744,
+          "sampling_sd": 0.01049490287705709,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.23090039894524478,
+          "sampling_sd": 0.002883170713805874,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.053863334841261226,
+          "sampling_sd": 0.0012476648733563778,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 1.2265470628028008,
+          "sampling_sd": 0.00372448915450513,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 7.411204730080804,
+          "sampling_sd": 0.40913274945561556,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 2.6402263430770834,
+          "sampling_sd": 0.002260224219605552,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 1.8004279018455618,
+          "sampling_sd": 0.001540490631061417,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.7456834075213489,
+          "sampling_sd": 0.003996691818000947,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.013315836588541666,
+          "sampling_sd": 0.0006653582484919764,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.06549072265625,
+          "sampling_sd": 0.0005179004745018658,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "candidate_003": {
+      "method": "conditional_reflection_copula",
+      "training_seed": 202,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.014117479545790906,
+          "sampling_sd": 0.00021306009302320697,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 4.7843607365046275,
+          "sampling_sd": 0.24282383781858977,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 2.2607740354284687,
+          "sampling_sd": 0.002607794402442539,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.46335495514568004,
+          "sampling_sd": 0.008446685655545575,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.2579939141472637,
+          "sampling_sd": 0.0033637853438458357,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 3.5744395681518517,
+          "sampling_sd": 0.0009453831016557254,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.1691010253254712,
+          "sampling_sd": 0.0013219082316639316,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.03204301436059934,
+          "sampling_sd": 0.0007375002823663294,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 1.2566687823082658,
+          "sampling_sd": 0.015637165323658313,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 8.70127156828768,
+          "sampling_sd": 0.5405549344525097,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 2.6100801895034964,
+          "sampling_sd": 0.0011260776163114067,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 1.755365574856903,
+          "sampling_sd": 0.02764098241918913,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.8062721522445673,
+          "sampling_sd": 0.015104825787510866,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.012163798014322918,
+          "sampling_sd": 7.193062145861293e-06,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.046478271484375,
+          "sampling_sd": 0.002632660745384485,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "candidate_004": {
+      "method": "conditional_flow_matching",
+      "training_seed": 101,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.005854509824582301,
+          "sampling_sd": 9.55954186703508e-05,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 2.3573573590058867,
+          "sampling_sd": 0.12507948046542441,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 0.4738940736400834,
+          "sampling_sd": 0.001946693785829986,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.19368982656264142,
+          "sampling_sd": 0.00037941931761379836,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.14900840701271106,
+          "sampling_sd": 0.004665301805208861,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 1.4286888243085918,
+          "sampling_sd": 0.017168804647677244,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.05720863442487002,
+          "sampling_sd": 0.0014942532762192622,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.023037557390244646,
+          "sampling_sd": 0.0011429623518008538,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 0.5609229718313211,
+          "sampling_sd": 0.0026957030145315602,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 5.036552353864893,
+          "sampling_sd": 0.04462459294500408,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 1.002790906580993,
+          "sampling_sd": 0.016868358844478546,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.1941568749807065,
+          "sampling_sd": 0.0019752890343244763,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.35063665266693395,
+          "sampling_sd": 0.0074439499395219655,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.10680643717447916,
+          "sampling_sd": 5.754449716687071e-05,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.50079345703125,
+          "sampling_sd": 0.002934769355510573,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "candidate_005": {
+      "method": "conditional_flow_matching",
+      "training_seed": 202,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.005816356105878953,
+          "sampling_sd": 0.00012069856592777013,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 2.4003920340755345,
+          "sampling_sd": 0.06870318727892584,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 0.428036653895981,
+          "sampling_sd": 0.011723475503706804,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.19808781328896052,
+          "sampling_sd": 0.0007362043845437024,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.15012020170662493,
+          "sampling_sd": 0.005509913615533239,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 1.350032817747648,
+          "sampling_sd": 0.0010123750682240846,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.05068155453122486,
+          "sampling_sd": 0.0017197155926809884,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.023510047660175275,
+          "sampling_sd": 0.0011993233090035278,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 0.5594655701476292,
+          "sampling_sd": 0.011105638520801039,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 5.214237092577528,
+          "sampling_sd": 0.09541315374805745,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 0.9250208630163197,
+          "sampling_sd": 0.0033819720678586376,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.20551770357042493,
+          "sampling_sd": 0.006707657768354643,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.32830914141658313,
+          "sampling_sd": 0.008089793253276672,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.13065338134765625,
+          "sampling_sd": 0.0005358831298665074,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.525146484375,
+          "sampling_sd": 0.003107402847011195,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "source_000": {
+      "method": "source_only_isotropic",
+      "training_seed": null,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.02170436861911043,
+          "sampling_sd": 3.046016584061449e-05,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 10.117192741237929,
+          "sampling_sd": 0.003997015139978672,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 1.6610942661260295,
+          "sampling_sd": 0.00025944745447601227,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 1.1582712632787664,
+          "sampling_sd": 0.002083301675804124,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.5331709585457547,
+          "sampling_sd": 0.0001482722227994577,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 3.255116144511666,
+          "sampling_sd": 0.0032262468616489075,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.5253687037072725,
+          "sampling_sd": 5.546591209887386e-05,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.09170106137517689,
+          "sampling_sd": 0.00016174408018297193,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 1.5160712210293141,
+          "sampling_sd": 0.0019209340399961236,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 15.537362815337634,
+          "sampling_sd": 0.039037097473262165,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 2.427257927900117,
+          "sampling_sd": 0.0012951257514864543,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 1.106182557388426,
+          "sampling_sd": 0.00809537090603646,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.5883605450086538,
+          "sampling_sd": 0.0010280072466472842,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.25270589192708337,
+          "sampling_sd": 0.0006329894688356269,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.60675048828125,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "independent_000": {
+      "method": "independent_marginals",
+      "training_seed": null,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.008476566016283714,
+          "sampling_sd": 0.00010050072434967169,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 5.5053899541661835,
+          "sampling_sd": 0.01096828400816045,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 1.4597903824705298,
+          "sampling_sd": 0.013682853824547514,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.536259767303835,
+          "sampling_sd": 0.0021759385467648553,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.13928715226480765,
+          "sampling_sd": 0.0013382862381715916,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 1.271931975716369,
+          "sampling_sd": 0.025255050184856718,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.4215438565645884,
+          "sampling_sd": 0.0004285335907276635,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.05998332523152654,
+          "sampling_sd": 0.0011171508054883751,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 0.4315405158054808,
+          "sampling_sd": 0.008711373355205141,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 12.254490473133561,
+          "sampling_sd": 0.009833917862494239,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 1.7868744586021053,
+          "sampling_sd": 0.04057652758238652,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.9926070150937232,
+          "sampling_sd": 0.015224286654985313,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.5188205971651537,
+          "sampling_sd": 0.001274421698854596,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.011661529541015627,
+          "sampling_sd": 0.0005053126157466138,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.0906982421875,
+          "sampling_sd": 0.0009494842032534207,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "baseline_mean": {
+      "method": "mean",
+      "training_seed": null,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.020826663049428974,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 9.507656914397469,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 1.4332240215796437,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.28280975410456277,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.12199904701060547,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 0.0,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.33442269542987535,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.1877843435887757,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 1.5565434688122608,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 20.86058598588059,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 3.0086269992035923,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.8090010422084644,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.558360714808671,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.028973897298177086,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.09906005859375,
+          "sampling_sd": 0.0,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "baseline_resample": {
+      "method": "resample",
+      "training_seed": null,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.005271992141865259,
+          "sampling_sd": 2.4273725977064705e-05,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 2.1528641619074733,
+          "sampling_sd": 0.007065178435421763,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 0.34204978767527194,
+          "sampling_sd": 0.007491406287377538,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.046413038545069146,
+          "sampling_sd": 0.0030796903989297117,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.1383874536049685,
+          "sampling_sd": 0.0002656697563658804,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 1.2502619451217183,
+          "sampling_sd": 0.0035566246371654536,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.030482089437911614,
+          "sampling_sd": 0.0010410715292219217,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.02062542476808668,
+          "sampling_sd": 0.00012127130477526453,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 0.42788456184874507,
+          "sampling_sd": 0.003046897753122598,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 4.217997495393536,
+          "sampling_sd": 0.15081195583096962,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 0.8468450716074939,
+          "sampling_sd": 0.03273961022286387,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.12578758720227065,
+          "sampling_sd": 0.007394967476772928,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.3477629497948826,
+          "sampling_sd": 0.0009496798766534146,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.013150533040364582,
+          "sampling_sd": 0.00033807392085538754,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.0164794921875,
+          "sampling_sd": 0.003797936813013683,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 1.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    },
+    "baseline_copula": {
+      "method": "copula",
+      "training_seed": null,
+      "metrics": {
+        "normalized_profile_sw1": {
+          "mean": 0.0055087148530326095,
+          "sampling_sd": 0.00022412939670727957,
+          "defined_draws": 2
+        },
+        "daily_energy_w1_kwh": {
+          "mean": 2.431023337406838,
+          "sampling_sd": 0.11607762888104538,
+          "defined_draws": 2
+        },
+        "peak_w1_kw": {
+          "mean": 0.5312829921669753,
+          "sampling_sd": 0.018778480350202877,
+          "defined_draws": 2
+        },
+        "ramp_w1_kw": {
+          "mean": 0.12788888621060499,
+          "sampling_sd": 0.0006239067585958843,
+          "defined_draws": 2
+        },
+        "mean_profile_rmse_kwh": {
+          "mean": 0.13886867387223695,
+          "sampling_sd": 0.010497848111017652,
+          "defined_draws": 2
+        },
+        "diversity_ratio": {
+          "mean": 1.2791335875581562,
+          "sampling_sd": 0.01266290805264269,
+          "defined_draws": 2
+        },
+        "acf_lag1_w1": {
+          "mean": 0.059260039987295274,
+          "sampling_sd": 0.0008067618946755259,
+          "defined_draws": 2
+        },
+        "acf_lag6_w1": {
+          "mean": 0.018420104083827715,
+          "sampling_sd": 0.0004460401077207849,
+          "defined_draws": 2
+        }
+      },
+      "tail_errors": {
+        "pointwise_quantile_mae_kwh": {
+          "mean": 0.4371060220693279,
+          "sampling_sd": 0.011461143763776533,
+          "defined_draws": 2
+        },
+        "daily_energy_quantile_mae_kwh": {
+          "mean": 4.970961789342538,
+          "sampling_sd": 0.1695323553600123,
+          "defined_draws": 2
+        },
+        "peak_quantile_mae_kw": {
+          "mean": 1.0710832129352819,
+          "sampling_sd": 0.016959840803661325,
+          "defined_draws": 2
+        },
+        "absolute_ramp_quantile_mae_kw": {
+          "mean": 0.21641115351908247,
+          "sampling_sd": 0.0011670983419167409,
+          "defined_draws": 2
+        },
+        "covariance_rmse_kwh2": {
+          "mean": 0.3466725488190836,
+          "sampling_sd": 0.02409679206064908,
+          "defined_draws": 2
+        },
+        "export_cell_fraction_abs_error": {
+          "mean": 0.011927286783854168,
+          "sampling_sd": 0.00022658145759456755,
+          "defined_draws": 2
+        },
+        "export_day_fraction_abs_error": {
+          "mean": 0.034820556640625,
+          "sampling_sd": 0.001683176542131064,
+          "defined_draws": 2
+        }
+      },
+      "quantized_exact_training_match_fraction": {
+        "mean": 0.0,
+        "sampling_sd": 0.0,
+        "defined_draws": 2
+      }
+    }
+  }
+}

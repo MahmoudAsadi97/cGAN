@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development stronger copula controls and nearest-training diagnostics",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "generation_seeds": [
+    20261023,
+    20261024
+  ],
+  "methods": [
+    {
+      "method_id": "beta",
+      "kind": "beta",
+      "fit_seed": 20261026
+    },
+    {
+      "method_id": "t_df4",
+      "kind": "student_t",
+      "df": 4
+    },
+    {
+      "method_id": "t_df8",
+      "kind": "student_t",
+      "df": 8
+    },
+    {
+      "method_id": "t_df16",
+      "kind": "student_t",
+      "df": 16
+    }
+  ],
+  "reference": {
+    "directory": "/workspace/cGAN/artifacts/phase1-development/fresh_diagnostics",
+    "manifest_sha256": "a06a77cc55bfb2bddf05ac28678220838f5afdb57567552f1f38c2798d2cd63c"
+  },
+  "calibration_reference": {
+    "directory": "/workspace/cGAN/artifacts/phase1-development/marginal_calibration",
+    "manifest_sha256": "c67278c421676d8e7095aeb8416f7f3eff3ee24288579cc531217b475452601b"
+  },
+  "design": "docs/DEPENDENCE_COMPARISON_PLAN.md",
+  "interpretation": "Paired reused development samples; retain every declared baseline and frozen raw/calibrated model. Nearest-TRAIN distances describe proximity, not privacy or novelty."
+}

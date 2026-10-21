@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "role": "Extraction from completed calibration artifacts; no evaluation or dataset/model access",
+  "source_manifest": "artifacts/phase1-development/marginal_calibration/manifest.json",
+  "source_manifest_sha256": "c67278c421676d8e7095aeb8416f7f3eff3ee24288579cc531217b475452601b",
+  "source_evaluation_git_head": "a272bb033a9f8e97dd1eaa40ed54ca43baa28251",
+  "copied_byte_identical": {
+    "manifest.json": "c67278c421676d8e7095aeb8416f7f3eff3ee24288579cc531217b475452601b",
+    "summary.json": "0c55efae725c536fcf44fc3e3dea6f1512a13fcd3878cbb5c474ea318d446789",
+    "metrics.csv": "3f0544c4258b1935d87e237f1f739af7fdea06e92821982b12cd45279802b1ca",
+    "condition_diagnostics.csv": "025bd61c7a798634637c38d01e24dd52a837b33e43c3b376620ae822669ee426"
+  },
+  "input_artifact_sha256": {
+    "baseline_copula.json": "3f1068f9e51a07d858acec8f217a7dcef6f9d284d7b9f1649aae659365516186",
+    "baseline_mean.json": "567dbce95c0c70701361acf43ff0510c66fb37c801a859109acc9a45bfd8e692",
+    "baseline_resample.json": "fe6d7c192da85008871f7cc7886f5beb22828f634e9f015ff2d3caeca673ea30",
+    "candidate_000_calibrated.json": "fb237cdc5bf1a3dde11cd191df056ac4b2404c4565fced46273b5770a58c7fc2",
+    "candidate_000_calibration.npz": "46b4c382d5be41a2175bc9f5832e2ea4dbb9d122ea98c8e461a8403551dd7822",
+    "candidate_000_fit.json": "56d1f2fcf129b08d4cbe7bffa017d8e565baa4d8827680774ba8cf6ef4f7ee72",
+    "candidate_000_raw.json": "27515cb2d9fd23f236fd20c238d9c8ec5c71c46e235d24750aa1b744cc725997",
+    "candidate_001_calibrated.json": "8bbbe268c3e15a12c70e484a9c44c88219d554a5809d156b0c9a185ec25cd005",
+    "candidate_001_calibration.npz": "0769667a93ac1bf1a1bd3138be6e2fb251439280dedbe5cab59f3dd5a2805065",
+    "candidate_001_fit.json": "cc09a591902bcc2d79e85ab797c647265ee6f15a13a5820796f840c42d9f4372",
+    "candidate_001_raw.json": "0dfd5b36857f6ed20e21c490078604833096ccf115e57f1c20ef33139ef20a5a",
+    "candidate_002_calibrated.json": "544a6b11cd58ec2026359f68d0e6083fe87c55e4b2aa3439609c38ee6fa6b19e",
+    "candidate_002_calibration.npz": "5240bae507bd05b0b9060e5feac2be19aab87cb13ba008cbd6c021f4c9cc2ca7",
+    "candidate_002_fit.json": "28a1ccb79d1441592d09ca3e2a9e4cf2fd48f391e678959de4e976a52979d49f",
+    "candidate_002_raw.json": "92bb8d06521c93a905c750b6986f40491f8fd2cee00bcb966eeea89b22a9e23d",
+    "candidate_003_calibrated.json": "e0669c7e94eb4a85575a1f3fc6c86ee2aa1d16101dce82b12982a2857c26da9a",
+    "candidate_003_calibration.npz": "bed1d2b24413cc3e02cd0f81292f383277bc2721c0ed16363b141a15a7bd4b9d",
+    "candidate_003_fit.json": "21e743efbc917710daa6e81ae5de99886bcba02937d9f5ef9e8a7780414e4d96",
+    "candidate_003_raw.json": "d02015f6b684d3dd150da09e014ce1e669fdd3edd30cdb53432012f0c4193b31",
+    "condition_diagnostics.csv": "025bd61c7a798634637c38d01e24dd52a837b33e43c3b376620ae822669ee426",
+    "metrics.csv": "3f0544c4258b1935d87e237f1f739af7fdea06e92821982b12cd45279802b1ca",
+    "plan.json": "618b9ad127cdffff3bd19560f09f4e07ce65a3d514e36228ec3021cb9c43cbfc",
+    "summary.json": "0c55efae725c536fcf44fc3e3dea6f1512a13fcd3878cbb5c474ea318d446789"
+  },
+  "derivation_script_sha256": "024996f05903cbf51db87a108b35d0cac04a77004422d22c8857c097c4c7f3f3",
+  "derived_csv_sha256": {
+    "calibration_diagnostics.csv": "da86ca68d48fb6e09afaf30182403f2abc140b86a84211d18fc4f47a584b5e12",
+    "calibration_fits.csv": "d6a6a82daa8c8086a900c5709e62347af31dd090dfedbb0dc3ccf0b1e37dcf61"
+  },
+  "frequency_definition": "Strict zero or negative and equality to fitted hourly endpoints. Values are fractions, not percentages; min/max counts overlap for constant targets.",
+  "mapping_error_definition": "Mean absolute difference between generated and fitted TRAIN frequencies over all 64 conditions and 24 hours.",
+  "probability_histogram_definition": "Mean over condition/hour of ten-bin L1 distance from .1. Descriptive only: flat bins are not expected for source atoms, and finite draw noise is not subtracted.",
+  "aggregation": "Report means average two paired generation draws within each training seed; these draws are not independent model replications."
+}

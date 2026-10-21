@@ -184,8 +184,11 @@ diffusion/reflection-copula method and a classical marginal-calibration control.
 Any proposed adaptation must disclose zero/tie treatment, uniformity errors,
 empirical tail truncation and conditioning changes. Restoring the empirical
 baseline's marginal support alone would not demonstrate a neural improvement.
-These candidates remain unimplemented; the reference result, all failed
-ablations and the current publication-readiness limitation remain recorded.
+The [fixed marginal-calibration study](MARGINAL_CALIBRATION_PLAN.md) implements
+the classical control for both cGAN and basic flow training seeds, preserving
+raw outputs and matching the existing Gaussian-copula inverse quantiles.
+The recent neural copula candidates remain unimplemented; the reference
+result, all failed ablations and publication-readiness limitations remain recorded.
 
 ## Scientific acceptance and independent validation
 

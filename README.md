@@ -30,9 +30,11 @@ The [fresh-draw comparison](reports/phase1-development/fresh_diagnostics/README.
 also finds excessive generated negative readings in source-PV=0 groups.
 This motivates the [recent copula/diffusion review](docs/SUPPORT_AWARE_GENERATORS.md),
 which separates marginal modeling from learned temporal dependence.
-The next [fixed marginal-calibration experiment](docs/MARGINAL_CALIBRATION_PLAN.md)
-tests TRAIN-fitted hourly quantiles against paired raw outputs and the same
-empirical-marginal Gaussian copula, without retraining or checkpoint reselection.
+The [completed marginal-calibration experiment](reports/phase1-development/marginal_calibration/README.md)
+greatly reduces excess PV=0 negatives. Calibrated flow improves several joint
+metrics over the Gaussian copula, but its ramp errors remain about 2.6 times
+those of complete-day resampling. Direct conditional dependence modeling is
+the next comparator; publication readiness remains unestablished.
 Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
 preserve `main`, `V1`, and `V2`. The user has authorized continued Phase 1

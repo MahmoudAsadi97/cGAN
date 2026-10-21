@@ -78,6 +78,37 @@ the same trajectory as uninterrupted training. CUDA support has a separate
 [notebook pilot](GPU_NOTEBOOK.md); it has not yet been executed on GPU hardware.
 Arbitrary interrupted-run recovery is not yet supported.
 
+## Generative-method comparator
+
+The literature review motivates a separate conditional flow baseline before
+combining newer mechanisms. The [declared flow screen](../reports/phase1-development/FLOW_SCREEN_PLAN.json)
+uses seeds 101/202, 6,000 updates, global training-only standardization, and the
+same inner-validation rows and physical metrics as the cGAN screens. Independent
+Gaussian/data pairs define a linear path with velocity target `data - noise`.
+The velocity MLP has 23,896 parameters, scalar time input, widths 64/128/64 and
+SiLU activations; Adam uses learning rate 0.001 and betas 0.9/0.999.
+
+Heun integration uses 32 steps / 64 field evaluations for checkpoint selection.
+The selected checkpoint is also scored at 64 steps with identical initial noise
+to check numerical sensitivity, without reselection. Model, optimizer and
+sampling cost differ from the cGAN: equal update counts do not mean equal compute.
+All runs retain parameter counts, row presentations and elapsed time. This is a
+Phase 1 comparator for whole-house generation, with no appliance-level targets.
+Any structured-prior, bridge or few-step extension needs its own controlled
+comparison after this basic baseline is assessed.
+
+The six 30,000-update momentum trajectories completed. Beta1=0 gave the lowest
+primary score at both seeds (approximately 0.00698 and 0.00687), but variance,
+peak and ramp discrepancies remain too large relative to the descriptive
+real-cohort comparisons. The next
+[dropout screen](../reports/phase1-development/DROPOUT_SCREEN_PLAN.json)
+changes only the existing discriminator dropout probability to 0 or 0.2, at
+seeds 101/202 and 6,000 updates, against the saved beta1=0/dropout=0.4 controls.
+It tests whether heavy discriminator regularization impairs distribution fitting.
+The topology and adversarial objective remain fixed. The short screen must be
+followed by a common longer budget if promising; it does not replace the
+five-seed validation requirement or establish publication readiness.
+
 ## Scientific acceptance and independent validation
 
 A useful foundation needs competitive distribution fidelity against strong

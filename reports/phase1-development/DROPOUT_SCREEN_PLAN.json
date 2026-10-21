@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development; discriminator dropout screen after momentum study",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "jobs": {
+    "standard_b0_d0_s101": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.0
+    },
+    "standard_b0_d0_s202": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.0
+    },
+    "standard_b0_d2_s101": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.2
+    },
+    "standard_b0_d2_s202": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0,
+      "discriminator_dropout": 0.2
+    }
+  },
+  "prespecified_scope": "Change only the probability of the existing discriminator Dropout layer (0 or 0.2) versus the beta1=0, dropout=0.4 controls at the identical 6000-update budget and seeds 101/202. Topology, BCE objective, learning rates, data, batch and selection remain fixed.",
+  "initial_interpretation": "Two-seed 6000-update diagnostic; retain all outcomes and compare only matching budgets. Promising regularization needs a longer common budget, multiple seeds and fresh diagnostics.",
+  "decision_basis": "At 30000 updates, beta1=0 gave the lowest primary error at both seeds, but diversity, peaks and ramps still missed the descriptive real-real reference. Removing/reducing heavy discriminator dropout tests an underfitting hypothesis; an improved primary score alone will not establish adequacy."
+}

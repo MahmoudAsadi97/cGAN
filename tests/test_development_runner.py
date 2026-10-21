@@ -43,3 +43,13 @@ def test_resume_plan_hashes_command_and_failed_attempt_are_preserved(tmp_path, m
         runner.run(path, tmp_path / 'tampered', workers=1)
     assert len(calls) == 1
     assert not (tmp_path / 'tampered').exists()
+    plan.update(method='flow', jobs={'flow': {'steps': 2, 'solver_steps': 2}},
+                resume_from={}, resume_checkpoint_sha256={})
+    path.write_text(json.dumps(plan))
+    assert runner.run(path, tmp_path / 'flow', workers=1) == 1
+    assert calls[-1][1:3] == ['-m', 'fluvius_cgan.flow']
+    plan['jobs']['flow']['normalization'] = 'minmax'
+    path.write_text(json.dumps(plan))
+    with pytest.raises(ValueError, match='Unknown flow config'):
+        runner.run(path, tmp_path / 'invalid_flow', workers=1)
+    assert len(calls) == 2

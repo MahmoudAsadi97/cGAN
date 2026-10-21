@@ -15,6 +15,14 @@ def run(plan_path, output, workers=3):
     if not 1 <= workers <= 4:
         raise ValueError('workers must be between 1 and 4')
     plan = json.loads(Path(plan_path).read_text())
+    method = plan.get('method', 'cgan')
+    if method not in ('cgan', 'flow'):
+        raise ValueError('Unknown development method')
+    validate = _config
+    module = 'fluvius_cgan.development'
+    if method == 'flow':
+        from fluvius_cgan.flow import _config as validate
+        module = 'fluvius_cgan.flow'
     data = Path(plan['data']).resolve()
     if set(plan['data_hashes']) != {'train.npz', 'val.npz', 'scaler.json', 'metadata.json'}:
         raise ValueError('Plan must bind the four development data files')
@@ -27,10 +35,12 @@ def run(plan_path, output, workers=3):
     for name, config in jobs.items():
         if not re.fullmatch(r'[a-z0-9_]+', name):
             raise ValueError('Invalid job name')
-        _config(config)
+        validate(config)
     resumes = plan.get('resume_from', {})
     if not isinstance(resumes, dict) or set(resumes) - set(jobs):
         raise ValueError('Resume entries must name declared jobs')
+    if method == 'flow' and resumes:
+        raise ValueError('Flow continuation is not supported')
     resume_hashes = plan.get('resume_checkpoint_sha256', {})
     if set(resume_hashes) != set(resumes):
         raise ValueError('Plan must bind every continuation checkpoint hash')
@@ -44,13 +54,13 @@ def run(plan_path, output, workers=3):
     (output / 'logs').mkdir()
     (output / 'configs').mkdir()
     _json(output / 'plan.json', plan)
-    execution = {'status': 'running', 'started_at_utc': _time(), 'workers': workers,
+    execution = {'status': 'running', 'started_at_utc': _time(), 'workers': workers, 'method': method,
                  'plan_sha256': _sha256(plan_path), 'test_performance_access': False, 'jobs': []}
     _json(output / 'execution.json', execution)
     def one(name, config):
         config_path = output / 'configs' / f'{name}.json'
         _json(config_path, config)
-        command = [sys.executable, '-m', 'fluvius_cgan.development', '--data', str(data),
+        command = [sys.executable, '-m', module, '--data', str(data),
                    '--run', str(output / name), '--config', str(config_path)]
         if name in resumes:
             command += ['--resume', str(Path(resumes[name]).resolve())]

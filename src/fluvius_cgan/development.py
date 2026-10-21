@@ -28,7 +28,8 @@ from .training import _json, _read_data, _save, _sha256
 
 DEFAULTS = {'steps': 6000, 'batch_size': 512, 'seed': 101, 'num_threads': 1,
             'normalization': 'minmax', 'validation_every': 1000,
-            'validation_per_condition': 256, 'device': 'cpu', 'beta1': .9}
+            'validation_per_condition': 256, 'device': 'cpu', 'beta1': .9,
+            'discriminator_dropout': .4}
 KINDS = ('minmax', 'standard', 'hourly_standard')
 SCHEMA = 'phase1-development-1'
 
@@ -136,6 +137,9 @@ def _config(values):
         raise ValueError('device must be cpu or cuda')
     if type(c['beta1']) not in (int, float) or not 0 <= c['beta1'] < 1:
         raise ValueError('beta1 must be a number in [0,1)')
+    if (type(c['discriminator_dropout']) not in (int, float)
+            or not 0 <= c['discriminator_dropout'] < 1):
+        raise ValueError('discriminator_dropout must be a number in [0,1)')
     return c
 
 
@@ -274,6 +278,7 @@ def train_probe(data_dir, run_dir, config, resume=None):
         'representation': representation, 'selection': selected,
         'metric_normalization': {'fitted_on': 'train', 'minimum': scaler['minimum'], 'maximum': scaler['maximum']},
         'optimizer': {'generator_lr': 1e-4, 'discriminator_lr': 2e-4, 'betas': [c['beta1'], .999], 'g_d_updates': [1, 1]},
+        'discriminator_dropout': c['discriminator_dropout'],
         'sampling': 'shuffle all inner-training rows per pass; include final partial batch',
         'available_training_rows': len(training['x']), 'source_sha256': source, 'git_head': git,
         'runtime': runtime, 'resume': lineage,
@@ -299,6 +304,7 @@ def train_probe(data_dir, run_dir, config, resume=None):
                 devices=[] if device.type == 'cpu' else [torch.cuda.current_device()]):
             torch.manual_seed(c['seed'])
             generator, discriminator = Generator().to(device), Discriminator().to(device)
+            discriminator.model[-2].p = c['discriminator_dropout']
             optimizer_g = torch.optim.Adam(generator.parameters(), lr=1e-4, betas=(c['beta1'], .999))
             optimizer_d = torch.optim.Adam(discriminator.parameters(), lr=2e-4, betas=(c['beta1'], .999))
             sampler = torch.Generator().manual_seed(c['seed'] + 1)

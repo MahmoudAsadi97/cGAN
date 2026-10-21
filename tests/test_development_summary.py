@@ -20,6 +20,25 @@ def write(path, value):
     path.write_text(json.dumps(value))
 
 
+def test_flow_history_keeps_its_objective_separate(study):
+    run, baseline, output = study
+    history = json.loads((run / 'history.json').read_text())
+    for row in history:
+        row.pop('loss_g')
+        row.pop('loss_d')
+        row['loss_velocity_mse'] = .25
+    write(run / 'history.json', history)
+    manifest = json.loads((run / 'manifest.json').read_text())
+    manifest['method'] = 'conditional_flow_matching'
+    manifest['artifact_hashes']['history.json'] = _sha256(run / 'history.json')
+    write(run / 'manifest.json', manifest)
+    result = module().summarize([run], baseline, output)
+    assert result['runs'][0]['method'] == 'conditional_flow_matching'
+    with (output / 'learning_curves.csv').open() as handle:
+        rows = list(csv.DictReader(handle))
+    assert all(row['loss_velocity_mse'] == '0.25' and row['loss_g'] == '' for row in rows)
+
+
 @pytest.fixture
 def study(tmp_path):
     run, baseline = tmp_path / 'run', tmp_path / 'baseline'

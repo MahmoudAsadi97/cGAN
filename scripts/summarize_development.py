@@ -91,6 +91,9 @@ def _csv(path, rows):
 
 def _plot(entries, baselines, output, post_initial=False):
     fig, axes = plt.subplots(2, 3, figsize=(17, 9), constrained_layout=True)
+    xlabel = ('Training updates (GAN pairs; flow optimizer steps)'
+              if any(entry['method'] == 'conditional_flow_matching' for entry in entries)
+              else 'Generator/discriminator update pairs')
     for axis, metric, title in zip(axes.flat, FIELDS, TITLES):
         for entry in entries:
             history = entry['history'][1:] if post_initial else entry['history']
@@ -110,7 +113,7 @@ def _plot(entries, baselines, output, post_initial=False):
                              label=f'{kind} (matched selection draw)')
         if metric == 'diversity_ratio':
             axis.axhline(1., color='black', linestyle=':', linewidth=1, label='Equal variance')
-        axis.set(title=title, xlabel='Generator/discriminator update pairs')
+        axis.set(title=title, xlabel=xlabel)
         axis.grid(alpha=.2)
         axis.margins(y=.08)
     axes.flat[-1].set_axis_off()
@@ -165,6 +168,7 @@ def summarize(runs, baselines, output, generation_seed=20261022):
             raise ValueError(f'Selected report disagrees with history/manifest: {run}')
         name = run.name if sum(path.name == run.name for path in runs) == 1 else f'{index + 1}:{run.name}'
         entry = {'name': name, 'directory': str(run), 'config': manifest['config'],
+            'method': manifest.get('method', 'conditional_gan'),
             'initial': _stage(history[0]), 'best': _stage(selected), 'last': _stage(history[-1]),
             'completed_steps': manifest['completed_steps'], 'row_presentations': manifest['row_presentations'],
             'training_pass_equivalents': manifest['row_presentations'] / manifest['available_training_rows'],
@@ -201,7 +205,9 @@ def summarize(runs, baselines, output, generation_seed=20261022):
                 'best_at_budget_boundary': entry['best_at_budget_boundary']})
         for row in entry['history']:
             curve_rows.append({'name': entry['name'], 'training_seed': entry['config']['seed'],
-                **_stage(row), 'loss_g': row['loss_g'], 'loss_d': row['loss_d'],
+                **_stage(row), 'method': entry['method'],
+                'loss_g': row.get('loss_g'), 'loss_d': row.get('loss_d'),
+                'loss_velocity_mse': row.get('loss_velocity_mse'),
                 'common_hour_error_fraction': row['diagnostics']['common_hour_error_fraction']})
         add_conditions(entry['name'], generation_seed, 'selected checkpoint', entry['best_metrics'])
     for kind, report in baseline_reports.items():

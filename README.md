@@ -12,6 +12,11 @@ Competitive fidelity, convergence and publication readiness are not established.
 Read the [initial results and scientific assessment](docs/PHASE1_RESULTS.md),
 [preserved benchmark record](reports/phase1/README.md), and
 [continued development protocol](docs/PHASE1_CONTINUATION.md).
+The target remains aggregate whole-house net energy. Missing building type,
+heat-pump subtype and separate appliance consumption do not prevent this task,
+but those attributes/components cannot be validated from the release. See the
+[label audit](reports/phase1-development/LABEL_AUDIT.md) and
+[flow matching and related methods review](docs/MODERN_GENERATIVE_METHODS.md).
 Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
 preserve `main`, `V1`, and `V2`. The user has authorized continued Phase 1
@@ -73,6 +78,11 @@ synthetic fixtures without the real archive. See
 [environment instructions](docs/ENVIRONMENT.md) and
 [CPU CI](.github/workflows/tests.yml). Setup caches and `.venv` are ignored;
 cloud environment publication is a separate operation.
+
+A separate [GPU notebook pilot](docs/GPU_NOTEBOOK.md) is available for Colab or
+Kaggle. It uses the fixed inner data split and records runtime and provenance.
+GPU execution remains unverified on this CPU-only machine; the default CPU
+setup is unchanged. See [compute options and cost limits](docs/COMPUTE_OPTIONS.md).
 
 ## Prepare the audited hourly dataset
 

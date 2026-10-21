@@ -1,0 +1,95 @@
+{
+  "assessment_date": "2026-10-21",
+  "scope": "Primary source retrieval for known generative and representation methods; not an exhaustive review of 2026 literature.",
+  "sources": [
+    {
+      "key": "flow_matching",
+      "url": "https://arxiv.org/abs/2210.02747",
+      "retrieved_at_utc": "2026-10-21T00:20:19.234924+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "rectified_flow",
+      "url": "https://arxiv.org/abs/2209.03003",
+      "retrieved_at_utc": "2026-10-21T00:20:19.235522+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "csdi",
+      "url": "https://arxiv.org/abs/2107.03502",
+      "retrieved_at_utc": "2026-10-21T00:20:19.236051+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "ts2vec",
+      "url": "https://arxiv.org/abs/2106.10466",
+      "retrieved_at_utc": "2026-10-21T00:20:19.236583+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "flow_matching_code",
+      "url": "https://github.com/facebookresearch/flow_matching",
+      "retrieved_at_utc": "2026-10-21T00:20:19.237135+00:00",
+      "http_status": 200,
+      "retrieved": true,
+      "bytes": 326500,
+      "sha256": "1d15ea92dcf9f5074de11183817c5a6d2bb8aba117affaacacca9cda4e23b7a0",
+      "repository_ref": "main",
+      "repository_commit": "11568d37f8d5a080e12aa7b5305d9c35ae07d136",
+      "evidence_scope": "Author or official repository README; repository experiments do not validate Fluvius performance."
+    },
+    {
+      "key": "rectified_flow_code",
+      "url": "https://github.com/gnobitab/RectifiedFlow",
+      "retrieved_at_utc": "2026-10-21T00:20:56.644846+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 317412,
+      "sha256": "e85323d1dfabdf289778711e716b7faf34a8c4a048811619f3a28ef59ddd4818",
+      "repository_ref": "main",
+      "repository_commit": "5a1fd4dd3ea7db764ce370a84ce35f9c8b15fde6",
+      "evidence_scope": "Author or official repository README; repository experiments do not validate Fluvius performance."
+    },
+    {
+      "key": "csdi_code",
+      "url": "https://github.com/ermongroup/CSDI",
+      "retrieved_at_utc": "2026-10-21T00:20:56.645469+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 309545,
+      "sha256": "488f8090714c773309a9c9bc7e15195191eb6509806c896d255b665b34a90f18",
+      "repository_ref": "main",
+      "repository_commit": "7f24a436f08d98853a6b43d4f7f04e5a65ecdf27",
+      "evidence_scope": "Author or official repository README; repository experiments do not validate Fluvius performance."
+    },
+    {
+      "key": "ts2vec_code",
+      "url": "https://github.com/zhihanyue/ts2vec",
+      "retrieved_at_utc": "2026-10-21T00:20:56.646006+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 286590,
+      "sha256": "fc995c995a1d499d30e68ce845a3c9ea4e049e1d93f5e4280d923120b0f90174",
+      "repository_ref": "main",
+      "repository_commit": "b0088e14a99706c05451316dc6db8d3da9351163",
+      "evidence_scope": "Author or official repository README; repository experiments do not validate Fluvius performance."
+    },
+    {
+      "key": "torchcfm_code",
+      "url": "https://github.com/atong01/conditional-flow-matching",
+      "retrieved_at_utc": "2026-10-21T00:20:56.646403+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 356938,
+      "sha256": "ca5616b1daf741cf73c37f1a68c6bc306a64ef59eaa9c611609cae1786bf4b78",
+      "repository_ref": "main",
+      "repository_commit": "7c653857de4c25b979a740ef8b6a5d5ddb09b6c1",
+      "evidence_scope": "Author or official repository README; repository experiments do not validate Fluvius performance."
+    }
+  ],
+  "verification_limit": "Paper endpoints at arxiv.org were inaccessible; author/official GitHub README pages were fetched and read. Review does not claim latest-2026 coverage."
+}

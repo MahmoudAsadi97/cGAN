@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-10-21T03:20:10.108233+00:00",
+  "base_commit": "5fe10a1711ce79bf698b8552a5dd584918f752dc",
+  "command": "OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m pytest -q -W error",
+  "passed": 802,
+  "skipped": 2,
+  "seconds": 72.16,
+  "skip_reason": "CUDA hardware unavailable for two hardware-specific tests",
+  "review": "Independent review of averaging, weighting, shared resampling, complete model membership and source binding. Plan-copy, failure-inventory and method-identity findings resolved with regression tests.",
+  "source_hashes": {
+    "scripts/compare_proper_scores.py": "273c9fef883958b6a93136e90caabd23049a8ba32efb881c10fbcf9f8a495d49",
+    "tests/test_proper_score_comparison.py": "ebd0b93920af2fdd43602234075a3864f2dac5409734e849b4358a717221b5e5",
+    "src/fluvius_cgan/meter_uncertainty.py": "6f0b44fc7203e83e2615848487b0c4ceba3fe4cbe079369dbd4fc77355f0d6a8",
+    "reports/phase1-development/PROPER_SCORE_COMPARISON_DESIGN.json": "83d5d0dadd2fb3471a27f9987724732b987957358a33e262f1d524201ee2ed64",
+    "reports/phase1-development/PROPER_SCORE_COMPARISON_PLAN.json": "1486599a1db04d68533ee1b51460db69cb7b21a858442d80cd07501d219e238b"
+  },
+  "scope": "Synthetic software checks; does not imply real-data interval coverage or publication readiness."
+}

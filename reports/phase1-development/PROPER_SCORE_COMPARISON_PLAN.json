@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "design": {
+    "path": "reports/phase1-development/PROPER_SCORE_COMPARISON_DESIGN.json",
+    "sha256": "83d5d0dadd2fb3471a27f9987724732b987957358a33e262f1d524201ee2ed64"
+  },
+  "studies": [
+    {
+      "id": "replication",
+      "directory": "/workspace/cGAN/artifacts/phase1-development/proper_scores",
+      "manifest_sha256": "48ad66e3f032e1ab64440b9ed92ab2428d2d3502e5279522295a82ef44e02189"
+    }
+  ],
+  "groups": [
+    {
+      "id": "mixture_k8",
+      "role": "replicated_mixture",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "mixture_k8_s20261101"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "mixture_k8_s20261102"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "mixture_k8_s20261103"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "mixture_k8_s20261104"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "mixture_k8_s20261105"
+        }
+      ]
+    },
+    {
+      "id": "gaussian",
+      "role": "gaussian",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "gaussian"
+        }
+      ]
+    },
+    {
+      "id": "cgan_cal",
+      "role": "calibrated_cgan",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "cgan_cal_s301"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_cal_s401"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_cal_s501"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_cal_s601"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_cal_s701"
+        }
+      ]
+    },
+    {
+      "id": "cgan_raw",
+      "role": "raw_cgan",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "cgan_raw_s301"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_raw_s401"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_raw_s501"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_raw_s601"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "cgan_raw_s701"
+        }
+      ]
+    },
+    {
+      "id": "mean",
+      "role": "control",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "mean"
+        }
+      ]
+    },
+    {
+      "id": "resample",
+      "role": "control",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "resample"
+        }
+      ]
+    },
+    {
+      "id": "beta",
+      "role": "control",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "beta"
+        }
+      ]
+    },
+    {
+      "id": "student_t4",
+      "role": "control",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "student_t4"
+        }
+      ]
+    },
+    {
+      "id": "student_t8",
+      "role": "control",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "student_t8"
+        }
+      ]
+    },
+    {
+      "id": "student_t16",
+      "role": "control",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "student_t16"
+        }
+      ]
+    },
+    {
+      "id": "flow_raw",
+      "role": "contextual_flow",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "flow_raw_s101"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "flow_raw_s202"
+        }
+      ]
+    },
+    {
+      "id": "flow_cal",
+      "role": "contextual_flow",
+      "members": [
+        {
+          "study_id": "replication",
+          "model_id": "flow_cal_s101"
+        },
+        {
+          "study_id": "replication",
+          "model_id": "flow_cal_s202"
+        }
+      ]
+    }
+  ],
+  "role": "postselection proper-score comparisons",
+  "comparisons": [
+    {
+      "id": "mixture_k8_vs_gaussian",
+      "left": "mixture_k8",
+      "right": "gaussian",
+      "role": "primary",
+      "priority": 1
+    },
+    {
+      "id": "cgan_cal_vs_mixture_k8",
+      "left": "cgan_cal",
+      "right": "mixture_k8",
+      "role": "primary",
+      "priority": 2
+    },
+    {
+      "id": "cgan_cal_vs_cgan_raw",
+      "left": "cgan_cal",
+      "right": "cgan_raw",
+      "role": "primary",
+      "priority": 3
+    },
+    {
+      "id": "mean_vs_gaussian",
+      "left": "mean",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "resample_vs_gaussian",
+      "left": "resample",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "beta_vs_gaussian",
+      "left": "beta",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "student_t4_vs_gaussian",
+      "left": "student_t4",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "student_t8_vs_gaussian",
+      "left": "student_t8",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "student_t16_vs_gaussian",
+      "left": "student_t16",
+      "right": "gaussian",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "cgan_raw_vs_mixture_k8",
+      "left": "cgan_raw",
+      "right": "mixture_k8",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "flow_raw_vs_mixture_k8",
+      "left": "flow_raw",
+      "right": "mixture_k8",
+      "role": "contextual",
+      "priority": null
+    },
+    {
+      "id": "flow_cal_vs_mixture_k8",
+      "left": "flow_cal",
+      "right": "mixture_k8",
+      "role": "contextual",
+      "priority": null
+    },
+    {
+      "id": "flow_cal_vs_flow_raw",
+      "left": "flow_cal",
+      "right": "flow_raw",
+      "role": "contextual",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_resample",
+      "left": "mixture_k8",
+      "right": "resample",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_beta",
+      "left": "mixture_k8",
+      "right": "beta",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_student_t4",
+      "left": "mixture_k8",
+      "right": "student_t4",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_student_t8",
+      "left": "mixture_k8",
+      "right": "student_t8",
+      "role": "secondary",
+      "priority": null
+    },
+    {
+      "id": "mixture_k8_vs_student_t16",
+      "left": "mixture_k8",
+      "right": "student_t16",
+      "role": "secondary",
+      "priority": null
+    }
+  ],
+  "bootstrap": {
+    "seed": 20261131,
+    "replicates": 1999,
+    "level": 0.95
+  },
+  "metrics": [
+    "energy_score",
+    "variogram_score"
+  ],
+  "ensemble_sizes": [
+    512,
+    1024
+  ],
+  "generation_seeds": [
+    20261111,
+    20261112,
+    20261113
+  ],
+  "synthetic_interval_verification": {
+    "directory": "/workspace/cGAN/artifacts/phase1-development/meter_interval_simulation",
+    "manifest_sha256": "322c9ad3cff50bb8941a9259397544ceba786db20e0b814187fdc9ae1843ad52",
+    "finding": "All5000 cohorts retained. One fixed-ensemble small-effect energy-score scenario shows93.5% coverage for nominal95%; algorithm is not uniformly calibrated. Small refreshed ensembles demonstrate severe undercoverage for underlying generator-law targets. No interval method is changed in response."
+  },
+  "output": "/workspace/cGAN/artifacts/phase1-development/proper_score_comparisons",
+  "interpretation": "One common meter multiplicity matrix for every comparison, score, size, individual fit and generation replicate. All intervals are postselection descriptive conditional on fixed score functions and ignore selection and generation error; no actual 95% new-meter coverage claim.",
+  "interval_multiplicity": "Marginal intervals only, not simultaneous or familywise coverage across18 comparisons, scores, ensemble sizes or individual fits."
+}

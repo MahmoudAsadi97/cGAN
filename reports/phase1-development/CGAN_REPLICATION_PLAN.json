@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "design": "docs/BASELINE_REPLICATION_PLAN.md",
+  "role": "post-test development five fresh fits of frozen reference-architecture cGAN recipe",
+  "method": "cgan",
+  "jobs": {
+    "cgan_standard_b0_s301": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 301,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0
+    },
+    "cgan_standard_b0_s401": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 401,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0
+    },
+    "cgan_standard_b0_s501": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 501,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0
+    },
+    "cgan_standard_b0_s601": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 601,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0
+    },
+    "cgan_standard_b0_s701": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 701,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "device": "cpu",
+      "beta1": 0.0
+    }
+  },
+  "interpretation": "All five fresh fits retained; reused inner-validation selection, not independent confirmation. Original benchmark and pilot seeds remain separate."
+}

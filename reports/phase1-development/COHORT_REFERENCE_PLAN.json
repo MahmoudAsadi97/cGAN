@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "role": "TRAIN-only descriptive real-real cohort reference; no calibrated significance or publication gate",
+  "train": "/workspace/cGAN/.cache/phase1-development/data/inner24/train.npz",
+  "metadata": "/workspace/cGAN/.cache/phase1-development/data/inner24/metadata.json",
+  "input_sha256": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "pairs": 100,
+  "per_condition": 256,
+  "seed": 20261031,
+  "quantiles": [
+    0.1,
+    0.5,
+    0.9,
+    0.95
+  ],
+  "cohort_equipment_counts": {
+    "0": 42,
+    "1": 42,
+    "2": 41,
+    "3": 42,
+    "4": 41,
+    "5": 42,
+    "6": 40,
+    "7": 42
+  },
+  "scope": "Two disjoint fitting-meter cohorts per pair, each matched to the332-meter inner-validation composition. Validation profile values are never read. Repeated pairs overlap; descriptive references are not independent experiments or calibrated confidence limits."
+}

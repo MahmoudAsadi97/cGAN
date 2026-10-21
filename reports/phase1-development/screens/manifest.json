@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "role": "post-test development",
+  "status": "completed",
+  "created_at_utc": "2026-10-21T00:34:07.281457+00:00",
+  "declared_run_directories": [
+    "/workspace/cGAN/runs/phase1-development/normalization_screen/minmax_s101",
+    "/workspace/cGAN/runs/phase1-development/normalization_screen/standard_s101",
+    "/workspace/cGAN/runs/phase1-development/normalization_screen/hourly_standard_s101",
+    "/workspace/cGAN/runs/phase1-development/normalization_replication/minmax_s202",
+    "/workspace/cGAN/runs/phase1-development/normalization_replication/standard_s202",
+    "/workspace/cGAN/runs/phase1-development/normalization_replication/hourly_standard_s202",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s101",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s202",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b5_s101",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b5_s202"
+  ],
+  "baseline_directory": "/workspace/cGAN/artifacts/phase1-development/baselines_screen",
+  "source_manifest_hashes": {
+    "/workspace/cGAN/artifacts/phase1-development/baselines_screen/manifest.json": "f7d944690594a39f1e8dd62b10b811f0bbce7c46586d34f5c86cbc5369212b58",
+    "/workspace/cGAN/runs/phase1-development/normalization_screen/minmax_s101/manifest.json": "59b9d83ca9a759f712fe528ce2039a13831cad4ef32d94f411dd8777b2c72f68",
+    "/workspace/cGAN/runs/phase1-development/normalization_screen/standard_s101/manifest.json": "eaa14477dd3427c725b754d5bb8a71128c49ce6eb423a307882cfb25f649603a",
+    "/workspace/cGAN/runs/phase1-development/normalization_screen/hourly_standard_s101/manifest.json": "da46529c7186783f46ff01861958fad8d3fc6d33f47e9b8093947b6237d9638b",
+    "/workspace/cGAN/runs/phase1-development/normalization_replication/minmax_s202/manifest.json": "16a2a8e35a24cb00f8d6ab2ae1d3666855f6b730fe28ebb469ebdc755c46197b",
+    "/workspace/cGAN/runs/phase1-development/normalization_replication/standard_s202/manifest.json": "49833f6755f9342f0a2f52760dc218581cecd4811e51563000f4fecd8d821865",
+    "/workspace/cGAN/runs/phase1-development/normalization_replication/hourly_standard_s202/manifest.json": "dfd72d8b8b2878ea59e1fe9875b0c26c472d964f9c37b162cfb277b0c0b19b57",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s101/manifest.json": "cfe6772c38fd04c36c8af1eb80634982edd1950aa56794cfb72b0ca9b4819351",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b0_s202/manifest.json": "fb7104989facd5f5e8ca8c11c604c0eff0b7d3f0f5e3c68488ea1ce59b036a43",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b5_s101/manifest.json": "c1676be3eba72310b3325a70423d5fe66adbd1f89f93ff60579f4a6f3c5a7797",
+    "/workspace/cGAN/runs/phase1-development/momentum_screen/standard_b5_s202/manifest.json": "d33919f28034e275ab77046633bc662e0be11ec707faa77225d0be2c3eae0306"
+  },
+  "script_sha256": "54e8fbe5dfca0208e72f78615d20a807050042147af0ec47b3136270a1e513d6",
+  "artifact_hashes": {
+    "checkpoints.csv": "3cb830b97bb3753c20492df28a5f621d83b72a25880852a267bd67d9f0fedc02",
+    "conditions.csv": "ce4c9f9f2155a12f1ef1b575d090e762c2b88b78d3fad1f19a335cc3e39dd8af",
+    "learning_curves.csv": "ee6c14b63cd6a1be16d0681884cea10e668941c2bc455412c3a86f966e309bae",
+    "learning_curves.png": "4b68266181f8f7c21e88d0ca846f2f03b7e25db35c7d74c5d2b92cf8b7cec273",
+    "learning_curves_detail.png": "499b7f48e68ec5b9d7e4370bbf1a1cb55e9660c47bccfafd7159cdb0e8ab0e94",
+    "summary.json": "1242ff1a16a8e7c452bf58b64b9196731c65d00d16d19e6a2092cb00503d659d"
+  }
+}

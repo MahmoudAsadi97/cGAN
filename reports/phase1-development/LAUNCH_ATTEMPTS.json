@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "attempts": [
+    {
+      "recorded_at_utc": "2026-10-21T00:27:24.005882+00:00",
+      "plan": "MOMENTUM_LONG_PLAN.json",
+      "source_commit": "9459ff0",
+      "status": "preflight_failed",
+      "training_jobs_started": 0,
+      "reason": "AttributeError in checkpoint-hash validation: a string path was passed to the Path-based hash helper.",
+      "fix": "Convert checkpoint path to Path; regression verifies hashing, rejected tampering, no overwrite and failure records.",
+      "retry": "Same declared plan and new output path; no prior experiment artifacts existed."
+    }
+  ]
+}

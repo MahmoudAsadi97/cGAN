@@ -1,0 +1,31 @@
+{
+  "citation": "Bilgrau et al. (2016), GMCM: Unsupervised Clustering and Meta-Analysis Using Gaussian Mixture Copula Models, Journal of Statistical Software70(2),1\u201323",
+  "doi": "10.18637/jss.v070.i02",
+  "sources": [
+    {
+      "role": "citation",
+      "url": "https://raw.githubusercontent.com/AEBilgrau/GMCM/master/inst/CITATION",
+      "sha256": "56aa01303a225a94cc52956975786908f95ad1f0b11739995e2444c94a15a0ab",
+      "bytes": 1969,
+      "cached_path": ".cache/phase1-development/mixture_sources/CITATION",
+      "retrieved_at_utc": "2026-10-21T02:27:48.894658+00:00"
+    },
+    {
+      "role": "simulation",
+      "url": "https://raw.githubusercontent.com/AEBilgrau/GMCM/master/R/SimulateGMCMData.R",
+      "sha256": "25b0e3c60468f37ecdde125795dd6664bb474f235c3a90ac0078ea0dc5352704",
+      "bytes": 3552,
+      "cached_path": ".cache/phase1-development/mixture_sources/SimulateGMCMData.R",
+      "retrieved_at_utc": "2026-10-21T02:27:48.995108+00:00"
+    },
+    {
+      "role": "fitting",
+      "url": "https://raw.githubusercontent.com/AEBilgrau/GMCM/master/man/fit.full.GMCM.Rd",
+      "sha256": "2c0ad234036cc0309d55280f65a4a17e8fc47c20b5d75c95289ce9281fbdd764",
+      "bytes": 5123,
+      "cached_path": ".cache/phase1-development/mixture_sources/fit.full.GMCM.Rd",
+      "retrieved_at_utc": "2026-10-21T02:27:49.101869+00:00"
+    }
+  ],
+  "interpretation": "Author package sources verified. Simulation supports the full-mixture marginal PIT; our fixed normal-score EM estimator is not copula maximum likelihood. No new full-paper retrieval is claimed."
+}

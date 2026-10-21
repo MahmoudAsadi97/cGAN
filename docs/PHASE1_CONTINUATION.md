@@ -148,6 +148,14 @@ metrics. Fresh random draws assess sampling sensitivity; they do not create new
 validation meters. The evaluator verifies checkpoint, source-prior and dataset
 provenance and preserves failed attempts.
 
+The correlated source worsened profile and ramp errors in both short-screen
+seeds. Its ramp error was still falling with training, so the
+[common 30,000-update flow comparison](../reports/phase1-development/FLOW_LONG_PLAN.json)
+retains both sources and both seeds. Flow currently has no continuation interface;
+new runs start from initialization and their first 6,000-update histories are
+checked against the saved screen. Reusing an identical trajectory prefix does
+not create an additional independent training seed.
+
 ## Scientific acceptance and independent validation
 
 A useful foundation needs competitive distribution fidelity against strong

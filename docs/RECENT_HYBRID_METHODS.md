@@ -6,6 +6,14 @@ a bridge-model comparison if it adds measurable value. A latent model or an
 energy-based refinement is a separate, more expensive hypothesis. These are
 research recommendations, not completed experiments or claims of superiority.
 
+**Development follow-up:** the first controlled TRAIN-correlation source
+ablation has now completed at two seeds and 6,000 updates. It worsened profile
+SW1 and ramp W1 compared with the independent source, despite slightly better
+daily-energy W1. See the [complete comparison](../reports/phase1-development/correlated_flow_screen/README.md).
+This specific combination has not earned adoption. A declared common longer
+budget tests whether the result depends on optimization time; it cannot erase
+the unfavorable short-budget result or establish the full TSFlow method's quality.
+
 Our target is a signed 24-hour whole-house net-energy profile, conditioned on
 the available HP/EV/PV flags and calendar. Building type, heat-pump subtype and
 individual appliance consumption are unobserved. A distribution model can

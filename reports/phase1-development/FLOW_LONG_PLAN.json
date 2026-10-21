@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development; common30000-update flow source comparison",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "jobs": {
+    "isotropic_flow_s101": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 32,
+      "source_prior": "isotropic"
+    },
+    "isotropic_flow_s202": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 32,
+      "source_prior": "isotropic"
+    },
+    "correlated_flow_s101": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 32,
+      "source_prior": "training_correlation"
+    },
+    "correlated_flow_s202": {
+      "steps": 30000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "device": "cpu",
+      "learning_rate": 0.001,
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "solver_steps": 32,
+      "source_prior": "training_correlation"
+    }
+  },
+  "prespecified_scope": "Train both source settings and both seeds to30000 updates with unchanged networks, optimizer, selection and Heun32 solver. No flow resume is implemented, so these restart deterministically from initialization into new directories. Verify the first6000-step metric/loss history against the corresponding saved short run. Identical prefixes and seeds are reused trajectories, not new training replicates.",
+  "initial_interpretation": "Budget sensitivity development, retaining all4 outcomes. Primary selection stays SW1; ramp/tail tradeoffs must be reported, not used to silently select a different checkpoint. No final-validation claim; equal updates and row presentations still do not imply equal compute across GAN and flow.",
+  "method": "flow",
+  "decision_basis": "The correlated source worsens SW1 and ramps at6000updates despite slightly improved daily-energy W1. Correlated ramp error continues to fall across the screen, and the network may need longer to alter strongly correlated noise. Compare both sources at the same longer budget before interpreting a source mechanism effect beyond the short screen."
+}

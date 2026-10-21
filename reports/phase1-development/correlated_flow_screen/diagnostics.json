@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "role": "saved post-test development diagnostics",
+  "created_at_utc": "2026-10-21T01:01:27.877499+00:00",
+  "interpretation": "Extracted from hash-verified source reports; no data arrays, checkpoint deserialization or new model evaluation.",
+  "runs": [
+    {
+      "run": "flow_s101",
+      "training_seed": 101,
+      "source_prior_kind": "isotropic",
+      "manifest_sha256": "96dace98e02d3c3a360ebb3408e14981dff8ba8cdd8e6aa8fcb237e4eb495363",
+      "solver_sensitivity_sha256": "47e749e57ae300c88ed760c635f13dfd6c72e984d96b336b56eb5d5b694494ff",
+      "selected_checkpoint_sha256": "6b1fdf7eae4b3bfb360fc1f96ecbb4d9c17a63514651cce937b3d7212be977a4",
+      "selected_checkpoint_step": 6000,
+      "generation_seed": 20261022,
+      "common_initial_noise": true,
+      "used_for_selection": false,
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.0019975703355369387,
+        "mean_absolute_kwh": 0.0005720497863654192,
+        "maximum_absolute_kwh": 0.05800187530419265
+      },
+      "selection_solver": {
+        "method": "Heun",
+        "steps": 32,
+        "nfe": 64,
+        "generation_seconds_including_checkpoint_load": 1.2813143419989501,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.2166452930977962,
+          "daily_energy_w1_kwh": 2.4336678514899592,
+          "peak_w1_kw": 0.4561299424617027,
+          "ramp_w1_kw": 0.19086232791337082,
+          "mean_profile_rmse_kwh": 0.1467778002444515,
+          "variance_mae_kwh2": 0.5567994764486013,
+          "diversity_ratio": 1.3759147948434807,
+          "acf_lag1_w1": 0.05950377780842209,
+          "profile_sw1_kwh": 0.19391176785009206,
+          "acf_lag6_w1": 0.022391394838852597,
+          "normalized_profile_sw1": 0.005767921706209152
+        }
+      },
+      "sensitivity_solver": {
+        "method": "Heun",
+        "steps": 64,
+        "nfe": 128,
+        "generation_seconds_including_checkpoint_load": 2.4453181450007833,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.21672347882071386,
+          "daily_energy_w1_kwh": 2.4368955038310762,
+          "peak_w1_kw": 0.45680426235646177,
+          "ramp_w1_kw": 0.19074043129962198,
+          "mean_profile_rmse_kwh": 0.14692455994233905,
+          "variance_mae_kwh2": 0.5583003371028413,
+          "diversity_ratio": 1.3791598800289804,
+          "acf_lag1_w1": 0.059371192100364706,
+          "profile_sw1_kwh": 0.19408615230828954,
+          "acf_lag6_w1": 0.022390263853884637,
+          "normalized_profile_sw1": 0.0057731087864612415
+        }
+      },
+      "source_only": {
+        "status": "absent in the original saved isotropic selection report",
+        "macro_metrics": null,
+        "recomputed": false
+      }
+    },
+    {
+      "run": "flow_s202",
+      "training_seed": 202,
+      "source_prior_kind": "isotropic",
+      "manifest_sha256": "0dc37d8a3ee4e02cfc6f815830b8e7fdc5afe0390546b992671274b5559d78b4",
+      "solver_sensitivity_sha256": "494c77729456c02859f3bc85c705eb1b7576f985bb1aaf1c1b744176ebb4952d",
+      "selected_checkpoint_sha256": "25a0f311f085aa2e72c333df24399f7a8bbed662f06436b75044faa768e5697c",
+      "selected_checkpoint_step": 4000,
+      "generation_seed": 20261022,
+      "common_initial_noise": true,
+      "used_for_selection": false,
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.0015043744225733862,
+        "mean_absolute_kwh": 0.00048222984761282957,
+        "maximum_absolute_kwh": 0.04005618230594088
+      },
+      "selection_solver": {
+        "method": "Heun",
+        "steps": 32,
+        "nfe": 64,
+        "generation_seconds_including_checkpoint_load": 1.1477130350031075,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.22058630807471136,
+          "daily_energy_w1_kwh": 2.427215316325758,
+          "peak_w1_kw": 0.4293459169727995,
+          "ramp_w1_kw": 0.19563795795460964,
+          "mean_profile_rmse_kwh": 0.14853214953363914,
+          "variance_mae_kwh2": 0.5242058607256709,
+          "diversity_ratio": 1.2975993375184547,
+          "acf_lag1_w1": 0.05248883185445674,
+          "profile_sw1_kwh": 0.19215052169845748,
+          "acf_lag6_w1": 0.0235919408100262,
+          "normalized_profile_sw1": 0.005715533292547513
+        }
+      },
+      "sensitivity_solver": {
+        "method": "Heun",
+        "steps": 64,
+        "nfe": 128,
+        "generation_seconds_including_checkpoint_load": 2.1983431999979075,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.2206027757031056,
+          "daily_energy_w1_kwh": 2.428241079335702,
+          "peak_w1_kw": 0.4294759728755392,
+          "ramp_w1_kw": 0.19550564914469679,
+          "mean_profile_rmse_kwh": 0.14856662732093479,
+          "variance_mae_kwh2": 0.5248822816227353,
+          "diversity_ratio": 1.2999444467210686,
+          "acf_lag1_w1": 0.05239805678671555,
+          "profile_sw1_kwh": 0.1922213727222317,
+          "acf_lag6_w1": 0.023598557380192814,
+          "normalized_profile_sw1": 0.0057176407621583845
+        }
+      },
+      "source_only": {
+        "status": "absent in the original saved isotropic selection report",
+        "macro_metrics": null,
+        "recomputed": false
+      }
+    },
+    {
+      "run": "correlated_flow_s101",
+      "training_seed": 101,
+      "source_prior_kind": "training_correlation",
+      "manifest_sha256": "8c47ad561f72decf0e4f58210ef77bfc8238560d4132c92542d1bf977c44392c",
+      "solver_sensitivity_sha256": "4847cb0ff030fe144d2da6721460f3eff90f2864fcb133569b47eae3884b64c9",
+      "selected_checkpoint_sha256": "72267407021f6af44c7816f23c1505ee3c13c8136773e44b0ccd2e13af5da342",
+      "selected_checkpoint_step": 6000,
+      "generation_seed": 20261022,
+      "common_initial_noise": true,
+      "used_for_selection": false,
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.0014867466839608436,
+        "mean_absolute_kwh": 0.0005144686433298313,
+        "maximum_absolute_kwh": 0.04507138205028838
+      },
+      "selection_solver": {
+        "method": "Heun",
+        "steps": 32,
+        "nfe": 64,
+        "generation_seconds_including_checkpoint_load": 0.9429828860011185,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.24500386249729816,
+          "daily_energy_w1_kwh": 2.3140623644766105,
+          "peak_w1_kw": 0.44817031151667697,
+          "ramp_w1_kw": 0.28889436548244124,
+          "mean_profile_rmse_kwh": 0.14546192712202322,
+          "variance_mae_kwh2": 0.5361506545393712,
+          "diversity_ratio": 1.334973110513672,
+          "acf_lag1_w1": 0.1840196575301309,
+          "profile_sw1_kwh": 0.20453754907810312,
+          "acf_lag6_w1": 0.03101475811954471,
+          "normalized_profile_sw1": 0.006083986454986315
+        }
+      },
+      "sensitivity_solver": {
+        "method": "Heun",
+        "steps": 64,
+        "nfe": 128,
+        "generation_seconds_including_checkpoint_load": 1.8063385220011696,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.2450666202489613,
+          "daily_energy_w1_kwh": 2.3146783207913826,
+          "peak_w1_kw": 0.44845874763462507,
+          "ramp_w1_kw": 0.288915468505774,
+          "mean_profile_rmse_kwh": 0.14554705483600577,
+          "variance_mae_kwh2": 0.5369970681205981,
+          "diversity_ratio": 1.3372820246360986,
+          "acf_lag1_w1": 0.18405879058072386,
+          "profile_sw1_kwh": 0.20464460645318766,
+          "acf_lag6_w1": 0.031017007613981067,
+          "normalized_profile_sw1": 0.006087170885536385
+        }
+      },
+      "source_only": {
+        "status": "saved",
+        "source_sha256": "39736244872c1de774abf4c5e3a4f763125e04ea9212734ba49aecfbb421108f",
+        "method": "source_only",
+        "source_prior_kind": "training_correlation",
+        "generation_seed": 20261022,
+        "selection_rows": 16384,
+        "used_for_selection": false,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.8445456448897001,
+          "daily_energy_w1_kwh": 12.39183417425944,
+          "peak_w1_kw": 1.2078618941723267,
+          "ramp_w1_kw": 0.42059121795956866,
+          "mean_profile_rmse_kwh": 0.5283575772952854,
+          "variance_mae_kwh2": 1.1969315222086785,
+          "diversity_ratio": 3.229201633220137,
+          "acf_lag1_w1": 0.13487594595865315,
+          "profile_sw1_kwh": 0.6996949967144855,
+          "acf_lag6_w1": 0.05878644968841844,
+          "normalized_profile_sw1": 0.02081248602918921
+        },
+        "generated_physical_float64_sha256": "b54326f63a1256d445612a652bb1b0c0ae290e12b52921e694e171b22b134c3c",
+        "interpretation": "Common unconditional Gaussian source, inverse-scaled without a trained map; same validation rows and generation seed."
+      }
+    },
+    {
+      "run": "correlated_flow_s202",
+      "training_seed": 202,
+      "source_prior_kind": "training_correlation",
+      "manifest_sha256": "d689d1c8902edcf29161c5076e2f6ea87c26a21d2ef673397c3789594f4dbc0e",
+      "solver_sensitivity_sha256": "71fb4b1b61a9e9bde1d1cc5c2f81cba579847f94ae65908d8f08f8bcfdcbe641",
+      "selected_checkpoint_sha256": "c7e9c399e85842c050d4076e7f49f5edd2406b7a9c7ad29417f2728955ca79e6",
+      "selected_checkpoint_step": 4000,
+      "generation_seed": 20261022,
+      "common_initial_noise": true,
+      "used_for_selection": false,
+      "paired_generated_profile_change": {
+        "rmse_kwh": 0.0011293502657364455,
+        "mean_absolute_kwh": 0.00040675737837030123,
+        "maximum_absolute_kwh": 0.031163502043137115
+      },
+      "selection_solver": {
+        "method": "Heun",
+        "steps": 32,
+        "nfe": 64,
+        "generation_seconds_including_checkpoint_load": 0.9122826320017339,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.265736987581158,
+          "daily_energy_w1_kwh": 2.309180554223817,
+          "peak_w1_kw": 0.47807680976434597,
+          "ramp_w1_kw": 0.3196553191549385,
+          "mean_profile_rmse_kwh": 0.14808685753287126,
+          "variance_mae_kwh2": 0.5347325350779373,
+          "diversity_ratio": 1.333671648921329,
+          "acf_lag1_w1": 0.18907208425006286,
+          "profile_sw1_kwh": 0.21666975336919042,
+          "acf_lag6_w1": 0.029577592249406093,
+          "normalized_profile_sw1": 0.006444859883404667
+        }
+      },
+      "sensitivity_solver": {
+        "method": "Heun",
+        "steps": 64,
+        "nfe": 128,
+        "generation_seconds_including_checkpoint_load": 1.9493484599952353,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.2657762274472779,
+          "daily_energy_w1_kwh": 2.3090459693936936,
+          "peak_w1_kw": 0.4781975976708214,
+          "ramp_w1_kw": 0.3196623716328466,
+          "mean_profile_rmse_kwh": 0.14815860866128228,
+          "variance_mae_kwh2": 0.5352803394128277,
+          "diversity_ratio": 1.335251607119322,
+          "acf_lag1_w1": 0.1891123263012342,
+          "profile_sw1_kwh": 0.21673705970912488,
+          "acf_lag6_w1": 0.02957773862309593,
+          "normalized_profile_sw1": 0.006446861916099111
+        }
+      },
+      "source_only": {
+        "status": "saved",
+        "source_sha256": "39736244872c1de774abf4c5e3a4f763125e04ea9212734ba49aecfbb421108f",
+        "method": "source_only",
+        "source_prior_kind": "training_correlation",
+        "generation_seed": 20261022,
+        "selection_rows": 16384,
+        "used_for_selection": false,
+        "macro_metrics": {
+          "slot_w1_kwh": 0.8445456448897001,
+          "daily_energy_w1_kwh": 12.39183417425944,
+          "peak_w1_kw": 1.2078618941723267,
+          "ramp_w1_kw": 0.42059121795956866,
+          "mean_profile_rmse_kwh": 0.5283575772952854,
+          "variance_mae_kwh2": 1.1969315222086785,
+          "diversity_ratio": 3.229201633220137,
+          "acf_lag1_w1": 0.13487594595865315,
+          "profile_sw1_kwh": 0.6996949967144855,
+          "acf_lag6_w1": 0.05878644968841844,
+          "normalized_profile_sw1": 0.02081248602918921
+        },
+        "generated_physical_float64_sha256": "b54326f63a1256d445612a652bb1b0c0ae290e12b52921e694e171b22b134c3c",
+        "interpretation": "Common unconditional Gaussian source, inverse-scaled without a trained map; same validation rows and generation seed."
+      }
+    }
+  ]
+}

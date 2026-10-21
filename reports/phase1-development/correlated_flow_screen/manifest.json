@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "role": "post-test development",
+  "status": "completed",
+  "created_at_utc": "2026-10-21T00:59:56.958136+00:00",
+  "declared_run_directories": [
+    "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s101",
+    "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s202",
+    "/workspace/cGAN/runs/phase1-development/correlated_flow/correlated_flow_s101",
+    "/workspace/cGAN/runs/phase1-development/correlated_flow/correlated_flow_s202"
+  ],
+  "baseline_directory": "/workspace/cGAN/artifacts/phase1-development/baselines_screen",
+  "source_manifest_hashes": {
+    "/workspace/cGAN/artifacts/phase1-development/baselines_screen/manifest.json": "f7d944690594a39f1e8dd62b10b811f0bbce7c46586d34f5c86cbc5369212b58",
+    "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s101/manifest.json": "96dace98e02d3c3a360ebb3408e14981dff8ba8cdd8e6aa8fcb237e4eb495363",
+    "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s202/manifest.json": "0dc37d8a3ee4e02cfc6f815830b8e7fdc5afe0390546b992671274b5559d78b4",
+    "/workspace/cGAN/runs/phase1-development/correlated_flow/correlated_flow_s101/manifest.json": "8c47ad561f72decf0e4f58210ef77bfc8238560d4132c92542d1bf977c44392c",
+    "/workspace/cGAN/runs/phase1-development/correlated_flow/correlated_flow_s202/manifest.json": "d689d1c8902edcf29161c5076e2f6ea87c26a21d2ef673397c3789594f4dbc0e"
+  },
+  "script_sha256": "628a3b80f584aa52ae8b0a130c217d1b86cd3d8edd96552740cf13f181928c48",
+  "artifact_hashes": {
+    "checkpoints.csv": "732543b38a3d0947f020c9f124cf2fb2689ae8a5d86394e9b7733e4c823dd520",
+    "conditions.csv": "03320b229f91a7c577d2c90a2adcf51aebeb8ae41a87bdb9deeaba25d42ae107",
+    "learning_curves.csv": "86f71e0e3f99eb71044f7f5888758f024d788b76bf1ab002b46316d739437c36",
+    "learning_curves.png": "ccfb32ee1e8922dc3da248a524f2ea74c30ac4a5cc36e2628f9a5f1ec8a4aa68",
+    "learning_curves_detail.png": "286af7931c339fdc79cf809910372e04f9a6864b42dc13db829fb25172805020",
+    "summary.json": "8060dcc6573b203f1aacd79371c0cbc64cea431ddc7b76ee3d756a40edb67293"
+  }
+}

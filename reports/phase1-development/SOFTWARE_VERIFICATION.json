@@ -1,9 +1,9 @@
 {
-  "command": ".venv/bin/python -m pytest -q -W error --ignore=tests/test_development_candidates.py",
-  "passed": 311,
+  "command": ".venv/bin/python -m pytest -q -W error",
+  "passed": 315,
   "skipped": 2,
   "skip_reason": "CUDA hardware unavailable; actual GPU training and auxiliary-loss execution unverified",
-  "elapsed_seconds": 20.02,
+  "elapsed_seconds": 29.88,
   "runtime": {
     "python": "3.12.14",
     "torch": "2.8.0+cpu",
@@ -38,7 +38,9 @@
     "tests/test_development_resume.py": "1cc91d896df0d1b052bb19b22bae2f9643ffde393d8a0bb1ae97e82e89990f2f",
     "tests/test_development_runner.py": "ae277631cb739838947c3bb438ecfdfa7a919bbece17e94b54b983425c3833ec",
     "tests/test_development_summary.py": "9a706f7194b911cfa9538eb11a64fe644288f9c35dca3a907a8aea96eb1fba18",
-    "tests/test_flow.py": "0428d867e6e43256e3c71cbc8a17dd8470d0cdf3a4bb850580ce71456f3f6b18"
+    "tests/test_flow.py": "0428d867e6e43256e3c71cbc8a17dd8470d0cdf3a4bb850580ce71456f3f6b18",
+    "scripts/evaluate_development_candidates.py": "aab33cedb7dacc27dac6f079741fe3cee750bdc680c540131eba785a1cb54f00",
+    "tests/test_development_candidates.py": "939d058667ce123c3353e9e1ad4f11c605798f2322645a7b5617e3ee0fa9acd0"
   },
-  "interpretation": "Software verification of recorded sources; new candidate evaluator remains outside this source freeze. Tests do not establish generative fidelity or publication readiness."
+  "interpretation": "Software verification of the recorded source; does not establish generative fidelity or publication readiness."
 }

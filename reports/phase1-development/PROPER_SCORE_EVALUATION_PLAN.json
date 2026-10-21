@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "full reused-inner-VAL fixed-model proper-score development supplement",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "generation_seeds": [
+    20261111,
+    20261112,
+    20261113
+  ],
+  "ensemble_size": 1024,
+  "nested_size": 512,
+  "models": [
+    {
+      "id": "mean",
+      "kind": "baseline",
+      "baseline": "mean"
+    },
+    {
+      "id": "resample",
+      "kind": "baseline",
+      "baseline": "resample"
+    },
+    {
+      "id": "gaussian",
+      "kind": "baseline",
+      "baseline": "copula"
+    },
+    {
+      "id": "beta",
+      "kind": "strong",
+      "baseline": "beta",
+      "fit_seed": 20261026,
+      "df": null
+    },
+    {
+      "id": "student_t4",
+      "kind": "strong",
+      "baseline": "student_t",
+      "fit_seed": 20261026,
+      "df": 4
+    },
+    {
+      "id": "student_t8",
+      "kind": "strong",
+      "baseline": "student_t",
+      "fit_seed": 20261026,
+      "df": 8
+    },
+    {
+      "id": "student_t16",
+      "kind": "strong",
+      "baseline": "student_t",
+      "fit_seed": 20261026,
+      "df": 16
+    },
+    {
+      "id": "mixture_k8_s20261101",
+      "kind": "mixture",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/mixture_replication/mixture_k8_s20261101",
+      "manifest_sha256": "ecf4b72f791494748718951dde8cea03997cfecbb4c51663274c3cb0e043bc72",
+      "model_sha256": "a2fd8434b99ce55952cb1b381fef873e38663a2d7c9f303ec23d4fac4d2c9eb0"
+    },
+    {
+      "id": "mixture_k8_s20261102",
+      "kind": "mixture",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/mixture_replication/mixture_k8_s20261102",
+      "manifest_sha256": "db75e0d34bc0f6c35dc6dc19404bcfca4ebeab574dd2f0eac2acfaa17c62fa50",
+      "model_sha256": "64a616b6d8413b8cf0b67ce38c65f2aa4fd0da8feaf2ac191855321f6b679c25"
+    },
+    {
+      "id": "mixture_k8_s20261103",
+      "kind": "mixture",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/mixture_replication/mixture_k8_s20261103",
+      "manifest_sha256": "90ac2c40735d959fb6dfb36b565a0bf3435f6bd8b3803595e4d4ba52b7f0c207",
+      "model_sha256": "3b34a542220820d3119ca0a5813e3e934bdf873c471fdc5dc9e786dcff2fc04f"
+    },
+    {
+      "id": "mixture_k8_s20261104",
+      "kind": "mixture",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/mixture_replication/mixture_k8_s20261104",
+      "manifest_sha256": "9f7026034b3227bcc68dc12440d9f76ce527a8fc40fc3f7d3b85c8683ac15273",
+      "model_sha256": "7777e7dd4f0bacf96afdd36b5fdcd6b8297042222d602f354bbba8d5a8582135"
+    },
+    {
+      "id": "mixture_k8_s20261105",
+      "kind": "mixture",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/mixture_replication/mixture_k8_s20261105",
+      "manifest_sha256": "d7b47335091bbb1f23e3c004c2ef6ca1993383fc9ef27d6988fd9fa5d2d017da",
+      "model_sha256": "4d3ee8f36304f66936e6df8adef42aff1905d8cfbbcf2123557369664a05dbd6"
+    },
+    {
+      "id": "cgan_raw_s301",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s301",
+      "manifest_sha256": "3180ca23d3ce7ed7171f7da85d81e2e7d5ad3f1ddb88ddd729c96ce35a25e7ab",
+      "checkpoint_sha256": "d81d3c97e5f28461d89aee2dc02437fc4a35253375f653fe8a8668ce27fe658d"
+    },
+    {
+      "id": "cgan_cal_s301",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s301",
+      "manifest_sha256": "3180ca23d3ce7ed7171f7da85d81e2e7d5ad3f1ddb88ddd729c96ce35a25e7ab",
+      "checkpoint_sha256": "d81d3c97e5f28461d89aee2dc02437fc4a35253375f653fe8a8668ce27fe658d",
+      "calibration": {
+        "study_directory": "/workspace/cGAN/artifacts/phase1-development/cgan_replication_calibration",
+        "manifest_sha256": "7ae5e116394c98a7029bf20dec49bf00e1f9ff2a704180d4c6e270662ae05a12",
+        "fit_artifact": "candidate_000_fit.json",
+        "fit_sha256": "b956df9e68b7471e599b693936169d4fb0d152ec3e9a2bd58528e0e8ece122cd",
+        "calibration_artifact": "candidate_000_calibration.npz",
+        "calibration_sha256": "3caf4b3995d3eac4afcc7480a399078aea9422c76d96b7fa8da20343948e3930"
+      }
+    },
+    {
+      "id": "cgan_raw_s401",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s401",
+      "manifest_sha256": "243772889f88135e7b91ae679a764592c44a88f62a9a96d7442d4004c578344d",
+      "checkpoint_sha256": "aab8a503ccc961da369bfdce2077458ca8d289459a373d6c80bfbdc1da43ae76"
+    },
+    {
+      "id": "cgan_cal_s401",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s401",
+      "manifest_sha256": "243772889f88135e7b91ae679a764592c44a88f62a9a96d7442d4004c578344d",
+      "checkpoint_sha256": "aab8a503ccc961da369bfdce2077458ca8d289459a373d6c80bfbdc1da43ae76",
+      "calibration": {
+        "study_directory": "/workspace/cGAN/artifacts/phase1-development/cgan_replication_calibration",
+        "manifest_sha256": "7ae5e116394c98a7029bf20dec49bf00e1f9ff2a704180d4c6e270662ae05a12",
+        "fit_artifact": "candidate_001_fit.json",
+        "fit_sha256": "4730cb9ddb1dff272cd600739fd5074ab207b390735eeea71f348c3f279a6f66",
+        "calibration_artifact": "candidate_001_calibration.npz",
+        "calibration_sha256": "1fcd24700c16fc9d171c4b9a34b1f43d2e0028f05ce71bbfdb9e1e2f0a8f44f5"
+      }
+    },
+    {
+      "id": "cgan_raw_s501",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s501",
+      "manifest_sha256": "fe588eab0536c3bbe04a3e6e309bfec84919197ac0190da352caefc3c5354a91",
+      "checkpoint_sha256": "78dc7c81e725b1f071dc5cdf993a20649798cfc18982198b6fe49f7237608dbe"
+    },
+    {
+      "id": "cgan_cal_s501",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s501",
+      "manifest_sha256": "fe588eab0536c3bbe04a3e6e309bfec84919197ac0190da352caefc3c5354a91",
+      "checkpoint_sha256": "78dc7c81e725b1f071dc5cdf993a20649798cfc18982198b6fe49f7237608dbe",
+      "calibration": {
+        "study_directory": "/workspace/cGAN/artifacts/phase1-development/cgan_replication_calibration",
+        "manifest_sha256": "7ae5e116394c98a7029bf20dec49bf00e1f9ff2a704180d4c6e270662ae05a12",
+        "fit_artifact": "candidate_002_fit.json",
+        "fit_sha256": "f7751cb97a6d9f4876eece6f5ae9500130249b1fc9180cb3192a6f02f2df9e4d",
+        "calibration_artifact": "candidate_002_calibration.npz",
+        "calibration_sha256": "52f6b9f34cb78cae8d94775263a1b1c6e63c253b940ad3f69748613e6e5b59a4"
+      }
+    },
+    {
+      "id": "cgan_raw_s601",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s601",
+      "manifest_sha256": "ec7c1caa74fc04428b98a024febabc45c830c2756628ad9e64b87e74d0f3e936",
+      "checkpoint_sha256": "ec49443c3d27081d90241fd6e1bace7a96bd512a196c820030a06790bfb2c648"
+    },
+    {
+      "id": "cgan_cal_s601",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s601",
+      "manifest_sha256": "ec7c1caa74fc04428b98a024febabc45c830c2756628ad9e64b87e74d0f3e936",
+      "checkpoint_sha256": "ec49443c3d27081d90241fd6e1bace7a96bd512a196c820030a06790bfb2c648",
+      "calibration": {
+        "study_directory": "/workspace/cGAN/artifacts/phase1-development/cgan_replication_calibration",
+        "manifest_sha256": "7ae5e116394c98a7029bf20dec49bf00e1f9ff2a704180d4c6e270662ae05a12",
+        "fit_artifact": "candidate_003_fit.json",
+        "fit_sha256": "898555bc84d7719ec7339fa04e1ce95759a9620180c47dac07effaa0100ac58d",
+        "calibration_artifact": "candidate_003_calibration.npz",
+        "calibration_sha256": "d21124fe14213b729168baa3a0453a1e7e43429aaba2f4b965fc32f00383a6a7"
+      }
+    },
+    {
+      "id": "cgan_raw_s701",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s701",
+      "manifest_sha256": "e9289e78913ef75e9ec8daeaabd69346f6e9c5fb5c2ce1853cfe7b7098367422",
+      "checkpoint_sha256": "7f8dd53cd0b47d7e004c8b1daa5b8bff66e63b309cc737d9eef30cada2a062b6"
+    },
+    {
+      "id": "cgan_cal_s701",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/cgan_replication/cgan_standard_b0_s701",
+      "manifest_sha256": "e9289e78913ef75e9ec8daeaabd69346f6e9c5fb5c2ce1853cfe7b7098367422",
+      "checkpoint_sha256": "7f8dd53cd0b47d7e004c8b1daa5b8bff66e63b309cc737d9eef30cada2a062b6",
+      "calibration": {
+        "study_directory": "/workspace/cGAN/artifacts/phase1-development/cgan_replication_calibration",
+        "manifest_sha256": "7ae5e116394c98a7029bf20dec49bf00e1f9ff2a704180d4c6e270662ae05a12",
+        "fit_artifact": "candidate_004_fit.json",
+        "fit_sha256": "95f7f5ae9409c1c4b38415a885ba7ac62c24bd715985bfee46ab67c8315f9841",
+        "calibration_artifact": "candidate_004_calibration.npz",
+        "calibration_sha256": "0568986cb0013ffbe9c35f9503d5615de1d3f3bf2eb452bedbc2ae0aef5fcd2c"
+      }
+    },
+    {
+      "id": "flow_raw_s101",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s101",
+      "manifest_sha256": "d1bc2c7a17df93663938ea1f51d5cbabf4451f6e1dc493156fc77a128c9fabd0",
+      "checkpoint_sha256": "7f54794875a3c9ced3556fad55bd3be35cd924a97293f094e1b43f77abae9220"
+    },
+    {
+      "id": "flow_cal_s101",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s101",
+      "manifest_sha256": "d1bc2c7a17df93663938ea1f51d5cbabf4451f6e1dc493156fc77a128c9fabd0",
+      "checkpoint_sha256": "7f54794875a3c9ced3556fad55bd3be35cd924a97293f094e1b43f77abae9220",
+      "calibration": {
+        "study_directory": "/workspace/cGAN/artifacts/phase1-development/marginal_calibration",
+        "manifest_sha256": "c67278c421676d8e7095aeb8416f7f3eff3ee24288579cc531217b475452601b",
+        "fit_artifact": "candidate_002_fit.json",
+        "fit_sha256": "28a1ccb79d1441592d09ca3e2a9e4cf2fd48f391e678959de4e976a52979d49f",
+        "calibration_artifact": "candidate_002_calibration.npz",
+        "calibration_sha256": "5240bae507bd05b0b9060e5feac2be19aab87cb13ba008cbd6c021f4c9cc2ca7"
+      }
+    },
+    {
+      "id": "flow_raw_s202",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s202",
+      "manifest_sha256": "0a0a150fa1482965a5af367ef7b26e1a8f446c07e94d2a02d70e95ffc3b6778f",
+      "checkpoint_sha256": "f2515281fb250a36e0e76721285e941c6d7799126169c7e8a85210e6ee9ea89e"
+    },
+    {
+      "id": "flow_cal_s202",
+      "kind": "neural",
+      "run_directory": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s202",
+      "manifest_sha256": "0a0a150fa1482965a5af367ef7b26e1a8f446c07e94d2a02d70e95ffc3b6778f",
+      "checkpoint_sha256": "f2515281fb250a36e0e76721285e941c6d7799126169c7e8a85210e6ee9ea89e",
+      "calibration": {
+        "study_directory": "/workspace/cGAN/artifacts/phase1-development/marginal_calibration",
+        "manifest_sha256": "c67278c421676d8e7095aeb8416f7f3eff3ee24288579cc531217b475452601b",
+        "fit_artifact": "candidate_003_fit.json",
+        "fit_sha256": "21e743efbc917710daa6e81ae5de99886bcba02937d9f5ef9e8a7780414e4d96",
+        "calibration_artifact": "candidate_003_calibration.npz",
+        "calibration_sha256": "bed1d2b24413cc3e02cd0f81292f383277bc2721c0ed16363b141a15a7bd4b9d"
+      }
+    }
+  ],
+  "comparison_design": {
+    "path": "reports/phase1-development/PROPER_SCORE_COMPARISON_DESIGN.json",
+    "sha256": "83d5d0dadd2fb3471a27f9987724732b987957358a33e262f1d524201ee2ed64"
+  },
+  "source_sha256_at_binding": {
+    "scripts/evaluate_proper_scores.py": "e28fe864a6664b52de833f1c0b4f34dcd2459191cda90aed3910e1bec0e216dd",
+    "src/fluvius_cgan/proper_scores.py": "e1ed06286926b1dc13f647f28e18cd09c673c9c223b7aa92041aae207691d57b",
+    "src/fluvius_cgan/meter_uncertainty.py": "6f0b44fc7203e83e2615848487b0c4ceba3fe4cbe079369dbd4fc77355f0d6a8"
+  },
+  "expected_validation": {
+    "meters": 332,
+    "profiles": 120848,
+    "retained_dates_per_meter": 364,
+    "conditions": 64
+  },
+  "expected_models": 26,
+  "expected_draws": 78,
+  "output": "/workspace/cGAN/artifacts/phase1-development/proper_scores",
+  "model_averaging": "Average model-specific per-profile scores; never concatenate fitted-model ensembles.",
+  "scope": "All fits and all draws retained. Inner VAL has informed development and selection. New generation and training seeds do not create untouched confirmation. Conditional postselection descriptive intervals will be computed only in a separate frozen comparison; no actual new-meter coverage or publication threshold is implied.",
+  "sampling_note": "Fresh 1024-member ensembles; first512 members nested within each condition. Earlier256-member diagnostics are a separate generation design and are not asserted to be nested. Equal integer seeds do not establish common random numbers across different samplers.",
+  "calibration_note": "Five fresh cGAN mappings use source seed20261121; contextual two-flow mappings use earlier independent source seed20261025. Every mapping is fit to inner TRAIN targets and bound to its source checkpoint.",
+  "original_val_test_performance_access": false
+}

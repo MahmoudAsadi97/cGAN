@@ -7,10 +7,13 @@ reference; this module isolates explicitly recorded development changes.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import platform
+import shutil
 import subprocess
 import time
 
@@ -25,7 +28,7 @@ from .training import _json, _read_data, _save, _sha256
 
 DEFAULTS = {'steps': 6000, 'batch_size': 512, 'seed': 101, 'num_threads': 1,
             'normalization': 'minmax', 'validation_every': 1000,
-            'validation_per_condition': 256}
+            'validation_per_condition': 256, 'device': 'cpu', 'beta1': .9}
 KINDS = ('minmax', 'standard', 'hourly_standard')
 SCHEMA = 'phase1-development-1'
 
@@ -90,12 +93,14 @@ def _samples(model, representation, labels, seed, batch_size=2048):
     outputs = []
     was_training = model.training
     model.eval()
+    device = next(model.parameters()).device
     try:
         with torch.no_grad():
             for start in range(0, len(labels), batch_size):
                 batch = torch.from_numpy(labels[start:start + batch_size].astype(np.int64))
                 z = torch.from_numpy(noise.standard_normal((len(batch), 24), dtype=np.float32))
-                outputs.append(transform(model(z, batch).numpy(), representation, inverse=True))
+                outputs.append(transform(model(z.to(device), batch.to(device)).cpu().numpy(),
+                                         representation, inverse=True))
     finally:
         model.train(was_training)
     return np.concatenate(outputs) if outputs else np.empty((0, 24))
@@ -127,11 +132,122 @@ def _config(values):
         raise ValueError('Invalid training seed')
     if c['normalization'] not in KINDS or c['validation_per_condition'] > 1024:
         raise ValueError('Invalid normalization or validation size')
+    if c['device'] not in ('cpu', 'cuda'):
+        raise ValueError('device must be cpu or cuda')
+    if type(c['beta1']) not in (int, float) or not 0 <= c['beta1'] < 1:
+        raise ValueError('beta1 must be a number in [0,1)')
     return c
 
 
-def train_probe(data_dir, run_dir, config):
+def _device(name):
+    if name == 'cuda':
+        # This must precede CUDA context creation, including device metadata reads.
+        workspace = os.environ.get('CUBLAS_WORKSPACE_CONFIG')
+        if workspace not in (None, ':4096:8', ':16:8'):
+            raise RuntimeError('CUDA requires deterministic CUBLAS_WORKSPACE_CONFIG')
+        if workspace is None and torch.cuda.is_initialized():
+            raise RuntimeError('Set CUBLAS_WORKSPACE_CONFIG before initializing CUDA')
+        os.environ.setdefault('CUBLAS_WORKSPACE_CONFIG', ':4096:8')
+        if not torch.cuda.is_available():
+            raise RuntimeError('CUDA was requested but is not available; no CPU fallback')
+    return torch.device(name)
+
+
+@contextmanager
+def _execution(device):
+    if device.type == 'cpu':
+        yield
+        return
+    previous = (torch.are_deterministic_algorithms_enabled(),
+                torch.is_deterministic_algorithms_warn_only_enabled(),
+                torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic,
+                torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32)
+    try:
+        torch.use_deterministic_algorithms(True)
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
+        yield
+    finally:
+        torch.use_deterministic_algorithms(previous[0], warn_only=previous[1])
+        torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic = previous[2:4]
+        torch.backends.cuda.matmul.allow_tf32, torch.backends.cudnn.allow_tf32 = previous[4:6]
+
+
+def _runtime(device, threads):
+    result = {'python': platform.python_version(), 'numpy': np.__version__,
+              'torch': str(torch.__version__), 'device': device.type, 'threads': threads,
+              'deterministic_algorithms': True if device.type == 'cuda'
+                  else torch.are_deterministic_algorithms_enabled(),
+              'cuda_version': torch.version.cuda, 'cudnn_version': torch.backends.cudnn.version()}
+    if device.type == 'cuda':
+        result.update(gpu_name=torch.cuda.get_device_name(),
+                      gpu_capability=list(torch.cuda.get_device_capability()),
+                      cublas_workspace_config=os.environ['CUBLAS_WORKSPACE_CONFIG'],
+                      cudnn_benchmark=False, cudnn_deterministic=True, allow_tf32=False)
+    return result
+
+
+def _resume(checkpoint, config, hashes, representation, selected, runtime):
+    """Verify a completed run before carrying its immutable record forward.
+
+    Interrupted-run recovery needs an atomic checkpoint bundle and is not
+    promised by this continuation API. Device/backend changes are separate runs.
+    """
+    path = Path(checkpoint).resolve()
+    if path.name != 'last.pt':
+        raise ValueError('Resume requires a completed run last.pt checkpoint')
+    manifest = json.loads((path.parent / 'manifest.json').read_text())
+    if manifest.get('status') != 'completed' or manifest.get('schema_version') != SCHEMA:
+        raise ValueError('Resume requires a completed development run')
+    names = ('last.pt', 'best.pt', 'history.json', 'best_validation.json')
+    artifact_hashes = {name: _sha256(path.parent / name) for name in names}
+    if any(manifest.get('artifact_hashes', {}).get(name) != value
+           for name, value in artifact_hashes.items()):
+        raise ValueError('Resume artifact hash mismatch')
+    state = torch.load(path, weights_only=True, map_location='cpu')
+    previous = _config(state['config'])
+    if ({key: value for key, value in config.items() if key != 'steps'} !=
+            {key: value for key, value in previous.items() if key != 'steps'}):
+        raise ValueError('Resume config differs from the original trajectory')
+    if config['steps'] <= state['step'] or state['step'] != previous['steps']:
+        raise ValueError('Resume requires a larger total step budget')
+    if state['step'] != 1 and state['step'] % config['validation_every']:
+        raise ValueError('Resume requires a scheduled validation boundary')
+    if (_config(manifest['config']) != previous or manifest['completed_steps'] != state['step']
+            or manifest['data_hashes'] != hashes or state['data_hashes'] != hashes
+            or state['representation'] != representation or state['selection'] != selected
+            or manifest['representation'] != representation or manifest['selection'] != selected
+            or state['schema_version'] != SCHEMA):
+        raise ValueError('Resume data, selection, representation, or manifest mismatch')
+    old_runtime = manifest['runtime']
+    for key in ('device', 'threads', 'python', 'numpy', 'torch'):
+        if old_runtime.get(key) != runtime[key]:
+            raise ValueError(f'Resume runtime differs: {key}')
+    if runtime['device'] == 'cuda':
+        for key in ('gpu_name', 'gpu_capability', 'cuda_version', 'cudnn_version',
+                    'cublas_workspace_config', 'deterministic_algorithms', 'allow_tf32'):
+            if old_runtime.get(key) != runtime[key]:
+                raise ValueError(f'Resume CUDA runtime differs: {key}')
+    best = torch.load(path.parent / 'best.pt', weights_only=True, map_location='cpu')
+    if (best['step'] != state['best_step'] or best['best_score'] != state['best_score']
+            or best['data_hashes'] != hashes or best['representation'] != representation
+            or best['selection'] != selected
+            or state['history'] != json.loads((path.parent / 'history.json').read_text())):
+        raise ValueError('Resume selection/history mismatch')
+    lineage = {'checkpoint': str(path), 'checkpoint_sha256': artifact_hashes['last.pt'],
+               'manifest_sha256': _sha256(path.parent / 'manifest.json'),
+               'prior_git_head': manifest['git_head'],
+               'prior_source_sha256': manifest['source_sha256'],
+               'prior_artifact_hashes': artifact_hashes,
+               'prior_elapsed_seconds': manifest['elapsed_seconds']}
+    return state, lineage
+
+
+def train_probe(data_dir, run_dir, config, resume=None):
     c = _config(config)
+    device = _device(c['device'])
     data, output = Path(data_dir), Path(run_dir)
     if output.exists() and (not output.is_dir() or any(output.iterdir())):
         raise FileExistsError(output)
@@ -145,6 +261,9 @@ def train_probe(data_dir, run_dir, config):
     selected = {'index_seed': 20261021, 'generation_seed': 20261022,
                 'indices': indices.tolist(), 'conditions': np.unique(labels).tolist(),
                 'directions_seed': 2026, 'directions_count': 128}
+    runtime = _runtime(device, c['num_threads'])
+    resumed, lineage = (None, None) if resume is None else _resume(
+        resume, c, hashes, representation, selected, runtime)
     output.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(c['num_threads'])
     source = {p.name: _sha256(p) for p in sorted(Path(__file__).parent.glob('*.py'))}
@@ -154,30 +273,53 @@ def train_probe(data_dir, run_dir, config):
         'test_performance_access': False, 'config': c, 'data_hashes': hashes,
         'representation': representation, 'selection': selected,
         'metric_normalization': {'fitted_on': 'train', 'minimum': scaler['minimum'], 'maximum': scaler['maximum']},
-        'optimizer': {'generator_lr': 1e-4, 'discriminator_lr': 2e-4, 'betas': [.9, .999], 'g_d_updates': [1, 1]},
+        'optimizer': {'generator_lr': 1e-4, 'discriminator_lr': 2e-4, 'betas': [c['beta1'], .999], 'g_d_updates': [1, 1]},
         'sampling': 'shuffle all inner-training rows per pass; include final partial batch',
         'available_training_rows': len(training['x']), 'source_sha256': source, 'git_head': git,
-        'runtime': {'python': platform.python_version(), 'numpy': np.__version__,
-                    'torch': str(torch.__version__), 'device': 'cpu', 'threads': c['num_threads']},
+        'runtime': runtime, 'resume': lineage,
         'started_at_utc': datetime.now(timezone.utc).isoformat(), 'status': 'running',
         'prior_exposure': 'Development within original TRAIN; neither inner split is a newly untouched confirmatory holdout.'}
     _json(output / 'manifest.json', manifest)
     history, best, best_step, presentations, epoch, cursor = [], float('inf'), None, 0, 0, len(training['x'])
+    start_step, elapsed_offset = 1, 0.
+    if resumed is not None:
+        start_step, history = resumed['step'] + 1, resumed['history']
+        best, best_step = resumed['best_score'], resumed['best_step']
+        presentations, epoch, cursor = (resumed['row_presentations'], resumed['passes_started'],
+                                        resumed['sampler_cursor'])
+        elapsed_offset = lineage['prior_elapsed_seconds']
+        manifest['resumed_from_step'] = resumed['step']
+        for name in ('best.pt', 'best_validation.json'):
+            shutil.copyfile(Path(resume).parent / name, output / name)
+        _json(output / 'history.json', history)
+        _json(output / 'manifest.json', manifest)
     started = time.perf_counter()
     try:
-        with torch.random.fork_rng(devices=[]):
+        with _execution(device), torch.random.fork_rng(
+                devices=[] if device.type == 'cpu' else [torch.cuda.current_device()]):
             torch.manual_seed(c['seed'])
-            generator, discriminator = Generator(), Discriminator()
-            optimizer_g = torch.optim.Adam(generator.parameters(), lr=1e-4, betas=(.9, .999))
-            optimizer_d = torch.optim.Adam(discriminator.parameters(), lr=2e-4, betas=(.9, .999))
+            generator, discriminator = Generator().to(device), Discriminator().to(device)
+            optimizer_g = torch.optim.Adam(generator.parameters(), lr=1e-4, betas=(c['beta1'], .999))
+            optimizer_d = torch.optim.Adam(discriminator.parameters(), lr=2e-4, betas=(c['beta1'], .999))
             sampler = torch.Generator().manual_seed(c['seed'] + 1)
             noise = torch.Generator().manual_seed(c['seed'] + 2)
-            x = torch.from_numpy(transform(training['x'], representation).astype(np.float32))
-            y = torch.from_numpy(training['y'])
+            x = torch.from_numpy(transform(training['x'], representation).astype(np.float32)).to(device)
+            y = torch.from_numpy(training['y']).to(device)
+            if resumed is not None:
+                generator.load_state_dict(resumed['generator'])
+                discriminator.load_state_dict(resumed['discriminator'])
+                optimizer_g.load_state_dict(resumed['optimizer_g'])
+                optimizer_d.load_state_dict(resumed['optimizer_d'])
+                sampler.set_state(resumed['sampler_rng_state'])
+                noise.set_state(resumed['noise_rng_state'])
+                order = resumed['sampler_order']
+                torch.set_rng_state(resumed['model_rng_state'])
+                if device.type == 'cuda':
+                    torch.cuda.set_rng_state(resumed['cuda_rng_state'])
             loss_fn = nn.BCEWithLogitsLoss()
             sums = np.zeros(2)
             window = 0
-            for step in range(1, c['steps'] + 1):
+            for step in range(start_step, c['steps'] + 1):
                 if cursor >= len(x):
                     order = torch.randperm(len(x), generator=sampler)
                     cursor = 0
@@ -185,10 +327,11 @@ def train_probe(data_dir, run_dir, config):
                 batch = order[cursor:cursor + c['batch_size']]
                 cursor += len(batch)
                 presentations += len(batch)
-                real_batch, conditions = x[batch], y[batch]
-                ones = torch.ones((len(batch), 1))
+                batch_device = batch.to(device)
+                real_batch, conditions = x[batch_device], y[batch_device]
+                ones = torch.ones((len(batch), 1), device=device)
                 optimizer_d.zero_grad(set_to_none=True)
-                z = torch.randn(len(batch), 24, generator=noise)
+                z = torch.randn(len(batch), 24, generator=noise).to(device)
                 fake_logits = discriminator(generator(z, conditions).detach(), conditions)
                 real_logits = discriminator(real_batch, conditions)
                 d_loss = (loss_fn(real_logits, ones) + loss_fn(fake_logits, torch.zeros_like(ones))) / 2
@@ -199,7 +342,7 @@ def train_probe(data_dir, run_dir, config):
                 optimizer_g.zero_grad(set_to_none=True)
                 discriminator.requires_grad_(False)
                 try:
-                    z = torch.randn(len(batch), 24, generator=noise)
+                    z = torch.randn(len(batch), 24, generator=noise).to(device)
                     g_loss = loss_fn(discriminator(generator(z, conditions), conditions), ones)
                     if not torch.isfinite(g_loss):
                         raise FloatingPointError('Nonfinite generator loss')
@@ -222,7 +365,7 @@ def train_probe(data_dir, run_dir, config):
                     'last_batch_real_logit_mean': float(real_logits.detach().mean()),
                     'last_batch_fake_logit_mean': float(fake_logits.detach().mean()),
                     'validation': metrics['macro'], 'diagnostics': metrics['diagnostics'],
-                    'elapsed_seconds': time.perf_counter() - started}
+                    'elapsed_seconds': elapsed_offset + time.perf_counter() - started}
                 history.append(row)
                 state = {'schema_version': SCHEMA, 'step': step, 'config': c,
                     'generator': generator.state_dict(), 'discriminator': discriminator.state_dict(),
@@ -232,6 +375,8 @@ def train_probe(data_dir, run_dir, config):
                     'model_rng_state': torch.get_rng_state(), 'noise_rng_state': noise.get_state(),
                     'sampler_rng_state': sampler.get_state(), 'sampler_order': order,
                     'sampler_cursor': cursor, 'passes_started': epoch, 'row_presentations': presentations}
+                if device.type == 'cuda':
+                    state['cuda_rng_state'] = torch.cuda.get_rng_state()
                 _save(output / 'last.pt', state)
                 if improved:
                     _save(output / 'best.pt', state)
@@ -246,7 +391,8 @@ def train_probe(data_dir, run_dir, config):
                 sums[:] = 0
                 window = 0
         manifest.update(status='completed', finished_at_utc=datetime.now(timezone.utc).isoformat(),
-            elapsed_seconds=time.perf_counter() - started,
+            elapsed_seconds=elapsed_offset + time.perf_counter() - started,
+            current_execution_seconds=time.perf_counter() - started,
             artifact_hashes={name: _sha256(output / name) for name in
                             ('best.pt', 'last.pt', 'history.json', 'best_validation.json')})
         _json(output / 'manifest.json', manifest)
@@ -262,8 +408,9 @@ def main():
     parser.add_argument('--data', type=Path, required=True)
     parser.add_argument('--run', type=Path, required=True)
     parser.add_argument('--config', type=Path, required=True)
+    parser.add_argument('--resume', type=Path, help='Completed run last.pt; continue into a new output directory')
     args = parser.parse_args()
-    train_probe(args.data, args.run, json.loads(args.config.read_text()))
+    train_probe(args.data, args.run, json.loads(args.config.read_text()), resume=args.resume)
 
 
 if __name__ == '__main__':

@@ -28,6 +28,12 @@ def run(plan_path, output, workers=3):
         if not re.fullmatch(r'[a-z0-9_]+', name):
             raise ValueError('Invalid job name')
         _config(config)
+    resumes = plan.get('resume_from', {})
+    if not isinstance(resumes, dict) or set(resumes) - set(jobs):
+        raise ValueError('Resume entries must name declared jobs')
+    for checkpoint in resumes.values():
+        if not Path(checkpoint).is_file():
+            raise FileNotFoundError(checkpoint)
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     (output / 'logs').mkdir()
@@ -41,6 +47,8 @@ def run(plan_path, output, workers=3):
         _json(config_path, config)
         command = [sys.executable, '-m', 'fluvius_cgan.development', '--data', str(data),
                    '--run', str(output / name), '--config', str(config_path)]
+        if name in resumes:
+            command += ['--resume', str(Path(resumes[name]).resolve())]
         record = _run_logged(name, command, output)
         _json(output / f'{name}.execution.json', record)
         print(f"{name}: exit={record['returncode']}", flush=True)

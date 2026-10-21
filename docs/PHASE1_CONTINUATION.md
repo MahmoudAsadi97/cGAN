@@ -63,6 +63,21 @@ longer common budget, and checked with controlled ablations. Rejected and failed
 attempts remain in the experiment ledger. Broad searches should follow evidence
 from these initial comparisons, rather than accumulating untested techniques.
 
+Both standardized transforms improved over min–max at seeds 101 and 202.
+Global standardization is the simpler transform, so the next small screen
+isolates Adam momentum: beta1 values 0 and 0.5 against the existing 0.9 controls
+at both seeds, with all other settings and the 6,000-update budget fixed.
+The [momentum plan](../reports/phase1-development/MOMENTUM_SCREEN_PLAN.json)
+was written before these runs. Longer-budget comparisons follow this screen;
+the short runs do not establish convergence or superiority to strong controls.
+
+The development trainer supports continuation of a completed run at a scheduled
+validation boundary into a new directory. It verifies artifacts, data and
+runtime and restores optimizer/sampler/random states. A CPU regression confirms
+the same trajectory as uninterrupted training. CUDA support has a separate
+[notebook pilot](GPU_NOTEBOOK.md); it has not yet been executed on GPU hardware.
+Arbitrary interrupted-run recovery is not yet supported.
+
 ## Scientific acceptance and independent validation
 
 A useful foundation needs competitive distribution fidelity against strong

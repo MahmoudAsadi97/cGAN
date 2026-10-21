@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "role": "post-test development; global-standardized Adam momentum screen",
+  "data": "/workspace/cGAN/.cache/phase1-development/data/inner24",
+  "data_hashes": {
+    "train.npz": "33f98c7a4d0c1b57f8145e03f8c56c0ac896caadce4ed9a4f54602da7dc9d1e4",
+    "val.npz": "2fb9cb451ed7c9a7c44cad234a3b79bd7d35be9a86e87c0d6d520b506bdb117f",
+    "scaler.json": "46b0ce5faa7658038fa6f449cc0023310180250306662388e2c6ff0b11c423c5",
+    "metadata.json": "1a067fbb6334943969362ec233360b213283c8726ae7d876f476d40a4329599d"
+  },
+  "jobs": {
+    "standard_b0_s101": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "beta1": 0.0
+    },
+    "standard_b0_s202": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "beta1": 0.0
+    },
+    "standard_b5_s101": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 101,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "beta1": 0.5
+    },
+    "standard_b5_s202": {
+      "steps": 6000,
+      "batch_size": 512,
+      "seed": 202,
+      "num_threads": 1,
+      "normalization": "standard",
+      "validation_every": 1000,
+      "validation_per_condition": 256,
+      "beta1": 0.5
+    }
+  },
+  "prespecified_scope": "Vary only Adam beta1 (0 or 0.5) relative to global-standardized beta1=0.9 controls at seeds 101 and 202; same networks, dropout, learning rates, data, batch, 6000 updates and selection.",
+  "initial_interpretation": "Two-seed optimization diagnostic; compare against both completed global-standard beta1=0.9 controls. Retain every attempt. No final validation claim.",
+  "decision_basis": "Both standardizations improve over minmax at both seeds; global standardization is the simpler transform and selected for further optimization probes. Global standard still lacks diversity and is improving at step 6000. Test lower momentum, motivated by earlier cycling diagnosis, before a common longer budget."
+}

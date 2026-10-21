@@ -55,15 +55,16 @@ alone do not impose a spending cap, and disks can remain billable after compute
 is deallocated. Spot rates and interruptions make a fixed-runtime promise
 inappropriate without checkpoint recovery.
 
-## GPU preparation still required
+## GPU pilot and validation status
 
 The repository's default setup deliberately installs `torch==2.8.0+cpu`; it does
-not currently enable CUDA training. A GPU workflow needs a separate compatible
-dependency setup, explicit model/tensor device handling, recorded GPU/software
-versions, and a verified save/resume path for notebook or Spot interruptions.
-The development checkpoints save training state, but the development CLI does
-not yet implement resumption. Buying GPU time alone will not accelerate the
-current CPU-only command.
+enable CUDA training through that setup. The separate
+[GPU notebook](GPU_NOTEBOOK.md) reuses a compatible provider CUDA environment,
+records its software/hardware versions, and runs a bounded timing pilot.
+The development trainer now supports explicit CUDA execution and continuation
+of completed training segments into new directories. CPU continuation has been
+verified; actual GPU execution and recovery from arbitrary interruptions remain
+unverified. Buying GPU time alone will not accelerate the default CPU command.
 
 Before estimating the full study, benchmark a fixed number of updates on the
 candidate GPU with the actual batch size, dataset and validation schedule.

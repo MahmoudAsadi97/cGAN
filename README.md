@@ -17,6 +17,10 @@ heat-pump subtype and separate appliance consumption do not prevent this task,
 but those attributes/components cannot be validated from the release. See the
 [label audit](reports/phase1-development/LABEL_AUDIT.md) and
 [flow matching and related methods review](docs/MODERN_GENERATIVE_METHODS.md).
+Recent work is assessed separately in the
+[2024–2026 hybrid-method review](docs/RECENT_HYBRID_METHODS.md) and
+[few-step transport review](docs/RECENT_TRANSPORT_METHODS.md), with source receipts
+and explicit limits on paper access and applicability.
 Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
 preserve `main`, `V1`, and `V2`. The user has authorized continued Phase 1

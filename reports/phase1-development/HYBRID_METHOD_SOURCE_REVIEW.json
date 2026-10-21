@@ -1,0 +1,397 @@
+{
+  "assessment_date": "2026-10-21",
+  "scope": "Targeted review of recent hybrid generators for 24-dimensional whole-house net-load profiles; no new model implementation or real-data access.",
+  "evidence": {
+    "full_author_manuscript_read": [
+      "MissPath-FM: methods, experimental design, limitations and relevant appendices/references"
+    ],
+    "author_slides_read": [
+      "Energy Matching: July 2026 28-slide technical talk, including transport and contrastive objectives"
+    ],
+    "author_code_inspected": [
+      "TSFlow Gaussian-process kernels, posterior source construction and conditional training path"
+    ],
+    "official_readmes_read": [
+      "TSFlow",
+      "TimeBridge",
+      "Energy Matching",
+      "Diffusion-TS",
+      "TabSyn",
+      "TabDiff",
+      "SDFlow",
+      "TimeAutoDiff",
+      "MissPath-FM"
+    ]
+  },
+  "limitations": [
+    "Author-identified venues were not independently verified against inaccessible proceedings.",
+    "Full-paper endpoints for most shortlisted works were blocked; source scope is specified per work.",
+    "2026 SDFlow performance and acceptance claims are not independently verified; keep as watchlist.",
+    "No reported performance has been reproduced on Fluvius."
+  ],
+  "sources": [
+    {
+      "key": "diffusion_ts",
+      "url": "https://github.com/Y-debug-sys/Diffusion-TS",
+      "retrieved_at_utc": "2026-10-21T00:28:41.943200+00:00",
+      "status": 200,
+      "bytes": 329213,
+      "sha256": "18ccc55224b0f192576d39d5ea916e3f2d84d988a2f21bf2affa8dc5666dce00",
+      "repository_commit": "566307e6cf2d8095e58de4c6e3a6ae965b69b5b5"
+    },
+    {
+      "key": "tabsyn",
+      "url": "https://github.com/amazon-science/tabular-data-synthesis",
+      "retrieved_at_utc": "2026-10-21T00:28:41.944078+00:00",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "key": "tabdiff",
+      "url": "https://github.com/amazon-science/tabdiff",
+      "retrieved_at_utc": "2026-10-21T00:28:41.952219+00:00",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "key": "timeautodiff_search",
+      "url": "https://github.com/search?q=TimeAutoDiff&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:28:41.956104+00:00",
+      "status": 200,
+      "bytes": 218212,
+      "sha256": "1d6d66b05065efd22bb525b6173bf09a4b2a270f3c71bad318375a7a0455b173"
+    },
+    {
+      "key": "timeldm_search",
+      "url": "https://github.com/search?q=TimeLDM&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:28:41.960119+00:00",
+      "status": 200,
+      "bytes": 217660,
+      "sha256": "53f814c8ca42b63926aafab481236fb6835129ce0f9fb0711e1cf0f96dc46978"
+    },
+    {
+      "key": "timeflow_search",
+      "url": "https://github.com/search?q=time+series+flow+matching+2025&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:28:41.968322+00:00",
+      "status": 200,
+      "bytes": 200655,
+      "sha256": "8030ab9eaa46485db5f4ea23fe7001a0fb69455985e377d03eb7d34b494109d4"
+    },
+    {
+      "key": "openreview",
+      "url": "https://openreview.net/forum?id=4h1apFjO99",
+      "retrieved_at_utc": "2026-10-21T00:28:41.976954+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "diffusion_ts_paper",
+      "url": "https://arxiv.org/html/2403.01742v1",
+      "retrieved_at_utc": "2026-10-21T00:28:41.978259+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "tsflow",
+      "url": "https://github.com/marcelkollovieh/TSFlow",
+      "retrieved_at_utc": "2026-10-21T00:29:23.042324+00:00",
+      "status": 200,
+      "bytes": 265239,
+      "sha256": "b3aeea18c3d974ff28676a38ef194f9911ed3e64fe79cd5ce42cd5a64e1b71f7",
+      "paper_links": [],
+      "repository_commit": "ff893176a41a1037f63efae674aab71480eee7d0"
+    },
+    {
+      "key": "timeautodiff",
+      "url": "https://github.com/namjoonsuh/TimeAutoDiff",
+      "retrieved_at_utc": "2026-10-21T00:29:23.048126+00:00",
+      "status": 200,
+      "bytes": 277870,
+      "sha256": "9f594436182cba58be4f5ec158dbe3aefa8305456a127af0151572326046aded",
+      "paper_links": [
+        "https://arxiv.org/pdf/2406.16028",
+        "https://arxiv.org/pdf/2406.16028",
+        "https://arxiv.org/pdf/2406.16028"
+      ],
+      "repository_commit": "1017c9e7010432b6f5200bc15a5b70cfc5d6ec6f"
+    },
+    {
+      "key": "tabsyn_search",
+      "url": "https://github.com/search?q=TabSyn&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:29:23.052095+00:00",
+      "status": 200,
+      "bytes": 261494,
+      "sha256": "27160db43df6c5ee1c5e732a3b70fc5b07813dd1f1ec6ad04c3c866fddd446f4",
+      "paper_links": []
+    },
+    {
+      "key": "tabdiff_search",
+      "url": "https://github.com/search?q=TabDiff&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:29:23.056095+00:00",
+      "status": 200,
+      "bytes": 255194,
+      "sha256": "c79ee513d3c8350dea5595fc847de3b46dd6dd8da75c2e8b314983b2732a2a77",
+      "paper_links": []
+    },
+    {
+      "key": "energyflow_search",
+      "url": "https://github.com/search?q=energy+flow+matching&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:29:23.057049+00:00",
+      "status": 200,
+      "bytes": 254283,
+      "sha256": "eb8756be250804bdaa095e7dbbe433f878702293c2c9a1637784e82b9283c8a5",
+      "paper_links": []
+    },
+    {
+      "key": "schrodinger_search",
+      "url": "https://github.com/search?q=time+series+Schrodinger+2025&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:29:23.057353+00:00",
+      "status": 200,
+      "bytes": 175648,
+      "sha256": "f24b6cb09d7944c7c93eaad6768f3cc0e50e9a0874ec74dc2fc81315fb3d02bf",
+      "paper_links": []
+    },
+    {
+      "key": "energy_matching",
+      "url": "https://github.com/m1balcerak/EnergyMatching",
+      "retrieved_at_utc": "2026-10-21T00:30:46.537997+00:00",
+      "status": 200,
+      "bytes": 296320,
+      "sha256": "9ba9587546c6c134045235ce280c0fdd5ab654900c55dff59628711e54e98a6c",
+      "paper_links": [
+        "https://arxiv.org/abs/2504.10612",
+        "https://arxiv.org/abs/2504.10612",
+        "/m1balcerak/EnergyMatching/blob/main/media/EnergyMatchingTalk.pdf",
+        "https://arxiv.org/abs/2504.10612",
+        "https://arxiv.org/abs/2603.23398",
+        "https://arxiv.org/abs/2504.10612"
+      ],
+      "repository_commit": "4fb994498d379324b4bfe67ee353105f0d1e3541"
+    },
+    {
+      "key": "tabsyn",
+      "url": "https://github.com/amazon-science/tabsyn",
+      "retrieved_at_utc": "2026-10-21T00:30:46.540201+00:00",
+      "status": 200,
+      "bytes": 380535,
+      "sha256": "dbb19a2aa843cb29cc79f6ab78bd2ff63454aa1c4af1f2e52040fa45a13cabab",
+      "paper_links": [
+        "https://openreview.net/forum?id=4Ay23yeuz0",
+        "https://arxiv.org/abs/2310.09656",
+        "https://arxiv.org/abs/2102.08921"
+      ],
+      "repository_commit": "cb5ac0f74ec36ee88e7a974a393dfbef50d42da7"
+    },
+    {
+      "key": "tabdiff",
+      "url": "https://github.com/MinkaiXu/TabDiff",
+      "retrieved_at_utc": "2026-10-21T00:30:46.548075+00:00",
+      "status": 200,
+      "bytes": 347079,
+      "sha256": "5f2ea7989310422ce325283e66da85e23d448c066eb155f861c4a1f07ea5da3d",
+      "paper_links": [
+        "https://openreview.net/forum?id=swvURjrt8z",
+        "https://arxiv.org/abs/2410.20626",
+        "https://arxiv.org/abs/2410.20626"
+      ],
+      "repository_commit": "5ecdb3356261aea72716cc9a779f31d7ad083bf4"
+    },
+    {
+      "key": "tsflow2026_search",
+      "url": "https://github.com/search?q=time+series+flow+matching+2026&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:30:46.552104+00:00",
+      "status": 200,
+      "bytes": 205332,
+      "sha256": "b10b238aa13d20e6ed9865fb42823b120656b961af0a181afaa33deddc9d8b8d",
+      "paper_links": []
+    },
+    {
+      "key": "load2025_search",
+      "url": "https://github.com/search?q=load+profile+diffusion+2025&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:30:46.556109+00:00",
+      "status": 200,
+      "bytes": 175642,
+      "sha256": "5df4b5c72fc0458bcb53f8799eae8e616b84d2032aef23a9c2231000d912576a",
+      "paper_links": []
+    },
+    {
+      "key": "srch_tsflowpaper",
+      "url": "https://github.com/search?q=%22Flow+Matching+with+Gaussian+Process+Priors%22&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:30:46.556505+00:00",
+      "status": 200,
+      "bytes": 201101,
+      "sha256": "6e8c572b82ce6d773314f27ac0083e3b4fe69a2088dfbeb88b238cbf2d3ae96b",
+      "paper_links": []
+    },
+    {
+      "key": "energy_matching_slides",
+      "url": "https://github.com/m1balcerak/EnergyMatching/raw/refs/heads/main/media/EnergyMatchingTalk.pdf",
+      "retrieved_at_utc": "2026-10-21T00:31:37.017523+00:00",
+      "status": 200,
+      "bytes": 4593306,
+      "sha256": "19572aa01258861e3ee034b9540ea607c86953423b297b69e46aa497a8d743e1",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "key": "sdflow",
+      "url": "https://github.com/William-Liwei/SDFlow",
+      "retrieved_at_utc": "2026-10-21T00:31:37.024074+00:00",
+      "status": 200,
+      "bytes": 277075,
+      "sha256": "bd60f63a03086b200d24635a2d138b9c5db1e02a4d7a3cc8fd19d179d97d295d",
+      "content_type": "text/html; charset=utf-8",
+      "paper_links": [],
+      "repository_commit": "04796a0cc37257731e7a630142fec014bf71afda"
+    },
+    {
+      "key": "misspath",
+      "url": "https://github.com/zgp110/misspath-fm",
+      "retrieved_at_utc": "2026-10-21T00:31:37.028122+00:00",
+      "status": 200,
+      "bytes": 325253,
+      "sha256": "ed78094fd3e4018f00659501ee77889574c60a8fb8a20481b2b5158cecd6f54f",
+      "content_type": "text/html; charset=utf-8",
+      "paper_links": [
+        "https://zgp110.github.io/misspath-fm/static/MissPath-FM_NeurIPS2026.pdf",
+        "https://zgp110.github.io/misspath-fm/static/MissPath-FM_NeurIPS2026.pdf"
+      ],
+      "repository_commit": "da6647502630bae0a38d2e4e6bcf06e09bddd6d8"
+    },
+    {
+      "key": "energy_paper",
+      "url": "https://arxiv.org/pdf/2504.10612",
+      "retrieved_at_utc": "2026-10-21T00:31:37.032140+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "energy_proceedings",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2025",
+      "retrieved_at_utc": "2026-10-21T00:31:37.036163+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "tsflow_page",
+      "url": "https://marcelkollovieh.com/publications/tsflow/",
+      "retrieved_at_utc": "2026-10-21T00:31:37.036615+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "misspath_paper",
+      "url": "https://zgp110.github.io/misspath-fm/static/MissPath-FM_NeurIPS2026.pdf",
+      "retrieved_at_utc": "2026-10-21T00:32:20.264108+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "misspath_paper_github",
+      "url": "https://github.com/zgp110/misspath-fm/raw/refs/heads/gh-pages/static/MissPath-FM_NeurIPS2026.pdf",
+      "retrieved_at_utc": "2026-10-21T00:32:20.272143+00:00",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "key": "tsflow_rawreadme",
+      "url": "https://raw.githubusercontent.com/marcelkollovieh/TSFlow/main/README.md",
+      "retrieved_at_utc": "2026-10-21T00:32:20.276093+00:00",
+      "status": 200,
+      "bytes": 1281,
+      "sha256": "c8911ce56420538803ce067eb6f62f25c86ec7082b411c6c6eb9d47302ee577d",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "key": "tsflow_tree",
+      "url": "https://github.com/marcelkollovieh/TSFlow/tree/main/tsflow",
+      "retrieved_at_utc": "2026-10-21T00:32:20.280161+00:00",
+      "status": 200,
+      "bytes": 221723,
+      "sha256": "38abe253a7a5830cb23238e70a6df104b759ec919b5ab8ba4f3c4c49a287a4a8",
+      "content_type": "text/html; charset=utf-8",
+      "repository_commit": "ff893176a41a1037f63efae674aab71480eee7d0"
+    },
+    {
+      "key": "misspath_paper_repository",
+      "url": "https://raw.githubusercontent.com/zgp110/misspath-fm/main/docs/static/MissPath-FM_NeurIPS2026.pdf",
+      "retrieved_at_utc": "2026-10-21T00:32:49.263668+00:00",
+      "status": 200,
+      "bytes": 718997,
+      "sha256": "1a481e23e8f3837beca78c49773a1f3a4ffd8229df35c1ebdcc919e56dfba2ee"
+    },
+    {
+      "key": "timebridge_search",
+      "url": "https://github.com/search?q=%22TimeBridge%22+%22diffusion%22&type=repositories",
+      "retrieved_at_utc": "2026-10-21T00:34:11.084097+00:00",
+      "status": 200,
+      "bytes": 200377,
+      "sha256": "3143ab478e0842208e77886fa5d1d369245ee7a0d6bf87ab1b70fc869939a543"
+    },
+    {
+      "key": "tsflow_home_repo",
+      "url": "https://github.com/marcelkollovieh/marcelkollovieh.github.io",
+      "retrieved_at_utc": "2026-10-21T00:34:11.092256+00:00",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "key": "energy_media_tree",
+      "url": "https://github.com/m1balcerak/EnergyMatching/tree/main/media",
+      "retrieved_at_utc": "2026-10-21T00:34:11.120282+00:00",
+      "status": 200,
+      "bytes": 209865,
+      "sha256": "4d0825249ba3f5ccdd7b256d5b3ba70532fab60983f903f4023ab585ce9b1991",
+      "repository_commit": "4fb994498d379324b4bfe67ee353105f0d1e3541"
+    },
+    {
+      "key": "timebridge",
+      "url": "https://github.com/JinseongP/TimeBridge",
+      "retrieved_at_utc": "2026-10-21T00:34:31.477250+00:00",
+      "status": 200,
+      "bytes": 292169,
+      "sha256": "4115db3633108d6a1df2b7fe8ac4d2a0111ca0b1a42dbf55237902d1646d2466",
+      "paper_links": [
+        "https://arxiv.org/abs/2408.06672"
+      ],
+      "repository_commit": "023a0aa9f6dbd24f66bd84eb8983bb78affd4e27"
+    },
+    {
+      "key": "tsflow_code_tsflow_utils_gaussian_process.py",
+      "url": "https://github.com/marcelkollovieh/TSFlow/blob/ff893176a41a1037f63efae674aab71480eee7d0/tsflow/utils/gaussian_process.py",
+      "repository_commit": "ff893176a41a1037f63efae674aab71480eee7d0",
+      "retrieved": true,
+      "sha256": "fb8977551437d682d684a3b1566dfc3d0bd1f1fc5f2728279a802dbbe2617235",
+      "bytes": 8056,
+      "evidence_scope": "Author source code inspected; no execution or copying into project code."
+    },
+    {
+      "key": "tsflow_code_tsflow_model_tsflow_cond.py",
+      "url": "https://github.com/marcelkollovieh/TSFlow/blob/ff893176a41a1037f63efae674aab71480eee7d0/tsflow/model/tsflow_cond.py",
+      "repository_commit": "ff893176a41a1037f63efae674aab71480eee7d0",
+      "retrieved": true,
+      "sha256": "2507dbd4ee6e11726585a40bfae842655d6785028b88a78391f2b208ca4a5d0f",
+      "bytes": 8036,
+      "evidence_scope": "Author source code inspected; no execution or copying into project code."
+    },
+    {
+      "key": "tsflow_code_tsflow_model__base.py",
+      "url": "https://github.com/marcelkollovieh/TSFlow/blob/ff893176a41a1037f63efae674aab71480eee7d0/tsflow/model/_base.py",
+      "repository_commit": "ff893176a41a1037f63efae674aab71480eee7d0",
+      "retrieved": true,
+      "sha256": "0af29f88e446a33d15776e85f0d74b31134e8d167bbf2788ee3e503c3787b8a3",
+      "bytes": 8458,
+      "evidence_scope": "Author source code inspected; no execution or copying into project code."
+    },
+    {
+      "key": "tsflow_code_configs_local_train_conditional.yaml",
+      "url": "https://github.com/marcelkollovieh/TSFlow/blob/ff893176a41a1037f63efae674aab71480eee7d0/configs_local/train_conditional.yaml",
+      "repository_commit": "ff893176a41a1037f63efae674aab71480eee7d0",
+      "retrieved": true,
+      "sha256": "f7e9fa69713ec3afa96a2feea488f9b208bd07d79e1377f4ac051f80a4e88e23",
+      "bytes": 1012,
+      "evidence_scope": "Author source code inspected; no execution or copying into project code."
+    }
+  ],
+  "primary_documents": [
+    {
+      "local_cache_file": ".cache/phase1-development/recent_hybrid_sources/energy_matching_slides.pdf",
+      "bytes": 4593306,
+      "sha256": "19572aa01258861e3ee034b9540ea607c86953423b297b69e46aa497a8d743e1"
+    },
+    {
+      "local_cache_file": ".cache/phase1-development/recent_hybrid_sources/misspath_paper_repository.pdf",
+      "bytes": 718997,
+      "sha256": "1a481e23e8f3837beca78c49773a1f3a4ffd8229df35c1ebdcc919e56dfba2ee"
+    }
+  ]
+}

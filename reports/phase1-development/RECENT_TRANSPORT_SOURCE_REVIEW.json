@@ -1,0 +1,585 @@
+{
+  "assessment_date": "2026-10-21",
+  "sources": [
+    {
+      "key": "meanflow_code",
+      "url": "https://github.com/Gsunshine/meanflow",
+      "retrieved_at_utc": "2026-10-21T00:30:28.044111+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 343948,
+      "sha256": "c34cdb6aabe48371c26700f7bbf24aa5324af6abe97de726ac820f481db8f170",
+      "content_type": "text/html; charset=utf-8",
+      "repository_ref": "main",
+      "repository_commit": "d70cb55d298ee03c53bf6da67bec281082e4e2d9"
+    },
+    {
+      "key": "shortcut_code",
+      "url": "https://github.com/kvfrans/shortcut-models",
+      "retrieved_at_utc": "2026-10-21T00:30:28.052263+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 286035,
+      "sha256": "851ee73ab85fb6bafc2a1506b819cc2e313c2b778eb63aa5d8e29a89d7685b3a",
+      "content_type": "text/html; charset=utf-8",
+      "repository_ref": "main",
+      "repository_commit": "601004348667094e1b71f30942199759412d4432"
+    },
+    {
+      "key": "meanflow_paper_html",
+      "url": "https://arxiv.org/html/2505.13447v1",
+      "retrieved_at_utc": "2026-10-21T00:30:28.056069+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "meanflow_paper_export",
+      "url": "https://export.arxiv.org/pdf/2505.13447",
+      "retrieved_at_utc": "2026-10-21T00:30:28.060145+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "shortcut_paper_html",
+      "url": "https://arxiv.org/html/2410.12557v1",
+      "retrieved_at_utc": "2026-10-21T00:30:28.060636+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "shortcut_paper_www",
+      "url": "https://www.arxiv.org/pdf/2410.12557",
+      "retrieved_at_utc": "2026-10-21T00:30:28.061363+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "improved_meanflow_code",
+      "url": "https://github.com/Lyy-iiis/imeanflow",
+      "retrieved_at_utc": "2026-10-21T00:31:15.456243+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 329466,
+      "sha256": "98bc59123f179cc98b3033c12542e20209be4e011866a5065ec33b4a6cbc1947",
+      "content_type": "text/html; charset=utf-8",
+      "repository_ref": "main",
+      "repository_commit": "bf60cd7cb653f6628e59d48034b333c5eba445e2"
+    },
+    {
+      "key": "meanflow_author",
+      "url": "https://kaiminghe.github.io/",
+      "retrieved_at_utc": "2026-10-21T00:31:15.460144+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "shortcut_project",
+      "url": "https://kvfrans.com/shortcut-models/",
+      "retrieved_at_utc": "2026-10-21T00:31:15.461106+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "meanflow_ar5iv",
+      "url": "https://ar5iv.labs.arxiv.org/html/2505.13447",
+      "retrieved_at_utc": "2026-10-21T00:31:15.468127+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "meanflow_asset_tree",
+      "url": "https://github.com/Gsunshine/meanflow/tree/main/assets",
+      "retrieved_at_utc": "2026-10-21T00:31:15.472180+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 208554,
+      "sha256": "fda90692082818e5ebae9abb22731c8b8896689a4738adb69458bbdd5b6b3f94",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "key": "kaiming_author_source",
+      "url": "https://github.com/kaiminghe/kaiminghe.github.io",
+      "retrieved_at_utc": "2026-10-21T00:31:42.788202+00:00",
+      "retrieved": false,
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "key": "meanflow_raw_readme",
+      "url": "https://raw.githubusercontent.com/Gsunshine/meanflow/main/README.md",
+      "retrieved_at_utc": "2026-10-21T00:31:42.792083+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 7993,
+      "sha256": "2c88a0a07c0aaf52526f2410926b30c0073a300d5c93ced73d1381450327dc5f",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "key": "shortcut_author_source",
+      "url": "https://github.com/kvfrans/kvfrans.github.io",
+      "retrieved_at_utc": "2026-10-21T00:31:42.792678+00:00",
+      "retrieved": false,
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "key": "meanflow_objective",
+      "url": "https://raw.githubusercontent.com/Gsunshine/meanflow/d70cb55d298ee03c53bf6da67bec281082e4e2d9/meanflow.py",
+      "retrieved_at_utc": "2026-10-21T00:32:59.956204+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 8029,
+      "sha256": "b8dcee1033e6ba01de0019d14fad846a399d356d67e549ee311a5e19d2a7c3a4",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "key": "improved_meanflow_objective",
+      "url": "https://raw.githubusercontent.com/Lyy-iiis/imeanflow/bf60cd7cb653f6628e59d48034b333c5eba445e2/imf.py",
+      "retrieved_at_utc": "2026-10-21T00:32:59.960098+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 12627,
+      "sha256": "8203e692a21f6e61e2b18d24579f85b3f04e6608a9fb419972e44718cebeb2f5",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "key": "shortcut_objective",
+      "url": "https://raw.githubusercontent.com/kvfrans/shortcut-models/601004348667094e1b71f30942199759412d4432/targets_shortcut.py",
+      "retrieved_at_utc": "2026-10-21T00:32:59.964105+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 6029,
+      "sha256": "adb2ac83febc1de012a7cdb713b9117d53616473ccd38f1104fd2475d8b1abc3",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "key": "geng_author_source",
+      "url": "https://github.com/Gsunshine/Gsunshine.github.io",
+      "retrieved_at_utc": "2026-10-21T00:32:59.968111+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 290253,
+      "sha256": "b9d1e510e9e8626ceeb58d3439d043c3860d9dc64293ad7e4fab0c803f1c8883",
+      "content_type": "text/html; charset=utf-8",
+      "repository_ref": "master",
+      "repository_commit": "cc320fef373e039c7c79c474684123306466bfad"
+    },
+    {
+      "key": "pixel_meanflow_code",
+      "url": "https://github.com/Lyy-iiis/pMF",
+      "retrieved_at_utc": "2026-10-21T00:34:17.972236+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 324824,
+      "sha256": "9520e4b41e16cebd9602f50be82e4839d1366831e04dd18fcd16c935aff9c49a",
+      "content_type": "text/html; charset=utf-8",
+      "repository_ref": "main",
+      "repository_commit": "75f6073042c21f7104686261a0c4784db4ede9d1"
+    },
+    {
+      "key": "geng_author_publications",
+      "url": "https://raw.githubusercontent.com/Gsunshine/Gsunshine.github.io/cc320fef373e039c7c79c474684123306466bfad/_pages/about.md",
+      "retrieved_at_utc": "2026-10-21T00:34:17.976147+00:00",
+      "retrieved": true,
+      "http_status": 200,
+      "bytes": 11481,
+      "sha256": "30092dbd6b490089cf59c41f3cfbdf43ced13116ef75d2ade9e4acc3e9b77215",
+      "content_type": "text/plain; charset=utf-8"
+    },
+    {
+      "key": "neurips2025_listing",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2025",
+      "retrieved_at_utc": "2026-10-21T00:34:17.980069+00:00",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "key": "improved_meanflow_cvf_paper",
+      "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Geng_Improved_Mean_Flows_On_the_Challenges_of_Fastforward_Generative_Models_CVPR_2026_paper.pdf",
+      "retrieved_at_utc": "2026-10-21T00:35:07.163123+00:00",
+      "url_status": "canonical CVF path attempted after author-site CVPR2026 venue verification; not assumed valid unless fetched",
+      "retrieved": false,
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "scope": "Bounded recent one/few-step transport review with author metadata, official README, official project mathematics and objective-source inspection; not an exhaustive 2026 literature search.",
+  "full_paper_limitation": "No full-paper PDF retrieved for these transport methods; arXiv, NeurIPS, CVF and author-web endpoints attempted were blocked. Official objective code and flow-map project equations were read; these are not represented as a complete paper review.",
+  "flowmap_review": {
+    "assessment_date": "2026-10-21",
+    "scope": "Bounded recent flow-map and joint-distillation review; primary author sources, not an exhaustive literature search.",
+    "full_paper_limitation": "No full paper PDFs retrieved. arXiv/openreview/NeurIPS endpoints blocked by proxy403; official project equations and implementation code inspected where stated.",
+    "author_metadata": {
+      "url": "https://github.com/nmboffi/nmboffi.github.io/blob/ec26ad5986c4c4b5530e8b10d0b9a8425c91526e/_data/publications.yml",
+      "repository_commit": "ec26ad5986c4c4b5530e8b10d0b9a8425c91526e",
+      "local_content_sha256": "ccb00c832d27af583e534412a92ca78912649254a2d41401ab085b4c13b0a6e3"
+    },
+    "papers": [
+      {
+        "title": "Flow map matching with stochastic interpolants: A mathematical framework for consistency models",
+        "authors": [
+          "Nicholas M. Boffi",
+          "Michael S. Albergo",
+          "Eric Vanden-Eijnden"
+        ],
+        "first_preprint_year": 2024,
+        "publication_year": 2025,
+        "venue": "Transactions on Machine Learning Research",
+        "arxiv": "2406.07507",
+        "paper_url": "https://arxiv.org/abs/2406.07507",
+        "repository": "https://github.com/nmboffi/flow_map_matching_public",
+        "repository_commit": "d44007a921db19bea73af7d16ddbea1921149431",
+        "evidence_read": [
+          "author publication metadata",
+          "author minimal repository README"
+        ],
+        "full_paper_retrieved": false,
+        "code_scope": "README explicitly says unofficial minimal implementation; does not reproduce exact paper experiments."
+      },
+      {
+        "title": "How to build a consistency model: Learning flow maps via self-distillation",
+        "authors": [
+          "Nicholas M. Boffi",
+          "Michael S. Albergo",
+          "Eric Vanden-Eijnden"
+        ],
+        "first_preprint_year": 2025,
+        "publication_year": 2025,
+        "venue": "NeurIPS",
+        "arxiv": "2505.18825",
+        "paper_url": "https://arxiv.org/abs/2505.18825",
+        "repository": "https://github.com/nmboffi/flow-maps",
+        "repository_commit": "2f115a07fa9073553193e4b265dfc303827af2b0",
+        "project_repository": "https://github.com/flow-maps/flow-maps.github.io",
+        "project_repository_commit": "cbee36be41b9cc95f10d585f551f960cb24ab62b",
+        "evidence_read": [
+          "official README",
+          "official project article including tangent condition, Lagrangian/Eulerian/semigroup equations and practical stop-gradient objectives",
+          "official py/common/losses.py diagonal and LSD/PSD/ESD implementations"
+        ],
+        "full_paper_retrieved": false
+      },
+      {
+        "title": "Joint Distillation for Fast Likelihood Evaluation and Sampling in Flow-based Models",
+        "authors": [
+          "Xinyue Ai",
+          "Yutong He",
+          "Albert Gu",
+          "Ruslan Salakhutdinov",
+          "J. Zico Kolter",
+          "Nicholas M. Boffi",
+          "Max Simchowitz"
+        ],
+        "first_preprint_year": 2025,
+        "publication_year": 2026,
+        "venue": "ICLR",
+        "arxiv": "2512.02636",
+        "paper_url": "https://arxiv.org/abs/2512.02636",
+        "conference_url": "https://openreview.net/forum?id=8uZ5UdIul2",
+        "repository": "https://github.com/Keely-Ai/F2D2",
+        "repository_commit": "391ea389b9fc0ee980406dce73e1d320852465c8",
+        "evidence_read": [
+          "official README and conference citation",
+          "training/experimental/loss.py",
+          "nll.py",
+          "run_ll.sh"
+        ],
+        "full_paper_retrieved": false
+      },
+      {
+        "title": "Generalised Flow Maps for Few-Step Generative Modelling on Riemannian Manifolds",
+        "authors": [
+          "Oscar Davis",
+          "Michael S. Albergo",
+          "Nicholas M. Boffi",
+          "Michael M. Bronstein",
+          "Avishek Joey Bose"
+        ],
+        "first_preprint_year": 2025,
+        "publication_year": 2026,
+        "venue": "ICLR",
+        "arxiv": "2510.21608",
+        "paper_url": "https://arxiv.org/abs/2510.21608",
+        "repository": "https://github.com/olsdavis/gfm",
+        "repository_commit": "da7f44eed0c080b871524ce7fdedcf28beebe60e",
+        "evidence_read": [
+          "official README and author publication metadata"
+        ],
+        "full_paper_retrieved": false,
+        "relevance": "Low priority for unconstrained Euclidean hourly net-load coordinates; no demonstrated manifold constraint."
+      }
+    ],
+    "retrievals": [
+      {
+        "key": "github_flow_map_search",
+        "url": "https://github.com/search?q=%22Flow+Map+Matching%22&type=repositories",
+        "at": "2026-10-21T00:30:24.540350+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 220102,
+        "sha256": "9036d52536e104d418bb6c40dd1b5239648ed805d78fd6078cd954f504e9c8cb"
+      },
+      {
+        "key": "google_flow_map_search",
+        "url": "https://www.google.com/search?q=%22Flow+Map+Matching%22",
+        "at": "2026-10-21T00:30:24.544067+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "arxiv_search",
+        "url": "https://export.arxiv.org/api/query?search_query=ti:%22Flow%20Map%20Matching%22",
+        "at": "2026-10-21T00:30:24.552139+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "openreview_search",
+        "url": "https://openreview.net/search?term=Flow%20Map%20Matching",
+        "at": "2026-10-21T00:30:24.556098+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "flow_map_author_repo",
+        "url": "https://github.com/nmboffi/flow_map_matching_public",
+        "at": "2026-10-21T00:30:53.780804+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 249289,
+        "sha256": "e85a0c21c35bcd5847c0b047f0b680b3bd325c5506be6fe152d0f848763b822e"
+      },
+      {
+        "key": "flow_map_arxiv_html",
+        "url": "https://arxiv.org/html/2406.07507v4",
+        "at": "2026-10-21T00:31:13.152215+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "flow_map_arxiv_www",
+        "url": "https://www.arxiv.org/html/2406.07507v4",
+        "at": "2026-10-21T00:31:13.160140+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "flow_map_arxiv_pdf",
+        "url": "https://arxiv.org/pdf/2406.07507",
+        "at": "2026-10-21T00:31:13.164141+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "author_web_repo",
+        "url": "https://github.com/nmboffi/nmboffi.github.io",
+        "at": "2026-10-21T00:31:13.168126+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 256970,
+        "sha256": "24dc88c9684d6683fe5f6c309ef76e9c220d04437e244dfacd63065c29caf8a7"
+      },
+      {
+        "key": "fmm_github_number",
+        "url": "https://github.com/search?q=%222406.07507%22&type=repositories",
+        "at": "2026-10-21T00:31:13.168566+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 175436,
+        "sha256": "b7624bea95ae99cdde4773bd7c4069c1485a56631f3a9cee26f924037a185f97"
+      },
+      {
+        "key": "author_web_pdfs",
+        "url": "https://github.com/nmboffi/nmboffi.github.io/tree/master/pdfs",
+        "at": "2026-10-21T00:31:47.664205+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 230336,
+        "sha256": "b33f30036004f0e03fad7820d41042af883ef395c06812a517b1a42c874d3e8f",
+        "tree": {}
+      },
+      {
+        "key": "author_web_pages",
+        "url": "https://github.com/nmboffi/nmboffi.github.io/tree/master/_pages",
+        "at": "2026-10-21T00:31:47.668137+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 211739,
+        "sha256": "289a4c8b7f1b227b8d1de46141e8735462dbb1be9854901ea9a3c2220da6eb8e",
+        "tree": {}
+      },
+      {
+        "key": "author_web_data",
+        "url": "https://github.com/nmboffi/nmboffi.github.io/tree/master/_data",
+        "at": "2026-10-21T00:31:47.668924+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 209078,
+        "sha256": "0f97fac97243932f8562e5dc9ff91dccf94d756a214268e155bbd3222f3eec59",
+        "tree": {}
+      },
+      {
+        "key": "author_publications",
+        "url": "https://github.com/nmboffi/nmboffi.github.io/blob/master/_data/publications.yml",
+        "at": "2026-10-21T00:32:12.709715+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 592988,
+        "sha256": "71962170cc2bf4ccc10b5382c452a183d428ffb3a3e87f2560c31598c2e6a884"
+      },
+      {
+        "key": "flow_maps_selfdistill",
+        "url": "https://github.com/nmboffi/flow-maps",
+        "at": "2026-10-21T00:32:26.217239+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 340426,
+        "sha256": "e42d11c97755e11a2918ca6c1f86b18e74e6c56dedb91247d36b6495f9438f9e"
+      },
+      {
+        "key": "flowmaps_project",
+        "url": "https://flow-maps.github.io",
+        "at": "2026-10-21T00:32:35.944100+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "flowmaps_project_repo",
+        "url": "https://github.com/flow-maps/flow-maps.github.io",
+        "at": "2026-10-21T00:32:35.952170+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 248773,
+        "sha256": "abccc7cfb45802220bd19cf9f348a7eaeb94f0bb76fb07ba28e0c9d46217c924"
+      },
+      {
+        "key": "neurips2025_search",
+        "url": "https://papers.nips.cc/paper_files/paper/2025",
+        "at": "2026-10-21T00:32:35.953604+00:00",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      {
+        "key": "flowmaps_project_static",
+        "url": "https://github.com/flow-maps/flow-maps.github.io/tree/main/static",
+        "at": "2026-10-21T00:33:09.560117+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 214676,
+        "sha256": "be3fd9ee7716577a554790910af3c5dc40c2a29ad7985351588199917add7ffc"
+      },
+      {
+        "key": "flowmaps_project_index",
+        "url": "https://github.com/flow-maps/flow-maps.github.io/blob/main/index.html",
+        "at": "2026-10-21T00:33:09.568136+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 645548,
+        "sha256": "6c4a34e4f8fbaa12495290cccc92d5b9b1a6706d317716f19c0dabc55add18f5"
+      },
+      {
+        "key": "flowmaps_loss_code",
+        "url": "https://github.com/nmboffi/flow-maps/blob/main/py/common/losses.py",
+        "at": "2026-10-21T00:33:09.572073+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 452595,
+        "sha256": "6067dce0bbd0ab50a88497e2d11b95f8f2b83da67cfe7231de3dd5c685636ab4"
+      },
+      {
+        "key": "joint_distill_search",
+        "url": "https://github.com/search?q=%22Joint+Distillation%22&type=repositories",
+        "at": "2026-10-21T00:33:42.924189+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 235372,
+        "sha256": "07134d0c9547bf2009ed77e64a9f1b8412274749c8d97377e2395defd1158c0a"
+      },
+      {
+        "key": "generalised_fmaps_search",
+        "url": "https://github.com/search?q=%22Generalised+Flow+Maps%22&type=repositories",
+        "at": "2026-10-21T00:33:42.928113+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 200059,
+        "sha256": "20590bfd4652c54910930ad92a7e0e3d4ba5edbcba4f450cce9925113df3ce7a"
+      },
+      {
+        "key": "f2d2_repo",
+        "url": "https://github.com/Keely-Ai/F2D2",
+        "at": "2026-10-21T00:34:08.115091+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 281744,
+        "sha256": "fa5c1cec1f6539d731d6c3ccd408487d564b22058489296330d57de266867ce9"
+      },
+      {
+        "key": "gfm_repo",
+        "url": "https://github.com/olsdavis/gfm",
+        "at": "2026-10-21T00:34:08.120152+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 265716,
+        "sha256": "9cc193d758bfd8a213c5ef599866be1acd780db2c510125ae012f6152eaba4e7"
+      },
+      {
+        "key": "f2d2_run_ll",
+        "url": "https://raw.githubusercontent.com/Keely-Ai/F2D2/391ea389b9fc0ee980406dce73e1d320852465c8/run_ll.sh",
+        "at": "2026-10-21T00:34:26.788211+00:00",
+        "status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "bytes": 550,
+        "sha256": "4d547112018de87a8cfbccf530695eb983e65c843da5ebe7a48a859e54d4fd5c"
+      },
+      {
+        "key": "f2d2_loss",
+        "url": "https://raw.githubusercontent.com/Keely-Ai/F2D2/391ea389b9fc0ee980406dce73e1d320852465c8/training/loss.py",
+        "at": "2026-10-21T00:34:26.792112+00:00",
+        "error": "HTTPError: HTTP Error 404: Not Found"
+      },
+      {
+        "key": "f2d2_nll",
+        "url": "https://raw.githubusercontent.com/Keely-Ai/F2D2/391ea389b9fc0ee980406dce73e1d320852465c8/nll.py",
+        "at": "2026-10-21T00:34:26.792755+00:00",
+        "status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "bytes": 5806,
+        "sha256": "ab804383eae3221b11f1cd98436f034b22ebcf1dffd8b127f83089f7b4ec94df"
+      },
+      {
+        "key": "f2d2_assets",
+        "url": "https://github.com/Keely-Ai/F2D2/tree/main/assets",
+        "at": "2026-10-21T00:34:26.796117+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 205485,
+        "sha256": "3c54e8706c464407f33426fec83e32311f1d0dab2968409273d181fa04e45e71"
+      },
+      {
+        "key": "f2d2_training",
+        "url": "https://github.com/Keely-Ai/F2D2/tree/main/training",
+        "at": "2026-10-21T00:34:42.985286+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 217676,
+        "sha256": "e87d399e44d3db5f5374c656283549ce5884d555ffe4b56563af69cef125cc72"
+      },
+      {
+        "key": "f2d2_experimental",
+        "url": "https://github.com/Keely-Ai/F2D2/tree/main/training/experimental",
+        "at": "2026-10-21T00:34:58.229435+00:00",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 214465,
+        "sha256": "ed3995f826f0fe87782a2ec4a7ea3ba5aaad3d54daccd189e4e09787965c5caf"
+      },
+      {
+        "key": "f2d2_experimental_loss",
+        "url": "https://raw.githubusercontent.com/Keely-Ai/F2D2/391ea389b9fc0ee980406dce73e1d320852465c8/training/experimental/loss.py",
+        "at": "2026-10-21T00:35:07.312504+00:00",
+        "status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "bytes": 7776,
+        "sha256": "216a726f03d5f662f204a38ee74697c5aed7b1c3180cc5466487bc3485849a7e"
+      },
+      {
+        "key": "f2d2_experimental_networks",
+        "url": "https://raw.githubusercontent.com/Keely-Ai/F2D2/391ea389b9fc0ee980406dce73e1d320852465c8/training/experimental/networks.py",
+        "at": "2026-10-21T00:35:07.313670+00:00",
+        "status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "bytes": 7881,
+        "sha256": "f21a7273a8843cd717b5408eb86014bd1c56594251dfee655e98320b4468e624"
+      }
+    ]
+  }
+}

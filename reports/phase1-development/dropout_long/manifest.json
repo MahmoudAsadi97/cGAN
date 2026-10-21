@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "role": "post-test development",
+  "status": "completed",
+  "created_at_utc": "2026-10-21T01:10:35.484077+00:00",
+  "declared_run_directories": [
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d0_s101",
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d0_s202",
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d2_s101",
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d2_s202",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s101",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s202"
+  ],
+  "baseline_directory": "/workspace/cGAN/artifacts/phase1-development/baselines_screen",
+  "source_manifest_hashes": {
+    "/workspace/cGAN/artifacts/phase1-development/baselines_screen/manifest.json": "f7d944690594a39f1e8dd62b10b811f0bbce7c46586d34f5c86cbc5369212b58",
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d0_s101/manifest.json": "16f6f224daf6dfde925ea747c8b24f9860e3728bf90f4a0c3c51353bb3fcfc43",
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d0_s202/manifest.json": "a933e0006fef49bfbe51f7322972f61e0f16e1026b70625abb332d9c90d27d75",
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d2_s101/manifest.json": "0792727b91ed92bc42dc5a2ff2534d8df881383b8bb3d4fce4f9eb78702a55fd",
+    "/workspace/cGAN/runs/phase1-development/dropout_long/standard_b0_d2_s202/manifest.json": "5a5d2cb8264b3c2d674620b3ef20b864d718a96363c793511bac74cd0833e140",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s101/manifest.json": "001d748ec67e82fe65ed30daf9bf185f58022ef9fbe5440793a0cd3c88fa6b94",
+    "/workspace/cGAN/runs/phase1-development/momentum_long/standard_b0_s202/manifest.json": "14c0250d8cac44e6e76221bb8ff93c6be526e5a41529d2b72e7cb3315dfcd1d5"
+  },
+  "script_sha256": "628a3b80f584aa52ae8b0a130c217d1b86cd3d8edd96552740cf13f181928c48",
+  "artifact_hashes": {
+    "checkpoints.csv": "f0bac85b694a1403d31f178995b699a1b40f032b8f4a7b4be71827258fb1dd86",
+    "conditions.csv": "56d03dfce60e2335c3e37399ff33fa7477aa6466f7b1cd701d7b98d07f5f7003",
+    "learning_curves.csv": "4c29f1db7019b07e550ea0cfa685a62ec6b63f20dcb5c7a3553c4a701e962c29",
+    "learning_curves.png": "52366d79006b76e7fe63022cd5117a9b59c23cb614a811f29a187860260f12ec",
+    "learning_curves_detail.png": "8c84f8402e771cf4d797947ef8367b15cde7a952bd3e77428f1ecb7888a9ac89",
+    "summary.json": "e5003720a84e8bdc98809d30a800440321235c7e28391ab30258af905870fba2"
+  }
+}

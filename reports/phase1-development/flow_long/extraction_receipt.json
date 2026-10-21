@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "role": "saved-report extraction only",
+  "artifact_sha256": {
+    "prefix_verification.json": "c006394bebb23193204adc84f5b519b7468ff6f3bd6de3b187af1fc948375c1d",
+    "diagnostics.json": "412f58f754b810865c2638f88684a66adc36e34eb0f013801ccb6969e2beb35c",
+    "selected_last_metrics.csv": "031edc1010ec682ff690d591fe62abb04a7ecbe2f9c3b48a098e27c8b3f49879"
+  },
+  "notes": "Source hashes and exact checks are retained in prefix_verification.json and diagnostics.json. No new training or evaluation."
+}

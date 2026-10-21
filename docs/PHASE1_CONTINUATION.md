@@ -168,6 +168,25 @@ includes all declared 30,000-update source/dropout arms, their matching cGAN
 controls, and the two 6,000-update auxiliary-loss candidates. Those budgets
 remain explicit. No arm is omitted because its selected score is unfavorable.
 
+All 34 declared fresh draws completed. Their
+[saved report](../reports/phase1-development/fresh_diagnostics/README.md)
+records a material discrepancy hidden by macro profile scores: neural models
+generate many negative hourly values in source-PV=0 groups, whereas none occur
+in that fixed real validation sample. Negative-energy magnitudes show that
+this is not solely a rounding issue. The source flag is not proof of a physical
+nonnegativity law, and the TRAIN-fitted empirical controls occasionally generate
+small negative readings. Do not conceal this failure by clipping outputs.
+
+The next research direction is explicit TRAIN-fitted conditional marginals
+with a separately evaluated dependence generator. The
+[support-aware review](SUPPORT_AWARE_GENERATORS.md) identifies a recent
+diffusion/reflection-copula method and a classical marginal-calibration control.
+Any proposed adaptation must disclose zero/tie treatment, uniformity errors,
+empirical tail truncation and conditioning changes. Restoring the empirical
+baseline's marginal support alone would not demonstrate a neural improvement.
+These candidates remain unimplemented; the reference result, all failed
+ablations and the current publication-readiness limitation remain recorded.
+
 ## Scientific acceptance and independent validation
 
 A useful foundation needs competitive distribution fidelity against strong

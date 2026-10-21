@@ -1,10 +1,18 @@
 # Recent hybrid generators relevant to Fluvius profiles
 
-Assessment date: 21 October 2026. The most relevant next combination is a
-conditional flow with a structured temporal source distribution, followed by
-a bridge-model comparison if it adds measurable value. A latent model or an
-energy-based refinement is a separate, more expensive hypothesis. These are
-research recommendations, not completed experiments or claims of superiority.
+Assessment date: 21 October 2026. This review compares structured temporal
+sources, diffusion bridges, latent generators and energy-based refinement.
+The named paper methods are research candidates; their reported performance
+has not been independently reproduced on Fluvius.
+
+**Current priority after diagnostics:** the completed source studies and
+[fresh-draw diagnostics](../reports/phase1-development/fresh_diagnostics/README.md)
+now motivate explicit conditional marginal modeling plus learned dependence.
+The targeted [support-aware copula review](SUPPORT_AWARE_GENERATORS.md) examines
+Huk and Damoulas's 2025 preprint, author-listed at ICLR 2026, including its
+reflection-flow and classification-diffusion code. This is a new research
+candidate; it has not been implemented or validated on Fluvius. The earlier
+structured-source recommendation below records the hypothesis that was tested.
 
 **Development follow-up:** the first controlled TRAIN-correlation source
 ablation has now completed at two seeds and 6,000 updates. It worsened profile
@@ -26,7 +34,7 @@ time series, so advances in imputation do not automatically solve this task.
 | Work and source status | What is combined | Relevance and first useful test |
 | --- | --- | --- |
 | **TSFlow**, *Flow Matching with Gaussian Process Priors for Probabilistic Time Series Forecasting*, Kollovieh et al.; author repository identifies ICLR 2025 | Flow matching with a Gaussian-process source and past-observation conditioning | Temporal structure enters the starting distribution. For whole-day generation, compare an independent Gaussian source with a TRAIN-fitted correlated Gaussian source; this is an adaptation, since TSFlow's forecasting model uses history unavailable in our present task. |
-| **TimeBridge**, *Better Diffusion Prior Design with Bridge Models for Time Series Generation*, Park et al.; author repository identifies KDD 2026 and links the earlier preprint 2408.06672 | Diffusion bridges with alternative source priors, including GP and trend priors, using ODE or SDE sampling | Directly addresses whole-series generation and source-distribution choice. A GP-source bridge is a relevant comparator after the simpler flow control. Trend-conditioned experiments require a specified trend at inference and are a different conditioning task. |
+| **TimeBridge**, *Better Diffusion Prior Design with Bridge Models for Time Series Generation*; author repository identifies KDD 2026 and links the earlier preprint 2408.06672 | Diffusion bridges with alternative source priors, including GP and trend priors, using ODE or SDE sampling | Directly addresses whole-series generation and source-distribution choice. A GP-source bridge is a relevant comparator after the simpler flow control. Trend-conditioned experiments require a specified trend at inference and are a different conditioning task. |
 | **Energy Matching**, *Unifying Flow Matching and Energy-Based Models for Generative Modeling*, Balcerak et al.; NeurIPS 2025 identified in author materials | Optimal-transport alignment of a scalar potential, followed by contrastive energy learning and Langevin refinement | Could combine a transport route with a density-based refinement stage. Test only if simpler methods leave a specific mixture/tail failure; input gradients, transport coupling and finite-chain sampling add cost and mixing questions. |
 | **Diffusion-TS**, *Interpretable Diffusion for General Time Series Generation*, Yuan and Qiao; official repository identifies ICLR 2024 | Diffusion with temporal decomposition, direct sample reconstruction and a Fourier loss | Offers a time-structure-aware diffusion comparator and a source of isolated spectral-loss ablations. Smooth trends/seasonality are statistical components, not measured appliances. A large transformer is not required merely because this paper uses one. |
 

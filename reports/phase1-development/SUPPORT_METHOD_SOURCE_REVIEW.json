@@ -1,0 +1,199 @@
+{
+  "assessed_at_utc": "2026-10-21T01:15:54.665538+00:00",
+  "scope": "Bounded primary-source review; no implementation or experiments.",
+  "papers": [
+    {
+      "title": "Diffusion and Flow-based Copulas: Forgetting and Remembering Dependencies",
+      "authors": [
+        "David Huk",
+        "Theodoros Damoulas"
+      ],
+      "arxiv": "2509.19707",
+      "preprint_identifier_month": "2025-09",
+      "author_reported_venue": "ICLR 2026",
+      "openreview": "YrX77XRgku",
+      "repository": "https://github.com/Huk-David/Diffusion-and-Flow-based-Copulas",
+      "commit": "5014c0f35179b38803f3634c0b0acd4a6f6e2e57",
+      "full_paper_read": false,
+      "read_evidence": [
+        "README",
+        "Ref_copula.py",
+        "train_Refcop.py",
+        "Sample_Ref_copula.py",
+        "CDC.py",
+        "train_CDC.py"
+      ],
+      "venue_proceedings_independently_checked": false
+    },
+    {
+      "title": "Amortized Vine Copulas for High-Dimensional Density and Information Estimation",
+      "authors": [
+        "Houman Safaai"
+      ],
+      "arxiv": "2604.20568",
+      "year": 2026,
+      "publication_status": "Author-described arXiv preprint; no venue claim verified",
+      "repository": "https://github.com/KempnerInstitute/vine-denoising-copula",
+      "commit": "24e11afacc0872570730bc70d4610152d2530abc",
+      "full_paper_read": false,
+      "read_evidence": [
+        "README",
+        "Selected sections of docs/USER_GUIDE.md: marginal transforms, density estimation, sampling"
+      ]
+    }
+  ],
+  "snippets": [
+    {
+      "cached_file": "reflection_model.py",
+      "start_line": 4,
+      "text": "def reflection(x, v, a1, a2):\n    \"\"\"Function used for reflected velocities.\"\"\"\n    x_rescaled = (x - a1)/(a2-a1)\n    v_rescaled = v/(a2-a1)"
+    },
+    {
+      "cached_file": "reflection_sample.py",
+      "start_line": 75,
+      "text": "                x_next = reflection(x_next, vf_pred, MIN_SUPPORT, MAX_SUPPORT)[0]\n                x_curr_list.append(x_next.detach().cpu())\n        return torch.stack(x_curr_list)\n"
+    },
+    {
+      "cached_file": "reflection_train.py",
+      "start_line": 97,
+      "text": "    t = MAX_TIME * (torch.rand(X_0.shape[0]).to(device) ** 4)\n    t = t.to(device)\n    X_0 = X_0.to(device)\n    V_0 = V_0.to(device)"
+    },
+    {
+      "cached_file": "cdc.py",
+      "start_line": 40,
+      "text": "        ranks = torch.argsort(torch.argsort(X[:, d]))\n        uniform = (ranks + 1).float() / (n + 1)\n        gaussianized = torch.tensor(scs.norm.ppf(uniform.cpu()), device=X.device)\n        X_gauss[:, d] = gaussianized"
+    },
+    {
+      "cached_file": "cdc.py",
+      "start_line": 201,
+      "text": "                x_t = x_t.clamp(-clip, clip).to(self.device)  # Clamp to avoid exploding values\n                x_t.detach_()  # Detach to avoid accumulating gradients\n\n                if exploration:"
+    },
+    {
+      "cached_file": "cdc.py",
+      "start_line": 229,
+      "text": "                x_t = x_t.clamp(-clip, clip).to(self.device)  # Clamp to avoid exploding values\n\n                x_t.detach_()  # Detach to avoid accumulating gradients\n"
+    },
+    {
+      "cached_file": "cdc_train.py",
+      "start_line": 44,
+      "text": "X_ecdf = scs.norm.ppf(X_ecdf.clip(1e-5,1-1e-5)) # for overflow/underflow\n\n# Split into train and test sets\nX_ecdf_train, X_ecdf_test, _, _ = train_test_split(X_ecdf, X_ecdf, test_size=0.2, random_state=cv_seed)"
+    },
+    {
+      "cached_file": "cdc_train.py",
+      "start_line": 147,
+      "text": "        total_loss = ce_weight * ce_loss + mse_loss\n\n        # Backprop + optimize\n        total_loss.backward()"
+    },
+    {
+      "cached_file": "vdc_guide.md",
+      "start_line": 78,
+      "text": "        U[:, j] = rankdata(X[:, j]) / (n + 1)\n    return U\n\n# Example usage"
+    }
+  ],
+  "cache_manifest": [
+    {
+      "file": "FINDINGS.md",
+      "bytes": 11507,
+      "sha256": "66ce0c2243ce4d12284335079a14e8e2e4dd5026d87103634f02a0767309b3aa"
+    },
+    {
+      "file": "author_profile.html",
+      "bytes": 205141,
+      "sha256": "dc94ac257ec6d479fb51b11fd2cd2f4e4796c0ffb6d0e2ca14445f176b3ed1e5"
+    },
+    {
+      "file": "cdc.py",
+      "bytes": 11374,
+      "sha256": "0cd6066ea25f5117aff60bee3762033f55b04be44a0e94317a3e03bdceaf5737"
+    },
+    {
+      "file": "cdc_train.py",
+      "bytes": 10419,
+      "sha256": "ca46c3b9a3092a6646af0b68911a2dc85373920c76da52048c207c9f1c0305ec"
+    },
+    {
+      "file": "copula_diffusion.html",
+      "bytes": 254619,
+      "sha256": "ceb9c65180d81c9f6e57615608f582f7e238b9a61f296cf66784c5c5f18b8b4a"
+    },
+    {
+      "file": "copula_flow.html",
+      "bytes": 255022,
+      "sha256": "c530330095a7834f96f929c01332f796d8564c21d3c742ca0ebfe555ec3f5e8c"
+    },
+    {
+      "file": "copulas_readme.md",
+      "bytes": 7693,
+      "sha256": "e3ee046eae367a27697e85d1b7ee4adc10a76847ebcc2e6c414fdfeb40c3f6dc"
+    },
+    {
+      "file": "diffusion_flow_copulas.html",
+      "bytes": 318192,
+      "sha256": "d42e86f9a4217317fcbd377d85a9effcb347800e20776798674c2ebe71282b80"
+    },
+    {
+      "file": "diffusion_flow_copulas.readme.txt",
+      "bytes": 6839,
+      "sha256": "28b6c48bdb07f4d746c8ca1c89f8ab7f57dada6ad4fc5bf5e1d1c2c165e37d1b"
+    },
+    {
+      "file": "discrete_copula_diffusion.html",
+      "bytes": 263666,
+      "sha256": "68d7e78d4832a1488ecf200212fdc65896c356fbf5f7b3c6bb5e702f3cb13000"
+    },
+    {
+      "file": "discrete_copula_diffusion.readme.txt",
+      "bytes": 2645,
+      "sha256": "58bda933e64e3af026bccc01ebd8e98d0fb369217c08f5495c26a3e46f77f097"
+    },
+    {
+      "file": "figures_tree.html",
+      "bytes": 224451,
+      "sha256": "1359c0cc367d7fce4b1e2e49edd1a71a4c3ec03edc0e24390eec1d062704e8a8"
+    },
+    {
+      "file": "marginal_diffusion.html",
+      "bytes": 215032,
+      "sha256": "d91390a1f417480c2e6ea8705bb2f57405aaf327d36e571a321efbe610bcf41e"
+    },
+    {
+      "file": "reflection_model.py",
+      "bytes": 2639,
+      "sha256": "58baf1c8f471318b9247ee3bf7568d1f8a14446349e6db687bbb3e9e8255df14"
+    },
+    {
+      "file": "reflection_sample.py",
+      "bytes": 3716,
+      "sha256": "5bfbb4dda6d079eda86df31c593389af920109015ab7cacc0fb41d375dda8a70"
+    },
+    {
+      "file": "reflection_train.py",
+      "bytes": 4117,
+      "sha256": "93ee0ebdd6444dfbc6d2f5d728de2aab8b26babb4afa0fcc210835da77d65dab"
+    },
+    {
+      "file": "sources.json",
+      "bytes": 5768,
+      "sha256": "12a389072e1cf5545f1ca8b37934eca63b9bcf404602083093c66a1b0abe5b72"
+    },
+    {
+      "file": "support_generator.html",
+      "bytes": 175882,
+      "sha256": "2bd3f7ede34d6f2aafbf11e1c6907cf4a2e39611450c2048a403018df0bc9013"
+    },
+    {
+      "file": "vdc_guide.md",
+      "bytes": 15365,
+      "sha256": "11e906b7181e84d346b104a86da72e2015efe9769882837c161d070f1dde63aa"
+    },
+    {
+      "file": "vine_denoising.html",
+      "bytes": 359348,
+      "sha256": "e7719c5407dfbc08f5ac6e7d60f421fa14735ded1bce280c389a8fcdfe3b7787"
+    },
+    {
+      "file": "vine_denoising.readme.txt",
+      "bytes": 5652,
+      "sha256": "0268fdd19ad48f212062a8b11187bb26633919184261c059f33ed1605b875eb7"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+[
+  {
+    "key": "copula_diffusion",
+    "url": "https://github.com/search?q=copula%20diffusion&type=repositories",
+    "at": "2026-10-21T01:12:20.185358+00:00",
+    "status": 200,
+    "sha256": "ceb9c65180d81c9f6e57615608f582f7e238b9a61f296cf66784c5c5f18b8b4a",
+    "bytes": 254619
+  },
+  {
+    "key": "copula_flow",
+    "url": "https://github.com/search?q=copula%20flow&type=repositories",
+    "at": "2026-10-21T01:12:20.186854+00:00",
+    "status": 200,
+    "sha256": "c530330095a7834f96f929c01332f796d8564c21d3c742ca0ebfe555ec3f5e8c",
+    "bytes": 255022
+  },
+  {
+    "key": "marginal_diffusion",
+    "url": "https://github.com/search?q=marginal%20diffusion%20tabular&type=repositories",
+    "at": "2026-10-21T01:12:20.187770+00:00",
+    "status": 200,
+    "sha256": "d91390a1f417480c2e6ea8705bb2f57405aaf327d36e571a321efbe610bcf41e",
+    "bytes": 215032
+  },
+  {
+    "key": "support_generator",
+    "url": "https://github.com/search?q=support%20constrained%20diffusion%20tabular&type=repositories",
+    "at": "2026-10-21T01:12:20.188399+00:00",
+    "status": 200,
+    "sha256": "2bd3f7ede34d6f2aafbf11e1c6907cf4a2e39611450c2048a403018df0bc9013",
+    "bytes": 175882
+  },
+  {
+    "key": "diffusion_flow_copulas",
+    "url": "https://github.com/Huk-David/Diffusion-and-Flow-based-Copulas",
+    "at": "2026-10-21T01:12:43.836701+00:00",
+    "status": 200,
+    "sha256": "d42e86f9a4217317fcbd377d85a9effcb347800e20776798674c2ebe71282b80",
+    "bytes": 318192
+  },
+  {
+    "key": "discrete_copula_diffusion",
+    "url": "https://github.com/liuanji/Copula-Diffusion",
+    "at": "2026-10-21T01:12:43.837425+00:00",
+    "status": 200,
+    "sha256": "68d7e78d4832a1488ecf200212fdc65896c356fbf5f7b3c6bb5e702f3cb13000",
+    "bytes": 263666
+  },
+  {
+    "key": "vine_denoising",
+    "url": "https://github.com/KempnerInstitute/vine-denoising-copula",
+    "at": "2026-10-21T01:12:43.837799+00:00",
+    "status": 200,
+    "sha256": "e7719c5407dfbc08f5ac6e7d60f421fa14735ded1bce280c389a8fcdfe3b7787",
+    "bytes": 359348
+  },
+  {
+    "key": "reflection_model.py",
+    "url": "https://raw.githubusercontent.com/Huk-David/Diffusion-and-Flow-based-Copulas/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/Ref_copula.py",
+    "at": "2026-10-21T01:13:13.842912+00:00",
+    "status": 200,
+    "sha256": "58baf1c8f471318b9247ee3bf7568d1f8a14446349e6db687bbb3e9e8255df14",
+    "bytes": 2639
+  },
+  {
+    "key": "reflection_sample.py",
+    "url": "https://raw.githubusercontent.com/Huk-David/Diffusion-and-Flow-based-Copulas/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/Sample_Ref_copula.py",
+    "at": "2026-10-21T01:13:13.844025+00:00",
+    "status": 200,
+    "sha256": "5bfbb4dda6d079eda86df31c593389af920109015ab7cacc0fb41d375dda8a70",
+    "bytes": 3716
+  },
+  {
+    "key": "reflection_train.py",
+    "url": "https://raw.githubusercontent.com/Huk-David/Diffusion-and-Flow-based-Copulas/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/train_Ref_copula.py",
+    "at": "2026-10-21T01:13:13.844689+00:00",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "key": "cdc.py",
+    "url": "https://raw.githubusercontent.com/Huk-David/Diffusion-and-Flow-based-Copulas/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/CDC.py",
+    "at": "2026-10-21T01:13:13.845169+00:00",
+    "status": 200,
+    "sha256": "0cd6066ea25f5117aff60bee3762033f55b04be44a0e94317a3e03bdceaf5737",
+    "bytes": 11374
+  },
+  {
+    "key": "copula_paper.html",
+    "url": "https://arxiv.org/html/2509.19707v1",
+    "at": "2026-10-21T01:13:13.845717+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "copula_openreview.html",
+    "url": "https://openreview.net/forum?id=YrX77XRgku",
+    "at": "2026-10-21T01:13:13.846106+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "vdc_guide.md",
+    "url": "https://raw.githubusercontent.com/KempnerInstitute/vine-denoising-copula/24e11afacc0872570730bc70d4610152d2530abc/docs/USER_GUIDE.md",
+    "at": "2026-10-21T01:13:13.846866+00:00",
+    "status": 200,
+    "sha256": "11e906b7181e84d346b104a86da72e2015efe9769882837c161d070f1dde63aa",
+    "bytes": 15365
+  },
+  {
+    "key": "reflection_train.py",
+    "url": "https://raw.githubusercontent.com/Huk-David/Diffusion-and-Flow-based-Copulas/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/train_Refcop.py",
+    "at": "2026-10-21T01:13:45.579202+00:00",
+    "status": 200,
+    "sha256": "93ee0ebdd6444dfbc6d2f5d728de2aab8b26babb4afa0fcc210835da77d65dab",
+    "bytes": 4117
+  },
+  {
+    "key": "cdc_train.py",
+    "url": "https://raw.githubusercontent.com/Huk-David/Diffusion-and-Flow-based-Copulas/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/train_CDC.py",
+    "at": "2026-10-21T01:13:45.579895+00:00",
+    "status": 200,
+    "sha256": "ca46c3b9a3092a6646af0b68911a2dc85373920c76da52048c207c9f1c0305ec",
+    "bytes": 10419
+  },
+  {
+    "key": "copulas_readme.md",
+    "url": "https://raw.githubusercontent.com/Huk-David/Diffusion-and-Flow-based-Copulas/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/README.md",
+    "at": "2026-10-21T01:13:45.580321+00:00",
+    "status": 200,
+    "sha256": "e3ee046eae367a27697e85d1b7ee4adc10a76847ebcc2e6c414fdfeb40c3f6dc",
+    "bytes": 7693
+  },
+  {
+    "key": "author_profile.html",
+    "url": "https://github.com/Huk-David",
+    "at": "2026-10-21T01:13:45.580732+00:00",
+    "status": 200,
+    "sha256": "dc94ac257ec6d479fb51b11fd2cd2f4e4796c0ffb6d0e2ca14445f176b3ed1e5",
+    "bytes": 205141
+  },
+  {
+    "key": "figures_tree.html",
+    "url": "https://github.com/Huk-David/Diffusion-and-Flow-based-Copulas/tree/5014c0f35179b38803f3634c0b0acd4a6f6e2e57/Figures",
+    "at": "2026-10-21T01:13:45.581171+00:00",
+    "status": 200,
+    "sha256": "1359c0cc367d7fce4b1e2e49edd1a71a4c3ec03edc0e24390eec1d062704e8a8",
+    "bytes": 224451
+  }
+]

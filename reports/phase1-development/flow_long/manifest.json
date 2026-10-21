@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "role": "post-test development",
+  "status": "completed",
+  "created_at_utc": "2026-10-21T01:08:31.112940+00:00",
+  "declared_run_directories": [
+    "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s101",
+    "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s202",
+    "/workspace/cGAN/runs/phase1-development/flow_long/correlated_flow_s101",
+    "/workspace/cGAN/runs/phase1-development/flow_long/correlated_flow_s202"
+  ],
+  "baseline_directory": "/workspace/cGAN/artifacts/phase1-development/baselines_screen",
+  "source_manifest_hashes": {
+    "/workspace/cGAN/artifacts/phase1-development/baselines_screen/manifest.json": "f7d944690594a39f1e8dd62b10b811f0bbce7c46586d34f5c86cbc5369212b58",
+    "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s101/manifest.json": "d1bc2c7a17df93663938ea1f51d5cbabf4451f6e1dc493156fc77a128c9fabd0",
+    "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s202/manifest.json": "0a0a150fa1482965a5af367ef7b26e1a8f446c07e94d2a02d70e95ffc3b6778f",
+    "/workspace/cGAN/runs/phase1-development/flow_long/correlated_flow_s101/manifest.json": "177945bd6793ebea246b67134272ecd1752554dcc408c06e1c11d6ed565485f7",
+    "/workspace/cGAN/runs/phase1-development/flow_long/correlated_flow_s202/manifest.json": "51613c51607fcac8ac080b97fd1896b48899d5967f0b74cce98a871b540c1dc2"
+  },
+  "script_sha256": "628a3b80f584aa52ae8b0a130c217d1b86cd3d8edd96552740cf13f181928c48",
+  "artifact_hashes": {
+    "checkpoints.csv": "b9d2284c3e81a3f6250ec7618a9e5093df341accc61b3ed01f4dfb8eb82ed41f",
+    "conditions.csv": "1faa505507adcee9eb182b94ad58f7b421608f2c96f4abf1259986cceceb1c4f",
+    "learning_curves.csv": "8f75c17da17ba2d8cc104620948d3135e459f98f8cddc0bdc4ab1b5685610190",
+    "learning_curves.png": "d89c69c621079701e9f28187d944927252ce3f23e7e7bfbd05e4cbd7d98633ef",
+    "learning_curves_detail.png": "0a3f66af631ec0f81809ee173001a43e2a1da2481721062f3e48f3bf0a10bc38",
+    "summary.json": "fbb54479f253d95496f7ad604f132f30a4040eee23f940cbbfd0f315f0306105"
+  }
+}

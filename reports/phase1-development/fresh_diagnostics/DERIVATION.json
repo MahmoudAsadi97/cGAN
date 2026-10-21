@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "role": "Extraction from completed diagnostics; no new evaluation or dataset/model access",
+  "source_manifest": "artifacts/phase1-development/fresh_diagnostics/manifest.json",
+  "source_manifest_sha256": "a06a77cc55bfb2bddf05ac28678220838f5afdb57567552f1f38c2798d2cd63c",
+  "source_evaluation_git_head": "b4a1935bb664cc54f0243ff17b60aa08920ad2fa",
+  "byte_identical_copies": {
+    "metrics.csv": "72c8243a5b2e869d7948f8b5c5aea6c3201320f4940633161421c4aca0fefa6b",
+    "summary.json": "75566381834330ede56ee13def122f78332db842f61e67409ca85559fef1bc3f",
+    "manifest.json": "a06a77cc55bfb2bddf05ac28678220838f5afdb57567552f1f38c2798d2cd63c"
+  },
+  "input_artifact_sha256": {
+    "artifacts/phase1-development/fresh_diagnostics/candidate_000.json": "283aa45e8d094e2bedc7732d3b4b5de60997cabdb018658ae02617c717b95dd7",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_001.json": "53482198461189c1126df24f9e3b4dede232ba81c6bf9bfe8698990e382bee55",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_002.json": "31d6d9dcbbe618fd4274e92e3ca21ed9f5b357d663bbc55c0e0e88cf9c97b415",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_003.json": "f2f5c29fcced628a3ee11cfa44bd14b66a852a573221e021744bb0ec4eca294a",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_004.json": "5bb00593b843fb7e364a61d673683f000d65a48672f705e968c52577012b9e64",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_005.json": "a9151eb6239ab28161fd3976a63a31a34f3f89fb5ac53faea30ba7de987a99cb",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_006.json": "c3f85a081e79bc39740e630021f4fd568c0e591611930c0fd1b3f1581910f36a",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_007.json": "1b9d3abb488d9892ff714c16b388358939768917cd8e143be1f783d3ac473b87",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_008.json": "747a9331451b2e2e6cc503f17726dfc97d759663c802a9fb28ced7042bbc4e56",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_009.json": "ef5ce23b3086a09d1805b8e7014d9a534667eeff4bfabd4226cc0d7a593d389c",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_010.json": "44fa112a79be7dcbb168e7420405cb25a03fc92a4faffd740f6da905ea38c9bf",
+    "artifacts/phase1-development/fresh_diagnostics/candidate_011.json": "49635efbba92e3f35e5c557852e12c91237a4fa99a1a7ee5620c692bfdd81f22",
+    "artifacts/phase1-development/fresh_diagnostics/source_000.json": "0b9900aa210b91f2bd24a1c1eda9f126a9ec4dbe7eba9c3a8a1b97139f2ae17a",
+    "artifacts/phase1-development/fresh_diagnostics/source_001.json": "292160320f74820297d19ad4bb2a7dae8c737717e090072f27bce0ef2552144d",
+    "artifacts/phase1-development/fresh_diagnostics/baseline_mean.json": "e7666b337b76cd21ff8a472639b517ccc508cd4354be6bfcb8e476ac244f6ff5",
+    "artifacts/phase1-development/fresh_diagnostics/baseline_resample.json": "fd18c297e027a5e586279d3bc87fa4ec1f1cef2241b5d5a74e18a18ce6298ab9",
+    "artifacts/phase1-development/fresh_diagnostics/baseline_copula.json": "17bb352e5709b980476672813910dcaf63bce86afb89af420c1ba80210034f2b"
+  },
+  "derivation_script": "derive_pv0.py",
+  "derivation_script_sha256": "b9e6d869f7271fd4ef0ba5633b10f68bb22829aa39620203c57bd9cb535b54a2",
+  "derived_csv": {
+    "path": "pv0_diagnostics.csv",
+    "sha256": "53b69eb09ce8862f39fb9c5d2e1f275a1d8e37e6facb1fad992c560573cc729d",
+    "rows": 34,
+    "grain": "one declared method/training-seed checkpoint or control per fresh generation draw",
+    "identity_source": "top-level method metadata in the named input JSON",
+    "measure_source": "draws[].diagnostics.source_pv0.{real,fake}",
+    "proportions": "fractions in [0,1], not percentages",
+    "empty_training_fields": "not applicable to source-only controls or directly fitted baselines",
+    "profile_population": "8192 profiles per side from the 32 source-PV=0 conditions",
+    "export_cell_fraction": "fraction of hourly net-import values strictly below zero",
+    "export_day_fraction": "fraction of profiles with at least one hourly value strictly below zero",
+    "negative_daily_energy_fraction": "fraction of profiles whose 24-hour net-import sum is below zero",
+    "mean_export_magnitude_kwh_per_day": "mean across all profiles of sum_h max(-net_import_h,0); not restricted to exporting days"
+  },
+  "readme_aggregation": "Displayed method metrics are arithmetic means over two generation draws; PV0 values are means of derived per-draw fields. Budgets/selected steps come from input JSON metadata. No refitting, reselection, or clipping."
+}

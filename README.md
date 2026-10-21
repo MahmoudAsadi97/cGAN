@@ -26,6 +26,10 @@ Current development records include the
 and [flow/dropout screen](reports/phase1-development/flow_dropout_screen/README.md).
 Basic flow improves profile fidelity over the screened GANs but still has
 inaccurate hourly ramps; it is not yet an adequate replacement.
+The [fresh-draw comparison](reports/phase1-development/fresh_diagnostics/README.md)
+also finds excessive generated negative readings in source-PV=0 groups.
+This motivates the [recent copula/diffusion review](docs/SUPPORT_AWARE_GENERATORS.md),
+which separates marginal modeling from learned temporal dependence.
 Development belongs to
 [**`MahmoudAsadi97/cGAN`, branch `V3`**](https://github.com/MahmoudAsadi97/cGAN/tree/V3);
 preserve `main`, `V1`, and `V2`. The user has authorized continued Phase 1

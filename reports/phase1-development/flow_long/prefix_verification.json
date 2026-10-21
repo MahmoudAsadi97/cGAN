@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "role": "deterministic rerun prefix verification",
+  "comparison": "Exact equality of every saved non-timing field at steps 1 through 6000; no approximate numeric tolerance and no omitted scientific fields.",
+  "timing_exclusion_basis": {
+    "elapsed_seconds": "elapsed wall time since run start",
+    "validation_generation_seconds": "timed generator integration per validation checkpoint",
+    "validation_metric_seconds": "timed metric computation per validation checkpoint",
+    "training_update_seconds": "cumulative time.perf_counter differences around training-update blocks; inspected in flow.py"
+  },
+  "interpretation": "The longer budgets reuse the corresponding two seeds and reproduced prefixes, not new independent training replicates. Checkpoint weights were not deserialized or compared.",
+  "comparisons": [
+    {
+      "run": "isotropic_flow_s101",
+      "short_run": "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s101",
+      "long_run": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s101",
+      "short_manifest_sha256": "96dace98e02d3c3a360ebb3408e14981dff8ba8cdd8e6aa8fcb237e4eb495363",
+      "long_manifest_sha256": "d1bc2c7a17df93663938ea1f51d5cbabf4451f6e1dc493156fc77a128c9fabd0",
+      "short_history_sha256": "32444f27c86f6862f5de762b41451c56a93fc6a3f50c0d8aa66862767735b34f",
+      "long_history_sha256": "dee65b2dced89e769cfde4cb7a917f26e84114818a017012e40717046e2434d5",
+      "checked_steps": [
+        1,
+        1000,
+        2000,
+        3000,
+        4000,
+        5000,
+        6000
+      ],
+      "excluded_fields": [
+        "elapsed_seconds",
+        "validation_generation_seconds",
+        "validation_metric_seconds",
+        "training_update_seconds"
+      ],
+      "non_timing_keys_compared": [
+        "diagnostics",
+        "loss_velocity_mse",
+        "passes_started",
+        "row_presentations",
+        "step",
+        "validation"
+      ],
+      "exact_saved_history_match": true,
+      "short_non_timing_history_sha256": "cf8858c0fba72d412924bfce2d9f4dede32d90dc93b191d882989bbf0cfda714",
+      "long_non_timing_prefix_sha256": "cf8858c0fba72d412924bfce2d9f4dede32d90dc93b191d882989bbf0cfda714"
+    },
+    {
+      "run": "isotropic_flow_s202",
+      "short_run": "/workspace/cGAN/runs/phase1-development/flow_screen/flow_s202",
+      "long_run": "/workspace/cGAN/runs/phase1-development/flow_long/isotropic_flow_s202",
+      "short_manifest_sha256": "0dc37d8a3ee4e02cfc6f815830b8e7fdc5afe0390546b992671274b5559d78b4",
+      "long_manifest_sha256": "0a0a150fa1482965a5af367ef7b26e1a8f446c07e94d2a02d70e95ffc3b6778f",
+      "short_history_sha256": "11226c8747fe2755782e2a3edf8959734bac2e6af00739dc1f1a560c122e6b06",
+      "long_history_sha256": "5e4c5abba1b09325e5287e9bd6507bdf5919d0acbf8a887859064308bc0a5526",
+      "checked_steps": [
+        1,
+        1000,
+        2000,
+        3000,
+        4000,
+        5000,
+        6000
+      ],
+      "excluded_fields": [
+        "elapsed_seconds",
+        "validation_generation_seconds",
+        "validation_metric_seconds",
+        "training_update_seconds"
+      ],
+      "non_timing_keys_compared": [
+        "diagnostics",
+        "loss_velocity_mse",
+        "passes_started",
+        "row_presentations",
+        "step",
+        "validation"
+      ],
+      "exact_saved_history_match": true,
+      "short_non_timing_history_sha256": "e0b658abfc279b53f32084282918159a5762531282ccf186d0f8d34b7630fac6",
+      "long_non_timing_prefix_sha256": "e0b658abfc279b53f32084282918159a5762531282ccf186d0f8d34b7630fac6"
+    },
+    {
+      "run": "correlated_flow_s101",
+      "short_run": "/workspace/cGAN/runs/phase1-development/correlated_flow/correlated_flow_s101",
+      "long_run": "/workspace/cGAN/runs/phase1-development/flow_long/correlated_flow_s101",
+      "short_manifest_sha256": "8c47ad561f72decf0e4f58210ef77bfc8238560d4132c92542d1bf977c44392c",
+      "long_manifest_sha256": "177945bd6793ebea246b67134272ecd1752554dcc408c06e1c11d6ed565485f7",
+      "short_history_sha256": "e607edd028cce2cdbab9956a5dfb8595295af526a25af232b963fec1cf82fdbf",
+      "long_history_sha256": "e43ae5d3497d9c21bde92087ae644798e4f1b28f622c291b4e35e36df4c3104e",
+      "checked_steps": [
+        1,
+        1000,
+        2000,
+        3000,
+        4000,
+        5000,
+        6000
+      ],
+      "excluded_fields": [
+        "elapsed_seconds",
+        "validation_generation_seconds",
+        "validation_metric_seconds",
+        "training_update_seconds"
+      ],
+      "non_timing_keys_compared": [
+        "diagnostics",
+        "loss_velocity_mse",
+        "passes_started",
+        "row_presentations",
+        "step",
+        "validation"
+      ],
+      "exact_saved_history_match": true,
+      "short_non_timing_history_sha256": "026dd49e96df1bace492efa00ad324bfc33c0739b7f9bf3c39b1e580d503db0b",
+      "long_non_timing_prefix_sha256": "026dd49e96df1bace492efa00ad324bfc33c0739b7f9bf3c39b1e580d503db0b"
+    },
+    {
+      "run": "correlated_flow_s202",
+      "short_run": "/workspace/cGAN/runs/phase1-development/correlated_flow/correlated_flow_s202",
+      "long_run": "/workspace/cGAN/runs/phase1-development/flow_long/correlated_flow_s202",
+      "short_manifest_sha256": "d689d1c8902edcf29161c5076e2f6ea87c26a21d2ef673397c3789594f4dbc0e",
+      "long_manifest_sha256": "51613c51607fcac8ac080b97fd1896b48899d5967f0b74cce98a871b540c1dc2",
+      "short_history_sha256": "3dec47ec77fa0eb91ccffb35b7a2ab6eeeeae01ec8cf4d17cbdcd4c4c67d9c52",
+      "long_history_sha256": "53c9431352343ee7620b1e86fd8702d0f746ea00adec82f802085de5c89a0d7e",
+      "checked_steps": [
+        1,
+        1000,
+        2000,
+        3000,
+        4000,
+        5000,
+        6000
+      ],
+      "excluded_fields": [
+        "elapsed_seconds",
+        "validation_generation_seconds",
+        "validation_metric_seconds",
+        "training_update_seconds"
+      ],
+      "non_timing_keys_compared": [
+        "diagnostics",
+        "loss_velocity_mse",
+        "passes_started",
+        "row_presentations",
+        "step",
+        "validation"
+      ],
+      "exact_saved_history_match": true,
+      "short_non_timing_history_sha256": "5d42c83ed34a308f9c4ed60baa3efec416c90ba60913ebf252734a9d78188e33",
+      "long_non_timing_prefix_sha256": "5d42c83ed34a308f9c4ed60baa3efec416c90ba60913ebf252734a9d78188e33"
+    }
+  ]
+}

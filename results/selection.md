@@ -1,0 +1,11 @@
+| candidate            | seed   | hidden x depth   |   noise | critic sees hour differences   | no-PV floor   | best validation accuracy (selection draw)   |   best epoch | same checkpoint, 5 fresh noise draws   |
+|:---------------------|:-------|:-----------------|--------:|:-------------------------------|:--------------|:--------------------------------------------|-------------:|:---------------------------------------|
+| dev_improved_nofloor | seed0  | 256 x 3          |      32 | False                          | False         | 87.88%                                      |          290 | 87.96 ± 0.10%                          |
+| improved_diff        | seed0  | 256 x 3          |      32 | True                           | True          | 88.48%                                      |          280 | 88.20 ± 0.13%                          |
+| improved_big         | seed0  | 512 x 4          |      64 | False                          | True          | 88.38%                                      |          180 | 88.52 ± 0.15%                          |
+| improved_bigdiff     | seed0  | 512 x 4          |      64 | True                           | True          | 88.70%                                      |          160 | 88.54 ± 0.13%                          |
+| final                | seed0  | 512 x 4          |      64 | True                           | True          | 88.70%                                      |          160 | 88.54 ± 0.13%                          |
+| final                | seed1  | 512 x 4          |      64 | True                           | True          | 88.50%                                      |          200 | 88.60 ± 0.12%                          |
+| final                | seed2  | 512 x 4          |      64 | True                           | True          | 88.84%                                      |          170 | 88.67 ± 0.06%                          |
+| final                | seed3  | 512 x 4          |      64 | True                           | True          | 88.62%                                      |          150 | 88.44 ± 0.12%                          |
+| final                | seed4  | 512 x 4          |      64 | True                           | True          | 88.62%                                      |          190 | 88.42 ± 0.14%                          |

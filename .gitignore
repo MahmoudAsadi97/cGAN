@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# data, runs and generated results
+data/
+runs/
+runs_*/
+# real test-household days written for the figures (rebuilt from raw.zip)
+results/**/*_real.csv
+# generated days of the reference model (figures only; the final model's are kept)
+results/figures/faithful_*/*_gen.csv

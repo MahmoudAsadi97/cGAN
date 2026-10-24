@@ -1,0 +1,25 @@
+# Reference model (GitHub cGAN_EB): seeds 1 and 2 (seed 0 is in jobs/variants.txt).
+faithful 1
+faithful 2
+# Ablation ladder from the reference to `improved` (seed 0); see train.py and README.
+abl_shuffle 0
+abl_quantile 0
+abl_wgan_refnets 0
+abl_wide 0
+abl_ema 0
+improved 0
+# Extra seeds so that every step of the ladder can be compared with its seed-to-seed noise.
+improved 1
+improved 2
+improved 3
+improved 4
+improved 1 improved_big hidden_size=512 depth=4 input_size=64
+improved 2 improved_big hidden_size=512 depth=4 input_size=64
+improved 3 improved_big hidden_size=512 depth=4 input_size=64
+improved 4 improved_big hidden_size=512 depth=4 input_size=64
+abl_wgan_refnets 1
+abl_wgan_refnets 2
+abl_wide 1
+abl_wide 2
+abl_ema 1
+abl_ema 2

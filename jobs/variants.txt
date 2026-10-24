@@ -1,0 +1,7 @@
+# Model-selection candidates (seed 0), compared on the validation households (results/selection.md).
+improved 0 dev_improved_nofloor nonneg_without_pv=false
+improved 0 improved_diff critic_diff=true
+improved 0 improved_big hidden_size=512 depth=4 input_size=64
+improved 0 improved_bigdiff hidden_size=512 depth=4 input_size=64 critic_diff=true
+# Reference model (GitHub cGAN_EB), first seed.
+faithful 0

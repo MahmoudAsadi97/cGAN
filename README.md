@@ -11,21 +11,20 @@ this repository.
 It contains the reference model with its original hyper-parameters
 (`faithful`, the GitHub code) and the delivered model (`final`), trained on the
 same households and evaluated on households that neither model has seen,
-together with the model-selection candidates and the set-up of an ablation
-ladder that leads from one to the other (results pending).
+together with the model-selection candidates and an ablation ladder that leads
+from one to the other.
 
 ## Results
 
 Held-out **test households** (354 households, 128,826 days); `final`: five
 training seeds, validation-selected checkpoints (`best`) and final iterates
-(`last`); `faithful` (the GitHub code): seed 0 — seeds 1–2 and the ablation
-ladder have not finished training yet, and the tables will be updated.  Accuracy in
+(`last`); `faithful` (the GitHub code): three training seeds.  Accuracy in
 percent; ± is the standard deviation over seeds.
 
 | model | statistical accuracy | worst label | labels ≥ 85 % | rFD ↓ | C2ST AUC (0.5 ideal) | coverage ↑ | DCR ratio (≈ 1) | negative load, no PV ↓ |
 |---|---|---|---|---|---|---|---|---|
-| GitHub cGAN [last] (as the reference) | 47.9 | 29.1 | 0 % | 1.21 | 1.00 | 0.02 | 2.01 | 25.4 % |
-| GitHub cGAN [best] | 54.8 | 43.3 | 0 % | 0.94 | 1.00 | 0.05 | 1.50 | 13.5 % |
+| GitHub cGAN [last] (as the reference) | 48.3 ± 1.3 | 27.4 ± 5.5 | 0 % | 1.40 | 1.00 | 0.04 | 2.00 | 21.9 % |
+| GitHub cGAN [best] | 55.1 ± 0.6 | 39.8 ± 4.1 | 0 % | 0.91 | 1.00 | 0.06 | 1.51 | 18.2 % |
 | **final [best]** | **87.9 ± 0.2** | 74.6 ± 0.6 | 82.5 % | **0.117** | 0.61 | 0.81 | 1.01 | **0** |
 | final [last] | 87.6 ± 0.2 | 70.8 ± 1.1 | 82.2 % | 0.129 | 0.59 | 0.82 | 1.00 | 0 |
 | real: validation households | 86.1 | 76.9 | 59.4 % | 0.167 | 0.50 | 0.79 | 1.02 | 0 |
@@ -37,8 +36,8 @@ percent; ± is the standard deviation over seeds.
   bound 86.7 %).  The final model matches the test households 1.8 points
   better than real days of the 356 validation households (paired 95 %
   interval +0.6 to +3.1) and as well as real days of the 1,657 training
-  households (−0.1, interval −0.8 to +0.7); it is 40.0 points above the
-  GitHub model [last] (38.6 to 41.4).
+  households (−0.1, interval −0.8 to +0.7); it is 39.5 points above the
+  GitHub model [last] (38.3 to 40.7).
 * **Better than the GitHub model on every ranked metric** (the reference
   code's KLD is descriptive only, see *Comparison with the GitHub model*),
   each with complete separation: every final seed beats every GitHub value
@@ -47,12 +46,29 @@ percent; ± is the standard deviation over seeds.
   the dotted line there is the training-household benchmark scored on the
   validation households); its average days zig-zag from hour to hour
   (`results/figures/compare/`).
+* **What makes the difference** (`results/ablation.md`): two changes in how
+  the data are fed to the networks — minibatches reshuffled every epoch
+  (+11.2 points) and the per-hour value transform (+21.1) — lift the
+  reference networks with their BCE training from 54.8 % (seed 0; 55.1 ± 0.6
+  over three seeds) to 87.2 % (one seed, validation-selected checkpoint).  The
+  WGAN-GP recipe with wider networks, EMA and the hour-to-hour critic input
+  adds 0.5–0.7 points of accuracy (seed 0: +0.55, within the seed spread of
+  the BCE runs) and mainly makes single days more realistic: C2ST AUC 0.70 →
+  0.61, rFD 0.137 → 0.117, coverage 0.80 → 0.81.  With the EMA read-out the
+  validation accuracy drifts down by at most 0.8 points after its peak,
+  against 2.0 points for the BCE model (88.0 % at epoch 1,450, 86.0 % at
+  epoch 10,000).  The no-PV floor removes negative load without PV (0.15 % of
+  the hours with BCE, 0.39–0.87 % in the WGAN steps before the floor).  The
+  BCE model is better on the worst label (78.9 % against 74.6 %), the
+  key-parameter FID (0.69 against 0.85), the near-base KL (0.070 against
+  0.080) and the key-parameter std (90.7 % against 90.1 %).
 * **Acceptance levels of the paper** (`results/paper_criteria.md`, test
   households, share of label × key-parameter pairs, with the paper's
   definitions and a proper KL; the reference-code definitions are in the same
-  table): |difference of mean| < 1 — GitHub [last] 46 %, final 99 %;
-  |difference of std| < 1 — 74 % / 100 %; KL < 0.3 — 6 % / 100 %; FID < 5 —
-  63 % / 100 %.  With the paper's own protocol (generated days against the
+  table; GitHub averaged over its three seeds): |difference of mean| < 1 —
+  GitHub [last] 54 %, final 99 %;
+  |difference of std| < 1 — 78 % / 100 %; KL < 0.3 — 7 % / 100 %; FID < 5 —
+  71 % / 100 %.  With the paper's own protocol (generated days against the
   training households, `results/paper_protocol.md`) the final model reaches
   93.2 % accuracy and meets every level for 100 % of the pairs with the
   paper's definitions (99 % for KL < 0.3 with the reference code's KLD).
@@ -169,21 +185,22 @@ with the same draw at 88.07 %, which leaves the ranking unchanged (the other
 three candidates re-score exactly).  The rule ranked the
 best of 40 validation checkpoints scored with one fixed noise draw; scored
 again with five fresh noise draws (`results/selection.md`), the two 4 × 512
-candidates are within noise of each other.  The wider networks are therefore
-supported by validation, while the hour-to-hour changes for the critic were
-kept because the pre-registered rule selected them, not because validation
-shows that they help; the ablation ladder (pending) will report the two steps
-separately.
+candidates are within noise of each other for seed 0.  Seeds 1–4 of
+`improved_big`, trained after the selection for the ablation and listed in
+`selection.md` together with the selection run (seed 0), give the
+hour-to-hour changes a small validation advantage (+0.14 ± 0.16 points over
+the five seeds with fresh noise draws, seed-matched; higher for 4 of 5
+seeds), and the ablation finds +0.09 ± 0.15 points on the test households:
+the change is kept, but its effect is within seed noise.
 
-**Ablation ladder** (pending: `results/ablation.md` is written by
-`report.py --ablation` once the runs of `jobs/ablation.txt` have finished;
-validation-selected checkpoints; seeds 0–4 for `improved`, `improved_big` and
-`final`, seeds 0–2 for the other WGAN steps, seed 0 for the BCE steps).  Each
-step adds one change to the previous row, and the table will give the
-seed-matched difference of test accuracy to the previous step; `abl_wgan_refnets` switches to the WGAN-GP training
-recipe as a whole (loss, critic without sigmoid and dropout, 5 critic steps,
-optimiser settings, batch 1,024, 400 critic epochs) with the reference
-networks:
+**Ablation ladder** (`results/ablation.md`, validation-selected checkpoints;
+seeds 0–4 for `improved`, `improved_big` and `final`, seeds 0–2 for
+`faithful` and the other WGAN steps, seed 0 for `abl_shuffle` and
+`abl_quantile`).  Each step adds one change to the previous row, and the table
+gives the seed-matched difference of test accuracy to the previous step;
+`abl_wgan_refnets` switches to the WGAN-GP training recipe as a whole (loss,
+critic without sigmoid and dropout, 5 critic steps, optimiser settings, batch
+1,024, 400 critic epochs) with the reference networks:
 
 `faithful` → `abl_shuffle` (+ reshuffled batches) → `abl_quantile` (+ value
 transform) → `abl_wgan_refnets` (+ WGAN-GP recipe) → `abl_wide` (+ 3 × 256
@@ -191,10 +208,33 @@ networks, noise 32) → `abl_ema` (+ EMA read-out) → `improved` (+ no-PV floor
 → `improved_big` (+ 4 × 512 networks, noise 64) → `final` (+ hour-to-hour
 changes for the critic).
 
-The EMA and the no-PV floor change only how generated days are read out and
-which checkpoint is selected: with the same seed, `abl_wide`, `abl_ema` and
-`improved` follow the same training trajectory, so their differences are not
-affected by training noise.
+| step | seeds | test accuracy | Δ to previous step (pt) | worst label | C2ST AUC | rFD | negative load, no PV |
+|---|---|---|---|---|---|---|---|
+| `faithful` [best] | 3 | 55.1 ± 0.6 | | 39.8 | 1.00 | 0.913 | 18.2 % |
+| `abl_shuffle` | 1 | 66.1 | +11.2 | 55.3 | 1.00 | 0.469 | 13.6 % |
+| `abl_quantile` | 1 | 87.2 | +21.1 | 78.9 | 0.70 | 0.137 | 0.15 % |
+| `abl_wgan_refnets` | 3 | 83.7 ± 0.3 | −3.8 (seed 0) | 72.2 | 0.76 | 0.200 | 0.87 % |
+| `abl_wide` | 3 | 87.1 ± 0.2 | +3.43 ± 0.54 | 74.8 | 0.68 | 0.119 | 0.48 % |
+| `abl_ema` | 3 | 87.5 ± 0.3 | +0.36 ± 0.41 | 75.1 | 0.65 | 0.117 | 0.39 % |
+| `improved` | 5 | 87.5 ± 0.2 | −0.00 ± 0.01 (seeds 0–2) | 76.0 | 0.65 | 0.117 | 0 |
+| `improved_big` | 5 | 87.8 ± 0.1 | +0.26 ± 0.20 | 75.2 | 0.62 | 0.117 | 0 |
+| `final` | 5 | 87.9 ± 0.2 | +0.09 ± 0.15 | 74.6 | 0.61 | 0.117 | 0 |
+
+The data-handling changes carry most of the gain; `abl_shuffle` and
+`abl_quantile` have one seed each, and the BCE runs of `faithful` have seed
+SDs of 0.6 (best) and 1.3 (last) points (ranges 1.1 and 2.5), so their single
+values are less certain than the WGAN rows.  With the reference networks the
+WGAN-GP recipe alone scores lower than BCE (within its 400 critic epochs;
+seeds 0 and 1 are still at their maximum at epoch 400); with the wider
+networks it reaches the BCE level (87.1 ± 0.2 against 87.2 %) and passes it
+only with the EMA read-out and the 4 × 512 networks (87.5–87.9 %).  Without
+EMA its validation accuracy fluctuates about as much as BCE's and ends
+0.5–1.1 points below its peak; with EMA it drifts down by at most 0.8 points
+after its peak, against 2.0 points for the BCE model.  The EMA and the
+no-PV floor change only how generated days are read out and which checkpoint
+is selected: with the same seed, `abl_wide`, `abl_ema` and `improved` follow
+the same training trajectory, so their differences are not affected by
+training noise.
 
 ## Paper, reference code and this implementation
 
@@ -317,9 +357,8 @@ published figures only and is not used to rank models.
   hourly values for labels without PV.  The three other selection candidates
   (`improved_diff`, `improved_big`, `improved_bigdiff`) were defined after
   this test scoring; the comparison among all four used validation households
-  only, with the selection rule fixed beforehand.  Every run in the summary
-  and comparison tables (and in the ablation table, once finished) was trained
-  after these decisions; the
+  only, with the selection rule fixed beforehand.  Every run in the summary,
+  comparison and ablation tables was trained after these decisions; the
   selection table lists the development run itself, scored on validation
   households.
 * The metric definitions were finalised after two code reviews and before the

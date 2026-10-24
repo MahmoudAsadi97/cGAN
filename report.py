@@ -38,6 +38,7 @@ the evaluation code; a cache whose fingerprint does not match is recomputed.
 import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -330,6 +331,8 @@ def main(argv=None):
     ap.add_argument("--curves", nargs="*", default=[], help="models for the validation-curve figure")
     ap.add_argument("--data", default="data/processed/fluvius_hourly.npz")
     args = ap.parse_args(argv)
+    if hasattr(sys.stdout, "reconfigure"):   # the tables contain non-ASCII (Δ, ±); avoid cp1252 errors on Windows
+        sys.stdout.reconfigure(encoding="utf-8")
     runs, out = Path(args.runs), Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     if args.selection:

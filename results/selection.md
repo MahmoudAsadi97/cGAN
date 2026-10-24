@@ -3,6 +3,10 @@
 | dev_improved_nofloor | seed0  | 256 x 3          |      32 | False                          | False         | 87.88%                                      |          290 | 87.96 ± 0.10%                          |
 | improved_diff        | seed0  | 256 x 3          |      32 | True                           | True          | 88.48%                                      |          280 | 88.20 ± 0.13%                          |
 | improved_big         | seed0  | 512 x 4          |      64 | False                          | True          | 88.38%                                      |          180 | 88.52 ± 0.15%                          |
+| improved_big         | seed1  | 512 x 4          |      64 | False                          | True          | 88.47%                                      |          200 | 88.29 ± 0.19%                          |
+| improved_big         | seed2  | 512 x 4          |      64 | False                          | True          | 88.34%                                      |          170 | 88.38 ± 0.16%                          |
+| improved_big         | seed3  | 512 x 4          |      64 | False                          | True          | 88.50%                                      |          210 | 88.31 ± 0.15%                          |
+| improved_big         | seed4  | 512 x 4          |      64 | False                          | True          | 88.40%                                      |          140 | 88.48 ± 0.04%                          |
 | improved_bigdiff     | seed0  | 512 x 4          |      64 | True                           | True          | 88.70%                                      |          160 | 88.54 ± 0.13%                          |
 | final                | seed0  | 512 x 4          |      64 | True                           | True          | 88.70%                                      |          160 | 88.54 ± 0.13%                          |
 | final                | seed1  | 512 x 4          |      64 | True                           | True          | 88.50%                                      |          200 | 88.60 ± 0.12%                          |
